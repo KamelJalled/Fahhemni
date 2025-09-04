@@ -7,19 +7,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 import { Globe, LogOut, Users, TrendingUp, Award, BarChart3 } from 'lucide-react';
-import { mockProblems } from '../mock';
 
 const TeacherDashboard = () => {
   const { user, logout, isTeacher } = useAuth();
   const { language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
-  const [students, setStudents] = useState([]);
-  const [stats, setStats] = useState({
-    totalStudents: 0,
-    averageProgress: 0,
-    completedProblems: 0,
-    averageScore: 0
-  });
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user || !isTeacher) {
@@ -27,64 +21,32 @@ const TeacherDashboard = () => {
       return;
     }
 
-    // Load all student data from localStorage
-    const studentData = [];
-    const keys = Object.keys(localStorage);
-    
-    keys.forEach(key => {
-      if (key.startsWith('mathapp_progress_')) {
-        const username = key.replace('mathapp_progress_', '');
-        const progress = JSON.parse(localStorage.getItem(key));
-        
-        // Calculate student stats
-        const section1Progress = progress.section1;
-        const completedProblems = Object.values(section1Progress).filter(p => p.completed).length;
-        const totalProblems = Object.keys(section1Progress).length;
-        const progressPercentage = (completedProblems / totalProblems) * 100;
-        
-        // Calculate weighted score
-        let totalScore = 0;
-        let totalWeight = 0;
-        Object.keys(section1Progress).forEach(problemId => {
-          const problemProgress = section1Progress[problemId];
-          const problem = mockProblems.section1.problems.find(p => p.id === problemId);
-          if (problem && problemProgress.completed) {
-            totalScore += (problemProgress.score * problem.weight) / 100;
-            totalWeight += problem.weight;
-          }
-        });
-        const weightedScore = totalWeight > 0 ? (totalScore / totalWeight) * 100 : 0;
-        
-        studentData.push({
-          username,
-          progress: progressPercentage,
-          completedProblems,
-          totalProblems,
-          weightedScore: Math.round(weightedScore),
-          totalAttempts: Object.values(section1Progress).reduce((sum, p) => sum + p.attempts, 0),
-          lastActivity: new Date().toLocaleDateString(), // Mock data
-          problemsStatus: section1Progress
-        });
-      }
-    });
-
-    setStudents(studentData);
-
-    // Calculate overall stats
-    if (studentData.length > 0) {
-      const totalStudents = studentData.length;
-      const averageProgress = studentData.reduce((sum, s) => sum + s.progress, 0) / totalStudents;
-      const completedProblems = studentData.reduce((sum, s) => sum + s.completedProblems, 0);
-      const averageScore = studentData.reduce((sum, s) => sum + s.weightedScore, 0) / totalStudents;
-
-      setStats({
-        totalStudents,
-        averageProgress: Math.round(averageProgress),
-        completedProblems,
-        averageScore: Math.round(averageScore)
-      });
-    }
+    fetchDashboardData();
   }, [user, isTeacher, navigate]);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teacher/students`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setDashboardData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      // Fallback to empty data
+      setDashboardData({
+        total_students: 0,
+        average_progress: 0,
+        completed_problems: 0,
+        average_score: 0,
+        students: []
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const text = {
     en: {
