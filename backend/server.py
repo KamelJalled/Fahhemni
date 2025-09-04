@@ -206,6 +206,11 @@ async def root():
 # Include the router in the main app
 app.include_router(api_router)
 
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database on startup"""
+    await init_database()
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
