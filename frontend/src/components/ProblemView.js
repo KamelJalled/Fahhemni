@@ -199,13 +199,15 @@ const ProblemView = () => {
     );
   };
 
-  if (!problem) {
-    return <div>Problem not found</div>;
+  if (loading || !problem) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-emerald-500"></div>
+    </div>;
   }
 
-  const problemProgress = userProgress?.section1[problemId];
-  const isCompleted = problemProgress?.completed || false;
-  const earnedScore = problemProgress?.score || 0;
+  const problemProgress = userProgress?.section1[problemId] || { completed: false, score: 0, attempts: 0 };
+  const isCompleted = problemProgress.completed;
+  const earnedScore = problemProgress.score;
 
   return (
     <div className="min-h-screen p-4">
@@ -263,16 +265,16 @@ const ProblemView = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {renderMathExpression(problem.question[language])}
+                {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
                 {/* Show explanation for preparation and explanation problems */}
-                {problem.showFullSolution && problem.explanation && (
+                {problem.show_full_solution && (problem.explanation_en || problem.explanation_ar) && (
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
                     <h4 className="font-semibold mb-2 text-blue-800">
                       {text[language].explanation}
                     </h4>
                     <pre className="whitespace-pre-wrap text-sm text-blue-700">
-                      {problem.explanation[language]}
+                      {language === 'en' ? problem.explanation_en : problem.explanation_ar}
                     </pre>
                   </div>
                 )}
@@ -280,7 +282,7 @@ const ProblemView = () => {
             </Card>
 
             {/* Answer Input - Only for non-explanation problems */}
-            {!problem.showFullSolution && (
+            {!problem.show_full_solution && (
               <Card>
                 <CardContent className="p-6">
                   <div className="space-y-4">
@@ -360,7 +362,7 @@ const ProblemView = () => {
                         </div>
                         
                         {/* Show correct answer only for non-assessment problems */}
-                        {!isCorrect && !problem.hideAnswer && (
+                        {!isCorrect && !problem.hide_answer && (
                           <div className="mt-2 text-sm">
                             {language === 'en' ? 'Correct answer: ' : 'الإجابة الصحيحة: '}
                             <span className="font-mono">{problem.answer}</span>
@@ -375,7 +377,7 @@ const ProblemView = () => {
           </div>
 
           {/* Right Column - Hints */}
-          {problem.hints && !problem.showFullSolution && (
+          {(problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) && !problem.show_full_solution && (
             <div>
               <Card>
                 <CardHeader>
@@ -390,9 +392,9 @@ const ProblemView = () => {
                     <div>
                       <div className="flex justify-between text-sm text-gray-500 mb-2">
                         <span>{language === 'en' ? 'Hints Used' : 'الإرشادات المستخدمة'}</span>
-                        <span>{showHints ? currentHint + 1 : 0}/{problem.hints.length}</span>
+                        <span>{showHints ? currentHint + 1 : 0}/{(language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0}</span>
                       </div>
-                      <Progress value={(showHints ? currentHint + 1 : 0) / problem.hints.length * 100} />
+                      <Progress value={(showHints ? currentHint + 1 : 0) / ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 1) * 100} />
                     </div>
 
                     {/* Show Hints Button */}
@@ -411,13 +413,13 @@ const ProblemView = () => {
                     {showHints && (
                       <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                         <p className="text-yellow-800">
-                          {problem.hints[currentHint][language]}
+                          {language === 'en' ? problem.hints_en[currentHint] : problem.hints_ar[currentHint]}
                         </p>
                       </div>
                     )}
 
                     {/* Next Hint Button */}
-                    {showHints && currentHint < problem.hints.length - 1 && (
+                    {showHints && currentHint < ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0) - 1 && (
                       <Button 
                         onClick={handleNextHint}
                         variant="outline"
@@ -428,9 +430,9 @@ const ProblemView = () => {
                     )}
 
                     {/* No More Hints Message */}
-                    {showHints && currentHint === problem.hints.length - 1 && (
+                    {showHints && currentHint === ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0) - 1 && (
                       <p className="text-center text-gray-500 text-sm">
-                        {problem.hideAnswer ? text[language].noMoreHints : 
+                        {problem.hide_answer ? text[language].noMoreHints : 
                          language === 'en' ? 'All hints used' : 'تم استخدام جميع الإرشادات'}
                       </p>
                     )}
