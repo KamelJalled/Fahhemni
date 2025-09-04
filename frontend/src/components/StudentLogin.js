@@ -50,12 +50,28 @@ const StudentLogin = () => {
 
     setIsLoading(true);
     
-    // Simulate loading for better UX
-    setTimeout(() => {
-      login(username.trim(), 'student');
-      navigate('/dashboard');
+    try {
+      // Call backend API for student login
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/student-login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username.trim() }),
+      });
+
+      if (response.ok) {
+        const student = await response.json();
+        login(student.username, 'student');
+        navigate('/dashboard');
+      } else {
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
