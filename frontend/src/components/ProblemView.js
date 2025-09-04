@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 import { Globe, ArrowLeft, Lightbulb, CheckCircle, XCircle, RotateCcw, Trophy } from 'lucide-react';
-import { mockProblems, normalizeAnswer } from '../mock';
 import { useToast } from '../hooks/use-toast';
 
 const ProblemView = () => {
