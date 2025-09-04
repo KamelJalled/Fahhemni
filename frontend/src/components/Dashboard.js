@@ -146,7 +146,7 @@ const Dashboard = () => {
     }
   };
 
-  if (!userProgress) {
+  if (!userProgress || loading) {
     return <div className="min-h-screen flex items-center justify-center">
       <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-emerald-500"></div>
     </div>;
@@ -230,7 +230,7 @@ const Dashboard = () => {
 
       {/* Problems Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {mockProblems.section1.problems.map((problem) => {
+        {problems.map((problem) => {
           const status = getProblemStatus(problem.id, userProgress);
           const problemProgress = userProgress.section1[problem.id];
           
@@ -267,7 +267,7 @@ const Dashboard = () => {
                 
                 <div className="text-center mb-4">
                   <div className="text-2xl font-mono bg-gray-50 p-3 rounded-lg border">
-                    {problem.question[language]}
+                    {language === 'en' ? problem.question_en : problem.question_ar}
                   </div>
                 </div>
                 
