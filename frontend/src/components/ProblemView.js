@@ -132,50 +132,49 @@ const ProblemView = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!userAnswer.trim()) return;
 
-    const normalizedUserAnswer = normalizeAnswer(userAnswer);
-    const normalizedCorrectAnswer = normalizeAnswer(problem.answer);
-    const newAttempts = attempts + 1;
-    
-    setAttempts(newAttempts);
-    setIsSubmitted(true);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            problem_id: problemId,
+            answer: userAnswer.trim(),
+            hints_used: currentHint
+          }),
+        }
+      );
 
-    const correct = normalizedUserAnswer === normalizedCorrectAnswer;
-    setIsCorrect(correct);
+      if (response.ok) {
+        const result = await response.json();
+        setIsSubmitted(true);
+        setIsCorrect(result.correct);
+        setAttempts(result.attempts);
 
-    // Calculate score based on attempts and hints used
-    let score = 0;
-    if (correct) {
-      score = Math.max(40, 100 - (newAttempts - 1) * 20 - currentHint * 10);
-    }
+        // Show toast notification
+        if (result.correct) {
+          toast({
+            title: text[language].correct,
+            description: `${text[language].points}: ${result.score}`,
+          });
+        } else {
+          // Show random encouragement
+          const encouragementIndex = Math.floor(Math.random() * text[language].encouragement.length);
+          setShowEncouragement(text[language].encouragement[encouragementIndex]);
+          setTimeout(() => setShowEncouragement(''), 3000);
+        }
 
-    // Update progress in localStorage
-    if (userProgress) {
-      const updatedProgress = { ...userProgress };
-      updatedProgress.section1[problemId] = {
-        completed: correct,
-        score: correct ? score : Math.max(updatedProgress.section1[problemId]?.score || 0, score),
-        attempts: newAttempts
-      };
-      
-      setUserProgress(updatedProgress);
-      localStorage.setItem(`mathapp_progress_${user.username}`, JSON.stringify(updatedProgress));
-    }
-
-    // Show toast notification
-    if (correct) {
-      toast({
-        title: text[language].correct,
-        description: `${text[language].points}: ${score}`,
-        variant: "success"
-      });
-    } else {
-      // Show random encouragement
-      const encouragementIndex = Math.floor(Math.random() * text[language].encouragement.length);
-      setShowEncouragement(text[language].encouragement[encouragementIndex]);
-      setTimeout(() => setShowEncouragement(''), 3000);
+        // Refresh progress data
+        fetchData();
+      }
+    } catch (error) {
+      console.error('Error submitting answer:', error);
     }
   };
 
