@@ -116,6 +116,12 @@ const TeacherDashboard = () => {
     return labels[problemType] || problemType;
   };
 
+  if (loading || !dashboardData) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-emerald-500"></div>
+    </div>;
+  }
+
   return (
     <div className="min-h-screen p-4">
       {/* Header */}
@@ -145,7 +151,7 @@ const TeacherDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100">{text[language].totalStudents}</p>
-                <p className="text-3xl font-bold">{stats.totalStudents}</p>
+                <p className="text-3xl font-bold">{dashboardData.total_students}</p>
               </div>
               <Users className="w-10 h-10 text-blue-200" />
             </div>
@@ -157,7 +163,7 @@ const TeacherDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-100">{text[language].averageProgress}</p>
-                <p className="text-3xl font-bold">{stats.averageProgress}%</p>
+                <p className="text-3xl font-bold">{dashboardData.average_progress}%</p>
               </div>
               <TrendingUp className="w-10 h-10 text-green-200" />
             </div>
@@ -169,7 +175,7 @@ const TeacherDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-orange-100">{text[language].completedProblems}</p>
-                <p className="text-3xl font-bold">{stats.completedProblems}</p>
+                <p className="text-3xl font-bold">{dashboardData.completed_problems}</p>
               </div>
               <BarChart3 className="w-10 h-10 text-orange-200" />
             </div>
@@ -181,7 +187,7 @@ const TeacherDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-100">{text[language].averageScore}</p>
-                <p className="text-3xl font-bold">{stats.averageScore}%</p>
+                <p className="text-3xl font-bold">{dashboardData.average_score}%</p>
               </div>
               <Award className="w-10 h-10 text-purple-200" />
             </div>
@@ -195,7 +201,7 @@ const TeacherDashboard = () => {
           <CardTitle>{text[language].details}</CardTitle>
         </CardHeader>
         <CardContent>
-          {students.length === 0 ? (
+          {dashboardData.students.length === 0 ? (
             <div className="text-center py-12">
               <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">{text[language].noStudents}</p>
@@ -218,52 +224,53 @@ const TeacherDashboard = () => {
                     <TableHead></TableHead>
                     <TableHead></TableHead>
                     <TableHead></TableHead>
-                    {mockProblems.section1.problems.map((problem) => (
-                      <TableHead key={problem.id} className="text-center text-xs">
-                        {getProblemTypeLabel(problem.type)}
-                      </TableHead>
-                    ))}
+                    <TableHead className="text-center text-xs">{getProblemTypeLabel('preparation')}</TableHead>
+                    <TableHead className="text-center text-xs">{getProblemTypeLabel('explanation')}</TableHead>
+                    <TableHead className="text-center text-xs">{getProblemTypeLabel('practice')}</TableHead>
+                    <TableHead className="text-center text-xs">{getProblemTypeLabel('practice')}</TableHead>
+                    <TableHead className="text-center text-xs">{getProblemTypeLabel('assessment')}</TableHead>
+                    <TableHead className="text-center text-xs">{getProblemTypeLabel('examprep')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {students.map((student) => (
+                  {dashboardData.students.map((student) => (
                     <TableRow key={student.username}>
                       <TableCell className="font-medium">
                         {student.username}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Progress value={student.progress} className="w-20" />
+                          <Progress value={student.progress_percentage} className="w-20" />
                           <span className="text-sm text-gray-500">
-                            {Math.round(student.progress)}%
+                            {Math.round(student.progress_percentage)}%
                           </span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <Badge variant={
-                          student.weightedScore >= 80 ? 'default' :
-                          student.weightedScore >= 60 ? 'secondary' : 'destructive'
+                          student.weighted_score >= 80 ? 'default' :
+                          student.weighted_score >= 60 ? 'secondary' : 'destructive'
                         }>
-                          {student.weightedScore}%
+                          {Math.round(student.weighted_score)}%
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        {student.totalAttempts}
+                        {student.total_attempts}
                       </TableCell>
-                      {mockProblems.section1.problems.map((problem) => (
-                        <TableCell key={problem.id} className="text-center">
+                      {Object.keys(student.problems_status).map((problemId) => (
+                        <TableCell key={problemId} className="text-center">
                           <span className={`text-sm ${
-                            student.problemsStatus[problem.id].completed 
+                            student.problems_status[problemId].completed 
                               ? 'text-green-600 font-bold' 
-                              : student.problemsStatus[problem.id].attempts > 0
+                              : student.problems_status[problemId].attempts > 0
                               ? 'text-orange-600'
                               : 'text-gray-400'
                           }`}>
-                            {getProblemStatusSymbol(student.problemsStatus[problem.id])}
+                            {getProblemStatusSymbol(student.problems_status[problemId])}
                           </span>
-                          {student.problemsStatus[problem.id].completed && (
+                          {student.problems_status[problemId].completed && (
                             <div className="text-xs text-gray-500">
-                              {student.problemsStatus[problem.id].score}%
+                              {student.problems_status[problemId].score}%
                             </div>
                           )}
                         </TableCell>
