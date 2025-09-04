@@ -6,7 +6,6 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 import { Globe, LogOut, Trophy, Star, Medal, Crown, Play, Lock, CheckCircle, XCircle } from 'lucide-react';
-import { mockProblems, mockUsers, badges } from '../mock';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -14,6 +13,15 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [userProgress, setUserProgress] = useState(null);
   const [userStats, setUserStats] = useState({ totalPoints: 0, badges: [] });
+  const [problems, setProblems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const badges = [
+    { id: "first_steps", name: { en: "First Steps", ar: "الخطوات الأولى" }, description: { en: "Complete your first problem", ar: "أكمل مسألتك الأولى" }, icon: "trophy" },
+    { id: "practice_master", name: { en: "Practice Master", ar: "أستاذ التمرين" }, description: { en: "Complete all practice problems", ar: "أكمل جميع مسائل التدريب" }, icon: "star" },
+    { id: "assessment_ace", name: { en: "Assessment Ace", ar: "بطل التقييم" }, description: { en: "Score 80+ on assessment", ar: "احصل على ٨٠+ في التقييم" }, icon: "medal" },
+    { id: "inequality_expert", name: { en: "Inequality Expert", ar: "خبير المتباينات" }, description: { en: "Complete entire section", ar: "أكمل القسم بالكامل" }, icon: "crown" }
+  ];
 
   useEffect(() => {
     if (!user) {
@@ -21,15 +29,41 @@ const Dashboard = () => {
       return;
     }
 
-    // Load user progress from localStorage
-    const savedProgress = localStorage.getItem(`mathapp_progress_${user.username}`);
-    if (savedProgress) {
-      const progress = JSON.parse(savedProgress);
-      setUserProgress(progress);
-      calculateStats(progress);
-    } else {
-      // Initialize empty progress
-      const initialProgress = {
+    fetchData();
+  }, [user, navigate]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch student progress
+      const progressResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/progress`
+      );
+      
+      if (progressResponse.ok) {
+        const progressData = await progressResponse.json();
+        setUserProgress(progressData.progress);
+        setUserStats({
+          totalPoints: progressData.total_points,
+          badges: progressData.badges
+        });
+      }
+
+      // Fetch problems for section1
+      const problemsResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/problems/section/section1`
+      );
+      
+      if (problemsResponse.ok) {
+        const problemsData = await problemsResponse.json();
+        setProblems(problemsData);
+      }
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Fallback to empty data
+      setUserProgress({
         section1: {
           prep1: { completed: false, score: 0, attempts: 0 },
           explanation1: { completed: false, score: 0, attempts: 0 },
@@ -38,41 +72,11 @@ const Dashboard = () => {
           assessment1: { completed: false, score: 0, attempts: 0 },
           examprep1: { completed: false, score: 0, attempts: 0 }
         }
-      };
-      setUserProgress(initialProgress);
-      localStorage.setItem(`mathapp_progress_${user.username}`, JSON.stringify(initialProgress));
+      });
+      setProblems([]);
+    } finally {
+      setLoading(false);
     }
-  }, [user, navigate]);
-
-  const calculateStats = (progress) => {
-    let totalPoints = 0;
-    let earnedBadges = [];
-    const section1 = progress.section1;
-
-    // Calculate points based on weighted scoring
-    Object.keys(section1).forEach(problemId => {
-      const problemProgress = section1[problemId];
-      const problem = mockProblems.section1.problems.find(p => p.id === problemId);
-      if (problem && problemProgress.completed) {
-        totalPoints += (problemProgress.score * problem.weight) / 100;
-      }
-    });
-
-    // Check badges
-    if (Object.values(section1).some(p => p.completed)) {
-      earnedBadges.push('first_steps');
-    }
-    if (section1.practice1.completed && section1.practice2.completed) {
-      earnedBadges.push('practice_master');
-    }
-    if (section1.assessment1.completed && section1.assessment1.score >= 80) {
-      earnedBadges.push('assessment_ace');
-    }
-    if (Object.values(section1).every(p => p.completed)) {
-      earnedBadges.push('inequality_expert');
-    }
-
-    setUserStats({ totalPoints: Math.round(totalPoints), badges: earnedBadges });
   };
 
   const text = {
