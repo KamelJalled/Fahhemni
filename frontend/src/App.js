@@ -1,52 +1,110 @@
-import { useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import StudentLogin from "./components/StudentLogin";
+import TeacherLogin from "./components/TeacherLogin";
+import Dashboard from "./components/Dashboard";
+import ProblemView from "./components/ProblemView";
+import TeacherDashboard from "./components/TeacherDashboard";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Language Context
+const LanguageContext = createContext();
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
+
+const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem('mathapp_language') || 'en';
+  });
 
   useEffect(() => {
-    helloWorldApi();
-  }, []);
+    localStorage.setItem('mathapp_language', language);
+    // Update document direction for RTL
+    document.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, [language]);
+
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === 'en' ? 'ar' : 'en');
+  };
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
+    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+// Auth Context
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('mathapp_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const [isTeacher, setIsTeacher] = useState(() => {
+    return localStorage.getItem('mathapp_teacher') === 'true';
+  });
+
+  const login = (username, userType = 'student') => {
+    const userData = {
+      username,
+      userType,
+      loginTime: new Date().toISOString()
+    };
+    
+    setUser(userData);
+    setIsTeacher(userType === 'teacher');
+    localStorage.setItem('mathapp_user', JSON.stringify(userData));
+    localStorage.setItem('mathapp_teacher', userType === 'teacher');
+  };
+
+  const logout = () => {
+    setUser(null);
+    setIsTeacher(false);
+    localStorage.removeItem('mathapp_user');
+    localStorage.removeItem('mathapp_teacher');
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, isTeacher, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <div className="App min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+      <AuthProvider>
+        <LanguageProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<StudentLogin />} />
+              <Route path="/teacher" element={<TeacherLogin />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/problem/:problemId" element={<ProblemView />} />
+              <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+            </Routes>
+          </BrowserRouter>
+        </LanguageProvider>
+      </AuthProvider>
     </div>
   );
 }
