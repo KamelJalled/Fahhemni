@@ -24,23 +24,60 @@ const ProblemView = () => {
   const [attempts, setAttempts] = useState(0);
   const [showEncouragement, setShowEncouragement] = useState(false);
   const [userProgress, setUserProgress] = useState(null);
+  const [problem, setProblem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const problem = mockProblems.section1.problems.find(p => p.id === problemId);
+  // Helper function to normalize answer
+  const normalizeAnswer = (answer) => {
+    // Convert Arabic numerals to Western and س to x
+    const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
+    return answer.toLowerCase()
+      .replace(/س/g, 'x')
+      .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
+      .trim();
+  };
 
   useEffect(() => {
-    if (!user || !problem) {
+    if (!user || !problemId) {
       navigate('/dashboard');
       return;
     }
 
-    // Load user progress
-    const savedProgress = localStorage.getItem(`mathapp_progress_${user.username}`);
-    if (savedProgress) {
-      const progress = JSON.parse(savedProgress);
-      setUserProgress(progress);
-      setAttempts(progress.section1[problemId]?.attempts || 0);
+    fetchData();
+  }, [user, problemId, navigate]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch problem details
+      const problemResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/problems/${problemId}`
+      );
+      
+      if (problemResponse.ok) {
+        const problemData = await problemResponse.json();
+        setProblem(problemData);
+      }
+
+      // Fetch user progress
+      const progressResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/progress`
+      );
+      
+      if (progressResponse.ok) {
+        const progressData = await progressResponse.json();
+        setUserProgress(progressData.progress);
+        setAttempts(progressData.progress.section1[problemId]?.attempts || 0);
+      }
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      navigate('/dashboard');
+    } finally {
+      setLoading(false);
     }
-  }, [user, problem, problemId, navigate]);
+  };
 
   const text = {
     en: {
