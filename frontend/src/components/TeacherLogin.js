@@ -42,16 +42,29 @@ const TeacherLogin = () => {
     setIsLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      if (accessCode.trim() === 'teacher2024') {
+    try {
+      // Call backend API for teacher login
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/teacher-login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ access_code: accessCode.trim() }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
         login('Teacher', 'teacher');
         navigate('/teacher-dashboard');
       } else {
         setError(text[language].error);
       }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(text[language].error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
