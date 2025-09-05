@@ -641,27 +641,57 @@ const ProblemView = () => {
                           <div key={index} className={`border rounded-lg p-4 ${
                             index <= currentStep ? 'bg-white' : 'bg-gray-50 opacity-50'
                           }`}>
-                            <div className="flex items-center mb-2">
-                              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 ${
-                                stepResults[index] ? 'bg-green-500 text-white' : 
-                                index === currentStep ? 'bg-blue-500 text-white' : 
-                                'bg-gray-300 text-gray-600'
-                              }`}>
-                                {stepResults[index] ? '✓' : index + 1}
-                              </span>
-                              <label className="font-medium">
-                                {language === 'en' ? step.step_en : step.step_ar}
-                              </label>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center">
+                                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 ${
+                                  stepResults[index] ? 'bg-green-500 text-white' : 
+                                  index === currentStep ? 'bg-blue-500 text-white' : 
+                                  'bg-gray-300 text-gray-600'
+                                }`}>
+                                  {stepResults[index] ? '✓' : index + 1}
+                                </span>
+                                <div>
+                                  <div className="font-medium text-sm text-gray-600">
+                                    {getStepLabel(index, step)}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                             <Input
                               value={stepAnswers[index]}
                               onChange={(e) => handleStepAnswerChange(index, e.target.value)}
-                              placeholder={language === 'en' ? 'Enter your answer for this step...' : 'أدخل إجابتك لهذه الخطوة...'}
+                              placeholder={language === 'en' ? 
+                                'Show your work for this step...' : 
+                                'أظهر عملك لهذه الخطوة...'
+                              }
                               className="text-lg h-12"
                               disabled={index > currentStep || stepResults[index]}
                             />
                           </div>
                         ))}
+
+                        {/* Final Answer Box (if required) */}
+                        {problem.final_answer_required && allStepsComplete && (
+                          <div className="border-2 border-green-200 rounded-lg p-4 bg-green-50">
+                            <div className="flex items-center mb-2">
+                              <span className="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 bg-green-500 text-white">
+                                ✓
+                              </span>
+                              <label className="font-medium text-green-800">
+                                {language === 'en' ? 'Final Answer:' : 'الإجابة النهائية:'}
+                              </label>
+                            </div>
+                            <Input
+                              value={userAnswer}
+                              onChange={(e) => setUserAnswer(e.target.value)}
+                              placeholder={language === 'en' ? 
+                                'Enter your final answer (e.g., x = 7)' : 
+                                'أدخل إجابتك النهائية (مثال: س = ٧)'
+                              }
+                              className="text-lg h-12 bg-white"
+                            />
+                          </div>
+                        )}
                       </>
                     ) : (
                       // Single answer input for non-step problems
