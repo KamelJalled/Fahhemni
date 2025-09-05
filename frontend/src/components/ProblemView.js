@@ -281,7 +281,6 @@ const ProblemView = () => {
     setIsCorrect(false);
     setStepResults([false, false, false]);
     setAllStepsComplete(false);
-    setShowHints([false, false, false]);
     setUserAnswer('');
     setCurrentExample(0);
     setShowExample(false);
@@ -289,10 +288,7 @@ const ProblemView = () => {
     setPracticeComplete([]);
     setHintsUsed(0);
     setShowEncouragement('');
-  };
-
-  const handleTryAgain = () => {
-    resetProblemState();
+    setAttempts(0);
   };
 
   const handleNextProblem = () => {
@@ -307,6 +303,30 @@ const ProblemView = () => {
     } else {
       navigate('/dashboard');
     }
+  };
+
+  // Reset state when problem changes
+  useEffect(() => {
+    resetProblemState();
+  }, [problemId]);
+
+  const getStepLabel = (stepIndex, step) => {
+    if (!step) return '';
+    
+    const labels = {
+      en: {
+        0: "Step 1: Apply operation to both sides",
+        1: "Step 2: Simplify the result", 
+        2: "Step 3: Final form"
+      },
+      ar: {
+        0: "الخطوة ١: طبق العملية على الطرفين",
+        1: "الخطوة ٢: بسط النتيجة",
+        2: "الخطوة ٣: الشكل النهائي"
+      }
+    };
+    
+    return labels[language][stepIndex] || `${language === 'en' ? 'Step' : 'الخطوة'} ${stepIndex + 1}`;
   };
 
   const handleStepHintToggle = (stepIndex) => {
