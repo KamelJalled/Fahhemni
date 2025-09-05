@@ -75,7 +75,20 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('mathapp_teacher', userType === 'teacher');
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      // Call backend logout endpoint
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    
+    // Clear local state regardless of backend response
     setUser(null);
     setIsTeacher(false);
     localStorage.removeItem('mathapp_user');
