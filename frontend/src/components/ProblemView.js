@@ -126,7 +126,13 @@ const ProblemView = () => {
       backToDashboard: "Back to Dashboard",
       nextProblem: "Next Problem →",
       stepByStep: "Solve Step by Step:",
-      nextStep: "Next Step →"
+      nextStep: "Next Step →",
+      showSolution: "Show Solution",
+      tryItYourself: "Try It Yourself:",
+      checkAnswer: "Check Answer",
+      hint: "Hint",
+      continueNext: "Continue to Next Problem →",
+      operatorInstructions: "Use +, -, *, / or ×, ÷"
     },
     ar: {
       back: "العودة للوحة التحكم",
@@ -154,7 +160,13 @@ const ProblemView = () => {
       backToDashboard: "العودة للوحة التحكم",
       nextProblem: "المسألة التالية ←",
       stepByStep: "حل خطوة بخطوة:",
-      nextStep: "الخطوة التالية ←"
+      nextStep: "الخطوة التالية ←",
+      showSolution: "إظهار الحل",
+      tryItYourself: "جربه بنفسك:",
+      checkAnswer: "تحقق من الإجابة",
+      hint: "إرشاد",
+      continueNext: "تابع للمسألة التالية ←",
+      operatorInstructions: "استخدم +, -, *, / أو ×, ÷"
     }
   };
 
