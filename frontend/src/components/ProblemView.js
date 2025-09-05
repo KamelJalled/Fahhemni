@@ -536,12 +536,24 @@ const ProblemView = () => {
                     {/* Mark explanation complete when all examples practiced */}
                     {practiceComplete.length === problem.interactive_examples.length && 
                      practiceComplete.every(completed => completed) && (
-                      <div className="text-center">
+                      <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
+                        <div className="text-green-600 mb-3">
+                          <CheckCircle className="w-12 h-12 mx-auto mb-2" />
+                          <h3 className="text-lg font-semibold">
+                            {language === 'en' ? 'Explanation Complete!' : 'اكتمل الشرح!'}
+                          </h3>
+                          <p className="text-sm">
+                            {language === 'en' 
+                              ? 'You have successfully practiced all examples. Ready for the next challenge!' 
+                              : 'لقد تدربت بنجاح على جميع الأمثلة. جاهز للتحدي التالي!'
+                            }
+                          </p>
+                        </div>
                         <Button 
                           onClick={handleNextProblem}
                           className="bg-gradient-to-r from-green-500 to-emerald-600"
                         >
-                          {language === 'en' ? 'Continue to Next Problem →' : 'تابع للمسألة التالية ←'}
+                          {language === 'en' ? 'Continue to Practice Problems →' : 'تابع لمسائل التدريب ←'}
                         </Button>
                       </div>
                     )}
