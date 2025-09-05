@@ -74,15 +74,20 @@ async def init_database():
             "answer_ar": "س ≤ ١١",
             "show_full_solution": False,
             "hide_answer": False,
+            "step_solutions": [
+                {"step_en": "Add 3 to both sides", "step_ar": "أضف ٣ للطرفين", "answer_en": "x - 3 + 3 ≤ 8 + 3", "answer_ar": "س - ٣ + ٣ ≤ ٨ + ٣"},
+                {"step_en": "Simplify", "step_ar": "بسط", "answer_en": "x ≤ 11", "answer_ar": "س ≤ ١١"},
+                {"step_en": "Final answer", "step_ar": "الإجابة النهائية", "answer_en": "x ≤ 11", "answer_ar": "س ≤ ١١"}
+            ],
             "hints_en": [
                 "What operation will isolate x on the left side?",
                 "Add 3 to both sides of the inequality.",
-                "x - 3 + 3 ≤ 8 + 3, so x ≤ ?"
+                "Combine like terms to get the final answer."
             ],
             "hints_ar": [
                 "ما العملية التي ستعزل س في الطرف الأيسر؟",
                 "أضف ٣ إلى طرفي المتباينة.",
-                "س - ٣ + ٣ ≤ ٨ + ٣، إذن س ≤ ؟"
+                "اجمع الحدود المتشابهة للحصول على الإجابة النهائية."
             ]
         },
         {
@@ -96,15 +101,20 @@ async def init_database():
             "answer_ar": "س < ٥",
             "show_full_solution": False,
             "hide_answer": False,
+            "step_solutions": [
+                {"step_en": "Divide both sides by 4", "step_ar": "اقسم الطرفين على ٤", "answer_en": "4x ÷ 4 < 20 ÷ 4", "answer_ar": "٤س ÷ ٤ < ٢٠ ÷ ٤"},
+                {"step_en": "Simplify", "step_ar": "بسط", "answer_en": "x < 5", "answer_ar": "س < ٥"},
+                {"step_en": "Final answer", "step_ar": "الإجابة النهائية", "answer_en": "x < 5", "answer_ar": "س < ٥"}
+            ],
             "hints_en": [
                 "What operation will isolate x?",
                 "Divide both sides by 4.",
-                "4x ÷ 4 < 20 ÷ 4, so x < ?"
+                "Simplify to get the final answer."
             ],
             "hints_ar": [
                 "ما العملية التي ستعزل س؟",
                 "اقسم الطرفين على ٤.",
-                "٤س ÷ ٤ < ٢٠ ÷ ٤، إذن س < ؟"
+                "بسط للحصول على الإجابة النهائية."
             ]
         },
         {
