@@ -305,10 +305,9 @@ const ProblemView = () => {
     }
   };
 
-  // Reset state when problem changes
-  useEffect(() => {
+  const handleTryAgain = () => {
     resetProblemState();
-  }, [problemId]);
+  };
 
   const getStepLabel = (stepIndex, step) => {
     if (!step) return '';
