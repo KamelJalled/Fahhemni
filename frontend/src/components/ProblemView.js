@@ -242,6 +242,7 @@ const ProblemView = () => {
     setStepResults([false, false, false]);
     setAllStepsComplete(false);
     setShowHints(false);
+    setUserAnswer('');
   };
 
   const handleNextProblem = () => {
