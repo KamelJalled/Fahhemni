@@ -255,16 +255,27 @@ const ProblemView = () => {
     }
   };
 
-  const handleTryAgain = () => {
+  const resetProblemState = () => {
     setStepAnswers(['', '', '']);
     setCurrentStep(0);
     setCurrentHint(0);
+    setShowHints([false, false, false]);
     setIsSubmitted(false);
     setIsCorrect(false);
     setStepResults([false, false, false]);
     setAllStepsComplete(false);
-    setShowHints(false);
+    setShowHints([false, false, false]);
     setUserAnswer('');
+    setCurrentExample(0);
+    setShowExample(false);
+    setPracticeAnswer('');
+    setPracticeComplete([]);
+    setHintsUsed(0);
+    setShowEncouragement('');
+  };
+
+  const handleTryAgain = () => {
+    resetProblemState();
   };
 
   const handleNextProblem = () => {
@@ -273,9 +284,20 @@ const ProblemView = () => {
     const currentIndex = problemOrder.indexOf(problemId);
     if (currentIndex < problemOrder.length - 1) {
       const nextProblemId = problemOrder[currentIndex + 1];
+      // Reset state before navigating
+      resetProblemState();
       navigate(`/problem/${nextProblemId}`);
     } else {
       navigate('/dashboard');
+    }
+  };
+
+  const handleStepHintToggle = (stepIndex) => {
+    const newShowHints = [...showHints];
+    newShowHints[stepIndex] = !newShowHints[stepIndex];
+    setShowHints(newShowHints);
+    if (!newShowHints[stepIndex]) {
+      setHintsUsed(hintsUsed + 1);
     }
   };
 
