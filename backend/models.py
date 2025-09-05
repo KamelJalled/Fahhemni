@@ -41,6 +41,12 @@ class ProblemAttempt(BaseModel):
     answer: str
     hints_used: int = Field(default=0, ge=0)
 
+class StepSolution(BaseModel):
+    step_en: str
+    step_ar: str
+    answer_en: str
+    answer_ar: str
+
 class Problem(BaseModel):
     id: str
     section_id: str
@@ -56,6 +62,7 @@ class Problem(BaseModel):
     explanation_ar: Optional[str] = None
     show_full_solution: bool = False
     hide_answer: bool = False
+    step_solutions: Optional[List[StepSolution]] = None
 
 class Section(BaseModel):
     id: str
