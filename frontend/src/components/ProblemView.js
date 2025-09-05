@@ -732,14 +732,20 @@ const ProblemView = () => {
 
                     {/* Submit/Try Again/Next Problem Buttons */}
                     <div className="flex gap-2">
-                      {!allStepsComplete && !isSubmitted ? (
+                      {!isCorrect && !isSubmitted ? (
                         <Button 
                           onClick={handleSubmit}
                           className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
-                          disabled={!stepAnswers[currentStep]?.trim() && !problem.step_solutions}
+                          disabled={
+                            problem.step_solutions ? 
+                              (!stepAnswers[currentStep]?.trim()) :
+                              (!stepAnswers[0]?.trim() && (!allStepsComplete || !userAnswer.trim()))
+                          }
                         >
                           {problem.step_solutions && currentStep < (problem.step_solutions?.length - 1) ? 
-                            (language === 'en' ? 'Next Step →' : 'الخطوة التالية ←') :
+                            (language === 'en' ? 'Check Step →' : 'تحقق من الخطوة ←') :
+                            problem.final_answer_required && allStepsComplete ?
+                            (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية') :
                             text[language].submit
                           }
                         </Button>
