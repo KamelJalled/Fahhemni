@@ -92,7 +92,7 @@ const ProblemView = () => {
       nextHint: "Next Hint",
       noMoreHints: "No more hints available",
       yourAnswer: "Your Answer",
-      placeholder: "Enter your answer (e.g., x > 5 or س > ٥)",
+      placeholder: "Enter your answer (e.g., x > 5)",
       correct: "Correct! Well done!",
       incorrect: "Not quite right. Try again!",
       explanation: "Explanation",
@@ -107,7 +107,10 @@ const ProblemView = () => {
       ],
       completed: "Problem Completed!",
       points: "Points Earned",
-      backToDashboard: "Back to Dashboard"
+      backToDashboard: "Back to Dashboard",
+      nextProblem: "Next Problem →",
+      stepByStep: "Solve Step by Step:",
+      nextStep: "Next Step →"
     },
     ar: {
       back: "العودة للوحة التحكم",
@@ -117,7 +120,7 @@ const ProblemView = () => {
       nextHint: "الإرشاد التالي",
       noMoreHints: "لا توجد إرشادات أخرى متاحة",
       yourAnswer: "إجابتك",
-      placeholder: "أدخل إجابتك (مثل: س > ٥ أو x > 5)",
+      placeholder: "أدخل إجابتك (مثل: س > ٥)",
       correct: "صحيح! أحسنت!",
       incorrect: "ليس صحيحاً تماماً. حاول مرة أخرى!",
       explanation: "الشرح",
@@ -132,7 +135,10 @@ const ProblemView = () => {
       ],
       completed: "تم إكمال المسألة!",
       points: "النقاط المكتسبة",
-      backToDashboard: "العودة للوحة التحكم"
+      backToDashboard: "العودة للوحة التحكم",
+      nextProblem: "المسألة التالية ←",
+      stepByStep: "حل خطوة بخطوة:",
+      nextStep: "الخطوة التالية ←"
     }
   };
 
