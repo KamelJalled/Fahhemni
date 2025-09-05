@@ -36,26 +36,49 @@ async def init_database():
             "section_id": "section1",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "Solve: x + 5 = 12",
-            "question_ar": "حل: س + ٥ = ١٢",
+            "question_en": "x + 8 = 15",
+            "question_ar": "س + ٨ = ١٥",
             "answer": "7",
             "answer_ar": "٧",
-            "explanation_en": "This is a review problem. Subtract 5 from both sides:\nx + 5 - 5 = 12 - 5\nx = 7",
-            "explanation_ar": "هذه مسألة مراجعة. اطرح ٥ من الطرفين:\nس + ٥ - ٥ = ١٢ - ٥\nس = ٧",
+            "explanation_en": "This is a review problem. We'll solve it step by step.",
+            "explanation_ar": "هذه مسألة مراجعة. سنحلها خطوة بخطوة.",
             "show_full_solution": False,
             "hide_answer": False,
-            "practice_problems": [
+            "step_solutions": [
                 {
-                    "question_en": "Now try: x + 8 = 15",
-                    "question_ar": "الآن جرب: س + ٨ = ١٥",
-                    "answer": "7",
-                    "answer_ar": "٧",
-                    "hint_en": "Subtract 8 from both sides",
-                    "hint_ar": "اطرح ٨ من الطرفين"
+                    "step_en": "Subtract 8 from both sides",
+                    "step_ar": "اطرح ٨ من الطرفين", 
+                    "possible_answers": [
+                        "x + 8 - 8 = 15 - 8",
+                        "x = 15 - 8",
+                        "x = 7"
+                    ],
+                    "possible_answers_ar": [
+                        "س + ٨ - ٨ = ١٥ - ٨",
+                        "س = ١٥ - ٨", 
+                        "س = ٧"
+                    ]
+                },
+                {
+                    "step_en": "Simplify both sides",
+                    "step_ar": "بسط الطرفين",
+                    "possible_answers": [
+                        "x = 7"
+                    ],
+                    "possible_answers_ar": [
+                        "س = ٧"
+                    ]
                 }
             ],
-            "hints_en": ["What do you need to do to isolate x?"],
-            "hints_ar": ["ما الذي تحتاج لفعله لعزل س؟"]
+            "final_answer_required": True,
+            "hints_en": [
+                "What operation cancels out addition?",
+                "Calculate 15 minus 8."
+            ],
+            "hints_ar": [
+                "ما العملية التي تلغي الجمع؟",
+                "احسب ١٥ ناقص ٨."
+            ]
         },
         {
             "id": "explanation1",
