@@ -203,6 +203,26 @@ async def get_teacher_dashboard():
 async def root():
     return {"message": "Math Tutoring API is running", "version": "1.0.0"}
 
+# Admin endpoint to reset database
+@api_router.post("/admin/reset-db")
+async def reset_database():
+    """Reset and reinitialize database - for development only"""
+    try:
+        from database import problems_collection, sections_collection, students_collection, progress_collection
+        
+        # Clear all collections
+        await problems_collection.delete_many({})
+        await sections_collection.delete_many({})
+        await students_collection.delete_many({})
+        await progress_collection.delete_many({})
+        
+        # Reinitialize
+        await init_database()
+        
+        return {"message": "Database reset and reinitialized successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Include the router in the main app
 app.include_router(api_router)
 
