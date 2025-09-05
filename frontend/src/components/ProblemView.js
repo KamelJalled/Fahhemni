@@ -171,16 +171,25 @@ const ProblemView = () => {
   };
 
   const handleSubmit = async () => {
-    if (!stepAnswers[currentStep].trim() && !allStepsComplete) return;
+    const currentAnswer = stepAnswers[currentStep].trim();
+    if (!currentAnswer && !allStepsComplete) return;
 
     try {
       // For step-by-step problems, validate current step
       if (problem.step_solutions && !allStepsComplete) {
         const currentStepSolution = problem.step_solutions[currentStep];
-        const normalizedAnswer = normalizeAnswer(stepAnswers[currentStep]);
-        const normalizedCorrect = normalizeAnswer(language === 'en' ? currentStepSolution.answer_en : currentStepSolution.answer_ar);
+        const normalizedAnswer = normalizeAnswer(currentAnswer);
         
-        if (normalizedAnswer === normalizedCorrect) {
+        // Check against all possible answers for this step
+        const possibleAnswers = language === 'en' ? 
+          currentStepSolution.possible_answers : 
+          currentStepSolution.possible_answers_ar;
+        
+        const isStepCorrect = possibleAnswers.some(possibleAnswer => 
+          normalizeAnswer(possibleAnswer) === normalizedAnswer
+        );
+        
+        if (isStepCorrect) {
           // Step is correct
           const newStepResults = [...stepResults];
           newStepResults[currentStep] = true;
@@ -189,36 +198,19 @@ const ProblemView = () => {
           if (currentStep < problem.step_solutions.length - 1) {
             // Move to next step
             setCurrentStep(currentStep + 1);
-            setCurrentHint(currentStep + 1); // Show hint for next step
+            setShowEncouragement(`✅ ${language === 'en' ? 'Great! Now continue with the next step.' : 'رائع! الآن تابع مع الخطوة التالية.'}`);
+            setTimeout(() => setShowEncouragement(''), 2000);
           } else {
-            // All steps complete
-            setAllStepsComplete(true);
-            setIsCorrect(true);
-            
-            // Submit final answer to backend
-            const response = await fetch(
-              `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  problem_id: problemId,
-                  answer: problem.answer,
-                  hints_used: currentHint
-                }),
-              }
-            );
-            
-            if (response.ok) {
-              const result = await response.json();
-              setAttempts(result.attempts);
-              toast({
-                title: text[language].correct,
-                description: `${text[language].points}: ${result.score}`,
-              });
-              fetchData();
+            // All steps complete - now require final answer if needed
+            if (problem.final_answer_required) {
+              setAllStepsComplete(true);
+              setShowEncouragement(`✅ ${language === 'en' ? 'Excellent! Now enter your final answer below.' : 'ممتاز! الآن أدخل إجابتك النهائية أدناه.'}`);
+              setTimeout(() => setShowEncouragement(''), 3000);
+            } else {
+              // Complete the problem
+              setAllStepsComplete(true);
+              setIsCorrect(true);
+              await submitToBackend();
             }
           }
         } else {
@@ -226,44 +218,57 @@ const ProblemView = () => {
           setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
           setTimeout(() => setShowEncouragement(''), 3000);
         }
+      } else if (problem.final_answer_required && allStepsComplete) {
+        // Submit final answer
+        const finalAnswer = stepAnswers[problem.step_solutions?.length || 0] || userAnswer;
+        const normalizedFinalAnswer = normalizeAnswer(finalAnswer);
+        const normalizedCorrectAnswer = normalizeAnswer(problem.answer);
+        
+        if (normalizedFinalAnswer === normalizedCorrectAnswer) {
+          setIsCorrect(true);
+          await submitToBackend();
+        } else {
+          setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
+          setTimeout(() => setShowEncouragement(''), 3000);
+        }
       } else {
         // Single answer submission (for non-step problems)
-        const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              problem_id: problemId,
-              answer: stepAnswers[0].trim(),
-              hints_used: currentHint
-            }),
-          }
-        );
-
-        if (response.ok) {
-          const result = await response.json();
-          setIsSubmitted(true);
-          setIsCorrect(result.correct);
-          setAttempts(result.attempts);
-
-          if (result.correct) {
-            toast({
-              title: text[language].correct,
-              description: `${text[language].points}: ${result.score}`,
-            });
-          } else {
-            const encouragementIndex = Math.floor(Math.random() * text[language].encouragement.length);
-            setShowEncouragement(text[language].encouragement[encouragementIndex]);
-            setTimeout(() => setShowEncouragement(''), 3000);
-          }
-          fetchData();
-        }
+        await submitToBackend();
       }
     } catch (error) {
       console.error('Error submitting answer:', error);
+    }
+  };
+
+  const submitToBackend = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          problem_id: problemId,
+          answer: problem.answer,
+          hints_used: hintsUsed
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      setAttempts(result.attempts);
+      setIsCorrect(true);
+      setIsSubmitted(true);
+      
+      toast({
+        title: text[language].correct,
+        description: `${text[language].points}: ${result.score}`,
+      });
+      
+      // Update progress immediately
+      await fetchData();
     }
   };
 
