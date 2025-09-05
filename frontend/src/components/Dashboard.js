@@ -115,10 +115,12 @@ const Dashboard = () => {
     if (problem.completed) return 'completed';
     if (problem.attempts > 0) return 'in-progress';
     
-    // Check if locked based on prerequisites
+    // Check if locked based on flexible prerequisites
     if (problemId === 'assessment1') {
-      const practiceComplete = progress.section1.practice1.completed && progress.section1.practice2.completed;
-      return practiceComplete ? 'available' : 'locked';
+      // Allow assessment after completing at least one practice problem
+      const practice1Complete = progress.section1.practice1.completed;
+      const practice2Complete = progress.section1.practice2.completed;
+      return (practice1Complete || practice2Complete) ? 'available' : 'locked';
     }
     if (problemId === 'examprep1') {
       return progress.section1.assessment1.completed ? 'available' : 'locked';
