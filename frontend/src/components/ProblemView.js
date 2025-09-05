@@ -66,6 +66,11 @@ const ProblemView = () => {
     fetchData();
   }, [user, problemId, navigate]);
 
+  // Reset state when problem changes
+  useEffect(() => {
+    resetProblemState();
+  }, [problemId]);
+
   const fetchData = async () => {
     try {
       setLoading(true);
