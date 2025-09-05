@@ -16,16 +16,19 @@ const ProblemView = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [userAnswer, setUserAnswer] = useState('');
+  const [stepAnswers, setStepAnswers] = useState(['', '', '']); // For 3-step solving
+  const [currentStep, setCurrentStep] = useState(0);
   const [currentHint, setCurrentHint] = useState(0);
   const [showHints, setShowHints] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [stepResults, setStepResults] = useState([false, false, false]); // Track each step result
   const [attempts, setAttempts] = useState(0);
   const [showEncouragement, setShowEncouragement] = useState(false);
   const [userProgress, setUserProgress] = useState(null);
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [allStepsComplete, setAllStepsComplete] = useState(false);
 
   // Helper function to normalize answer
   const normalizeAnswer = (answer) => {
