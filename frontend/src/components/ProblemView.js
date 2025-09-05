@@ -29,6 +29,7 @@ const ProblemView = () => {
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [allStepsComplete, setAllStepsComplete] = useState(false);
+  const [userAnswer, setUserAnswer] = useState('');
 
   // Helper function to normalize answer
   const normalizeAnswer = (answer) => {
