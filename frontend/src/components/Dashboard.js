@@ -143,6 +143,22 @@ const Dashboard = () => {
 
   const handleProblemClick = (problemId) => {
     const status = getProblemStatus(problemId, userProgress);
+    
+    // Show warning for assessment if not all practice completed
+    if (problemId === 'assessment1' && status === 'available') {
+      const practice1Complete = userProgress.section1.practice1.completed;
+      const practice2Complete = userProgress.section1.practice2.completed;
+      
+      if (!practice1Complete || !practice2Complete) {
+        const proceed = window.confirm(
+          language === 'en' 
+            ? "⚠️ Recommended to complete all practice problems first. Continue anyway?"
+            : "⚠️ يُنصح بإكمال جميع مسائل التدريب أولاً. هل تريد المتابعة؟"
+        );
+        if (!proceed) return;
+      }
+    }
+    
     if (status !== 'locked') {
       navigate(`/problem/${problemId}`);
     }
