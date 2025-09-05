@@ -365,18 +365,54 @@ const ProblemView = () => {
               <Card>
                 <CardContent className="p-6">
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        {text[language].yourAnswer}
-                      </label>
-                      <Input
-                        value={userAnswer}
-                        onChange={(e) => setUserAnswer(e.target.value)}
-                        placeholder={text[language].placeholder}
-                        className="text-lg h-12"
-                        disabled={isCompleted && !isSubmitted}
-                      />
-                    </div>
+                    {/* Step-by-step inputs for practice problems */}
+                    {problem.step_solutions ? (
+                      <>
+                        <h4 className="font-semibold text-lg mb-4">
+                          {language === 'en' ? 'Solve Step by Step:' : 'حل خطوة بخطوة:'}
+                        </h4>
+                        
+                        {problem.step_solutions.map((step, index) => (
+                          <div key={index} className={`border rounded-lg p-4 ${
+                            index <= currentStep ? 'bg-white' : 'bg-gray-50 opacity-50'
+                          }`}>
+                            <div className="flex items-center mb-2">
+                              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 ${
+                                stepResults[index] ? 'bg-green-500 text-white' : 
+                                index === currentStep ? 'bg-blue-500 text-white' : 
+                                'bg-gray-300 text-gray-600'
+                              }`}>
+                                {stepResults[index] ? '✓' : index + 1}
+                              </span>
+                              <label className="font-medium">
+                                {language === 'en' ? step.step_en : step.step_ar}
+                              </label>
+                            </div>
+                            <Input
+                              value={stepAnswers[index]}
+                              onChange={(e) => handleStepAnswerChange(index, e.target.value)}
+                              placeholder={language === 'en' ? 'Enter your answer for this step...' : 'أدخل إجابتك لهذه الخطوة...'}
+                              className="text-lg h-12"
+                              disabled={index > currentStep || stepResults[index]}
+                            />
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      // Single answer input for non-step problems
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          {text[language].yourAnswer}
+                        </label>
+                        <Input
+                          value={stepAnswers[0]}
+                          onChange={(e) => handleStepAnswerChange(0, e.target.value)}
+                          placeholder={language === 'en' ? 'Enter your answer (e.g., x > 5)' : 'أدخل إجابتك (مثل: س > ٥)'}
+                          className="text-lg h-12"
+                          disabled={isCompleted && !isSubmitted}
+                        />
+                      </div>
+                    )}
 
                     {/* Encouragement Message */}
                     {showEncouragement && (
@@ -387,35 +423,37 @@ const ProblemView = () => {
                       </div>
                     )}
 
-                    {/* Submit/Try Again Button */}
+                    {/* Submit/Try Again/Next Problem Buttons */}
                     <div className="flex gap-2">
-                      {!isSubmitted ? (
+                      {!allStepsComplete && !isSubmitted ? (
                         <Button 
                           onClick={handleSubmit}
                           className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
-                          disabled={!userAnswer.trim()}
+                          disabled={!stepAnswers[currentStep]?.trim() && !problem.step_solutions}
                         >
-                          {text[language].submit}
+                          {problem.step_solutions && currentStep < (problem.step_solutions?.length - 1) ? 
+                            (language === 'en' ? 'Next Step →' : 'الخطوة التالية ←') :
+                            text[language].submit
+                          }
                         </Button>
                       ) : (
                         <>
-                          {!isCorrect && (
+                          <Button 
+                            onClick={handleTryAgain}
+                            className="flex-1 h-12"
+                            variant="outline"
+                          >
+                            <RotateCcw className="w-4 h-4 mr-2" />
+                            {text[language].tryAgain}
+                          </Button>
+                          
+                          {(allStepsComplete || isCorrect) && (
                             <Button 
-                              onClick={handleTryAgain}
-                              className="flex-1 h-12"
-                              variant="outline"
-                            >
-                              <RotateCcw className="w-4 h-4 mr-2" />
-                              {text[language].tryAgain}
-                            </Button>
-                          )}
-                          {isCorrect && (
-                            <Button 
-                              onClick={() => navigate('/dashboard')}
+                              onClick={handleNextProblem}
                               className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
                             >
                               <Trophy className="w-4 h-4 mr-2" />
-                              {text[language].backToDashboard}
+                              {language === 'en' ? 'Next Problem →' : 'المسألة التالية ←'}
                             </Button>
                           )}
                         </>
@@ -423,25 +461,25 @@ const ProblemView = () => {
                     </div>
 
                     {/* Result Display */}
-                    {isSubmitted && (
+                    {(isSubmitted || allStepsComplete) && (
                       <div className={`p-4 rounded-lg border ${
-                        isCorrect 
+                        (isCorrect || allStepsComplete)
                           ? 'bg-green-50 border-green-200 text-green-800' 
                           : 'bg-red-50 border-red-200 text-red-800'
                       }`}>
                         <div className="flex items-center">
-                          {isCorrect ? (
+                          {(isCorrect || allStepsComplete) ? (
                             <CheckCircle className="w-5 h-5 mr-2" />
                           ) : (
                             <XCircle className="w-5 h-5 mr-2" />
                           )}
                           <span className="font-medium">
-                            {isCorrect ? text[language].correct : text[language].incorrect}
+                            {(isCorrect || allStepsComplete) ? text[language].correct : text[language].incorrect}
                           </span>
                         </div>
                         
                         {/* Show correct answer only for non-assessment problems */}
-                        {!isCorrect && !problem.hide_answer && (
+                        {!isCorrect && !allStepsComplete && !problem.hide_answer && (
                           <div className="mt-2 text-sm">
                             {language === 'en' ? 'Correct answer: ' : 'الإجابة الصحيحة: '}
                             <span className="font-mono">{problem.answer}</span>
