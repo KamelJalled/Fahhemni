@@ -121,19 +121,38 @@ async def init_database():
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
-                {"step_en": "Add 3 to both sides", "step_ar": "أضف ٣ للطرفين", "answer_en": "x - 3 + 3 ≤ 8 + 3", "answer_ar": "س - ٣ + ٣ ≤ ٨ + ٣"},
-                {"step_en": "Simplify", "step_ar": "بسط", "answer_en": "x ≤ 11", "answer_ar": "س ≤ ١١"},
-                {"step_en": "Final answer", "step_ar": "الإجابة النهائية", "answer_en": "x ≤ 11", "answer_ar": "س ≤ ١١"}
+                {
+                    "step_en": "Add 3 to both sides", 
+                    "step_ar": "أضف ٣ للطرفين", 
+                    "possible_answers": [
+                        "x - 3 + 3 ≤ 8 + 3",
+                        "x ≤ 8 + 3", 
+                        "x ≤ 11"
+                    ],
+                    "possible_answers_ar": [
+                        "س - ٣ + ٣ ≤ ٨ + ٣",
+                        "س ≤ ٨ + ٣",
+                        "س ≤ ١١"
+                    ]
+                },
+                {
+                    "step_en": "Simplify the right side", 
+                    "step_ar": "بسط الطرف الأيمن",
+                    "possible_answers": [
+                        "x ≤ 11"
+                    ],
+                    "possible_answers_ar": [
+                        "س ≤ ١١"
+                    ]
+                }
             ],
             "hints_en": [
-                "What operation will isolate x on the left side?",
-                "Add 3 to both sides of the inequality.",
-                "Combine like terms to get the final answer."
+                "What operation cancels out subtraction?",
+                "Combine the numbers on the right side."
             ],
             "hints_ar": [
-                "ما العملية التي ستعزل س في الطرف الأيسر؟",
-                "أضف ٣ إلى طرفي المتباينة.",
-                "اجمع الحدود المتشابهة للحصول على الإجابة النهائية."
+                "ما العملية التي تلغي الطرح؟",
+                "اجمع الأرقام في الطرف الأيمن."
             ]
         },
         {
@@ -148,19 +167,40 @@ async def init_database():
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
-                {"step_en": "Divide both sides by 4", "step_ar": "اقسم الطرفين على ٤", "answer_en": "4x ÷ 4 < 20 ÷ 4", "answer_ar": "٤س ÷ ٤ < ٢٠ ÷ ٤"},
-                {"step_en": "Simplify", "step_ar": "بسط", "answer_en": "x < 5", "answer_ar": "س < ٥"},
-                {"step_en": "Final answer", "step_ar": "الإجابة النهائية", "answer_en": "x < 5", "answer_ar": "س < ٥"}
+                {
+                    "step_en": "Divide both sides by 4", 
+                    "step_ar": "اقسم الطرفين على ٤",
+                    "possible_answers": [
+                        "4x ÷ 4 < 20 ÷ 4",
+                        "4x / 4 < 20 / 4",
+                        "x < 20 / 4",
+                        "x < 5"
+                    ],
+                    "possible_answers_ar": [
+                        "٤س ÷ ٤ < ٢٠ ÷ ٤",
+                        "٤س / ٤ < ٢٠ / ٤",
+                        "س < ٢٠ / ٤",
+                        "س < ٥"
+                    ]
+                },
+                {
+                    "step_en": "Simplify the division", 
+                    "step_ar": "بسط القسمة",
+                    "possible_answers": [
+                        "x < 5"
+                    ],
+                    "possible_answers_ar": [
+                        "س < ٥"
+                    ]
+                }
             ],
             "hints_en": [
-                "What operation will isolate x?",
-                "Divide both sides by 4.",
-                "Simplify to get the final answer."
+                "What operation cancels out multiplication?",
+                "Calculate 20 divided by 4."
             ],
             "hints_ar": [
-                "ما العملية التي ستعزل س؟",
-                "اقسم الطرفين على ٤.",
-                "بسط للحصول على الإجابة النهائية."
+                "ما العملية التي تلغي الضرب؟",
+                "احسب ٢٠ مقسوماً على ٤."
             ]
         },
         {
