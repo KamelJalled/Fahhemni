@@ -390,9 +390,11 @@ const ProblemView = () => {
               <CardContent>
                 {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
-                {/* Show explanation for preparation and explanation problems */}
-                {problem.show_full_solution && (problem.explanation_en || problem.explanation_ar) && (
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+            {/* Show explanation or preparation content */}
+            {problem.show_full_solution && problem.explanation_en && (
+              <Card className="mb-6">
+                <CardContent className="p-6">
+                  <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
                     <h4 className="font-semibold mb-2 text-blue-800">
                       {text[language].explanation}
                     </h4>
@@ -400,7 +402,185 @@ const ProblemView = () => {
                       {language === 'en' ? problem.explanation_en : problem.explanation_ar}
                     </pre>
                   </div>
-                )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Interactive Examples for Explanation */}
+            {problem.interactive_examples && (
+              <Card className="mb-6">
+                <CardContent className="p-6">
+                  <div className="space-y-6">
+                    {problem.interactive_examples.map((example, index) => (
+                      <div key={index} className="border rounded-lg p-4">
+                        <h4 className="font-semibold text-lg mb-3 text-blue-700">
+                          {language === 'en' ? example.title_en : example.title_ar}
+                        </h4>
+                        
+                        {/* Show example */}
+                        <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                          <div className="text-xl font-mono text-center mb-2">
+                            {language === 'en' ? example.problem_en : example.problem_ar}
+                          </div>
+                          
+                          {(showExample && currentExample === index) && (
+                            <div className="mt-4 text-sm">
+                              <pre className="whitespace-pre-wrap text-gray-700">
+                                {language === 'en' ? example.solution_en : example.solution_ar}
+                              </pre>
+                            </div>
+                          )}
+                          
+                          {!showExample && currentExample === index && (
+                            <Button 
+                              onClick={() => setShowExample(true)}
+                              className="mt-2 w-full"
+                              variant="outline"
+                            >
+                              {language === 'en' ? 'Show Solution' : 'إظهار الحل'}
+                            </Button>
+                          )}
+                        </div>
+
+                        {/* Practice problem */}
+                        {showExample && currentExample === index && (
+                          <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <h5 className="font-medium mb-2 text-yellow-800">
+                              {language === 'en' ? 'Try It Yourself:' : 'جربه بنفسك:'}
+                            </h5>
+                            <div className="text-lg font-mono text-center mb-3">
+                              {language === 'en' ? example.practice_question_en : example.practice_question_ar}
+                            </div>
+                            
+                            <Input
+                              value={practiceAnswer}
+                              onChange={(e) => setPracticeAnswer(e.target.value)}
+                              placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
+                              className="mb-3"
+                            />
+                            
+                            <Button 
+                              onClick={() => {
+                                const correct = normalizeAnswer(practiceAnswer) === normalizeAnswer(example.practice_answer);
+                                if (correct) {
+                                  const newPracticeComplete = [...practiceComplete];
+                                  newPracticeComplete[index] = true;
+                                  setPracticeComplete(newPracticeComplete);
+                                  setPracticeAnswer('');
+                                  if (index < problem.interactive_examples.length - 1) {
+                                    setCurrentExample(index + 1);
+                                    setShowExample(false);
+                                  }
+                                } else {
+                                  setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
+                                  setTimeout(() => setShowEncouragement(''), 3000);
+                                }
+                              }}
+                              className="w-full"
+                              disabled={!practiceAnswer.trim()}
+                            >
+                              {language === 'en' ? 'Check Answer' : 'تحقق من الإجابة'}
+                            </Button>
+                            
+                            {practiceComplete[index] && (
+                              <div className="mt-2 p-2 bg-green-100 text-green-800 rounded text-center">
+                                ✓ {language === 'en' ? 'Correct! Well done!' : 'صحيح! أحسنت!'}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    
+                    {/* Mark explanation complete when all examples practiced */}
+                    {practiceComplete.length === problem.interactive_examples.length && 
+                     practiceComplete.every(completed => completed) && (
+                      <div className="text-center">
+                        <Button 
+                          onClick={handleNextProblem}
+                          className="bg-gradient-to-r from-green-500 to-emerald-600"
+                        >
+                          {language === 'en' ? 'Continue to Next Problem →' : 'تابع للمسألة التالية ←'}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Interactive Practice for Preparation */}
+            {problem.practice_problems && (
+              <Card className="mb-6">
+                <CardContent className="p-6">
+                  <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 mb-4">
+                    <h4 className="font-semibold mb-2 text-blue-800">
+                      {text[language].explanation}
+                    </h4>
+                    <pre className="whitespace-pre-wrap text-sm text-blue-700">
+                      {language === 'en' ? problem.explanation_en : problem.explanation_ar}
+                    </pre>
+                  </div>
+                  
+                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <h5 className="font-medium mb-2 text-yellow-800">
+                      {language === 'en' ? 'Try It Yourself:' : 'جربه بنفسك:'}
+                    </h5>
+                    <div className="text-lg font-mono text-center mb-3">
+                      {language === 'en' ? problem.practice_problems[0].question_en : problem.practice_problems[0].question_ar}
+                    </div>
+                    
+                    <Input
+                      value={practiceAnswer}
+                      onChange={(e) => setPracticeAnswer(e.target.value)}
+                      placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
+                      className="mb-3"
+                    />
+                    
+                    <div className="flex gap-2">
+                      <Button 
+                        onClick={() => {
+                          const correct = normalizeAnswer(practiceAnswer) === normalizeAnswer(problem.practice_problems[0].answer);
+                          if (correct) {
+                            setPracticeComplete([true]);
+                          } else {
+                            setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
+                            setTimeout(() => setShowEncouragement(''), 3000);
+                          }
+                        }}
+                        className="flex-1"
+                        disabled={!practiceAnswer.trim()}
+                      >
+                        {language === 'en' ? 'Check Answer' : 'تحقق من الإجابة'}
+                      </Button>
+                      
+                      <Button 
+                        onClick={() => {
+                          alert(language === 'en' ? problem.practice_problems[0].hint_en : problem.practice_problems[0].hint_ar);
+                        }}
+                        variant="outline"
+                      >
+                        {language === 'en' ? 'Hint' : 'إرشاد'}
+                      </Button>
+                    </div>
+                    
+                    {practiceComplete[0] && (
+                      <div className="mt-4">
+                        <div className="p-2 bg-green-100 text-green-800 rounded text-center mb-3">
+                          ✓ {language === 'en' ? 'Correct! Well done!' : 'صحيح! أحسنت!'}
+                        </div>
+                        <Button 
+                          onClick={handleNextProblem}
+                          className="w-full bg-gradient-to-r from-green-500 to-emerald-600"
+                        >
+                          {language === 'en' ? 'Continue to Next Problem →' : 'تابع للمسألة التالية ←'}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
               </CardContent>
             </Card>
 
