@@ -42,10 +42,19 @@ const ProblemView = () => {
   const normalizeAnswer = (answer) => {
     // Convert Arabic numerals to Western and س to x
     const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
-    return answer.toLowerCase()
+    let normalized = answer.toLowerCase()
       .replace(/س/g, 'x')
       .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
       .trim();
+    
+    // Normalize operators
+    normalized = normalized
+      .replace(/÷/g, '/') // Convert ÷ to /
+      .replace(/×/g, '*') // Convert × to *
+      .replace(/\s+/g, ' ') // Normalize spaces
+      .replace(/\s*([<>=≤≥+\-*/])\s*/g, '$1'); // Remove spaces around operators
+    
+    return normalized;
   };
 
   useEffect(() => {
