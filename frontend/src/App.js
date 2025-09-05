@@ -88,11 +88,21 @@ const AuthProvider = ({ children }) => {
       console.error('Logout error:', error);
     }
     
-    // Clear local state regardless of backend response
+    // Clear all local state and storage
     setUser(null);
     setIsTeacher(false);
     localStorage.removeItem('mathapp_user');
     localStorage.removeItem('mathapp_teacher');
+    
+    // Clear any cached data
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('mathapp_')) {
+        localStorage.removeItem(key);
+      }
+    });
+    
+    // Force page reload to ensure complete state reset
+    window.location.href = '/';
   };
 
   return (
