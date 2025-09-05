@@ -717,7 +717,7 @@ const ProblemView = () => {
             )}
           </div>
 
-          {/* Right Column - Hints */}
+          {/* Right Column - Hints (Hidden by Default) */}
           {(problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) && !problem.show_full_solution && (
             <div>
               <Card>
@@ -729,53 +729,103 @@ const ProblemView = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {/* Hint Progress */}
+                    {/* Hint Usage Tracker */}
                     <div>
                       <div className="flex justify-between text-sm text-gray-500 mb-2">
                         <span>{language === 'en' ? 'Hints Used' : 'الإرشادات المستخدمة'}</span>
-                        <span>{showHints ? currentHint + 1 : 0}/{(language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0}</span>
+                        <span>{hintsUsed}/{(language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0}</span>
                       </div>
-                      <Progress value={(showHints ? currentHint + 1 : 0) / ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 1) * 100} />
+                      <Progress value={(hintsUsed / ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 1)) * 100} />
                     </div>
 
-                    {/* Show Hints Button */}
-                    {!showHints && (
-                      <Button 
-                        onClick={() => setShowHints(true)}
-                        variant="outline"
-                        className="w-full"
-                      >
-                        <Lightbulb className="w-4 h-4 mr-2" />
-                        {text[language].showHint}
-                      </Button>
-                    )}
+                    {/* Operator Instructions */}
+                    <div className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                      {language === 'en' 
+                        ? 'Accepted operators: +, -, *, /, ×, ÷, <, >, ≤, ≥'
+                        : 'العمليات المقبولة: +, -, *, /, ×, ÷, <, >, ≤, ≥'
+                      }
+                    </div>
 
-                    {/* Display Current Hint */}
-                    {showHints && (
-                      <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                        <p className="text-yellow-800">
-                          {language === 'en' ? problem.hints_en[currentHint] : problem.hints_ar[currentHint]}
-                        </p>
+                    {/* Step-based Hints */}
+                    {problem.step_solutions ? (
+                      problem.step_solutions.map((step, index) => (
+                        <div key={index} className={`border rounded-lg p-3 ${
+                          index <= currentStep ? 'bg-white' : 'bg-gray-50 opacity-50'
+                        }`}>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm font-medium">
+                              {language === 'en' ? `Step ${index + 1} Hint` : `إرشاد الخطوة ${index + 1}`}
+                            </span>
+                            <Button 
+                              onClick={() => handleStepHintToggle(index)}
+                              variant="outline" 
+                              size="sm"
+                              disabled={index > currentStep}
+                            >
+                              <Lightbulb className="w-3 h-3 mr-1" />
+                              {showHints[index] ? 
+                                (language === 'en' ? 'Hide' : 'إخفاء') : 
+                                (language === 'en' ? 'Show' : 'إظهار')
+                              }
+                            </Button>
+                          </div>
+                          
+                          {showHints[index] && (
+                            <div className="bg-yellow-50 p-3 rounded border border-yellow-200">
+                              <p className="text-yellow-800 text-sm">
+                                {language === 'en' ? problem.hints_en[index] : problem.hints_ar[index]}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      /* Single problem hints */
+                      <div className="space-y-3">
+                        {(language === 'en' ? problem.hints_en : problem.hints_ar)?.map((hint, index) => (
+                          <div key={index} className="border rounded-lg p-3">
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm font-medium">
+                                {language === 'en' ? `Hint ${index + 1}` : `إرشاد ${index + 1}`}
+                              </span>
+                              <Button 
+                                onClick={() => {
+                                  const newShowHints = [...showHints];
+                                  newShowHints[index] = !newShowHints[index];
+                                  setShowHints(newShowHints);
+                                  if (newShowHints[index]) {
+                                    setHintsUsed(hintsUsed + 1);
+                                  }
+                                }}
+                                variant="outline" 
+                                size="sm"
+                              >
+                                <Lightbulb className="w-3 h-3 mr-1" />
+                                {showHints[index] ? 
+                                  (language === 'en' ? 'Hide' : 'إخفاء') : 
+                                  (language === 'en' ? 'Show' : 'إظهار')
+                                }
+                              </Button>
+                            </div>
+                            
+                            {showHints[index] && (
+                              <div className="bg-yellow-50 p-3 rounded border border-yellow-200">
+                                <p className="text-yellow-800 text-sm">{hint}</p>
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     )}
 
-                    {/* Next Hint Button */}
-                    {showHints && currentHint < ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0) - 1 && (
-                      <Button 
-                        onClick={handleNextHint}
-                        variant="outline"
-                        className="w-full"
-                      >
-                        {text[language].nextHint}
-                      </Button>
-                    )}
-
-                    {/* No More Hints Message */}
-                    {showHints && currentHint === ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0) - 1 && (
-                      <p className="text-center text-gray-500 text-sm">
-                        {problem.hide_answer ? text[language].noMoreHints : 
-                         language === 'en' ? 'All hints used' : 'تم استخدام جميع الإرشادات'}
-                      </p>
+                    {/* Hints Impact Notice */}
+                    {hintsUsed > 0 && (
+                      <div className="text-xs text-orange-600 text-center">
+                        {language === 'en' 
+                          ? `Using hints may affect your score (-${hintsUsed * 10} points)`
+                          : `استخدام الإرشادات قد يؤثر على نتيجتك (-${hintsUsed * 10} نقطة)`
+                        }
+                      </div>
                     )}
                   </div>
                 </CardContent>
