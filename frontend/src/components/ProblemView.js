@@ -136,45 +136,96 @@ const ProblemView = () => {
   };
 
   const handleSubmit = async () => {
-    if (!userAnswer.trim()) return;
+    if (!stepAnswers[currentStep].trim() && !allStepsComplete) return;
 
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            problem_id: problemId,
-            answer: userAnswer.trim(),
-            hints_used: currentHint
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        setIsSubmitted(true);
-        setIsCorrect(result.correct);
-        setAttempts(result.attempts);
-
-        // Show toast notification
-        if (result.correct) {
-          toast({
-            title: text[language].correct,
-            description: `${text[language].points}: ${result.score}`,
-          });
+      // For step-by-step problems, validate current step
+      if (problem.step_solutions && !allStepsComplete) {
+        const currentStepSolution = problem.step_solutions[currentStep];
+        const normalizedAnswer = normalizeAnswer(stepAnswers[currentStep]);
+        const normalizedCorrect = normalizeAnswer(language === 'en' ? currentStepSolution.answer_en : currentStepSolution.answer_ar);
+        
+        if (normalizedAnswer === normalizedCorrect) {
+          // Step is correct
+          const newStepResults = [...stepResults];
+          newStepResults[currentStep] = true;
+          setStepResults(newStepResults);
+          
+          if (currentStep < problem.step_solutions.length - 1) {
+            // Move to next step
+            setCurrentStep(currentStep + 1);
+            setCurrentHint(currentStep + 1); // Show hint for next step
+          } else {
+            // All steps complete
+            setAllStepsComplete(true);
+            setIsCorrect(true);
+            
+            // Submit final answer to backend
+            const response = await fetch(
+              `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  problem_id: problemId,
+                  answer: problem.answer,
+                  hints_used: currentHint
+                }),
+              }
+            );
+            
+            if (response.ok) {
+              const result = await response.json();
+              setAttempts(result.attempts);
+              toast({
+                title: text[language].correct,
+                description: `${text[language].points}: ${result.score}`,
+              });
+              fetchData();
+            }
+          }
         } else {
-          // Show random encouragement
-          const encouragementIndex = Math.floor(Math.random() * text[language].encouragement.length);
-          setShowEncouragement(text[language].encouragement[encouragementIndex]);
+          // Step is incorrect
+          setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
           setTimeout(() => setShowEncouragement(''), 3000);
         }
+      } else {
+        // Single answer submission (for non-step problems)
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              problem_id: problemId,
+              answer: stepAnswers[0].trim(),
+              hints_used: currentHint
+            }),
+          }
+        );
 
-        // Refresh progress data
-        fetchData();
+        if (response.ok) {
+          const result = await response.json();
+          setIsSubmitted(true);
+          setIsCorrect(result.correct);
+          setAttempts(result.attempts);
+
+          if (result.correct) {
+            toast({
+              title: text[language].correct,
+              description: `${text[language].points}: ${result.score}`,
+            });
+          } else {
+            const encouragementIndex = Math.floor(Math.random() * text[language].encouragement.length);
+            setShowEncouragement(text[language].encouragement[encouragementIndex]);
+            setTimeout(() => setShowEncouragement(''), 3000);
+          }
+          fetchData();
+        }
       }
     } catch (error) {
       console.error('Error submitting answer:', error);
