@@ -19,7 +19,7 @@ const ProblemView = () => {
   const [stepAnswers, setStepAnswers] = useState(['', '', '']); // For 3-step solving
   const [currentStep, setCurrentStep] = useState(0);
   const [currentHint, setCurrentHint] = useState(0);
-  const [showHints, setShowHints] = useState(false);
+  const [showHints, setShowHints] = useState([false, false, false]); // Per-step hint visibility
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [stepResults, setStepResults] = useState([false, false, false]); // Track each step result
@@ -30,6 +30,13 @@ const ProblemView = () => {
   const [loading, setLoading] = useState(true);
   const [allStepsComplete, setAllStepsComplete] = useState(false);
   const [userAnswer, setUserAnswer] = useState('');
+  
+  // For interactive explanation/preparation
+  const [currentExample, setCurrentExample] = useState(0);
+  const [showExample, setShowExample] = useState(false);
+  const [practiceAnswer, setPracticeAnswer] = useState('');
+  const [practiceComplete, setPracticeComplete] = useState([]);
+  const [hintsUsed, setHintsUsed] = useState(0);
 
   // Helper function to normalize answer
   const normalizeAnswer = (answer) => {
