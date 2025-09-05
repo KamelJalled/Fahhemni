@@ -64,8 +64,8 @@ class InteractiveExample(BaseModel):
 class StepSolution(BaseModel):
     step_en: str
     step_ar: str
-    answer_en: str
-    answer_ar: str
+    possible_answers: List[str]
+    possible_answers_ar: List[str]
 
 class Problem(BaseModel):
     id: str
@@ -85,6 +85,7 @@ class Problem(BaseModel):
     step_solutions: Optional[List[StepSolution]] = None
     practice_problems: Optional[List[PracticeExample]] = None
     interactive_examples: Optional[List[InteractiveExample]] = None
+    final_answer_required: Optional[bool] = False
 
 class Section(BaseModel):
     id: str
