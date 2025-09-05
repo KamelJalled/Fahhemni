@@ -36,30 +36,76 @@ async def init_database():
             "section_id": "section1",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "x + 5 = 12",
-            "question_ar": "س + ٥ = ١٢",
+            "question_en": "Solve: x + 5 = 12",
+            "question_ar": "حل: س + ٥ = ١٢",
             "answer": "7",
             "answer_ar": "٧",
-            "explanation_en": "This is a review problem. Subtract 5 from both sides: x = 12 - 5 = 7",
-            "explanation_ar": "هذه مسألة مراجعة. اطرح ٥ من الطرفين: س = ١٢ - ٥ = ٧",
-            "show_full_solution": True,
+            "explanation_en": "This is a review problem. Subtract 5 from both sides:\nx + 5 - 5 = 12 - 5\nx = 7",
+            "explanation_ar": "هذه مسألة مراجعة. اطرح ٥ من الطرفين:\nس + ٥ - ٥ = ١٢ - ٥\nس = ٧",
+            "show_full_solution": False,
             "hide_answer": False,
-            "hints_en": [],
-            "hints_ar": []
+            "practice_problems": [
+                {
+                    "question_en": "Now try: x + 8 = 15",
+                    "question_ar": "الآن جرب: س + ٨ = ١٥",
+                    "answer": "7",
+                    "answer_ar": "٧",
+                    "hint_en": "Subtract 8 from both sides",
+                    "hint_ar": "اطرح ٨ من الطرفين"
+                }
+            ],
+            "hints_en": ["What do you need to do to isolate x?"],
+            "hints_ar": ["ما الذي تحتاج لفعله لعزل س؟"]
         },
         {
             "id": "explanation1",
-            "section_id": "section1",
+            "section_id": "section1", 
             "type": ProblemType.EXPLANATION,
             "weight": 0,
             "question_en": "Learn Inequality Solving",
             "question_ar": "تعلم حل المتباينات",
             "answer": "",
             "answer_ar": "",
-            "explanation_en": "EXAMPLE 1: Addition/Subtraction\nx + 7 > 10\nStep 1: Subtract 7 from both sides\nx + 7 - 7 > 10 - 7\nStep 2: Simplify\nx > 3\n\nEXAMPLE 2: Multiplication/Division\n3x ≤ 15\nStep 1: Divide both sides by 3\n3x ÷ 3 ≤ 15 ÷ 3\nStep 2: Simplify\nx ≤ 5\n\nEXAMPLE 3: Negative Coefficient\n-2x > 8\nStep 1: Divide both sides by -2 (flip inequality sign!)\n-2x ÷ (-2) < 8 ÷ (-2)\nStep 2: Simplify\nx < -4\n\nREMEMBER: When multiplying or dividing by a negative number, flip the inequality sign!",
-            "explanation_ar": "المثال الأول: الجمع/الطرح\nس + ٧ > ١٠\nالخطوة ١: اطرح ٧ من الطرفين\nس + ٧ - ٧ > ١٠ - ٧\nالخطوة ٢: بسط\nس > ٣\n\nالمثال الثاني: الضرب/القسمة\n٣س ≤ ١٥\nالخطوة ١: اقسم الطرفين على ٣\n٣س ÷ ٣ ≤ ١٥ ÷ ٣\nالخطوة ٢: بسط\nس ≤ ٥\n\nالمثال الثالث: المعامل السالب\n-٢س > ٨\nالخطوة ١: اقسم الطرفين على -٢ (اقلب إشارة المتباينة!)\n-٢س ÷ (-٢) < ٨ ÷ (-٢)\nالخطوة ٢: بسط\nس < -٤\n\nتذكر: عند الضرب أو القسمة على عدد سالب، اقلب إشارة المتباينة!",
-            "show_full_solution": True,
+            "show_full_solution": False,
             "hide_answer": False,
+            "interactive_examples": [
+                {
+                    "title_en": "Example 1: Addition/Subtraction",
+                    "title_ar": "المثال الأول: الجمع/الطرح",
+                    "problem_en": "x + 7 > 10",
+                    "problem_ar": "س + ٧ > ١٠",
+                    "solution_en": "Step 1: Subtract 7 from both sides\nx + 7 - 7 > 10 - 7\nStep 2: Simplify\nx > 3",
+                    "solution_ar": "الخطوة ١: اطرح ٧ من الطرفين\nس + ٧ - ٧ > ١٠ - ٧\nالخطوة ٢: بسط\nس > ٣",
+                    "practice_question_en": "Now try: x + 4 ≤ 9",
+                    "practice_question_ar": "الآن جرب: س + ٤ ≤ ٩",
+                    "practice_answer": "x ≤ 5",
+                    "practice_answer_ar": "س ≤ ٥"
+                },
+                {
+                    "title_en": "Example 2: Multiplication/Division",
+                    "title_ar": "المثال الثاني: الضرب/القسمة",
+                    "problem_en": "3x ≤ 15",
+                    "problem_ar": "٣س ≤ ١٥",
+                    "solution_en": "Step 1: Divide both sides by 3\n3x ÷ 3 ≤ 15 ÷ 3\nStep 2: Simplify\nx ≤ 5",
+                    "solution_ar": "الخطوة ١: اقسم الطرفين على ٣\n٣س ÷ ٣ ≤ ١٥ ÷ ٣\nالخطوة ٢: بسط\nس ≤ ٥",
+                    "practice_question_en": "Now try: 2x > 8",
+                    "practice_question_ar": "الآن جرب: ٢س > ٨",
+                    "practice_answer": "x > 4",
+                    "practice_answer_ar": "س > ٤"
+                },
+                {
+                    "title_en": "Example 3: Negative Coefficient",  
+                    "title_ar": "المثال الثالث: المعامل السالب",
+                    "problem_en": "-2x > 8",
+                    "problem_ar": "-٢س > ٨",
+                    "solution_en": "Step 1: Divide both sides by -2 (FLIP the inequality sign!)\n-2x ÷ (-2) < 8 ÷ (-2)\nStep 2: Simplify\nx < -4\n\nREMEMBER: When dividing by negative, flip the sign!",
+                    "solution_ar": "الخطوة ١: اقسم الطرفين على -٢ (اقلب إشارة المتباينة!)\n-٢س ÷ (-٢) < ٨ ÷ (-٢)\nالخطوة ٢: بسط\nس < -٤\n\nتذكر: عند القسمة على عدد سالب، اقلب الإشارة!",
+                    "practice_question_en": "Now try: -3x ≤ 12",
+                    "practice_question_ar": "الآن جرب: -٣س ≤ ١٢",
+                    "practice_answer": "x ≥ -4",
+                    "practice_answer_ar": "س ≥ -٤"
+                }
+            ],
             "hints_en": [],
             "hints_ar": []
         },
