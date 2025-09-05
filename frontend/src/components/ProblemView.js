@@ -233,16 +233,39 @@ const ProblemView = () => {
   };
 
   const handleTryAgain = () => {
-    setUserAnswer('');
+    setStepAnswers(['', '', '']);
+    setCurrentStep(0);
+    setCurrentHint(0);
     setIsSubmitted(false);
     setIsCorrect(false);
+    setStepResults([false, false, false]);
+    setAllStepsComplete(false);
+    setShowHints(false);
+  };
+
+  const handleNextProblem = () => {
+    // Get next problem in sequence
+    const problemOrder = ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'];
+    const currentIndex = problemOrder.indexOf(problemId);
+    if (currentIndex < problemOrder.length - 1) {
+      const nextProblemId = problemOrder[currentIndex + 1];
+      navigate(`/problem/${nextProblemId}`);
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   const handleNextHint = () => {
-    if (currentHint < (problem.hints?.length || 0) - 1) {
+    if (currentHint < ((language === 'en' ? problem.hints_en : problem.hints_ar)?.length || 0) - 1) {
       setCurrentHint(currentHint + 1);
     }
     setShowHints(true);
+  };
+
+  const handleStepAnswerChange = (stepIndex, value) => {
+    const newAnswers = [...stepAnswers];
+    newAnswers[stepIndex] = value;
+    setStepAnswers(newAnswers);
   };
 
   const renderMathExpression = (expression) => {
