@@ -310,19 +310,20 @@ class MathTutoringAPITester:
     def test_cors_configuration(self):
         """Test CORS configuration"""
         try:
-            # Make an OPTIONS request to check CORS headers
-            response = self.session.options(f"{self.base_url}/")
+            # Make a request with Origin header to trigger CORS
+            headers = {"Origin": "https://example.com"}
+            response = self.session.get(f"{self.base_url}/", headers=headers)
             
             cors_headers = [
                 "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Methods", 
-                "Access-Control-Allow-Headers"
+                "Access-Control-Allow-Credentials"
             ]
             
             present_headers = [h for h in cors_headers if h in response.headers]
             
             if len(present_headers) >= 1:  # At least one CORS header should be present
-                self.log_test("CORS Configuration", True, f"CORS headers present: {present_headers}")
+                origin_header = response.headers.get("Access-Control-Allow-Origin")
+                self.log_test("CORS Configuration", True, f"CORS working - Allow-Origin: {origin_header}")
                 return True
             else:
                 self.log_test("CORS Configuration", False, "No CORS headers found in response")
