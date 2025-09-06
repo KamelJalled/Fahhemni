@@ -97,27 +97,33 @@ A comprehensive, bilingual (Arabic/English) math tutoring application designed s
 
 ## 🌐 **Production Deployment**
 
-### Deploy to Vercel (Recommended)
+This application can be deployed to any hosting platform! The frontend is built as static files, and the backend is a standard FastAPI application.
 
-1. **Automated Setup**
-   ```bash
-   ./setup-github.sh  # Push code to GitHub
-   ./deploy.sh        # Deploy to Vercel
-   ```
+### Quick Deployment Options
 
-2. **Manual Setup**
-   - Follow the comprehensive guide in [`DEPLOYMENT.md`](DEPLOYMENT.md)
-   - Set up MongoDB Atlas cluster
-   - Configure Vercel environment variables
-   - Deploy with one click
+**Frontend (Static Hosting):**
+- Netlify, GitHub Pages, AWS S3, Firebase Hosting, Surge.sh
+- Upload the contents of `frontend/build/` folder
+
+**Backend (API Hosting):**
+- Railway, Render, DigitalOcean, AWS, Google Cloud, Heroku
+- Deploy the FastAPI application with MongoDB connection
+
+**Complete Setup:**
+1. Follow the comprehensive guide in [`DEPLOYMENT.md`](DEPLOYMENT.md)
+2. Set up MongoDB database (Atlas recommended)
+3. Configure environment variables
+4. Deploy frontend and backend separately
 
 ### Environment Variables
 
 **Production Required:**
 ```bash
+# Backend
 MONGO_URL=mongodb+srv://user:pass@cluster.mongodb.net/mathtutor
-DB_NAME=mathtutor
-REACT_APP_BACKEND_URL=https://your-app.vercel.app
+
+# Frontend (rebuild required after change)
+REACT_APP_BACKEND_URL=https://your-api-domain.com
 ```
 
 ## 📚 **Curriculum Structure**
