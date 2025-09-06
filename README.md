@@ -2,7 +2,7 @@
 
 A comprehensive, bilingual (Arabic/English) math tutoring application designed specifically for Saudi Grade 9 students learning one-step inequalities. Built with React, FastAPI, and MongoDB.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/math-tutoring-app)
+**🚀 Ready for production deployment on any hosting platform!**
 
 ## 🌟 Features
 
