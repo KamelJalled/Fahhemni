@@ -1,0 +1,79 @@
+{
+  "summary": {
+    "passed": 2,
+    "total": 8,
+    "success_rate": 0.25
+  },
+  "results": [
+    {
+      "test": "Health Check",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.666308",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Student Login",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.673753",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Teacher Login (Valid Code)",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.680387",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Teacher Login (Invalid Code)",
+      "success": false,
+      "details": "Should return 401, got 404",
+      "timestamp": "2025-09-06T06:51:47.687217"
+    },
+    {
+      "test": "Student Progress",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.693892",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Section Problems",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.700326",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Answer Submission (Correct)",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.706611",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Answer Submission (Incorrect)",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.713158",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "Teacher Dashboard",
+      "success": false,
+      "details": "HTTP 404",
+      "timestamp": "2025-09-06T06:51:47.719752",
+      "response_data": "404 page not found\n"
+    },
+    {
+      "test": "CORS Configuration",
+      "success": false,
+      "details": "No CORS headers found in response",
+      "timestamp": "2025-09-06T06:51:47.726003"
+    }
+  ],
+  "backend_url": "https://None.preview.emergentagent.com/api",
+  "test_timestamp": "2025-09-06T06:51:47.726200"
+}
