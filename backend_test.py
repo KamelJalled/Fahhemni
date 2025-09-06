@@ -10,8 +10,8 @@ import sys
 import os
 from datetime import datetime
 
-# Get backend URL from environment
-BACKEND_URL = "https://None.preview.emergentagent.com/api"
+# Get backend URL from environment - using local URL since external URL is misconfigured
+BACKEND_URL = "http://localhost:8001/api"
 
 class MathTutoringAPITester:
     def __init__(self, base_url):
