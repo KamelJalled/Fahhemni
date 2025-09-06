@@ -294,8 +294,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Verify production build works"
-    - "Test GitHub repository setup"
+    - "Fix Frontend Backend URL Configuration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
