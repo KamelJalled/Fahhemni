@@ -35,8 +35,7 @@ backend/.pytest_cache/
 frontend/.env
 backend/.env
 
-# Build outputs
-frontend/build/
+# Build outputs (keep production build)
 frontend/dist/
 
 # IDE files
