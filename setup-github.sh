@@ -95,12 +95,13 @@ required_files=(
     "frontend/src/components/TeacherLogin.js"
     "frontend/src/components/TeacherDashboard.js"
     "frontend/package.json"
+    "frontend/build/index.html"
     "backend/server.py"
     "backend/models.py"
     "backend/database.py"
     "backend/utils.py"
     "backend/requirements.txt"
-    "vercel.json"
+    "README.md"
     "DEPLOYMENT.md"
 )
 
