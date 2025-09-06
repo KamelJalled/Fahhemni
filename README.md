@@ -266,8 +266,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔗 **Quick Links**
 
 - [🚀 Deployment Guide](DEPLOYMENT.md)
-- [📖 API Documentation](http://localhost:8001/docs)
-- [🎯 Live Demo](https://your-app.vercel.app)
-- [👨‍🏫 Teacher Dashboard](https://your-app.vercel.app/teacher) (Code: `teacher2024`)
+- [📖 API Documentation](http://localhost:8001/docs) (when running locally)
+- [🎯 Frontend Build](frontend/build/) (ready for deployment)
+- [👨‍🏫 Teacher Dashboard](http://localhost:3000/teacher) (Code: `teacher2024`)
 
 **Happy Learning and Teaching! 🎓**
