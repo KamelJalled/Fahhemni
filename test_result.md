@@ -304,5 +304,7 @@ agent_communication:
     message: "Successfully prepared production build and removed all Vercel-specific configurations. Frontend build is complete and ready for static hosting. Backend remains as standard FastAPI app deployable to any platform."
   - agent: "main"
     message: "Fixed dependency conflict issue by rebuilding frontend with npm and including build folder in Git repository. All files are committed and ready for GitHub push. Build folder with 5 optimized files included in repository."
+  - agent: "main"
+    message: "CRITICAL BUG FIX: Updated frontend .env to use correct backend URL (https://fahhemni-backend.onrender.com) and rebuilt production build. This fixes CORS errors caused by frontend trying to connect to placeholder URL. Frontend now correctly connects to the deployed backend."
   - agent: "testing"
     message: "Completed comprehensive backend API testing. All 8 core API endpoints are working correctly and production-ready. Found one configuration issue: frontend/.env has incorrect REACT_APP_BACKEND_URL (https://None.preview.emergentagent.com) which should be updated with the correct external URL. Backend is fully functional on localhost:8001."
