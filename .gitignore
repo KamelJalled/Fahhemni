@@ -26,7 +26,9 @@ next-env.d.ts
 *.tsbuildinfo
 
 # Production builds
-# Keep frontend/build for deployment
+# Keep frontend/build for deployment - exclude only root build
+/build
+!/frontend/build
 dist/
 dist
 
