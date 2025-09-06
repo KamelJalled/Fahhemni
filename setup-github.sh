@@ -207,8 +207,9 @@ if [[ $push_now =~ ^[Yy]$ ]]; then
         echo "🚀 Next Steps:"
         echo "1. Verify all files are visible on GitHub"
         echo "2. Set up MongoDB Atlas (see DEPLOYMENT.md)"
-        echo "3. Deploy to Vercel using the GitHub repository"
-        echo "4. Configure environment variables in Vercel"
+        echo "3. Deploy frontend (build folder) to static hosting"
+        echo "4. Deploy backend API to your preferred hosting service"
+        echo "5. Configure environment variables on hosting platforms"
         echo ""
         echo "📖 Full deployment guide: DEPLOYMENT.md"
     else
