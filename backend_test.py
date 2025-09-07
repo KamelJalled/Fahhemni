@@ -781,26 +781,44 @@ class MathTutoringAPITester:
             return False
 
     def run_all_tests(self):
-        """Run all API tests - expanded version for 5 sections"""
+        """Run all API tests - comprehensive MVP testing"""
         print("=" * 80)
-        print("MATH TUTORING API TEST SUITE - EXPANDED (5 SECTIONS)")
+        print("MATH TUTORING API TEST SUITE - COMPREHENSIVE MVP TESTING")
         print("=" * 80)
         print(f"Testing backend at: {self.base_url}")
         print(f"Expected: 5 sections with 30 total problems (6 per section)")
+        print(f"Testing: Class management, Admin endpoints, Data persistence")
         print()
         
-        # Run tests in logical order - prioritizing new expanded tests
+        # Run tests in logical order - prioritizing comprehensive MVP tests
         tests = [
+            # PART 1: Core API Health
             ("Health Check", self.test_health_check),
             ("Database Initialization (5 Sections)", self.test_database_initialization),
-            ("Student Login", self.test_student_login),
+            
+            # PART 2: Authentication with Class Management
+            ("Student Login with Class Selection", self.test_student_login_with_class),
             ("Teacher Login", self.test_teacher_login),
+            
+            # PART 3: Content and Progress
             ("Student Progress", self.test_student_progress),
             ("All Sections Problems", self.test_all_sections_problems),
             ("Answer Submission All Types", self.test_answer_submission_all_types),
+            
+            # PART 4: Class Management Features
+            ("Teacher Dashboard Class Filtering", self.test_teacher_dashboard_class_filtering),
             ("Teacher Dashboard Expanded", self.test_teacher_dashboard_expanded),
+            
+            # PART 5: Admin and Data Verification
+            ("Admin Stats Endpoint", self.test_admin_stats_endpoint),
+            ("Admin Clear Data Endpoint", self.test_admin_clear_data_endpoint),
+            ("Data Persistence", self.test_data_persistence),
+            
+            # PART 6: Infrastructure
             ("CORS Configuration", self.test_cors_configuration),
+            
             # Legacy tests for backward compatibility
+            ("Student Login (Legacy)", self.test_student_login),
             ("Problem Data Fetching (Legacy)", self.test_problem_data_fetching),
             ("Answer Submission (Legacy)", self.test_answer_submission),
             ("Teacher Dashboard (Legacy)", self.test_teacher_dashboard)
