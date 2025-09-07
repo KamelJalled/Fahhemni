@@ -874,6 +874,29 @@ const ProblemView = () => {
                       </div>
                     )}
 
+                    {/* Voice Input Component */}
+                    {showVoiceInput && (
+                      <div className="mt-4">
+                        <VoiceInput
+                          onResult={handleVoiceResult}
+                          onError={handleVoiceError}
+                          disabled={false}
+                        />
+                      </div>
+                    )}
+
+                    {/* Math Keyboard Component */}
+                    {showMathKeyboard && (
+                      <div className="mt-4">
+                        <MathKeyboard
+                          onSymbolSelect={handleSymbolSelect}
+                          onNumberSelect={handleNumberSelect}
+                          onOperatorSelect={handleOperatorSelect}
+                          onAction={handleKeyboardAction}
+                        />
+                      </div>
+                    )}
+
                     {/* Encouragement Message */}
                     {showEncouragement && (
                       <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
