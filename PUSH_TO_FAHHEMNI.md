@@ -73,7 +73,7 @@ git push -u origin main
 ### Deploy the Pre-built Files
 **Frontend**: Deploy the `frontend/build/` folder to any static hosting:
 - Netlify: Upload build folder
-- Vercel: Import from GitHub, set publish directory to `frontend/build`
+- Firebase: Install Firebase CLI, set public directory to `frontend/build`
 - GitHub Pages: Enable Pages, use `frontend/build` as source
 
 **Backend**: Deploy backend folder as Python app:
