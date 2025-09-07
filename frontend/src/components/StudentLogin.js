@@ -135,14 +135,38 @@ const StudentLogin = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder={text[language].placeholder}
-                className="h-12 text-lg"
-                required
-              />
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  {text[language].username}
+                </label>
+                <Input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder={text[language].placeholder}
+                  className="h-12 text-lg"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  {text[language].class}
+                </label>
+                <select
+                  value={className}
+                  onChange={(e) => setClassName(e.target.value)}
+                  className="w-full h-12 px-3 text-lg border border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+                  required
+                >
+                  {classes.map((cls) => (
+                    <option key={cls.value} value={cls.value}>
+                      {cls.label[language]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <Button
                 type="submit"
                 className="w-full h-12 text-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg"
