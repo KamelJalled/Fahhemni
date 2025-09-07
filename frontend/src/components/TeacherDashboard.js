@@ -14,6 +14,7 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedClass, setSelectedClass] = useState('all');
 
   useEffect(() => {
     if (!user || !isTeacher) {
