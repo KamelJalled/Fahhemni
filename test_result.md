@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Please update the GitHub repository with a production build that can be deployed to any web hosting (not Vercel-specific). Include: 1. Frontend built files (HTML, CSS, JS) 2. Backend as a separate API if needed 3. Remove Vercel-specific configurations"
+user_problem_statement: "Please implement these improvements to complete the MVP for classroom deployment: PART 1: BUG FIXES (Priority) 1. Fix status updating - Preparation and Explanation stages remain 'start' after completion 2. Fix logout error - Remove error flash, logout cleanly 3. Fix step labels - Change to 'Step 1: Isolate variable term' 4. Add stage navigation - 'Continue to Next Stage' button after completion. PART 2: CONTENT EXPANSION - Add 4 new sections with 6 problems each (Sections 2-5). PART 3: INPUT FEATURES - Voice Input for Mathematics and Mathematical Symbol Keyboard. PART 4: CLASS MANAGEMENT - Add class selection and teacher dashboard filtering. PART 5: DATA VERIFICATION - Confirm MongoDB is storing student progress."
 
 backend:
   - task: "Remove Vercel-specific configurations"
