@@ -230,6 +230,47 @@ async def get_teacher_dashboard_new(class_filter: str = None):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# Admin endpoints
+@api_router.post("/admin/clear-test-data")
+async def clear_test_data(admin_key: str = "admin123"):
+    """Clear all test data - for development only"""
+    if admin_key != "admin123":  # Simple admin key for demo
+        raise HTTPException(status_code=403, detail="Invalid admin key")
+    
+    try:
+        # Clear all student data
+        student_result = await students_collection.delete_many({})
+        
+        # Clear all progress data
+        progress_result = await progress_collection.delete_many({})
+        
+        return {
+            "message": "Test data cleared successfully",
+            "students_deleted": student_result.deleted_count,
+            "progress_deleted": progress_result.deleted_count
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error clearing data: {str(e)}")
+
+@api_router.get("/admin/stats")
+async def get_admin_stats():
+    """Get admin statistics about data storage"""
+    try:
+        student_count = await students_collection.count_documents({})
+        progress_count = await progress_collection.count_documents({})
+        problem_count = await problems_collection.count_documents({})
+        section_count = await sections_collection.count_documents({})
+        
+        return {
+            "total_students": student_count,
+            "total_progress_records": progress_count,
+            "total_problems": problem_count,
+            "total_sections": section_count,
+            "database_status": "connected"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting stats: {str(e)}")
+
 # Health check endpoint
 @api_router.get("/")
 async def root():
