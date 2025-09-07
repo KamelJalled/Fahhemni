@@ -319,14 +319,14 @@ const ProblemView = () => {
     
     const labels = {
       en: {
-        0: "Step 1: Apply operation to both sides",
-        1: "Step 2: Simplify the result", 
-        2: "Step 3: Final form"
+        0: "Step 1: Isolate variable term",
+        1: "Step 2: Solve for the variable", 
+        2: "Step 3: Write final answer"
       },
       ar: {
-        0: "الخطوة ١: طبق العملية على الطرفين",
-        1: "الخطوة ٢: بسط النتيجة",
-        2: "الخطوة ٣: الشكل النهائي"
+        0: "الخطوة ١: عزل حد المتغير",
+        1: "الخطوة ٢: حل للمتغير",
+        2: "الخطوة ٣: كتابة الإجابة النهائية"
       }
     };
     
