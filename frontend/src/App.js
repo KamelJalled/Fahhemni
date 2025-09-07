@@ -76,19 +76,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    try {
-      // Call backend logout endpoint
-      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/logout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-    
-    // Clear all local state and storage
+    // Clear all local state and storage first (immediate UI response)
     setUser(null);
     setIsTeacher(false);
     localStorage.removeItem('mathapp_user');
@@ -101,7 +89,20 @@ const AuthProvider = ({ children }) => {
       }
     });
     
-    // Force page reload to ensure complete state reset
+    // Try to call backend logout endpoint silently (don't block on errors)
+    try {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      // Silently handle logout errors - user experience shouldn't be affected
+      console.log('Logout request completed');
+    }
+    
+    // Navigate to home page
     window.location.href = '/';
   };
 
