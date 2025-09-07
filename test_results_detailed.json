@@ -1,77 +1,1817 @@
 {
   "summary": {
-    "passed": 8,
-    "total": 8,
-    "success_rate": 1.0
+    "passed": 10,
+    "total": 12,
+    "success_rate": 0.8333333333333334
   },
   "results": [
     {
       "test": "Health Check",
       "success": true,
       "details": "API running version 1.0.0",
-      "timestamp": "2025-09-06T06:52:49.367428"
+      "timestamp": "2025-09-07T11:16:30.647898"
+    },
+    {
+      "test": "Database Init - section1",
+      "success": false,
+      "details": "Expected 6 problems, got 24",
+      "timestamp": "2025-09-07T11:16:30.655235"
+    },
+    {
+      "test": "Database Init - section2",
+      "success": false,
+      "details": "Expected 6 problems, got 12",
+      "timestamp": "2025-09-07T11:16:30.699159"
+    },
+    {
+      "test": "Database Init - section3",
+      "success": true,
+      "details": "Found 6 problems for Multi-Step Inequalities",
+      "timestamp": "2025-09-07T11:16:30.744007"
+    },
+    {
+      "test": "Database Init - section4",
+      "success": true,
+      "details": "Found 6 problems for Variables on Both Sides",
+      "timestamp": "2025-09-07T11:16:30.788925"
+    },
+    {
+      "test": "Database Init - section5",
+      "success": true,
+      "details": "Found 6 problems for Compound Inequalities",
+      "timestamp": "2025-09-07T11:16:30.832970"
+    },
+    {
+      "test": "Database Initialization",
+      "success": false,
+      "details": "Some sections missing or incomplete",
+      "timestamp": "2025-09-07T11:16:30.833012"
     },
     {
       "test": "Student Login",
       "success": true,
       "details": "Student 'sarah_ahmed' logged in successfully",
-      "timestamp": "2025-09-06T06:52:49.411767"
+      "timestamp": "2025-09-07T11:16:30.883844"
     },
     {
       "test": "Teacher Login (Valid Code)",
       "success": true,
       "details": "Teacher authenticated successfully",
-      "timestamp": "2025-09-06T06:52:49.454718"
+      "timestamp": "2025-09-07T11:16:30.926828"
     },
     {
       "test": "Teacher Login (Invalid Code)",
       "success": true,
       "details": "Correctly rejected invalid access code",
-      "timestamp": "2025-09-06T06:52:49.496742"
+      "timestamp": "2025-09-07T11:16:30.968808"
     },
     {
       "test": "Student Progress",
       "success": true,
       "details": "Retrieved progress for 6 problems",
-      "timestamp": "2025-09-06T06:52:49.541735"
+      "timestamp": "2025-09-07T11:16:31.021851"
     },
     {
-      "test": "Section Problems",
-      "success": true,
-      "details": "Retrieved 6 problems from section1",
-      "timestamp": "2025-09-06T06:52:49.585829"
+      "test": "Section Problems - section1",
+      "success": false,
+      "details": "Expected 6 problems, got 24",
+      "timestamp": "2025-09-07T11:16:31.067148",
+      "response_data": [
+        {
+          "id": "prep1",
+          "section_id": "section1",
+          "type": "preparation",
+          "weight": 10,
+          "question_en": "x + 8 = 15",
+          "question_ar": "\u0633 + \u0668 = \u0661\u0665",
+          "answer": "7",
+          "answer_ar": "\u0667",
+          "hints_en": [
+            "What operation cancels out addition?",
+            "Calculate 15 minus 8."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u062c\u0645\u0639\u061f",
+            "\u0627\u062d\u0633\u0628 \u0661\u0665 \u0646\u0627\u0642\u0635 \u0668."
+          ],
+          "explanation_en": "This is a review problem. We'll solve it step by step.",
+          "explanation_ar": "\u0647\u0630\u0647 \u0645\u0633\u0623\u0644\u0629 \u0645\u0631\u0627\u062c\u0639\u0629. \u0633\u0646\u062d\u0644\u0647\u0627 \u062e\u0637\u0648\u0629 \u0628\u062e\u0637\u0648\u0629.",
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 8 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0668 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x + 8 - 8 = 15 - 8",
+                "x = 15 - 8",
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 + \u0668 - \u0668 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0667"
+              ]
+            },
+            {
+              "step_en": "Simplify both sides",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 = \u0667"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": true
+        },
+        {
+          "id": "explanation1",
+          "section_id": "section1",
+          "type": "explanation",
+          "weight": 0,
+          "question_en": "Learn Inequality Solving",
+          "question_ar": "\u062a\u0639\u0644\u0645 \u062d\u0644 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0627\u062a",
+          "answer": "",
+          "answer_ar": "",
+          "hints_en": [],
+          "hints_ar": [],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": [
+            {
+              "title_en": "Example 1: Addition/Subtraction",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0648\u0644: \u0627\u0644\u062c\u0645\u0639/\u0627\u0644\u0637\u0631\u062d",
+              "problem_en": "x + 7 > 10",
+              "problem_ar": "\u0633 + \u0667 > \u0661\u0660",
+              "solution_en": "Step 1: Subtract 7 from both sides\nx + 7 - 7 > 10 - 7\nStep 2: Simplify\nx > 3",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0637\u0631\u062d \u0667 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646\n\u0633 + \u0667 - \u0667 > \u0661\u0660 - \u0667\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 > \u0663",
+              "practice_question_en": "Now try: x + 4 \u2264 9",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0633 + \u0664 \u2264 \u0669",
+              "practice_answer": "x \u2264 5",
+              "practice_answer_ar": "\u0633 \u2264 \u0665"
+            },
+            {
+              "title_en": "Example 2: Multiplication/Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0646\u064a: \u0627\u0644\u0636\u0631\u0628/\u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "3x \u2264 15",
+              "problem_ar": "\u0663\u0633 \u2264 \u0661\u0665",
+              "solution_en": "Step 1: Divide both sides by 3\n3x \u00f7 3 \u2264 15 \u00f7 3\nStep 2: Simplify\nx \u2264 5",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0663\n\u0663\u0633 \u00f7 \u0663 \u2264 \u0661\u0665 \u00f7 \u0663\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 \u2264 \u0665",
+              "practice_question_en": "Now try: 2x > 8",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0662\u0633 > \u0668",
+              "practice_answer": "x > 4",
+              "practice_answer_ar": "\u0633 > \u0664"
+            },
+            {
+              "title_en": "Example 3: Negative Coefficient",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0644\u062b: \u0627\u0644\u0645\u0639\u0627\u0645\u0644 \u0627\u0644\u0633\u0627\u0644\u0628",
+              "problem_en": "-2x > 8",
+              "problem_ar": "-\u0662\u0633 > \u0668",
+              "solution_en": "Step 1: Divide both sides by -2 (FLIP the inequality sign!)\n-2x \u00f7 (-2) < 8 \u00f7 (-2)\nStep 2: Simplify\nx < -4\n\nREMEMBER: When dividing by negative, flip the sign!",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 -\u0662 (\u0627\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629!)\n-\u0662\u0633 \u00f7 (-\u0662) < \u0668 \u00f7 (-\u0662)\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 < -\u0664\n\n\u062a\u0630\u0643\u0631: \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u060c \u0627\u0642\u0644\u0628 \u0627\u0644\u0625\u0634\u0627\u0631\u0629!",
+              "practice_question_en": "Now try: -3x \u2264 12",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: -\u0663\u0633 \u2264 \u0661\u0662",
+              "practice_answer": "x \u2265 -4",
+              "practice_answer_ar": "\u0633 \u2265 -\u0664"
+            }
+          ],
+          "final_answer_required": false
+        },
+        {
+          "id": "practice1",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "x - 3 \u2264 8",
+          "question_ar": "\u0633 - \u0663 \u2264 \u0668",
+          "answer": "x \u2264 11",
+          "answer_ar": "\u0633 \u2264 \u0661\u0661",
+          "hints_en": [
+            "What operation cancels out subtraction?",
+            "Combine the numbers on the right side."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0637\u0631\u062d\u061f",
+            "\u0627\u062c\u0645\u0639 \u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0641\u064a \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Add 3 to both sides",
+              "step_ar": "\u0623\u0636\u0641 \u0663 \u0644\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x - 3 + 3 \u2264 8 + 3",
+                "x \u2264 8 + 3",
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 - \u0663 + \u0663 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            },
+            {
+              "step_en": "Simplify the right side",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646",
+              "possible_answers": [
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "4x < 20",
+          "question_ar": "\u0664\u0633 < \u0662\u0660",
+          "answer": "x < 5",
+          "answer_ar": "\u0633 < \u0665",
+          "hints_en": [
+            "What operation cancels out multiplication?",
+            "Calculate 20 divided by 4."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0636\u0631\u0628\u061f",
+            "\u0627\u062d\u0633\u0628 \u0662\u0660 \u0645\u0642\u0633\u0648\u0645\u0627\u064b \u0639\u0644\u0649 \u0664."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Divide both sides by 4",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664",
+              "possible_answers": [
+                "4x \u00f7 4 < 20 \u00f7 4",
+                "4x / 4 < 20 / 4",
+                "x < 20 / 4",
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 \u00f7 \u0664 < \u0662\u0660 \u00f7 \u0664",
+                "\u0664\u0633 / \u0664 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0665"
+              ]
+            },
+            {
+              "step_en": "Simplify the division",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "possible_answers": [
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0633 < \u0665"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "assessment1",
+          "section_id": "section1",
+          "type": "assessment",
+          "weight": 30,
+          "question_en": "6x \u2265 18",
+          "question_ar": "\u0666\u0633 \u2265 \u0661\u0668",
+          "answer": "x \u2265 3",
+          "answer_ar": "\u0633 \u2265 \u0663",
+          "hints_en": [
+            "Think about what operation will help you solve for x.",
+            "You need to isolate x by using division.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0641\u0643\u0631 \u0641\u064a \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u0633\u062a\u0633\u0627\u0639\u062f\u0643 \u0641\u064a \u062d\u0644 \u0633.",
+            "\u062a\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0639\u0632\u0644 \u0633 \u0628\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0642\u0633\u0645\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "examprep1",
+          "section_id": "section1",
+          "type": "examprep",
+          "weight": 30,
+          "question_en": "-2x > 8",
+          "question_ar": "-\u0662\u0633 > \u0668",
+          "answer": "x < -4",
+          "answer_ar": "\u0633 < -\u0664",
+          "hints_en": [
+            "What happens to the inequality when you divide by a negative number?",
+            "The inequality sign flips when dividing by negative numbers.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0645\u0627\u0630\u0627 \u064a\u062d\u062f\u062b \u0644\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f\u0645\u0627 \u062a\u0642\u0633\u0645 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u061f",
+            "\u062a\u0646\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0623\u0639\u062f\u0627\u062f \u0627\u0644\u0633\u0627\u0644\u0628\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "prep1",
+          "section_id": "section1",
+          "type": "preparation",
+          "weight": 10,
+          "question_en": "x + 8 = 15",
+          "question_ar": "\u0633 + \u0668 = \u0661\u0665",
+          "answer": "7",
+          "answer_ar": "\u0667",
+          "hints_en": [
+            "What operation cancels out addition?",
+            "Calculate 15 minus 8."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u062c\u0645\u0639\u061f",
+            "\u0627\u062d\u0633\u0628 \u0661\u0665 \u0646\u0627\u0642\u0635 \u0668."
+          ],
+          "explanation_en": "This is a review problem. We'll solve it step by step.",
+          "explanation_ar": "\u0647\u0630\u0647 \u0645\u0633\u0623\u0644\u0629 \u0645\u0631\u0627\u062c\u0639\u0629. \u0633\u0646\u062d\u0644\u0647\u0627 \u062e\u0637\u0648\u0629 \u0628\u062e\u0637\u0648\u0629.",
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 8 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0668 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x + 8 - 8 = 15 - 8",
+                "x = 15 - 8",
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 + \u0668 - \u0668 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0667"
+              ]
+            },
+            {
+              "step_en": "Simplify both sides",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 = \u0667"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": true
+        },
+        {
+          "id": "explanation1",
+          "section_id": "section1",
+          "type": "explanation",
+          "weight": 0,
+          "question_en": "Learn Inequality Solving",
+          "question_ar": "\u062a\u0639\u0644\u0645 \u062d\u0644 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0627\u062a",
+          "answer": "",
+          "answer_ar": "",
+          "hints_en": [],
+          "hints_ar": [],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": [
+            {
+              "title_en": "Example 1: Addition/Subtraction",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0648\u0644: \u0627\u0644\u062c\u0645\u0639/\u0627\u0644\u0637\u0631\u062d",
+              "problem_en": "x + 7 > 10",
+              "problem_ar": "\u0633 + \u0667 > \u0661\u0660",
+              "solution_en": "Step 1: Subtract 7 from both sides\nx + 7 - 7 > 10 - 7\nStep 2: Simplify\nx > 3",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0637\u0631\u062d \u0667 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646\n\u0633 + \u0667 - \u0667 > \u0661\u0660 - \u0667\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 > \u0663",
+              "practice_question_en": "Now try: x + 4 \u2264 9",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0633 + \u0664 \u2264 \u0669",
+              "practice_answer": "x \u2264 5",
+              "practice_answer_ar": "\u0633 \u2264 \u0665"
+            },
+            {
+              "title_en": "Example 2: Multiplication/Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0646\u064a: \u0627\u0644\u0636\u0631\u0628/\u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "3x \u2264 15",
+              "problem_ar": "\u0663\u0633 \u2264 \u0661\u0665",
+              "solution_en": "Step 1: Divide both sides by 3\n3x \u00f7 3 \u2264 15 \u00f7 3\nStep 2: Simplify\nx \u2264 5",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0663\n\u0663\u0633 \u00f7 \u0663 \u2264 \u0661\u0665 \u00f7 \u0663\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 \u2264 \u0665",
+              "practice_question_en": "Now try: 2x > 8",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0662\u0633 > \u0668",
+              "practice_answer": "x > 4",
+              "practice_answer_ar": "\u0633 > \u0664"
+            },
+            {
+              "title_en": "Example 3: Negative Coefficient",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0644\u062b: \u0627\u0644\u0645\u0639\u0627\u0645\u0644 \u0627\u0644\u0633\u0627\u0644\u0628",
+              "problem_en": "-2x > 8",
+              "problem_ar": "-\u0662\u0633 > \u0668",
+              "solution_en": "Step 1: Divide both sides by -2 (FLIP the inequality sign!)\n-2x \u00f7 (-2) < 8 \u00f7 (-2)\nStep 2: Simplify\nx < -4\n\nREMEMBER: When dividing by negative, flip the sign!",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 -\u0662 (\u0627\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629!)\n-\u0662\u0633 \u00f7 (-\u0662) < \u0668 \u00f7 (-\u0662)\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 < -\u0664\n\n\u062a\u0630\u0643\u0631: \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u060c \u0627\u0642\u0644\u0628 \u0627\u0644\u0625\u0634\u0627\u0631\u0629!",
+              "practice_question_en": "Now try: -3x \u2264 12",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: -\u0663\u0633 \u2264 \u0661\u0662",
+              "practice_answer": "x \u2265 -4",
+              "practice_answer_ar": "\u0633 \u2265 -\u0664"
+            }
+          ],
+          "final_answer_required": false
+        },
+        {
+          "id": "practice1",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "x - 3 \u2264 8",
+          "question_ar": "\u0633 - \u0663 \u2264 \u0668",
+          "answer": "x \u2264 11",
+          "answer_ar": "\u0633 \u2264 \u0661\u0661",
+          "hints_en": [
+            "What operation cancels out subtraction?",
+            "Combine the numbers on the right side."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0637\u0631\u062d\u061f",
+            "\u0627\u062c\u0645\u0639 \u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0641\u064a \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Add 3 to both sides",
+              "step_ar": "\u0623\u0636\u0641 \u0663 \u0644\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x - 3 + 3 \u2264 8 + 3",
+                "x \u2264 8 + 3",
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 - \u0663 + \u0663 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            },
+            {
+              "step_en": "Simplify the right side",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646",
+              "possible_answers": [
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "4x < 20",
+          "question_ar": "\u0664\u0633 < \u0662\u0660",
+          "answer": "x < 5",
+          "answer_ar": "\u0633 < \u0665",
+          "hints_en": [
+            "What operation cancels out multiplication?",
+            "Calculate 20 divided by 4."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0636\u0631\u0628\u061f",
+            "\u0627\u062d\u0633\u0628 \u0662\u0660 \u0645\u0642\u0633\u0648\u0645\u0627\u064b \u0639\u0644\u0649 \u0664."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Divide both sides by 4",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664",
+              "possible_answers": [
+                "4x \u00f7 4 < 20 \u00f7 4",
+                "4x / 4 < 20 / 4",
+                "x < 20 / 4",
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 \u00f7 \u0664 < \u0662\u0660 \u00f7 \u0664",
+                "\u0664\u0633 / \u0664 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0665"
+              ]
+            },
+            {
+              "step_en": "Simplify the division",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "possible_answers": [
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0633 < \u0665"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "assessment1",
+          "section_id": "section1",
+          "type": "assessment",
+          "weight": 30,
+          "question_en": "6x \u2265 18",
+          "question_ar": "\u0666\u0633 \u2265 \u0661\u0668",
+          "answer": "x \u2265 3",
+          "answer_ar": "\u0633 \u2265 \u0663",
+          "hints_en": [
+            "Think about what operation will help you solve for x.",
+            "You need to isolate x by using division.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0641\u0643\u0631 \u0641\u064a \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u0633\u062a\u0633\u0627\u0639\u062f\u0643 \u0641\u064a \u062d\u0644 \u0633.",
+            "\u062a\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0639\u0632\u0644 \u0633 \u0628\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0642\u0633\u0645\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "examprep1",
+          "section_id": "section1",
+          "type": "examprep",
+          "weight": 30,
+          "question_en": "-2x > 8",
+          "question_ar": "-\u0662\u0633 > \u0668",
+          "answer": "x < -4",
+          "answer_ar": "\u0633 < -\u0664",
+          "hints_en": [
+            "What happens to the inequality when you divide by a negative number?",
+            "The inequality sign flips when dividing by negative numbers.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0645\u0627\u0630\u0627 \u064a\u062d\u062f\u062b \u0644\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f\u0645\u0627 \u062a\u0642\u0633\u0645 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u061f",
+            "\u062a\u0646\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0623\u0639\u062f\u0627\u062f \u0627\u0644\u0633\u0627\u0644\u0628\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "prep1",
+          "section_id": "section1",
+          "type": "preparation",
+          "weight": 10,
+          "question_en": "x + 8 = 15",
+          "question_ar": "\u0633 + \u0668 = \u0661\u0665",
+          "answer": "7",
+          "answer_ar": "\u0667",
+          "hints_en": [
+            "What operation cancels out addition?",
+            "Calculate 15 minus 8."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u062c\u0645\u0639\u061f",
+            "\u0627\u062d\u0633\u0628 \u0661\u0665 \u0646\u0627\u0642\u0635 \u0668."
+          ],
+          "explanation_en": "This is a review problem. We'll solve it step by step.",
+          "explanation_ar": "\u0647\u0630\u0647 \u0645\u0633\u0623\u0644\u0629 \u0645\u0631\u0627\u062c\u0639\u0629. \u0633\u0646\u062d\u0644\u0647\u0627 \u062e\u0637\u0648\u0629 \u0628\u062e\u0637\u0648\u0629.",
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 8 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0668 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x + 8 - 8 = 15 - 8",
+                "x = 15 - 8",
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 + \u0668 - \u0668 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0667"
+              ]
+            },
+            {
+              "step_en": "Simplify both sides",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 = \u0667"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": true
+        },
+        {
+          "id": "explanation1",
+          "section_id": "section1",
+          "type": "explanation",
+          "weight": 0,
+          "question_en": "Learn Inequality Solving",
+          "question_ar": "\u062a\u0639\u0644\u0645 \u062d\u0644 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0627\u062a",
+          "answer": "",
+          "answer_ar": "",
+          "hints_en": [],
+          "hints_ar": [],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": [
+            {
+              "title_en": "Example 1: Addition/Subtraction",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0648\u0644: \u0627\u0644\u062c\u0645\u0639/\u0627\u0644\u0637\u0631\u062d",
+              "problem_en": "x + 7 > 10",
+              "problem_ar": "\u0633 + \u0667 > \u0661\u0660",
+              "solution_en": "Step 1: Subtract 7 from both sides\nx + 7 - 7 > 10 - 7\nStep 2: Simplify\nx > 3",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0637\u0631\u062d \u0667 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646\n\u0633 + \u0667 - \u0667 > \u0661\u0660 - \u0667\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 > \u0663",
+              "practice_question_en": "Now try: x + 4 \u2264 9",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0633 + \u0664 \u2264 \u0669",
+              "practice_answer": "x \u2264 5",
+              "practice_answer_ar": "\u0633 \u2264 \u0665"
+            },
+            {
+              "title_en": "Example 2: Multiplication/Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0646\u064a: \u0627\u0644\u0636\u0631\u0628/\u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "3x \u2264 15",
+              "problem_ar": "\u0663\u0633 \u2264 \u0661\u0665",
+              "solution_en": "Step 1: Divide both sides by 3\n3x \u00f7 3 \u2264 15 \u00f7 3\nStep 2: Simplify\nx \u2264 5",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0663\n\u0663\u0633 \u00f7 \u0663 \u2264 \u0661\u0665 \u00f7 \u0663\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 \u2264 \u0665",
+              "practice_question_en": "Now try: 2x > 8",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0662\u0633 > \u0668",
+              "practice_answer": "x > 4",
+              "practice_answer_ar": "\u0633 > \u0664"
+            },
+            {
+              "title_en": "Example 3: Negative Coefficient",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0644\u062b: \u0627\u0644\u0645\u0639\u0627\u0645\u0644 \u0627\u0644\u0633\u0627\u0644\u0628",
+              "problem_en": "-2x > 8",
+              "problem_ar": "-\u0662\u0633 > \u0668",
+              "solution_en": "Step 1: Divide both sides by -2 (FLIP the inequality sign!)\n-2x \u00f7 (-2) < 8 \u00f7 (-2)\nStep 2: Simplify\nx < -4\n\nREMEMBER: When dividing by negative, flip the sign!",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 -\u0662 (\u0627\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629!)\n-\u0662\u0633 \u00f7 (-\u0662) < \u0668 \u00f7 (-\u0662)\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 < -\u0664\n\n\u062a\u0630\u0643\u0631: \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u060c \u0627\u0642\u0644\u0628 \u0627\u0644\u0625\u0634\u0627\u0631\u0629!",
+              "practice_question_en": "Now try: -3x \u2264 12",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: -\u0663\u0633 \u2264 \u0661\u0662",
+              "practice_answer": "x \u2265 -4",
+              "practice_answer_ar": "\u0633 \u2265 -\u0664"
+            }
+          ],
+          "final_answer_required": false
+        },
+        {
+          "id": "practice1",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "x - 3 \u2264 8",
+          "question_ar": "\u0633 - \u0663 \u2264 \u0668",
+          "answer": "x \u2264 11",
+          "answer_ar": "\u0633 \u2264 \u0661\u0661",
+          "hints_en": [
+            "What operation cancels out subtraction?",
+            "Combine the numbers on the right side."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0637\u0631\u062d\u061f",
+            "\u0627\u062c\u0645\u0639 \u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0641\u064a \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Add 3 to both sides",
+              "step_ar": "\u0623\u0636\u0641 \u0663 \u0644\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x - 3 + 3 \u2264 8 + 3",
+                "x \u2264 8 + 3",
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 - \u0663 + \u0663 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            },
+            {
+              "step_en": "Simplify the right side",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646",
+              "possible_answers": [
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "4x < 20",
+          "question_ar": "\u0664\u0633 < \u0662\u0660",
+          "answer": "x < 5",
+          "answer_ar": "\u0633 < \u0665",
+          "hints_en": [
+            "What operation cancels out multiplication?",
+            "Calculate 20 divided by 4."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0636\u0631\u0628\u061f",
+            "\u0627\u062d\u0633\u0628 \u0662\u0660 \u0645\u0642\u0633\u0648\u0645\u0627\u064b \u0639\u0644\u0649 \u0664."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Divide both sides by 4",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664",
+              "possible_answers": [
+                "4x \u00f7 4 < 20 \u00f7 4",
+                "4x / 4 < 20 / 4",
+                "x < 20 / 4",
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 \u00f7 \u0664 < \u0662\u0660 \u00f7 \u0664",
+                "\u0664\u0633 / \u0664 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0665"
+              ]
+            },
+            {
+              "step_en": "Simplify the division",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "possible_answers": [
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0633 < \u0665"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "assessment1",
+          "section_id": "section1",
+          "type": "assessment",
+          "weight": 30,
+          "question_en": "6x \u2265 18",
+          "question_ar": "\u0666\u0633 \u2265 \u0661\u0668",
+          "answer": "x \u2265 3",
+          "answer_ar": "\u0633 \u2265 \u0663",
+          "hints_en": [
+            "Think about what operation will help you solve for x.",
+            "You need to isolate x by using division.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0641\u0643\u0631 \u0641\u064a \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u0633\u062a\u0633\u0627\u0639\u062f\u0643 \u0641\u064a \u062d\u0644 \u0633.",
+            "\u062a\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0639\u0632\u0644 \u0633 \u0628\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0642\u0633\u0645\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "examprep1",
+          "section_id": "section1",
+          "type": "examprep",
+          "weight": 30,
+          "question_en": "-2x > 8",
+          "question_ar": "-\u0662\u0633 > \u0668",
+          "answer": "x < -4",
+          "answer_ar": "\u0633 < -\u0664",
+          "hints_en": [
+            "What happens to the inequality when you divide by a negative number?",
+            "The inequality sign flips when dividing by negative numbers.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0645\u0627\u0630\u0627 \u064a\u062d\u062f\u062b \u0644\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f\u0645\u0627 \u062a\u0642\u0633\u0645 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u061f",
+            "\u062a\u0646\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0623\u0639\u062f\u0627\u062f \u0627\u0644\u0633\u0627\u0644\u0628\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "prep1",
+          "section_id": "section1",
+          "type": "preparation",
+          "weight": 10,
+          "question_en": "x + 8 = 15",
+          "question_ar": "\u0633 + \u0668 = \u0661\u0665",
+          "answer": "7",
+          "answer_ar": "\u0667",
+          "hints_en": [
+            "What operation cancels out addition?",
+            "Calculate 15 minus 8."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u062c\u0645\u0639\u061f",
+            "\u0627\u062d\u0633\u0628 \u0661\u0665 \u0646\u0627\u0642\u0635 \u0668."
+          ],
+          "explanation_en": "This is a review problem. We'll solve it step by step.",
+          "explanation_ar": "\u0647\u0630\u0647 \u0645\u0633\u0623\u0644\u0629 \u0645\u0631\u0627\u062c\u0639\u0629. \u0633\u0646\u062d\u0644\u0647\u0627 \u062e\u0637\u0648\u0629 \u0628\u062e\u0637\u0648\u0629.",
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 8 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0668 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x + 8 - 8 = 15 - 8",
+                "x = 15 - 8",
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 + \u0668 - \u0668 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0661\u0665 - \u0668",
+                "\u0633 = \u0667"
+              ]
+            },
+            {
+              "step_en": "Simplify both sides",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x = 7"
+              ],
+              "possible_answers_ar": [
+                "\u0633 = \u0667"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": true
+        },
+        {
+          "id": "explanation1",
+          "section_id": "section1",
+          "type": "explanation",
+          "weight": 0,
+          "question_en": "Learn Inequality Solving",
+          "question_ar": "\u062a\u0639\u0644\u0645 \u062d\u0644 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0627\u062a",
+          "answer": "",
+          "answer_ar": "",
+          "hints_en": [],
+          "hints_ar": [],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": [
+            {
+              "title_en": "Example 1: Addition/Subtraction",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0648\u0644: \u0627\u0644\u062c\u0645\u0639/\u0627\u0644\u0637\u0631\u062d",
+              "problem_en": "x + 7 > 10",
+              "problem_ar": "\u0633 + \u0667 > \u0661\u0660",
+              "solution_en": "Step 1: Subtract 7 from both sides\nx + 7 - 7 > 10 - 7\nStep 2: Simplify\nx > 3",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0637\u0631\u062d \u0667 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646\n\u0633 + \u0667 - \u0667 > \u0661\u0660 - \u0667\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 > \u0663",
+              "practice_question_en": "Now try: x + 4 \u2264 9",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0633 + \u0664 \u2264 \u0669",
+              "practice_answer": "x \u2264 5",
+              "practice_answer_ar": "\u0633 \u2264 \u0665"
+            },
+            {
+              "title_en": "Example 2: Multiplication/Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0646\u064a: \u0627\u0644\u0636\u0631\u0628/\u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "3x \u2264 15",
+              "problem_ar": "\u0663\u0633 \u2264 \u0661\u0665",
+              "solution_en": "Step 1: Divide both sides by 3\n3x \u00f7 3 \u2264 15 \u00f7 3\nStep 2: Simplify\nx \u2264 5",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0663\n\u0663\u0633 \u00f7 \u0663 \u2264 \u0661\u0665 \u00f7 \u0663\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 \u2264 \u0665",
+              "practice_question_en": "Now try: 2x > 8",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0662\u0633 > \u0668",
+              "practice_answer": "x > 4",
+              "practice_answer_ar": "\u0633 > \u0664"
+            },
+            {
+              "title_en": "Example 3: Negative Coefficient",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0644\u062b: \u0627\u0644\u0645\u0639\u0627\u0645\u0644 \u0627\u0644\u0633\u0627\u0644\u0628",
+              "problem_en": "-2x > 8",
+              "problem_ar": "-\u0662\u0633 > \u0668",
+              "solution_en": "Step 1: Divide both sides by -2 (FLIP the inequality sign!)\n-2x \u00f7 (-2) < 8 \u00f7 (-2)\nStep 2: Simplify\nx < -4\n\nREMEMBER: When dividing by negative, flip the sign!",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 -\u0662 (\u0627\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629!)\n-\u0662\u0633 \u00f7 (-\u0662) < \u0668 \u00f7 (-\u0662)\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0628\u0633\u0637\n\u0633 < -\u0664\n\n\u062a\u0630\u0643\u0631: \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u060c \u0627\u0642\u0644\u0628 \u0627\u0644\u0625\u0634\u0627\u0631\u0629!",
+              "practice_question_en": "Now try: -3x \u2264 12",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: -\u0663\u0633 \u2264 \u0661\u0662",
+              "practice_answer": "x \u2265 -4",
+              "practice_answer_ar": "\u0633 \u2265 -\u0664"
+            }
+          ],
+          "final_answer_required": false
+        },
+        {
+          "id": "practice1",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "x - 3 \u2264 8",
+          "question_ar": "\u0633 - \u0663 \u2264 \u0668",
+          "answer": "x \u2264 11",
+          "answer_ar": "\u0633 \u2264 \u0661\u0661",
+          "hints_en": [
+            "What operation cancels out subtraction?",
+            "Combine the numbers on the right side."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0637\u0631\u062d\u061f",
+            "\u0627\u062c\u0645\u0639 \u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0641\u064a \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Add 3 to both sides",
+              "step_ar": "\u0623\u0636\u0641 \u0663 \u0644\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "x - 3 + 3 \u2264 8 + 3",
+                "x \u2264 8 + 3",
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 - \u0663 + \u0663 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0668 + \u0663",
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            },
+            {
+              "step_en": "Simplify the right side",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0623\u064a\u0645\u0646",
+              "possible_answers": [
+                "x \u2264 11"
+              ],
+              "possible_answers_ar": [
+                "\u0633 \u2264 \u0661\u0661"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2",
+          "section_id": "section1",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "4x < 20",
+          "question_ar": "\u0664\u0633 < \u0662\u0660",
+          "answer": "x < 5",
+          "answer_ar": "\u0633 < \u0665",
+          "hints_en": [
+            "What operation cancels out multiplication?",
+            "Calculate 20 divided by 4."
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a \u0627\u0644\u0636\u0631\u0628\u061f",
+            "\u0627\u062d\u0633\u0628 \u0662\u0660 \u0645\u0642\u0633\u0648\u0645\u0627\u064b \u0639\u0644\u0649 \u0664."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Divide both sides by 4",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664",
+              "possible_answers": [
+                "4x \u00f7 4 < 20 \u00f7 4",
+                "4x / 4 < 20 / 4",
+                "x < 20 / 4",
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 \u00f7 \u0664 < \u0662\u0660 \u00f7 \u0664",
+                "\u0664\u0633 / \u0664 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0662\u0660 / \u0664",
+                "\u0633 < \u0665"
+              ]
+            },
+            {
+              "step_en": "Simplify the division",
+              "step_ar": "\u0628\u0633\u0637 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "possible_answers": [
+                "x < 5"
+              ],
+              "possible_answers_ar": [
+                "\u0633 < \u0665"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "assessment1",
+          "section_id": "section1",
+          "type": "assessment",
+          "weight": 30,
+          "question_en": "6x \u2265 18",
+          "question_ar": "\u0666\u0633 \u2265 \u0661\u0668",
+          "answer": "x \u2265 3",
+          "answer_ar": "\u0633 \u2265 \u0663",
+          "hints_en": [
+            "Think about what operation will help you solve for x.",
+            "You need to isolate x by using division.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0641\u0643\u0631 \u0641\u064a \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u0633\u062a\u0633\u0627\u0639\u062f\u0643 \u0641\u064a \u062d\u0644 \u0633.",
+            "\u062a\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0639\u0632\u0644 \u0633 \u0628\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0642\u0633\u0645\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "examprep1",
+          "section_id": "section1",
+          "type": "examprep",
+          "weight": 30,
+          "question_en": "-2x > 8",
+          "question_ar": "-\u0662\u0633 > \u0668",
+          "answer": "x < -4",
+          "answer_ar": "\u0633 < -\u0664",
+          "hints_en": [
+            "What happens to the inequality when you divide by a negative number?",
+            "The inequality sign flips when dividing by negative numbers.",
+            "That's all the hints available."
+          ],
+          "hints_ar": [
+            "\u0645\u0627\u0630\u0627 \u064a\u062d\u062f\u062b \u0644\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f\u0645\u0627 \u062a\u0642\u0633\u0645 \u0639\u0644\u0649 \u0639\u062f\u062f \u0633\u0627\u0644\u0628\u061f",
+            "\u062a\u0646\u0642\u0644\u0628 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0639\u0646\u062f \u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0623\u0639\u062f\u0627\u062f \u0627\u0644\u0633\u0627\u0644\u0628\u0629.",
+            "\u0647\u0630\u0647 \u0643\u0644 \u0627\u0644\u0625\u0631\u0634\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u062a\u0627\u062d\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        }
+      ]
     },
     {
-      "test": "Individual Problem",
-      "success": true,
-      "details": "Retrieved problem 'prep1'",
-      "timestamp": "2025-09-06T06:52:49.629751"
+      "test": "Section Problems - section2",
+      "success": false,
+      "details": "Expected 6 problems, got 12",
+      "timestamp": "2025-09-07T11:16:31.112049",
+      "response_data": [
+        {
+          "id": "prep2",
+          "section_id": "section2",
+          "type": "preparation",
+          "weight": 10,
+          "question_en": "3x + 2 < 11",
+          "question_ar": "\u0663\u0633 + \u0662 < \u0661\u0661",
+          "answer": "x < 3",
+          "answer_ar": "\u0633 < \u0663",
+          "hints_en": [
+            "Start by isolating the term with x",
+            "What operation cancels out +2?",
+            "Then isolate x by dividing"
+          ],
+          "hints_ar": [
+            "\u0627\u0628\u062f\u0623 \u0628\u0639\u0632\u0644 \u0627\u0644\u062d\u062f \u0627\u0644\u0630\u064a \u064a\u062d\u062a\u0648\u064a \u0639\u0644\u0649 \u0633",
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a +\u0662\u061f",
+            "\u062b\u0645 \u0627\u0639\u0632\u0644 \u0633 \u0628\u0627\u0644\u0642\u0633\u0645\u0629"
+          ],
+          "explanation_en": "This is a two-step inequality. We need to undo addition first, then division.",
+          "explanation_ar": "\u0647\u0630\u0647 \u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0630\u0627\u062a \u062e\u0637\u0648\u062a\u064a\u0646. \u0646\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062c\u0645\u0639 \u0623\u0648\u0644\u0627\u064b\u060c \u062b\u0645 \u0627\u0644\u0642\u0633\u0645\u0629.",
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 2 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0662 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "3x + 2 - 2 < 11 - 2",
+                "3x < 11 - 2",
+                "3x < 9"
+              ],
+              "possible_answers_ar": [
+                "\u0663\u0633 + \u0662 - \u0662 < \u0661\u0661 - \u0662",
+                "\u0663\u0633 < \u0661\u0661 - \u0662",
+                "\u0663\u0633 < \u0669"
+              ]
+            },
+            {
+              "step_en": "Divide both sides by 3",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0663",
+              "possible_answers": [
+                "3x / 3 < 9 / 3",
+                "x < 9 / 3",
+                "x < 3"
+              ],
+              "possible_answers_ar": [
+                "\u0663\u0633 / \u0663 < \u0669 / \u0663",
+                "\u0633 < \u0669 / \u0663",
+                "\u0633 < \u0663"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": true
+        },
+        {
+          "id": "explanation2",
+          "section_id": "section2",
+          "type": "explanation",
+          "weight": 0,
+          "question_en": "Learn Two-Step Inequalities",
+          "question_ar": "\u062a\u0639\u0644\u0645 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0627\u062a \u0630\u0627\u062a \u0627\u0644\u062e\u0637\u0648\u062a\u064a\u0646",
+          "answer": "",
+          "answer_ar": "",
+          "hints_en": [],
+          "hints_ar": [],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": [
+            {
+              "title_en": "Example 1: Addition then Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0648\u0644: \u0627\u0644\u062c\u0645\u0639 \u062b\u0645 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "2x - 5 \u2265 7",
+              "problem_ar": "\u0662\u0633 - \u0665 \u2265 \u0667",
+              "solution_en": "Step 1: Add 5 to both sides\n2x - 5 + 5 \u2265 7 + 5\n2x \u2265 12\nStep 2: Divide both sides by 2\n2x \u00f7 2 \u2265 12 \u00f7 2\nx \u2265 6",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0623\u0636\u0641 \u0665 \u0644\u0644\u0637\u0631\u0641\u064a\u0646\n\u0662\u0633 - \u0665 + \u0665 \u2265 \u0667 + \u0665\n\u0662\u0633 \u2265 \u0661\u0662\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0662\n\u0662\u0633 \u00f7 \u0662 \u2265 \u0661\u0662 \u00f7 \u0662\n\u0633 \u2265 \u0666",
+              "practice_question_en": "Now try: 3x + 1 > 10",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0663\u0633 + \u0661 > \u0661\u0660",
+              "practice_answer": "x > 3",
+              "practice_answer_ar": "\u0633 > \u0663"
+            },
+            {
+              "title_en": "Example 2: Subtraction then Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0646\u064a: \u0627\u0644\u0637\u0631\u062d \u062b\u0645 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "4x + 8 \u2264 20",
+              "problem_ar": "\u0664\u0633 + \u0668 \u2264 \u0662\u0660",
+              "solution_en": "Step 1: Subtract 8 from both sides\n4x + 8 - 8 \u2264 20 - 8\n4x \u2264 12\nStep 2: Divide both sides by 4\n4x \u00f7 4 \u2264 12 \u00f7 4\nx \u2264 3",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0637\u0631\u062d \u0668 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646\n\u0664\u0633 + \u0668 - \u0668 \u2264 \u0662\u0660 - \u0668\n\u0664\u0633 \u2264 \u0661\u0662\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664\n\u0664\u0633 \u00f7 \u0664 \u2264 \u0661\u0662 \u00f7 \u0664\n\u0633 \u2264 \u0663",
+              "practice_question_en": "Now try: 5x - 3 < 17",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0665\u0633 - \u0663 < \u0661\u0667",
+              "practice_answer": "x < 4",
+              "practice_answer_ar": "\u0633 < \u0664"
+            }
+          ],
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2_1",
+          "section_id": "section2",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "4x + 3 \u2264 15",
+          "question_ar": "\u0664\u0633 + \u0663 \u2264 \u0661\u0665",
+          "answer": "x \u2264 3",
+          "answer_ar": "\u0633 \u2264 \u0663",
+          "hints_en": [
+            "Start by removing the constant term",
+            "What do you add or subtract to cancel +3?",
+            "Then isolate x by dividing by the coefficient"
+          ],
+          "hints_ar": [
+            "\u0627\u0628\u062f\u0623 \u0628\u0625\u0632\u0627\u0644\u0629 \u0627\u0644\u062d\u062f \u0627\u0644\u062b\u0627\u0628\u062a",
+            "\u0645\u0627\u0630\u0627 \u062a\u062c\u0645\u0639 \u0623\u0648 \u062a\u0637\u0631\u062d \u0644\u062a\u0644\u063a\u064a +\u0663\u061f",
+            "\u062b\u0645 \u0627\u0639\u0632\u0644 \u0633 \u0628\u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0639\u0627\u0645\u0644"
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 3 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0663 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "4x + 3 - 3 \u2264 15 - 3",
+                "4x \u2264 15 - 3",
+                "4x \u2264 12"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 + \u0663 - \u0663 \u2264 \u0661\u0665 - \u0663",
+                "\u0664\u0633 \u2264 \u0661\u0665 - \u0663",
+                "\u0664\u0633 \u2264 \u0661\u0662"
+              ]
+            },
+            {
+              "step_en": "Divide both sides by 4",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664",
+              "possible_answers": [
+                "4x / 4 \u2264 12 / 4",
+                "x \u2264 12 / 4",
+                "x \u2264 3"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 / \u0664 \u2264 \u0661\u0662 / \u0664",
+                "\u0633 \u2264 \u0661\u0662 / \u0664",
+                "\u0633 \u2264 \u0663"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2_2",
+          "section_id": "section2",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "5x - 2 > 18",
+          "question_ar": "\u0665\u0633 - \u0662 > \u0661\u0668",
+          "answer": "x > 4",
+          "answer_ar": "\u0633 > \u0664",
+          "hints_en": [
+            "What operation cancels out -2?",
+            "Calculate 18 + 2",
+            "Then divide both sides by 5"
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a -\u0662\u061f",
+            "\u0627\u062d\u0633\u0628 \u0661\u0668 + \u0662",
+            "\u062b\u0645 \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0665"
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Add 2 to both sides",
+              "step_ar": "\u0623\u0636\u0641 \u0662 \u0644\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "5x - 2 + 2 > 18 + 2",
+                "5x > 18 + 2",
+                "5x > 20"
+              ],
+              "possible_answers_ar": [
+                "\u0665\u0633 - \u0662 + \u0662 > \u0661\u0668 + \u0662",
+                "\u0665\u0633 > \u0661\u0668 + \u0662",
+                "\u0665\u0633 > \u0662\u0660"
+              ]
+            },
+            {
+              "step_en": "Divide both sides by 5",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0665",
+              "possible_answers": [
+                "5x / 5 > 20 / 5",
+                "x > 20 / 5",
+                "x > 4"
+              ],
+              "possible_answers_ar": [
+                "\u0665\u0633 / \u0665 > \u0662\u0660 / \u0665",
+                "\u0633 > \u0662\u0660 / \u0665",
+                "\u0633 > \u0664"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "assessment2",
+          "section_id": "section2",
+          "type": "assessment",
+          "weight": 30,
+          "question_en": "3x + 7 \u2265 22",
+          "question_ar": "\u0663\u0633 + \u0667 \u2265 \u0662\u0662",
+          "answer": "x \u2265 5",
+          "answer_ar": "\u0633 \u2265 \u0665",
+          "hints_en": [
+            "This is a two-step inequality. Start by isolating the x term.",
+            "First subtract, then divide.",
+            "Remember to keep the inequality sign in the same direction."
+          ],
+          "hints_ar": [
+            "\u0647\u0630\u0647 \u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0630\u0627\u062a \u062e\u0637\u0648\u062a\u064a\u0646. \u0627\u0628\u062f\u0623 \u0628\u0639\u0632\u0644 \u062d\u062f \u0633.",
+            "\u0627\u0637\u0631\u062d \u0623\u0648\u0644\u0627\u064b\u060c \u062b\u0645 \u0627\u0642\u0633\u0645.",
+            "\u062a\u0630\u0643\u0631 \u0623\u0646 \u062a\u062d\u0627\u0641\u0638 \u0639\u0644\u0649 \u0627\u062a\u062c\u0627\u0647 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "examprep2",
+          "section_id": "section2",
+          "type": "examprep",
+          "weight": 30,
+          "question_en": "6x - 4 < 20",
+          "question_ar": "\u0666\u0633 - \u0664 < \u0662\u0660",
+          "answer": "x < 4",
+          "answer_ar": "\u0633 < \u0664",
+          "hints_en": [
+            "Follow the two-step process: first deal with the constant term.",
+            "Add 4 to both sides, then divide by 6.",
+            "Check your final answer by substituting back."
+          ],
+          "hints_ar": [
+            "\u0627\u062a\u0628\u0639 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0630\u0627\u062a \u0627\u0644\u062e\u0637\u0648\u062a\u064a\u0646: \u062a\u0639\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u062d\u062f \u0627\u0644\u062b\u0627\u0628\u062a \u0623\u0648\u0644\u0627\u064b.",
+            "\u0623\u0636\u0641 \u0664 \u0644\u0644\u0637\u0631\u0641\u064a\u0646\u060c \u062b\u0645 \u0627\u0642\u0633\u0645 \u0639\u0644\u0649 \u0666.",
+            "\u062a\u062d\u0642\u0642 \u0645\u0646 \u0625\u062c\u0627\u0628\u062a\u0643 \u0627\u0644\u0646\u0647\u0627\u0626\u064a\u0629 \u0628\u0627\u0644\u062a\u0639\u0648\u064a\u0636 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "prep2",
+          "section_id": "section2",
+          "type": "preparation",
+          "weight": 10,
+          "question_en": "3x + 2 < 11",
+          "question_ar": "\u0663\u0633 + \u0662 < \u0661\u0661",
+          "answer": "x < 3",
+          "answer_ar": "\u0633 < \u0663",
+          "hints_en": [
+            "Start by isolating the term with x",
+            "What operation cancels out +2?",
+            "Then isolate x by dividing"
+          ],
+          "hints_ar": [
+            "\u0627\u0628\u062f\u0623 \u0628\u0639\u0632\u0644 \u0627\u0644\u062d\u062f \u0627\u0644\u0630\u064a \u064a\u062d\u062a\u0648\u064a \u0639\u0644\u0649 \u0633",
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a +\u0662\u061f",
+            "\u062b\u0645 \u0627\u0639\u0632\u0644 \u0633 \u0628\u0627\u0644\u0642\u0633\u0645\u0629"
+          ],
+          "explanation_en": "This is a two-step inequality. We need to undo addition first, then division.",
+          "explanation_ar": "\u0647\u0630\u0647 \u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0630\u0627\u062a \u062e\u0637\u0648\u062a\u064a\u0646. \u0646\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062c\u0645\u0639 \u0623\u0648\u0644\u0627\u064b\u060c \u062b\u0645 \u0627\u0644\u0642\u0633\u0645\u0629.",
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 2 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0662 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "3x + 2 - 2 < 11 - 2",
+                "3x < 11 - 2",
+                "3x < 9"
+              ],
+              "possible_answers_ar": [
+                "\u0663\u0633 + \u0662 - \u0662 < \u0661\u0661 - \u0662",
+                "\u0663\u0633 < \u0661\u0661 - \u0662",
+                "\u0663\u0633 < \u0669"
+              ]
+            },
+            {
+              "step_en": "Divide both sides by 3",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0663",
+              "possible_answers": [
+                "3x / 3 < 9 / 3",
+                "x < 9 / 3",
+                "x < 3"
+              ],
+              "possible_answers_ar": [
+                "\u0663\u0633 / \u0663 < \u0669 / \u0663",
+                "\u0633 < \u0669 / \u0663",
+                "\u0633 < \u0663"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": true
+        },
+        {
+          "id": "explanation2",
+          "section_id": "section2",
+          "type": "explanation",
+          "weight": 0,
+          "question_en": "Learn Two-Step Inequalities",
+          "question_ar": "\u062a\u0639\u0644\u0645 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0627\u062a \u0630\u0627\u062a \u0627\u0644\u062e\u0637\u0648\u062a\u064a\u0646",
+          "answer": "",
+          "answer_ar": "",
+          "hints_en": [],
+          "hints_ar": [],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": [
+            {
+              "title_en": "Example 1: Addition then Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0648\u0644: \u0627\u0644\u062c\u0645\u0639 \u062b\u0645 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "2x - 5 \u2265 7",
+              "problem_ar": "\u0662\u0633 - \u0665 \u2265 \u0667",
+              "solution_en": "Step 1: Add 5 to both sides\n2x - 5 + 5 \u2265 7 + 5\n2x \u2265 12\nStep 2: Divide both sides by 2\n2x \u00f7 2 \u2265 12 \u00f7 2\nx \u2265 6",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0623\u0636\u0641 \u0665 \u0644\u0644\u0637\u0631\u0641\u064a\u0646\n\u0662\u0633 - \u0665 + \u0665 \u2265 \u0667 + \u0665\n\u0662\u0633 \u2265 \u0661\u0662\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0662\n\u0662\u0633 \u00f7 \u0662 \u2265 \u0661\u0662 \u00f7 \u0662\n\u0633 \u2265 \u0666",
+              "practice_question_en": "Now try: 3x + 1 > 10",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0663\u0633 + \u0661 > \u0661\u0660",
+              "practice_answer": "x > 3",
+              "practice_answer_ar": "\u0633 > \u0663"
+            },
+            {
+              "title_en": "Example 2: Subtraction then Division",
+              "title_ar": "\u0627\u0644\u0645\u062b\u0627\u0644 \u0627\u0644\u062b\u0627\u0646\u064a: \u0627\u0644\u0637\u0631\u062d \u062b\u0645 \u0627\u0644\u0642\u0633\u0645\u0629",
+              "problem_en": "4x + 8 \u2264 20",
+              "problem_ar": "\u0664\u0633 + \u0668 \u2264 \u0662\u0660",
+              "solution_en": "Step 1: Subtract 8 from both sides\n4x + 8 - 8 \u2264 20 - 8\n4x \u2264 12\nStep 2: Divide both sides by 4\n4x \u00f7 4 \u2264 12 \u00f7 4\nx \u2264 3",
+              "solution_ar": "\u0627\u0644\u062e\u0637\u0648\u0629 \u0661: \u0627\u0637\u0631\u062d \u0668 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646\n\u0664\u0633 + \u0668 - \u0668 \u2264 \u0662\u0660 - \u0668\n\u0664\u0633 \u2264 \u0661\u0662\n\u0627\u0644\u062e\u0637\u0648\u0629 \u0662: \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664\n\u0664\u0633 \u00f7 \u0664 \u2264 \u0661\u0662 \u00f7 \u0664\n\u0633 \u2264 \u0663",
+              "practice_question_en": "Now try: 5x - 3 < 17",
+              "practice_question_ar": "\u0627\u0644\u0622\u0646 \u062c\u0631\u0628: \u0665\u0633 - \u0663 < \u0661\u0667",
+              "practice_answer": "x < 4",
+              "practice_answer_ar": "\u0633 < \u0664"
+            }
+          ],
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2_1",
+          "section_id": "section2",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "4x + 3 \u2264 15",
+          "question_ar": "\u0664\u0633 + \u0663 \u2264 \u0661\u0665",
+          "answer": "x \u2264 3",
+          "answer_ar": "\u0633 \u2264 \u0663",
+          "hints_en": [
+            "Start by removing the constant term",
+            "What do you add or subtract to cancel +3?",
+            "Then isolate x by dividing by the coefficient"
+          ],
+          "hints_ar": [
+            "\u0627\u0628\u062f\u0623 \u0628\u0625\u0632\u0627\u0644\u0629 \u0627\u0644\u062d\u062f \u0627\u0644\u062b\u0627\u0628\u062a",
+            "\u0645\u0627\u0630\u0627 \u062a\u062c\u0645\u0639 \u0623\u0648 \u062a\u0637\u0631\u062d \u0644\u062a\u0644\u063a\u064a +\u0663\u061f",
+            "\u062b\u0645 \u0627\u0639\u0632\u0644 \u0633 \u0628\u0627\u0644\u0642\u0633\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0639\u0627\u0645\u0644"
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Subtract 3 from both sides",
+              "step_ar": "\u0627\u0637\u0631\u062d \u0663 \u0645\u0646 \u0627\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "4x + 3 - 3 \u2264 15 - 3",
+                "4x \u2264 15 - 3",
+                "4x \u2264 12"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 + \u0663 - \u0663 \u2264 \u0661\u0665 - \u0663",
+                "\u0664\u0633 \u2264 \u0661\u0665 - \u0663",
+                "\u0664\u0633 \u2264 \u0661\u0662"
+              ]
+            },
+            {
+              "step_en": "Divide both sides by 4",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0664",
+              "possible_answers": [
+                "4x / 4 \u2264 12 / 4",
+                "x \u2264 12 / 4",
+                "x \u2264 3"
+              ],
+              "possible_answers_ar": [
+                "\u0664\u0633 / \u0664 \u2264 \u0661\u0662 / \u0664",
+                "\u0633 \u2264 \u0661\u0662 / \u0664",
+                "\u0633 \u2264 \u0663"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "practice2_2",
+          "section_id": "section2",
+          "type": "practice",
+          "weight": 15,
+          "question_en": "5x - 2 > 18",
+          "question_ar": "\u0665\u0633 - \u0662 > \u0661\u0668",
+          "answer": "x > 4",
+          "answer_ar": "\u0633 > \u0664",
+          "hints_en": [
+            "What operation cancels out -2?",
+            "Calculate 18 + 2",
+            "Then divide both sides by 5"
+          ],
+          "hints_ar": [
+            "\u0645\u0627 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0644\u063a\u064a -\u0662\u061f",
+            "\u0627\u062d\u0633\u0628 \u0661\u0668 + \u0662",
+            "\u062b\u0645 \u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0665"
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": false,
+          "step_solutions": [
+            {
+              "step_en": "Add 2 to both sides",
+              "step_ar": "\u0623\u0636\u0641 \u0662 \u0644\u0644\u0637\u0631\u0641\u064a\u0646",
+              "possible_answers": [
+                "5x - 2 + 2 > 18 + 2",
+                "5x > 18 + 2",
+                "5x > 20"
+              ],
+              "possible_answers_ar": [
+                "\u0665\u0633 - \u0662 + \u0662 > \u0661\u0668 + \u0662",
+                "\u0665\u0633 > \u0661\u0668 + \u0662",
+                "\u0665\u0633 > \u0662\u0660"
+              ]
+            },
+            {
+              "step_en": "Divide both sides by 5",
+              "step_ar": "\u0627\u0642\u0633\u0645 \u0627\u0644\u0637\u0631\u0641\u064a\u0646 \u0639\u0644\u0649 \u0665",
+              "possible_answers": [
+                "5x / 5 > 20 / 5",
+                "x > 20 / 5",
+                "x > 4"
+              ],
+              "possible_answers_ar": [
+                "\u0665\u0633 / \u0665 > \u0662\u0660 / \u0665",
+                "\u0633 > \u0662\u0660 / \u0665",
+                "\u0633 > \u0664"
+              ]
+            }
+          ],
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "assessment2",
+          "section_id": "section2",
+          "type": "assessment",
+          "weight": 30,
+          "question_en": "3x + 7 \u2265 22",
+          "question_ar": "\u0663\u0633 + \u0667 \u2265 \u0662\u0662",
+          "answer": "x \u2265 5",
+          "answer_ar": "\u0633 \u2265 \u0665",
+          "hints_en": [
+            "This is a two-step inequality. Start by isolating the x term.",
+            "First subtract, then divide.",
+            "Remember to keep the inequality sign in the same direction."
+          ],
+          "hints_ar": [
+            "\u0647\u0630\u0647 \u0645\u062a\u0628\u0627\u064a\u0646\u0629 \u0630\u0627\u062a \u062e\u0637\u0648\u062a\u064a\u0646. \u0627\u0628\u062f\u0623 \u0628\u0639\u0632\u0644 \u062d\u062f \u0633.",
+            "\u0627\u0637\u0631\u062d \u0623\u0648\u0644\u0627\u064b\u060c \u062b\u0645 \u0627\u0642\u0633\u0645.",
+            "\u062a\u0630\u0643\u0631 \u0623\u0646 \u062a\u062d\u0627\u0641\u0638 \u0639\u0644\u0649 \u0627\u062a\u062c\u0627\u0647 \u0625\u0634\u0627\u0631\u0629 \u0627\u0644\u0645\u062a\u0628\u0627\u064a\u0646\u0629."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        },
+        {
+          "id": "examprep2",
+          "section_id": "section2",
+          "type": "examprep",
+          "weight": 30,
+          "question_en": "6x - 4 < 20",
+          "question_ar": "\u0666\u0633 - \u0664 < \u0662\u0660",
+          "answer": "x < 4",
+          "answer_ar": "\u0633 < \u0664",
+          "hints_en": [
+            "Follow the two-step process: first deal with the constant term.",
+            "Add 4 to both sides, then divide by 6.",
+            "Check your final answer by substituting back."
+          ],
+          "hints_ar": [
+            "\u0627\u062a\u0628\u0639 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0630\u0627\u062a \u0627\u0644\u062e\u0637\u0648\u062a\u064a\u0646: \u062a\u0639\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u062d\u062f \u0627\u0644\u062b\u0627\u0628\u062a \u0623\u0648\u0644\u0627\u064b.",
+            "\u0623\u0636\u0641 \u0664 \u0644\u0644\u0637\u0631\u0641\u064a\u0646\u060c \u062b\u0645 \u0627\u0642\u0633\u0645 \u0639\u0644\u0649 \u0666.",
+            "\u062a\u062d\u0642\u0642 \u0645\u0646 \u0625\u062c\u0627\u0628\u062a\u0643 \u0627\u0644\u0646\u0647\u0627\u0626\u064a\u0629 \u0628\u0627\u0644\u062a\u0639\u0648\u064a\u0636 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+          ],
+          "explanation_en": null,
+          "explanation_ar": null,
+          "show_full_solution": false,
+          "hide_answer": true,
+          "step_solutions": null,
+          "practice_problems": null,
+          "interactive_examples": null,
+          "final_answer_required": false
+        }
+      ]
     },
     {
-      "test": "Answer Submission (Correct)",
+      "test": "Section Problems - section3",
       "success": true,
-      "details": "Correct answer scored 60 points",
-      "timestamp": "2025-09-06T06:52:49.674724"
+      "details": "Retrieved 6 problems from Multi-Step Inequalities",
+      "timestamp": "2025-09-07T11:16:31.155908"
     },
     {
-      "test": "Answer Submission (Incorrect)",
+      "test": "Individual Problem - section3",
       "success": true,
-      "details": "Incorrect answer properly handled",
-      "timestamp": "2025-09-06T06:52:49.719745"
+      "details": "Retrieved problem 'prep3' from section3",
+      "timestamp": "2025-09-07T11:16:31.199866"
     },
     {
-      "test": "Teacher Dashboard",
+      "test": "Section Problems - section4",
       "success": true,
-      "details": "Dashboard shows 5 students",
-      "timestamp": "2025-09-06T06:52:49.770778"
+      "details": "Retrieved 6 problems from Variables on Both Sides",
+      "timestamp": "2025-09-07T11:16:31.244936"
+    },
+    {
+      "test": "Individual Problem - section4",
+      "success": true,
+      "details": "Retrieved problem 'prep4' from section4",
+      "timestamp": "2025-09-07T11:16:31.288903"
+    },
+    {
+      "test": "Section Problems - section5",
+      "success": true,
+      "details": "Retrieved 6 problems from Compound Inequalities",
+      "timestamp": "2025-09-07T11:16:31.333017"
+    },
+    {
+      "test": "Individual Problem - section5",
+      "success": true,
+      "details": "Retrieved problem 'prep5' from section5",
+      "timestamp": "2025-09-07T11:16:31.376907"
+    },
+    {
+      "test": "Answer Submission - prep1",
+      "success": true,
+      "details": "Correct answer for section1 scored 40 points",
+      "timestamp": "2025-09-07T11:16:31.424836"
+    },
+    {
+      "test": "Answer Submission - prep2",
+      "success": true,
+      "details": "Correct answer for section2 scored 100 points",
+      "timestamp": "2025-09-07T11:16:31.472831"
+    },
+    {
+      "test": "Answer Submission - prep3",
+      "success": true,
+      "details": "Correct answer for section3 scored 100 points",
+      "timestamp": "2025-09-07T11:16:31.517859"
+    },
+    {
+      "test": "Answer Submission - prep4",
+      "success": true,
+      "details": "Correct answer for section4 scored 100 points",
+      "timestamp": "2025-09-07T11:16:31.562827"
+    },
+    {
+      "test": "Answer Submission - prep5",
+      "success": true,
+      "details": "Correct answer for section5 scored 100 points",
+      "timestamp": "2025-09-07T11:16:31.607919"
+    },
+    {
+      "test": "Teacher Dashboard Expanded",
+      "success": true,
+      "details": "Dashboard shows 5 students with expanded data structure",
+      "timestamp": "2025-09-07T11:16:31.659905"
     },
     {
       "test": "CORS Configuration",
       "success": true,
       "details": "CORS working - Allow-Origin: *",
-      "timestamp": "2025-09-06T06:52:49.812723"
+      "timestamp": "2025-09-07T11:16:31.701803"
+    },
+    {
+      "test": "Section Problems",
+      "success": true,
+      "details": "Retrieved 24 problems from section1",
+      "timestamp": "2025-09-07T11:16:31.747236"
+    },
+    {
+      "test": "Individual Problem",
+      "success": true,
+      "details": "Retrieved problem 'prep1'",
+      "timestamp": "2025-09-07T11:16:31.847800"
+    },
+    {
+      "test": "Answer Submission (Correct)",
+      "success": true,
+      "details": "Correct answer scored 40 points",
+      "timestamp": "2025-09-07T11:16:31.893838"
+    },
+    {
+      "test": "Answer Submission (Incorrect)",
+      "success": true,
+      "details": "Incorrect answer properly handled",
+      "timestamp": "2025-09-07T11:16:31.938878"
+    },
+    {
+      "test": "Teacher Dashboard",
+      "success": true,
+      "details": "Dashboard shows 5 students",
+      "timestamp": "2025-09-07T11:16:31.991945"
     }
   ],
   "backend_url": "http://localhost:8001/api",
-  "test_timestamp": "2025-09-06T06:52:49.812940"
+  "test_timestamp": "2025-09-07T11:16:31.992162"
 }
