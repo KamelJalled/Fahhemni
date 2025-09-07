@@ -191,15 +191,16 @@ const Dashboard = () => {
     return <IconComponent className="w-5 h-5" />;
   };
 
-  const handleProblemClick = (problemId) => {
-    const status = getProblemStatus(problemId, userProgress);
+  const handleProblemClick = (problemId, sectionId) => {
+    const status = getProblemStatus(problemId, sectionId, userProgress);
     
     // Show warning for assessment if not all practice completed
-    if (problemId === 'assessment1' && status === 'available') {
-      const practice1Complete = userProgress.section1.practice1.completed;
-      const practice2Complete = userProgress.section1.practice2.completed;
+    const assessmentId = `assessment${sectionId.slice(-1)}`;
+    if (problemId === assessmentId && status === 'available') {
+      const practiceProblems = Object.keys(userProgress[sectionId] || {}).filter(id => id.includes('practice'));
+      const allPracticeComplete = practiceProblems.every(practiceId => userProgress[sectionId][practiceId]?.completed);
       
-      if (!practice1Complete || !practice2Complete) {
+      if (!allPracticeComplete) {
         const proceed = window.confirm(
           language === 'en' 
             ? "⚠️ Recommended to complete all practice problems first. Continue anyway?"
