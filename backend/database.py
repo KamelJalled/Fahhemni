@@ -286,7 +286,264 @@ async def init_database():
     }
     
     await sections_collection.insert_one(section1)
-    print("Database initialized with Section 1 problems")
+    
+    # Section 2: Two-Step Inequalities
+    section2_problems = [
+        {
+            "id": "prep2",
+            "section_id": "section2",
+            "type": ProblemType.PREPARATION,
+            "weight": 10,
+            "question_en": "3x + 2 < 11",
+            "question_ar": "٣س + ٢ < ١١",
+            "answer": "x < 3",
+            "answer_ar": "س < ٣",
+            "explanation_en": "This is a two-step inequality. We need to undo addition first, then division.",
+            "explanation_ar": "هذه متباينة ذات خطوتين. نحتاج إلى إلغاء الجمع أولاً، ثم القسمة.",
+            "show_full_solution": False,
+            "hide_answer": False,
+            "step_solutions": [
+                {
+                    "step_en": "Subtract 2 from both sides",
+                    "step_ar": "اطرح ٢ من الطرفين",
+                    "possible_answers": [
+                        "3x + 2 - 2 < 11 - 2",
+                        "3x < 11 - 2",
+                        "3x < 9"
+                    ],
+                    "possible_answers_ar": [
+                        "٣س + ٢ - ٢ < ١١ - ٢",
+                        "٣س < ١١ - ٢",
+                        "٣س < ٩"
+                    ]
+                },
+                {
+                    "step_en": "Divide both sides by 3",
+                    "step_ar": "اقسم الطرفين على ٣",
+                    "possible_answers": [
+                        "3x / 3 < 9 / 3",
+                        "x < 9 / 3",
+                        "x < 3"
+                    ],
+                    "possible_answers_ar": [
+                        "٣س / ٣ < ٩ / ٣",
+                        "س < ٩ / ٣",
+                        "س < ٣"
+                    ]
+                }
+            ],
+            "final_answer_required": True,
+            "hints_en": [
+                "Start by isolating the term with x",
+                "What operation cancels out +2?",
+                "Then isolate x by dividing"
+            ],
+            "hints_ar": [
+                "ابدأ بعزل الحد الذي يحتوي على س",
+                "ما العملية التي تلغي +٢؟", 
+                "ثم اعزل س بالقسمة"
+            ]
+        },
+        {
+            "id": "explanation2",
+            "section_id": "section2",
+            "type": ProblemType.EXPLANATION,
+            "weight": 0,
+            "question_en": "Learn Two-Step Inequalities",
+            "question_ar": "تعلم المتباينات ذات الخطوتين",
+            "answer": "",
+            "answer_ar": "",
+            "show_full_solution": False,
+            "hide_answer": False,
+            "interactive_examples": [
+                {
+                    "title_en": "Example 1: Addition then Division",
+                    "title_ar": "المثال الأول: الجمع ثم القسمة",
+                    "problem_en": "2x - 5 ≥ 7",
+                    "problem_ar": "٢س - ٥ ≥ ٧",
+                    "solution_en": "Step 1: Add 5 to both sides\n2x - 5 + 5 ≥ 7 + 5\n2x ≥ 12\nStep 2: Divide both sides by 2\n2x ÷ 2 ≥ 12 ÷ 2\nx ≥ 6",
+                    "solution_ar": "الخطوة ١: أضف ٥ للطرفين\n٢س - ٥ + ٥ ≥ ٧ + ٥\n٢س ≥ ١٢\nالخطوة ٢: اقسم الطرفين على ٢\n٢س ÷ ٢ ≥ ١٢ ÷ ٢\nس ≥ ٦",
+                    "practice_question_en": "Now try: 3x + 1 > 10",
+                    "practice_question_ar": "الآن جرب: ٣س + ١ > ١٠",
+                    "practice_answer": "x > 3",
+                    "practice_answer_ar": "س > ٣"
+                },
+                {
+                    "title_en": "Example 2: Subtraction then Division",
+                    "title_ar": "المثال الثاني: الطرح ثم القسمة",
+                    "problem_en": "4x + 8 ≤ 20",
+                    "problem_ar": "٤س + ٨ ≤ ٢٠",
+                    "solution_en": "Step 1: Subtract 8 from both sides\n4x + 8 - 8 ≤ 20 - 8\n4x ≤ 12\nStep 2: Divide both sides by 4\n4x ÷ 4 ≤ 12 ÷ 4\nx ≤ 3",
+                    "solution_ar": "الخطوة ١: اطرح ٨ من الطرفين\n٤س + ٨ - ٨ ≤ ٢٠ - ٨\n٤س ≤ ١٢\nالخطوة ٢: اقسم الطرفين على ٤\n٤س ÷ ٤ ≤ ١٢ ÷ ٤\nس ≤ ٣",
+                    "practice_question_en": "Now try: 5x - 3 < 17",
+                    "practice_question_ar": "الآن جرب: ٥س - ٣ < ١٧",
+                    "practice_answer": "x < 4",
+                    "practice_answer_ar": "س < ٤"
+                }
+            ],
+            "hints_en": [],
+            "hints_ar": []
+        },
+        {
+            "id": "practice2_1",
+            "section_id": "section2",
+            "type": ProblemType.PRACTICE,
+            "weight": 15,
+            "question_en": "4x + 3 ≤ 15",
+            "question_ar": "٤س + ٣ ≤ ١٥",
+            "answer": "x ≤ 3",
+            "answer_ar": "س ≤ ٣",
+            "show_full_solution": False,
+            "hide_answer": False,
+            "step_solutions": [
+                {
+                    "step_en": "Subtract 3 from both sides",
+                    "step_ar": "اطرح ٣ من الطرفين",
+                    "possible_answers": [
+                        "4x + 3 - 3 ≤ 15 - 3",
+                        "4x ≤ 15 - 3",
+                        "4x ≤ 12"
+                    ],
+                    "possible_answers_ar": [
+                        "٤س + ٣ - ٣ ≤ ١٥ - ٣",
+                        "٤س ≤ ١٥ - ٣",
+                        "٤س ≤ ١٢"
+                    ]
+                },
+                {
+                    "step_en": "Divide both sides by 4",
+                    "step_ar": "اقسم الطرفين على ٤",
+                    "possible_answers": [
+                        "4x / 4 ≤ 12 / 4",
+                        "x ≤ 12 / 4",
+                        "x ≤ 3"
+                    ],
+                    "possible_answers_ar": [
+                        "٤س / ٤ ≤ ١٢ / ٤",
+                        "س ≤ ١٢ / ٤",
+                        "س ≤ ٣"
+                    ]
+                }
+            ],
+            "hints_en": [
+                "Start by removing the constant term",
+                "What do you add or subtract to cancel +3?",
+                "Then isolate x by dividing by the coefficient"
+            ],
+            "hints_ar": [
+                "ابدأ بإزالة الحد الثابت",
+                "ماذا تجمع أو تطرح لتلغي +٣؟",
+                "ثم اعزل س بالقسمة على المعامل"
+            ]
+        },
+        {
+            "id": "practice2_2",
+            "section_id": "section2",
+            "type": ProblemType.PRACTICE,
+            "weight": 15,
+            "question_en": "5x - 2 > 18",
+            "question_ar": "٥س - ٢ > ١٨",
+            "answer": "x > 4",
+            "answer_ar": "س > ٤",
+            "show_full_solution": False,
+            "hide_answer": False,
+            "step_solutions": [
+                {
+                    "step_en": "Add 2 to both sides",
+                    "step_ar": "أضف ٢ للطرفين",
+                    "possible_answers": [
+                        "5x - 2 + 2 > 18 + 2",
+                        "5x > 18 + 2",
+                        "5x > 20"
+                    ],
+                    "possible_answers_ar": [
+                        "٥س - ٢ + ٢ > ١٨ + ٢",
+                        "٥س > ١٨ + ٢",
+                        "٥س > ٢٠"
+                    ]
+                },
+                {
+                    "step_en": "Divide both sides by 5",
+                    "step_ar": "اقسم الطرفين على ٥",
+                    "possible_answers": [
+                        "5x / 5 > 20 / 5",
+                        "x > 20 / 5",
+                        "x > 4"
+                    ],
+                    "possible_answers_ar": [
+                        "٥س / ٥ > ٢٠ / ٥",
+                        "س > ٢٠ / ٥",
+                        "س > ٤"
+                    ]
+                }
+            ],
+            "hints_en": [
+                "What operation cancels out -2?",
+                "Calculate 18 + 2",
+                "Then divide both sides by 5"
+            ],
+            "hints_ar": [
+                "ما العملية التي تلغي -٢؟",
+                "احسب ١٨ + ٢",
+                "ثم اقسم الطرفين على ٥"
+            ]
+        },
+        {
+            "id": "assessment2",
+            "section_id": "section2",
+            "type": ProblemType.ASSESSMENT,
+            "weight": 30,
+            "question_en": "3x + 7 ≥ 22",
+            "question_ar": "٣س + ٧ ≥ ٢٢",
+            "answer": "x ≥ 5",
+            "answer_ar": "س ≥ ٥",
+            "show_full_solution": False,
+            "hide_answer": True,
+            "hints_en": [
+                "This is a two-step inequality. Start by isolating the x term.",
+                "First subtract, then divide.",
+                "Remember to keep the inequality sign in the same direction."
+            ],
+            "hints_ar": [
+                "هذه متباينة ذات خطوتين. ابدأ بعزل حد س.",
+                "اطرح أولاً، ثم اقسم.",
+                "تذكر أن تحافظ على اتجاه إشارة المتباينة."
+            ]
+        },
+        {
+            "id": "examprep2",
+            "section_id": "section2",
+            "type": ProblemType.EXAMPREP,
+            "weight": 30,
+            "question_en": "6x - 4 < 20",
+            "question_ar": "٦س - ٤ < ٢٠",
+            "answer": "x < 4",
+            "answer_ar": "س < ٤",
+            "show_full_solution": False,
+            "hide_answer": True,
+            "hints_en": [
+                "Follow the two-step process: first deal with the constant term.",
+                "Add 4 to both sides, then divide by 6.",
+                "Check your final answer by substituting back."
+            ],
+            "hints_ar": [
+                "اتبع العملية ذات الخطوتين: تعامل مع الحد الثابت أولاً.",
+                "أضف ٤ للطرفين، ثم اقسم على ٦.",
+                "تحقق من إجابتك النهائية بالتعويض مرة أخرى."
+            ]
+        }
+    ]
+    
+    await problems_collection.insert_many(section2_problems)
+    
+    section2 = {
+        "id": "section2",
+        "title_en": "Section 2: Two-Step Inequalities",
+        "title_ar": "القسم الثاني: المتباينات ذات الخطوتين"
+    }
+    await sections_collection.insert_one(section2)
+    
+    print("Database initialized with all sections")
 
 # Student operations
 async def create_student(username: str) -> Student:
