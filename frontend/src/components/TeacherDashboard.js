@@ -25,10 +25,14 @@ const TeacherDashboard = () => {
     fetchDashboardData();
   }, [user, isTeacher, navigate]);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (classFilter = null) => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teacher/students`);
+      const url = classFilter && classFilter !== 'all' 
+        ? `${process.env.REACT_APP_BACKEND_URL}/api/teacher/students?class_filter=${classFilter}`
+        : `${process.env.REACT_APP_BACKEND_URL}/api/teacher/students`;
+      
+      const response = await fetch(url);
       
       if (response.ok) {
         const data = await response.json();
