@@ -774,7 +774,7 @@ const ProblemView = () => {
                               className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
                             >
                               <Trophy className="w-4 h-4 mr-2" />
-                              {language === 'en' ? 'Next Problem →' : 'المسألة التالية ←'}
+                              {language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←'}
                             </Button>
                           )}
                         </>
