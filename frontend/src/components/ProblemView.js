@@ -6,8 +6,10 @@ import { Input } from './ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
-import { Globe, ArrowLeft, Lightbulb, CheckCircle, XCircle, RotateCcw, Trophy } from 'lucide-react';
+import { Globe, ArrowLeft, Lightbulb, CheckCircle, XCircle, RotateCcw, Trophy, Keyboard, Mic } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import VoiceInput from './VoiceInput';
+import MathKeyboard from './MathKeyboard';
 
 const ProblemView = () => {
   const { problemId } = useParams();
