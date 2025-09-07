@@ -116,28 +116,40 @@ const Dashboard = () => {
       progress: "Your Progress",
       points: "Total Points",
       badges: "Badges Earned",
-      section: "Section 1: One-Step Inequalities",
+      sections: "Sections",
       problems: "Problems",
       start: "Start",
       continue: "Continue",
       completed: "Completed",
       locked: "Locked",
       attempts: "attempts",
-      logout: "Logout"
+      logout: "Logout",
+      // Problem type labels
+      preparation: "Preparation",
+      explanation: "Explanation",
+      practice: "Practice",
+      assessment: "Assessment",
+      examprep: "Exam Prep"
     },
     ar: {
       welcome: "مرحباً بك مرة أخرى",
       progress: "تقدمك",
       points: "إجمالي النقاط",
       badges: "الشارات المكتسبة",
-      section: "القسم الأول: المتباينات أحادية الخطوة",
+      sections: "الأقسام",
       problems: "المسائل",
       start: "ابدأ",
       continue: "تابع",
       completed: "مكتمل",
       locked: "مقفل",
       attempts: "محاولات",
-      logout: "خروج"
+      logout: "خروج",
+      // Problem type labels - FIXED LOCALIZATION
+      preparation: "التحضير",
+      explanation: "الشرح",
+      practice: "التدريب",
+      assessment: "التقييم",
+      examprep: "الإعداد للاختبار"
     }
   };
 
