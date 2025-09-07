@@ -315,8 +315,73 @@ class MathTutoringAPITester:
             self.log_test("Problem Data Fetching", False, f"Request error: {str(e)}")
             return False
 
+    def test_answer_submission_all_types(self, username="sarah_ahmed"):
+        """Test answer submission for different problem types across sections"""
+        try:
+            # Test cases for different sections and problem types
+            test_cases = [
+                # Section 1: One-Step Inequalities
+                {"problem_id": "prep1", "correct_answer": "7", "section": "section1"},
+                
+                # Section 2: Two-Step Inequalities  
+                {"problem_id": "prep2", "correct_answer": "x < 3", "section": "section2"},
+                
+                # Section 3: Multi-Step Inequalities
+                {"problem_id": "prep3", "correct_answer": "x > 2", "section": "section3"},
+                
+                # Section 4: Variables on Both Sides
+                {"problem_id": "prep4", "correct_answer": "x < 4", "section": "section4"},
+                
+                # Section 5: Compound Inequalities
+                {"problem_id": "prep5", "correct_answer": "-2 < x ≤ 3", "section": "section5"}
+            ]
+            
+            all_success = True
+            
+            for test_case in test_cases:
+                # Test correct answer
+                attempt_data = {
+                    "problem_id": test_case["problem_id"],
+                    "answer": test_case["correct_answer"],
+                    "hints_used": 0
+                }
+                
+                response = self.session.post(
+                    f"{self.base_url}/students/{username}/attempt",
+                    json=attempt_data,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    required_fields = ["correct", "score", "attempts", "progress"]
+                    
+                    if all(field in data for field in required_fields):
+                        if data["correct"] == True and data["score"] > 0:
+                            self.log_test(f"Answer Submission - {test_case['problem_id']}", True, 
+                                        f"Correct answer for {test_case['section']} scored {data['score']} points")
+                        else:
+                            self.log_test(f"Answer Submission - {test_case['problem_id']}", False, 
+                                        f"Expected correct=True and score>0, got correct={data['correct']}, score={data['score']}")
+                            all_success = False
+                    else:
+                        missing = [f for f in required_fields if f not in data]
+                        self.log_test(f"Answer Submission - {test_case['problem_id']}", False, 
+                                    f"Missing fields: {missing}", data)
+                        all_success = False
+                else:
+                    self.log_test(f"Answer Submission - {test_case['problem_id']}", False, 
+                                f"HTTP {response.status_code}", response.text)
+                    all_success = False
+            
+            return all_success
+            
+        except Exception as e:
+            self.log_test("Answer Submission All Types", False, f"Request error: {str(e)}")
+            return False
+
     def test_answer_submission(self, username="sarah_ahmed"):
-        """Test answer submission functionality"""
+        """Test answer submission functionality - legacy method for section1"""
         try:
             # Test correct answer submission
             attempt_data = {
