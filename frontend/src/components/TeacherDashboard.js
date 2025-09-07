@@ -258,6 +258,7 @@ const TeacherDashboard = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>{text[language].studentName}</TableHead>
+                    <TableHead>{text[language].class}</TableHead>
                     <TableHead>{text[language].progress}</TableHead>
                     <TableHead>{text[language].score}</TableHead>
                     <TableHead>{text[language].attempts}</TableHead>
