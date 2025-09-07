@@ -446,8 +446,52 @@ class MathTutoringAPITester:
             self.log_test("Answer Submission", False, f"Request error: {str(e)}")
             return False
 
+    def test_teacher_dashboard_expanded(self):
+        """Test teacher dashboard endpoint with expanded content"""
+        try:
+            response = self.session.get(f"{self.base_url}/teacher/students")
+            
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["total_students", "average_progress", "completed_problems", "average_score", "students"]
+                
+                if all(field in data for field in required_fields):
+                    # Test that dashboard can handle students with progress across multiple sections
+                    students = data.get("students", [])
+                    
+                    dashboard_success = True
+                    if students:
+                        # Check if student data includes proper structure
+                        first_student = students[0]
+                        student_required_fields = ["username", "progress_percentage", "completed_problems", "problems_status"]
+                        
+                        if all(field in first_student for field in student_required_fields):
+                            self.log_test("Teacher Dashboard Expanded", True, 
+                                        f"Dashboard shows {data['total_students']} students with expanded data structure")
+                        else:
+                            missing = [f for f in student_required_fields if f not in first_student]
+                            self.log_test("Teacher Dashboard Expanded", False, 
+                                        f"Student data missing fields: {missing}", first_student)
+                            dashboard_success = False
+                    else:
+                        self.log_test("Teacher Dashboard Expanded", True, 
+                                    f"Dashboard working with {data['total_students']} students (empty state)")
+                    
+                    return dashboard_success
+                else:
+                    missing = [f for f in required_fields if f not in data]
+                    self.log_test("Teacher Dashboard Expanded", False, f"Missing fields: {missing}", data)
+                    return False
+            else:
+                self.log_test("Teacher Dashboard Expanded", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_test("Teacher Dashboard Expanded", False, f"Request error: {str(e)}")
+            return False
+
     def test_teacher_dashboard(self):
-        """Test teacher dashboard endpoint"""
+        """Test teacher dashboard endpoint - legacy method"""
         try:
             response = self.session.get(f"{self.base_url}/teacher/students")
             
