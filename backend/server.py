@@ -30,9 +30,9 @@ api_router = APIRouter(prefix="/api")
 # Authentication endpoints
 @api_router.post("/auth/student-login", response_model=Student)
 async def student_login(student_data: StudentCreate):
-    """Student login with username only"""
+    """Student login with username and class"""
     try:
-        student = await create_student(student_data.username)
+        student = await create_student(student_data.username, student_data.class_name)
         return student
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
