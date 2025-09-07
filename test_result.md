@@ -566,8 +566,8 @@ test_plan:
   current_focus:
     - "Dashboard Shows All 5 Sections"
   stuck_tasks: []
-  test_all: false
-  test_priority: "high_first"
+  test_all: true
+  test_priority: "comprehensive_mvp_complete"
 
 agent_communication:
   - agent: "main"
