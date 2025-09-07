@@ -541,23 +541,29 @@ class MathTutoringAPITester:
             return False
 
     def run_all_tests(self):
-        """Run all API tests"""
-        print("=" * 60)
-        print("MATH TUTORING API TEST SUITE")
-        print("=" * 60)
+        """Run all API tests - expanded version for 5 sections"""
+        print("=" * 80)
+        print("MATH TUTORING API TEST SUITE - EXPANDED (5 SECTIONS)")
+        print("=" * 80)
         print(f"Testing backend at: {self.base_url}")
+        print(f"Expected: 5 sections with 30 total problems (6 per section)")
         print()
         
-        # Run tests in logical order
+        # Run tests in logical order - prioritizing new expanded tests
         tests = [
             ("Health Check", self.test_health_check),
+            ("Database Initialization (5 Sections)", self.test_database_initialization),
             ("Student Login", self.test_student_login),
             ("Teacher Login", self.test_teacher_login),
             ("Student Progress", self.test_student_progress),
-            ("Problem Data Fetching", self.test_problem_data_fetching),
-            ("Answer Submission", self.test_answer_submission),
-            ("Teacher Dashboard", self.test_teacher_dashboard),
-            ("CORS Configuration", self.test_cors_configuration)
+            ("All Sections Problems", self.test_all_sections_problems),
+            ("Answer Submission All Types", self.test_answer_submission_all_types),
+            ("Teacher Dashboard Expanded", self.test_teacher_dashboard_expanded),
+            ("CORS Configuration", self.test_cors_configuration),
+            # Legacy tests for backward compatibility
+            ("Problem Data Fetching (Legacy)", self.test_problem_data_fetching),
+            ("Answer Submission (Legacy)", self.test_answer_submission),
+            ("Teacher Dashboard (Legacy)", self.test_teacher_dashboard)
         ]
         
         passed = 0
@@ -571,16 +577,18 @@ class MathTutoringAPITester:
             except Exception as e:
                 self.log_test(test_name, False, f"Test execution error: {str(e)}")
         
-        print("=" * 60)
+        print("=" * 80)
         print("TEST SUMMARY")
-        print("=" * 60)
+        print("=" * 80)
         print(f"Passed: {passed}/{total}")
         print(f"Failed: {total - passed}/{total}")
         
         if passed == total:
-            print("\n🎉 ALL TESTS PASSED - API is production ready!")
+            print("\n🎉 ALL TESTS PASSED - Expanded Math Tutoring API is production ready!")
+            print("✅ All 5 sections with 30 problems are working correctly")
         else:
             print(f"\n⚠️  {total - passed} tests failed - API needs attention")
+            print("❌ Some sections or functionality may not be working properly")
         
         return passed, total, self.test_results
 
