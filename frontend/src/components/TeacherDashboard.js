@@ -161,6 +161,35 @@ const TeacherDashboard = () => {
         </div>
       </div>
 
+      {/* Class Filter */}
+      <Card className="mb-6">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-4">
+            <label className="font-medium text-gray-700">
+              {text[language].classFilter}:
+            </label>
+            <select
+              value={selectedClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+            >
+              {classes.map((cls) => (
+                <option key={cls.value} value={cls.value}>
+                  {cls.label[language]}
+                </option>
+              ))}
+            </select>
+            <div className="text-sm text-gray-500">
+              {selectedClass !== 'all' && (
+                <span>
+                  {language === 'en' ? 'Showing:' : 'عرض:'} {classes.find(c => c.value === selectedClass)?.label[language]}
+                </span>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
