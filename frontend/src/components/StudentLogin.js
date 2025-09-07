@@ -8,6 +8,7 @@ import { Globe, Calculator, Trophy, Star } from 'lucide-react';
 
 const StudentLogin = () => {
   const [username, setUsername] = useState('');
+  const [className, setClassName] = useState('GR9-A');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const { language, toggleLanguage } = useLanguage();
