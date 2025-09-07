@@ -59,19 +59,41 @@ const Dashboard = () => {
         });
       }
 
-      // Fetch problems for section1
-      const problemsResponse = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/problems/section/section1`
-      );
-      
-      if (problemsResponse.ok) {
-        const problemsData = await problemsResponse.json();
-        setProblems(problemsData);
+      // Fetch problems for all sections
+      const sectionsWithProblems = [];
+      for (const section of sections_info) {
+        try {
+          const problemsResponse = await fetch(
+            `${process.env.REACT_APP_BACKEND_URL}/api/problems/section/${section.id}`
+          );
+          
+          if (problemsResponse.ok) {
+            const problemsData = await problemsResponse.json();
+            sectionsWithProblems.push({
+              ...section,
+              problems: problemsData
+            });
+          } else {
+            // Section doesn't exist, add empty problems
+            sectionsWithProblems.push({
+              ...section,
+              problems: []
+            });
+          }
+        } catch (sectionError) {
+          console.error(`Error fetching ${section.id}:`, sectionError);
+          sectionsWithProblems.push({
+            ...section,
+            problems: []
+          });
+        }
       }
+      
+      setSections(sectionsWithProblems);
 
     } catch (error) {
       console.error('Error fetching data:', error);
-      // Fallback to empty data
+      // Fallback to empty data for all sections
       setUserProgress({
         section1: {
           prep1: { completed: false, score: 0, attempts: 0 },
@@ -82,7 +104,7 @@ const Dashboard = () => {
           examprep1: { completed: false, score: 0, attempts: 0 }
         }
       });
-      setProblems([]);
+      setSections(sections_info.map(s => ({ ...s, problems: [] })));
     } finally {
       setLoading(false);
     }
