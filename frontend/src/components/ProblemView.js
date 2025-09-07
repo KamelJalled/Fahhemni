@@ -550,7 +550,11 @@ const ProblemView = () => {
                           </p>
                         </div>
                         <Button 
-                          onClick={handleNextProblem}
+                          onClick={async () => {
+                            // Mark stage as completed
+                            await submitToBackend();
+                            handleNextProblem();
+                          }}
                           className="bg-gradient-to-r from-green-500 to-emerald-600"
                         >
                           {language === 'en' ? 'Continue to Practice Problems →' : 'تابع لمسائل التدريب ←'}
