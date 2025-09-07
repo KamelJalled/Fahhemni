@@ -13,7 +13,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [userProgress, setUserProgress] = useState(null);
   const [userStats, setUserStats] = useState({ totalPoints: 0, badges: [] });
-  const [problems, setProblems] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [selectedSection, setSelectedSection] = useState('section1');
   const [loading, setLoading] = useState(true);
 
   const badges = [
