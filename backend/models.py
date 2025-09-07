@@ -12,6 +12,7 @@ class ProblemType(str, Enum):
 
 class Student(BaseModel):
     username: str = Field(..., min_length=1, max_length=50)
+    class_name: str = Field(default="GR9-A", regex="^GR9-[A-D]$")
     created_at: datetime = Field(default_factory=datetime.utcnow)
     last_login: datetime = Field(default_factory=datetime.utcnow)
     total_points: int = Field(default=0, ge=0)
