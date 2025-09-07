@@ -198,6 +198,38 @@ async def get_teacher_dashboard(class_filter: str = None):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@api_router.get("/teacher/dashboard")
+async def get_teacher_dashboard_new(class_filter: str = None):
+    """Teacher dashboard with student statistics, optionally filtered by class"""
+    try:
+        stats = await get_all_students_stats(class_filter)
+        
+        if not stats:
+            return {
+                "total_students": 0,
+                "average_progress": 0,
+                "completed_problems": 0,
+                "average_score": 0,
+                "students": [],
+                "class_filter": class_filter
+            }
+        
+        total_students = len(stats)
+        average_progress = sum(s["progress_percentage"] for s in stats) / total_students
+        total_completed = sum(s["completed_problems"] for s in stats)
+        average_score = sum(s["weighted_score"] for s in stats) / total_students
+        
+        return {
+            "total_students": total_students,
+            "average_progress": round(average_progress, 1),
+            "completed_problems": total_completed,
+            "average_score": round(average_score, 1),
+            "students": stats,
+            "class_filter": class_filter
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Health check endpoint
 @api_router.get("/")
 async def root():
