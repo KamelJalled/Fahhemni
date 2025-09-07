@@ -167,10 +167,10 @@ async def get_problem_endpoint(problem_id: str):
 
 # Teacher dashboard endpoints
 @api_router.get("/teacher/students")
-async def get_teacher_dashboard():
-    """Get all student statistics for teacher dashboard"""
+async def get_teacher_dashboard(class_filter: str = None):
+    """Get all student statistics for teacher dashboard, optionally filtered by class"""
     try:
-        students_stats = await get_all_students_stats()
+        students_stats = await get_all_students_stats(class_filter)
         
         if not students_stats:
             return {
