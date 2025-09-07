@@ -153,20 +153,27 @@ const Dashboard = () => {
     }
   };
 
-  const getProblemStatus = (problemId, progress) => {
-    const problem = progress.section1[problemId];
+  const getProblemStatus = (problemId, sectionId, progress) => {
+    if (!progress || !progress[sectionId] || !progress[sectionId][problemId]) {
+      return 'available';
+    }
+    
+    const problem = progress[sectionId][problemId];
     if (problem.completed) return 'completed';
     if (problem.attempts > 0) return 'in-progress';
     
     // Check if locked based on flexible prerequisites
-    if (problemId === 'assessment1') {
+    const assessmentId = `assessment${sectionId.slice(-1)}`;
+    const examPrepId = `examprep${sectionId.slice(-1)}`;
+    
+    if (problemId === assessmentId) {
       // Allow assessment after completing at least one practice problem
-      const practice1Complete = progress.section1.practice1.completed;
-      const practice2Complete = progress.section1.practice2.completed;
-      return (practice1Complete || practice2Complete) ? 'available' : 'locked';
+      const practiceProblems = Object.keys(progress[sectionId]).filter(id => id.includes('practice'));
+      const hasPracticeComplete = practiceProblems.some(practiceId => progress[sectionId][practiceId]?.completed);
+      return hasPracticeComplete ? 'available' : 'locked';
     }
-    if (problemId === 'examprep1') {
-      return progress.section1.assessment1.completed ? 'available' : 'locked';
+    if (problemId === examPrepId) {
+      return progress[sectionId][assessmentId]?.completed ? 'available' : 'locked';
     }
     
     return 'available';
