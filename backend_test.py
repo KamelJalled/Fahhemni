@@ -489,6 +489,62 @@ class MathTutoringAPITester:
             self.log_test("Answer Submission", False, f"Request error: {str(e)}")
             return False
 
+    def test_teacher_dashboard_class_filtering(self):
+        """Test teacher dashboard with class filtering"""
+        try:
+            # Test without class filter
+            response = self.session.get(f"{self.base_url}/teacher/students")
+            
+            if response.status_code != 200:
+                self.log_test("Teacher Dashboard (No Filter)", False, f"HTTP {response.status_code}", response.text)
+                return False
+            
+            all_students_data = response.json()
+            
+            # Test with specific class filters
+            test_classes = ["GR9-A", "GR9-B", "GR9-C", "GR9-D"]
+            all_success = True
+            
+            for class_name in test_classes:
+                response = self.session.get(f"{self.base_url}/teacher/students?class_filter={class_name}")
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    required_fields = ["total_students", "average_progress", "completed_problems", "average_score", "students"]
+                    
+                    if all(field in data for field in required_fields):
+                        # Check if filtering is working (students should be from specified class only)
+                        students = data.get("students", [])
+                        
+                        if students:
+                            # Verify all students belong to the filtered class
+                            class_match = all(student.get("class_name") == class_name for student in students if "class_name" in student)
+                            if class_match:
+                                self.log_test(f"Teacher Dashboard Class Filter {class_name}", True, 
+                                            f"Filtered {len(students)} students from class {class_name}")
+                            else:
+                                self.log_test(f"Teacher Dashboard Class Filter {class_name}", False, 
+                                            f"Some students don't belong to class {class_name}")
+                                all_success = False
+                        else:
+                            self.log_test(f"Teacher Dashboard Class Filter {class_name}", True, 
+                                        f"No students in class {class_name} (empty state)")
+                    else:
+                        missing = [f for f in required_fields if f not in data]
+                        self.log_test(f"Teacher Dashboard Class Filter {class_name}", False, 
+                                    f"Missing fields: {missing}", data)
+                        all_success = False
+                else:
+                    self.log_test(f"Teacher Dashboard Class Filter {class_name}", False, 
+                                f"HTTP {response.status_code}", response.text)
+                    all_success = False
+            
+            return all_success
+                
+        except Exception as e:
+            self.log_test("Teacher Dashboard Class Filtering", False, f"Request error: {str(e)}")
+            return False
+
     def test_teacher_dashboard_expanded(self):
         """Test teacher dashboard endpoint with expanded content"""
         try:
