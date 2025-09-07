@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App
-Tests all core API endpoints for production readiness
+Backend API Test Suite for Math Tutoring App - Expanded Version
+Tests all core API endpoints for production readiness with all 5 sections
 """
 
 import requests
@@ -12,6 +12,15 @@ from datetime import datetime
 
 # Get backend URL from environment - using local URL since external URL is misconfigured
 BACKEND_URL = "http://localhost:8001/api"
+
+# Expected sections and their problem counts
+EXPECTED_SECTIONS = {
+    "section1": {"title": "One-Step Inequalities", "problems": 6},
+    "section2": {"title": "Two-Step Inequalities", "problems": 6}, 
+    "section3": {"title": "Multi-Step Inequalities", "problems": 6},
+    "section4": {"title": "Variables on Both Sides", "problems": 6},
+    "section5": {"title": "Compound Inequalities", "problems": 6}
+}
 
 class MathTutoringAPITester:
     def __init__(self, base_url):
