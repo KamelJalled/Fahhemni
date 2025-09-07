@@ -301,8 +301,8 @@ const Dashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100">{text[language].problems}</p>
-                <p className="text-3xl font-bold">{sectionProgress}/{totalProblems}</p>
+                <p className="text-purple-100">{text[language].progress}</p>
+                <p className="text-3xl font-bold">{Math.round(overallProgressPercentage)}%</p>
               </div>
               <CheckCircle className="w-10 h-10 text-purple-200" />
             </div>
@@ -310,16 +310,53 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Progress Bar */}
+      {/* Sections Navigation */}
       <Card className="mb-6">
         <CardContent className="p-6">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="font-semibold">{text[language].section}</h3>
-            <span className="text-sm text-gray-500">{Math.round(progressPercentage)}%</span>
+          <h3 className="font-semibold mb-4">{text[language].sections}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+            {sections.map((section) => {
+              const sectionProgress = calculateSectionProgress(section.id);
+              const isSelected = selectedSection === section.id;
+              const hasProblems = section.problems && section.problems.length > 0;
+              
+              return (
+                <Button
+                  key={section.id}
+                  variant={isSelected ? "default" : "outline"}
+                  className={`h-auto p-4 ${!hasProblems ? 'opacity-50' : ''}`}
+                  onClick={() => setSelectedSection(section.id)}
+                  disabled={!hasProblems}
+                >
+                  <div className="text-center">
+                    <div className="text-sm font-medium mb-1">
+                      {language === 'en' ? section.title_en : section.title_ar}
+                    </div>
+                    <div className="text-xs opacity-75">
+                      {Math.round(sectionProgress)}% {text[language].completed}
+                    </div>
+                  </div>
+                </Button>
+              );
+            })}
           </div>
-          <Progress value={progressPercentage} className="mb-4" />
         </CardContent>
       </Card>
+
+      {/* Selected Section Progress */}
+      {selectedSectionData && (
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-semibold">
+                {language === 'en' ? selectedSectionData.title_en : selectedSectionData.title_ar}
+              </h3>
+              <span className="text-sm text-gray-500">{Math.round(selectedSectionProgress)}%</span>
+            </div>
+            <Progress value={selectedSectionProgress} className="mb-4" />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Problems Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
