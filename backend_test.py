@@ -216,8 +216,61 @@ class MathTutoringAPITester:
             self.log_test("Student Progress", False, f"Request error: {str(e)}")
             return False, None
 
+    def test_all_sections_problems(self):
+        """Test problem data fetching for all sections"""
+        try:
+            all_sections_success = True
+            
+            for section_id, section_info in EXPECTED_SECTIONS.items():
+                # Test getting section problems
+                response = self.session.get(f"{self.base_url}/problems/section/{section_id}")
+                
+                if response.status_code == 200:
+                    problems = response.json()
+                    if isinstance(problems, list) and len(problems) == section_info["problems"]:
+                        self.log_test(f"Section Problems - {section_id}", True, 
+                                    f"Retrieved {len(problems)} problems from {section_info['title']}")
+                        
+                        # Test getting individual problem from this section
+                        if problems:
+                            first_problem_id = problems[0]["id"]
+                            response = self.session.get(f"{self.base_url}/problems/{first_problem_id}")
+                            
+                            if response.status_code == 200:
+                                problem = response.json()
+                                required_fields = ["id", "section_id", "type", "question_en", "answer"]
+                                
+                                if all(field in problem for field in required_fields):
+                                    self.log_test(f"Individual Problem - {section_id}", True, 
+                                                f"Retrieved problem '{problem['id']}' from {section_id}")
+                                else:
+                                    missing = [f for f in required_fields if f not in problem]
+                                    self.log_test(f"Individual Problem - {section_id}", False, 
+                                                f"Missing fields: {missing}", problem)
+                                    all_sections_success = False
+                            else:
+                                self.log_test(f"Individual Problem - {section_id}", False, 
+                                            f"HTTP {response.status_code}", response.text)
+                                all_sections_success = False
+                    else:
+                        expected_count = section_info["problems"]
+                        actual_count = len(problems) if isinstance(problems, list) else 0
+                        self.log_test(f"Section Problems - {section_id}", False, 
+                                    f"Expected {expected_count} problems, got {actual_count}", problems)
+                        all_sections_success = False
+                else:
+                    self.log_test(f"Section Problems - {section_id}", False, 
+                                f"HTTP {response.status_code}", response.text)
+                    all_sections_success = False
+                    
+            return all_sections_success
+            
+        except Exception as e:
+            self.log_test("All Sections Problems", False, f"Request error: {str(e)}")
+            return False
+
     def test_problem_data_fetching(self):
-        """Test problem data fetching endpoints"""
+        """Test problem data fetching endpoints - legacy method for section1"""
         try:
             # Test getting section problems
             response = self.session.get(f"{self.base_url}/problems/section/section1")
