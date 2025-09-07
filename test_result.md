@@ -336,6 +336,66 @@ backend:
         agent: "testing"
         comment: "✅ VERIFIED: Teacher dashboard successfully handles expanded content with all 5 sections. Dashboard returns proper statistics including total_students, average_progress, completed_problems, average_score, and detailed student data with problems_status for all sections."
 
+  - task: "Student Login with Class Selection"
+    implemented: true
+    working: true
+    file: "backend/server.py, backend/models.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: Student login with class selection working correctly for all classes (GR9-A, GR9-B, GR9-C, GR9-D). Class information is properly stored and retrieved. Fixed Pydantic compatibility issue by changing 'regex' to 'pattern' parameter in models.py."
+
+  - task: "Teacher Dashboard Class Filtering"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: Teacher dashboard class filtering working correctly. GET /api/teacher/students?class_filter=GR9-A properly filters students by class. All classes (GR9-A, GR9-B, GR9-C, GR9-D) tested and working. Class-specific progress reports functional."
+
+  - task: "Admin Statistics Endpoint"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: Admin statistics endpoint GET /api/admin/stats working correctly. Returns proper database statistics: 5 sections, 30 problems, student counts, progress records, and database connection status."
+
+  - task: "Admin Clear Test Data Endpoint"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: Admin clear test data endpoint POST /api/admin/clear-test-data working correctly. Properly validates admin key (admin123), clears student and progress data, and returns deletion counts. Security validation working (403 for invalid keys)."
+
+  - task: "Data Persistence Across Sessions"
+    implemented: true
+    working: true
+    file: "backend/server.py, backend/database.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: Data persistence working correctly across sessions. Student progress is properly stored in MongoDB and retrieved accurately. Tested with student creation, progress submission, and retrieval - all data persists correctly."
+
 frontend:
   - task: "Build production frontend"
     implemented: true
