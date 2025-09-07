@@ -1380,9 +1380,12 @@ async def get_problem(problem_id: str) -> Optional[Problem]:
     return Problem(**problem) if problem else None
 
 # Teacher operations
-async def get_all_students_stats() -> List[Dict]:
-    """Get statistics for all students"""
-    students = await students_collection.find().to_list(None)
+async def get_all_students_stats(class_filter: str = None) -> List[Dict]:
+    """Get statistics for all students, optionally filtered by class"""
+    query = {}
+    if class_filter:
+        query["class_name"] = class_filter
+    students = await students_collection.find(query).to_list(None)
     stats = []
     
     for student in students:
