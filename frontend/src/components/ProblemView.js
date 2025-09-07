@@ -833,13 +833,44 @@ const ProblemView = () => {
                         <label className="block text-sm font-medium mb-2">
                           {text[language].yourAnswer}
                         </label>
-                        <Input
-                          value={stepAnswers[0]}
-                          onChange={(e) => handleStepAnswerChange(0, e.target.value)}
-                          placeholder={language === 'en' ? 'Enter your answer (e.g., x > 5)' : 'أدخل إجابتك (مثل: س > ٥)'}
-                          className="text-lg h-12"
-                          disabled={isCompleted && !isSubmitted}
-                        />
+                        <div className="flex gap-2">
+                          <Input
+                            value={stepAnswers[0]}
+                            onChange={(e) => handleStepAnswerChange(0, e.target.value)}
+                            onFocus={() => handleInputFocus(0)}
+                            placeholder={language === 'en' ? 'Enter your answer (e.g., x > 5)' : 'أدخل إجابتك (مثل: س > ٥)'}
+                            className="flex-1 text-lg h-12"
+                            disabled={isCompleted && !isSubmitted}
+                          />
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setActiveInputIndex(0);
+                              setShowVoiceInput(!showVoiceInput);
+                              setShowMathKeyboard(false);
+                            }}
+                            className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                            disabled={isCompleted && !isSubmitted}
+                            title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
+                          >
+                            <Mic className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setActiveInputIndex(0);
+                              setShowMathKeyboard(!showMathKeyboard);
+                              setShowVoiceInput(false);
+                            }}
+                            className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                            disabled={isCompleted && !isSubmitted}
+                            title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                          >
+                            <Keyboard className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     )}
 
