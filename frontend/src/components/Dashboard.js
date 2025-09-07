@@ -221,9 +221,33 @@ const Dashboard = () => {
     </div>;
   }
 
-  const sectionProgress = Object.values(userProgress.section1).filter(p => p.completed).length;
-  const totalProblems = Object.keys(userProgress.section1).length;
-  const progressPercentage = (sectionProgress / totalProblems) * 100;
+  // Calculate overall progress across all sections
+  const calculateOverallProgress = () => {
+    let totalCompleted = 0;
+    let totalProblems = 0;
+    
+    sections.forEach(section => {
+      if (userProgress[section.id]) {
+        const sectionCompleted = Object.values(userProgress[section.id]).filter(p => p.completed).length;
+        const sectionTotal = Object.keys(userProgress[section.id]).length;
+        totalCompleted += sectionCompleted;
+        totalProblems += sectionTotal;
+      }
+    });
+    
+    return totalProblems > 0 ? (totalCompleted / totalProblems) * 100 : 0;
+  };
+
+  const calculateSectionProgress = (sectionId) => {
+    if (!userProgress[sectionId]) return 0;
+    const sectionCompleted = Object.values(userProgress[sectionId]).filter(p => p.completed).length;
+    const sectionTotal = Object.keys(userProgress[sectionId]).length;
+    return sectionTotal > 0 ? (sectionCompleted / sectionTotal) * 100 : 0;
+  };
+
+  const overallProgressPercentage = calculateOverallProgress();
+  const selectedSectionData = sections.find(s => s.id === selectedSection);
+  const selectedSectionProgress = calculateSectionProgress(selectedSection);
 
   return (
     <div className="min-h-screen p-4">
