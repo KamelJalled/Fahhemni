@@ -760,16 +760,47 @@ const ProblemView = () => {
                                 </div>
                               </div>
                             </div>
-                            <Input
-                              value={stepAnswers[index]}
-                              onChange={(e) => handleStepAnswerChange(index, e.target.value)}
-                              placeholder={language === 'en' ? 
-                                'Show your work for this step...' : 
-                                'أظهر عملك لهذه الخطوة...'
-                              }
-                              className="text-lg h-12"
-                              disabled={index > currentStep || stepResults[index]}
-                            />
+                            <div className="flex gap-2">
+                              <Input
+                                value={stepAnswers[index]}
+                                onChange={(e) => handleStepAnswerChange(index, e.target.value)}
+                                onFocus={() => handleInputFocus(index)}
+                                placeholder={language === 'en' ? 
+                                  'Show your work for this step...' : 
+                                  'أظهر عملك لهذه الخطوة...'
+                                }
+                                className="flex-1 text-lg h-12"
+                                disabled={index > currentStep || stepResults[index]}
+                              />
+                              <Button 
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setActiveInputIndex(index);
+                                  setShowVoiceInput(!showVoiceInput);
+                                  setShowMathKeyboard(false);
+                                }}
+                                className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                                disabled={index > currentStep || stepResults[index]}
+                                title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
+                              >
+                                <Mic className="w-4 h-4" />
+                              </Button>
+                              <Button 
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setActiveInputIndex(index);
+                                  setShowMathKeyboard(!showMathKeyboard);
+                                  setShowVoiceInput(false);
+                                }}
+                                className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                disabled={index > currentStep || stepResults[index]}
+                                title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                              >
+                                <Keyboard className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </div>
                         ))}
 
