@@ -83,6 +83,7 @@ const StudentLogin = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
+      alert(`Connection error: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
