@@ -649,13 +649,8 @@ class MathTutoringAPITester:
     def test_admin_clear_data_endpoint(self):
         """Test admin clear test data endpoint"""
         try:
-            # Test with correct admin key
-            clear_data = {"admin_key": "admin123"}
-            response = self.session.post(
-                f"{self.base_url}/admin/clear-test-data",
-                json=clear_data,
-                headers={"Content-Type": "application/json"}
-            )
+            # Test with correct admin key (as query parameter)
+            response = self.session.post(f"{self.base_url}/admin/clear-test-data?admin_key=admin123")
             
             if response.status_code == 200:
                 data = response.json()
@@ -673,13 +668,8 @@ class MathTutoringAPITester:
                 self.log_test("Admin Clear Data (Valid Key)", False, f"HTTP {response.status_code}", response.text)
                 valid_success = False
             
-            # Test with invalid admin key
-            clear_data = {"admin_key": "wrong_key"}
-            response = self.session.post(
-                f"{self.base_url}/admin/clear-test-data",
-                json=clear_data,
-                headers={"Content-Type": "application/json"}
-            )
+            # Test with invalid admin key (as query parameter)
+            response = self.session.post(f"{self.base_url}/admin/clear-test-data?admin_key=wrong_key")
             
             if response.status_code == 403:
                 self.log_test("Admin Clear Data (Invalid Key)", True, "Correctly rejected invalid admin key")
