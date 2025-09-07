@@ -1,113 +1,281 @@
 {
   "summary": {
-    "passed": 2,
+    "passed": 16,
     "total": 17,
-    "success_rate": 0.11764705882352941
+    "success_rate": 0.9411764705882353
   },
   "results": [
     {
       "test": "Health Check",
-      "success": false,
-      "details": "Connection error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88a86350>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.063366"
+      "success": true,
+      "details": "API running version 1.0.0",
+      "timestamp": "2025-09-07T12:15:30.994109"
+    },
+    {
+      "test": "Database Init - section1",
+      "success": true,
+      "details": "Found 6 problems for One-Step Inequalities",
+      "timestamp": "2025-09-07T12:15:31.045903"
+    },
+    {
+      "test": "Database Init - section2",
+      "success": true,
+      "details": "Found 6 problems for Two-Step Inequalities",
+      "timestamp": "2025-09-07T12:15:31.089984"
+    },
+    {
+      "test": "Database Init - section3",
+      "success": true,
+      "details": "Found 6 problems for Multi-Step Inequalities",
+      "timestamp": "2025-09-07T12:15:31.133995"
+    },
+    {
+      "test": "Database Init - section4",
+      "success": true,
+      "details": "Found 6 problems for Variables on Both Sides",
+      "timestamp": "2025-09-07T12:15:31.177963"
+    },
+    {
+      "test": "Database Init - section5",
+      "success": true,
+      "details": "Found 6 problems for Compound Inequalities",
+      "timestamp": "2025-09-07T12:15:31.222037"
     },
     {
       "test": "Database Initialization",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/problems/section/section1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885768d0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.064490"
+      "success": true,
+      "details": "All 5 sections initialized with 30 total problems",
+      "timestamp": "2025-09-07T12:15:31.222094"
     },
     {
-      "test": "Student Login with Class",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/auth/student-login (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885778d0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.065476"
+      "test": "Student Login with Class GR9-A",
+      "success": true,
+      "details": "Student 'student_gr9-a' logged in to class GR9-A",
+      "timestamp": "2025-09-07T12:15:31.279865"
     },
     {
-      "test": "Teacher Login",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/auth/teacher-login (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88590f10>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.066435"
+      "test": "Student Login with Class GR9-B",
+      "success": true,
+      "details": "Student 'student_gr9-b' logged in to class GR9-B",
+      "timestamp": "2025-09-07T12:15:31.324935"
+    },
+    {
+      "test": "Student Login with Class GR9-C",
+      "success": true,
+      "details": "Student 'student_gr9-c' logged in to class GR9-C",
+      "timestamp": "2025-09-07T12:15:31.368850"
+    },
+    {
+      "test": "Student Login with Class GR9-D",
+      "success": true,
+      "details": "Student 'student_gr9-d' logged in to class GR9-D",
+      "timestamp": "2025-09-07T12:15:31.412814"
+    },
+    {
+      "test": "Teacher Login (Valid Code)",
+      "success": true,
+      "details": "Teacher authenticated successfully",
+      "timestamp": "2025-09-07T12:15:31.454796"
+    },
+    {
+      "test": "Teacher Login (Invalid Code)",
+      "success": true,
+      "details": "Correctly rejected invalid access code",
+      "timestamp": "2025-09-07T12:15:31.496804"
     },
     {
       "test": "Student Progress",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/students/sarah_ahmed/progress (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885922d0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.067322"
+      "success": true,
+      "details": "Retrieved progress for 10 problems",
+      "timestamp": "2025-09-07T12:15:31.543855"
     },
     {
-      "test": "All Sections Problems",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/problems/section/section1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88593490>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.068195"
+      "test": "Section Problems - section1",
+      "success": true,
+      "details": "Retrieved 6 problems from One-Step Inequalities",
+      "timestamp": "2025-09-07T12:15:31.586880"
     },
     {
-      "test": "Answer Submission All Types",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/students/sarah_ahmed/attempt (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885a0b90>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.069114"
+      "test": "Individual Problem - section1",
+      "success": true,
+      "details": "Retrieved problem 'prep1' from section1",
+      "timestamp": "2025-09-07T12:15:31.629852"
     },
     {
-      "test": "Teacher Dashboard Class Filtering",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/teacher/students (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885a1fd0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.070043"
+      "test": "Section Problems - section2",
+      "success": true,
+      "details": "Retrieved 6 problems from Two-Step Inequalities",
+      "timestamp": "2025-09-07T12:15:31.672943"
+    },
+    {
+      "test": "Individual Problem - section2",
+      "success": true,
+      "details": "Retrieved problem 'prep2' from section2",
+      "timestamp": "2025-09-07T12:15:31.715871"
+    },
+    {
+      "test": "Section Problems - section3",
+      "success": true,
+      "details": "Retrieved 6 problems from Multi-Step Inequalities",
+      "timestamp": "2025-09-07T12:15:31.760030"
+    },
+    {
+      "test": "Individual Problem - section3",
+      "success": true,
+      "details": "Retrieved problem 'prep3' from section3",
+      "timestamp": "2025-09-07T12:15:31.803864"
+    },
+    {
+      "test": "Section Problems - section4",
+      "success": true,
+      "details": "Retrieved 6 problems from Variables on Both Sides",
+      "timestamp": "2025-09-07T12:15:31.848047"
+    },
+    {
+      "test": "Individual Problem - section4",
+      "success": true,
+      "details": "Retrieved problem 'prep4' from section4",
+      "timestamp": "2025-09-07T12:15:31.890842"
+    },
+    {
+      "test": "Section Problems - section5",
+      "success": true,
+      "details": "Retrieved 6 problems from Compound Inequalities",
+      "timestamp": "2025-09-07T12:15:31.935038"
+    },
+    {
+      "test": "Individual Problem - section5",
+      "success": true,
+      "details": "Retrieved problem 'prep5' from section5",
+      "timestamp": "2025-09-07T12:15:31.978863"
+    },
+    {
+      "test": "Answer Submission - prep1",
+      "success": true,
+      "details": "Correct answer for section1 scored 40 points",
+      "timestamp": "2025-09-07T12:15:32.024856"
+    },
+    {
+      "test": "Answer Submission - prep2",
+      "success": true,
+      "details": "Correct answer for section2 scored 80 points",
+      "timestamp": "2025-09-07T12:15:32.069835"
+    },
+    {
+      "test": "Answer Submission - prep3",
+      "success": true,
+      "details": "Correct answer for section3 scored 80 points",
+      "timestamp": "2025-09-07T12:15:32.115814"
+    },
+    {
+      "test": "Answer Submission - prep4",
+      "success": true,
+      "details": "Correct answer for section4 scored 80 points",
+      "timestamp": "2025-09-07T12:15:32.160873"
+    },
+    {
+      "test": "Answer Submission - prep5",
+      "success": true,
+      "details": "Correct answer for section5 scored 80 points",
+      "timestamp": "2025-09-07T12:15:32.206880"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-A",
+      "success": true,
+      "details": "Filtered 1 students from class GR9-A",
+      "timestamp": "2025-09-07T12:15:32.304864"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-B",
+      "success": true,
+      "details": "Filtered 1 students from class GR9-B",
+      "timestamp": "2025-09-07T12:15:32.349898"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-C",
+      "success": true,
+      "details": "Filtered 1 students from class GR9-C",
+      "timestamp": "2025-09-07T12:15:32.395900"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-D",
+      "success": true,
+      "details": "Filtered 1 students from class GR9-D",
+      "timestamp": "2025-09-07T12:15:32.440854"
     },
     {
       "test": "Teacher Dashboard Expanded",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/teacher/students (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885a3110>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.070841"
+      "success": true,
+      "details": "Dashboard shows 6 students with expanded data structure",
+      "timestamp": "2025-09-07T12:15:32.492900"
     },
     {
       "test": "Admin Stats Endpoint",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/admin/stats (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885ac490>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.071789"
+      "success": true,
+      "details": "Database stats: 5 sections, 30 problems, 6 students",
+      "timestamp": "2025-09-07T12:15:32.537846"
     },
     {
-      "test": "Admin Clear Data Endpoint",
+      "test": "Admin Clear Data (Valid Key)",
+      "success": true,
+      "details": "Cleared 6 students and 5 progress records",
+      "timestamp": "2025-09-07T12:15:32.586822"
+    },
+    {
+      "test": "Admin Clear Data (Invalid Key)",
       "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/admin/clear-test-data (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885a31d0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.072609"
+      "details": "Should return 403, got 200",
+      "timestamp": "2025-09-07T12:15:32.630791"
     },
     {
       "test": "Data Persistence",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/auth/student-login (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885a2290>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.073413"
+      "success": true,
+      "details": "Student progress persisted correctly for persistence_test_student",
+      "timestamp": "2025-09-07T12:15:32.764868"
     },
     {
       "test": "CORS Configuration",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a885a0510>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.074171"
+      "success": true,
+      "details": "CORS working - Allow-Origin: *",
+      "timestamp": "2025-09-07T12:15:32.806821"
     },
     {
       "test": "Student Login",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/auth/student-login (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88593f90>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.074982"
+      "success": true,
+      "details": "Student 'sarah_ahmed' logged in successfully",
+      "timestamp": "2025-09-07T12:15:32.850849"
     },
     {
-      "test": "Problem Data Fetching",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/problems/section/section1 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88592290>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.075766"
+      "test": "Section Problems",
+      "success": true,
+      "details": "Retrieved 6 problems from section1",
+      "timestamp": "2025-09-07T12:15:32.894934"
     },
     {
-      "test": "Answer Submission",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/students/sarah_ahmed/attempt (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88590fd0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.076566"
+      "test": "Individual Problem",
+      "success": true,
+      "details": "Retrieved problem 'prep1'",
+      "timestamp": "2025-09-07T12:15:32.937881"
+    },
+    {
+      "test": "Answer Submission (Correct)",
+      "success": true,
+      "details": "Correct answer scored 100 points",
+      "timestamp": "2025-09-07T12:15:32.982839"
+    },
+    {
+      "test": "Answer Submission (Incorrect)",
+      "success": true,
+      "details": "Incorrect answer properly handled",
+      "timestamp": "2025-09-07T12:15:33.027849"
     },
     {
       "test": "Teacher Dashboard",
-      "success": false,
-      "details": "Request error: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/teacher/students (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfd6a88577950>: Failed to establish a new connection: [Errno 111] Connection refused'))",
-      "timestamp": "2025-09-07T12:14:22.077355"
+      "success": true,
+      "details": "Dashboard shows 2 students",
+      "timestamp": "2025-09-07T12:15:33.074877"
     }
   ],
   "backend_url": "http://localhost:8001/api",
-  "test_timestamp": "2025-09-07T12:14:22.077518"
+  "test_timestamp": "2025-09-07T12:15:33.075103"
 }
