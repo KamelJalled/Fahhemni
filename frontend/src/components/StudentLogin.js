@@ -67,7 +67,10 @@ const StudentLogin = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: username.trim() }),
+        body: JSON.stringify({ 
+          username: username.trim(),
+          class_name: className
+        }),
       });
 
       if (response.ok) {
