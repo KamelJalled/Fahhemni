@@ -613,6 +613,147 @@ class MathTutoringAPITester:
             self.log_test("Teacher Dashboard", False, f"Request error: {str(e)}")
             return False
 
+    def test_admin_stats_endpoint(self):
+        """Test admin statistics endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/admin/stats")
+            
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["total_students", "total_progress_records", "total_problems", "total_sections", "database_status"]
+                
+                if all(field in data for field in required_fields):
+                    # Verify expected data structure
+                    if (data["total_sections"] == 5 and 
+                        data["total_problems"] == 30 and 
+                        data["database_status"] == "connected"):
+                        self.log_test("Admin Stats Endpoint", True, 
+                                    f"Database stats: {data['total_sections']} sections, {data['total_problems']} problems, {data['total_students']} students")
+                        return True
+                    else:
+                        self.log_test("Admin Stats Endpoint", False, 
+                                    f"Unexpected data: sections={data['total_sections']}, problems={data['total_problems']}, status={data['database_status']}")
+                        return False
+                else:
+                    missing = [f for f in required_fields if f not in data]
+                    self.log_test("Admin Stats Endpoint", False, f"Missing fields: {missing}", data)
+                    return False
+            else:
+                self.log_test("Admin Stats Endpoint", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_test("Admin Stats Endpoint", False, f"Request error: {str(e)}")
+            return False
+
+    def test_admin_clear_data_endpoint(self):
+        """Test admin clear test data endpoint"""
+        try:
+            # Test with correct admin key
+            clear_data = {"admin_key": "admin123"}
+            response = self.session.post(
+                f"{self.base_url}/admin/clear-test-data",
+                json=clear_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["message", "students_deleted", "progress_deleted"]
+                
+                if all(field in data for field in required_fields):
+                    self.log_test("Admin Clear Data (Valid Key)", True, 
+                                f"Cleared {data['students_deleted']} students and {data['progress_deleted']} progress records")
+                    valid_success = True
+                else:
+                    missing = [f for f in required_fields if f not in data]
+                    self.log_test("Admin Clear Data (Valid Key)", False, f"Missing fields: {missing}", data)
+                    valid_success = False
+            else:
+                self.log_test("Admin Clear Data (Valid Key)", False, f"HTTP {response.status_code}", response.text)
+                valid_success = False
+            
+            # Test with invalid admin key
+            clear_data = {"admin_key": "wrong_key"}
+            response = self.session.post(
+                f"{self.base_url}/admin/clear-test-data",
+                json=clear_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 403:
+                self.log_test("Admin Clear Data (Invalid Key)", True, "Correctly rejected invalid admin key")
+                invalid_success = True
+            else:
+                self.log_test("Admin Clear Data (Invalid Key)", False, f"Should return 403, got {response.status_code}")
+                invalid_success = False
+                
+            return valid_success and invalid_success
+                
+        except Exception as e:
+            self.log_test("Admin Clear Data Endpoint", False, f"Request error: {str(e)}")
+            return False
+
+    def test_data_persistence(self):
+        """Test data persistence across sessions"""
+        try:
+            # Create a student with progress
+            username = "persistence_test_student"
+            class_name = "GR9-A"
+            
+            # Step 1: Login student
+            student_data = {"username": username, "class_name": class_name}
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=student_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Data Persistence - Student Creation", False, f"HTTP {response.status_code}")
+                return False
+            
+            # Step 2: Submit an answer to create progress
+            attempt_data = {
+                "problem_id": "prep1",
+                "answer": "7",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{username}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Data Persistence - Progress Creation", False, f"HTTP {response.status_code}")
+                return False
+            
+            # Step 3: Retrieve progress to verify it was saved
+            response = self.session.get(f"{self.base_url}/students/{username}/progress")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if ("progress" in data and 
+                    "section1" in data["progress"] and 
+                    "prep1" in data["progress"]["section1"] and
+                    data["progress"]["section1"]["prep1"]["completed"] == True):
+                    self.log_test("Data Persistence", True, 
+                                f"Student progress persisted correctly for {username}")
+                    return True
+                else:
+                    self.log_test("Data Persistence", False, 
+                                "Progress not found or incomplete", data)
+                    return False
+            else:
+                self.log_test("Data Persistence", False, f"HTTP {response.status_code}", response.text)
+                return False
+                
+        except Exception as e:
+            self.log_test("Data Persistence", False, f"Request error: {str(e)}")
+            return False
+
     def test_cors_configuration(self):
         """Test CORS configuration"""
         try:
