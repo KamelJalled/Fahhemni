@@ -287,6 +287,11 @@ const TeacherDashboard = () => {
                         {student.username}
                       </TableCell>
                       <TableCell>
+                        <Badge variant="outline" className="text-xs">
+                          {student.class_name || 'GR9-A'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
                         <div className="flex items-center gap-2">
                           <Progress value={student.progress_percentage} className="w-20" />
                           <span className="text-sm text-gray-500">
