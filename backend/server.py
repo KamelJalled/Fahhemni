@@ -14,7 +14,8 @@ from models import (
 )
 from database import (
     init_database, create_student, get_student, get_student_progress,
-    update_progress, get_section_problems, get_problem, get_all_students_stats
+    update_progress, get_section_problems, get_problem, get_all_students_stats,
+    students_collection, progress_collection, problems_collection, sections_collection
 )
 from utils import normalize_answer, calculate_score, calculate_badges, calculate_total_points
 
