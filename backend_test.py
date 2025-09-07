@@ -143,8 +143,44 @@ class MathTutoringAPITester:
             self.log_test("Teacher Login", False, f"Request error: {str(e)}")
             return False
 
+    def test_database_initialization(self):
+        """Test that database is initialized with all 5 sections"""
+        try:
+            all_sections_working = True
+            total_problems_found = 0
+            
+            for section_id, section_info in EXPECTED_SECTIONS.items():
+                response = self.session.get(f"{self.base_url}/problems/section/{section_id}")
+                
+                if response.status_code == 200:
+                    problems = response.json()
+                    if isinstance(problems, list) and len(problems) == section_info["problems"]:
+                        self.log_test(f"Database Init - {section_id}", True, 
+                                    f"Found {len(problems)} problems for {section_info['title']}")
+                        total_problems_found += len(problems)
+                    else:
+                        self.log_test(f"Database Init - {section_id}", False, 
+                                    f"Expected {section_info['problems']} problems, got {len(problems) if isinstance(problems, list) else 0}")
+                        all_sections_working = False
+                else:
+                    self.log_test(f"Database Init - {section_id}", False, 
+                                f"HTTP {response.status_code}", response.text)
+                    all_sections_working = False
+            
+            if all_sections_working:
+                self.log_test("Database Initialization", True, 
+                            f"All 5 sections initialized with {total_problems_found} total problems")
+                return True
+            else:
+                self.log_test("Database Initialization", False, "Some sections missing or incomplete")
+                return False
+                
+        except Exception as e:
+            self.log_test("Database Initialization", False, f"Request error: {str(e)}")
+            return False
+
     def test_student_progress(self, username="sarah_ahmed"):
-        """Test student progress retrieval"""
+        """Test student progress retrieval - updated for section1 only initially"""
         try:
             response = self.session.get(f"{self.base_url}/students/{username}/progress")
             
