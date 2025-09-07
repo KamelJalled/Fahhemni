@@ -14,11 +14,19 @@ const StudentLogin = () => {
   const { language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
 
+  const classes = [
+    { value: 'GR9-A', label: { en: 'Grade 9 - Class A', ar: 'الصف التاسع - شعبة أ' } },
+    { value: 'GR9-B', label: { en: 'Grade 9 - Class B', ar: 'الصف التاسع - شعبة ب' } },
+    { value: 'GR9-C', label: { en: 'Grade 9 - Class C', ar: 'الصف التاسع - شعبة ج' } },
+    { value: 'GR9-D', label: { en: 'Grade 9 - Class D', ar: 'الصف التاسع - شعبة د' } }
+  ];
+
   const text = {
     en: {
       title: "Math Inequalities Tutor",
       subtitle: "Master Grade 9 Inequalities with Interactive Learning",
       username: "Enter your username",
+      class: "Select your class",
       placeholder: "Your username...",
       login: "Start Learning",
       teacher: "Teacher Access",
@@ -33,6 +41,7 @@ const StudentLogin = () => {
       title: "مدرس المتباينات الرياضية",
       subtitle: "أتقن متباينات الصف التاسع مع التعلم التفاعلي",
       username: "أدخل اسم المستخدم",
+      class: "اختر صفك",
       placeholder: "اسم المستخدم...",
       login: "ابدأ التعلم",
       teacher: "دخول المعلم",
