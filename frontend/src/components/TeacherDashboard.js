@@ -271,6 +271,7 @@ const TeacherDashboard = () => {
                     <TableHead></TableHead>
                     <TableHead></TableHead>
                     <TableHead></TableHead>
+                    <TableHead></TableHead>
                     <TableHead className="text-center text-xs">{getProblemTypeLabel('preparation')}</TableHead>
                     <TableHead className="text-center text-xs">{getProblemTypeLabel('explanation')}</TableHead>
                     <TableHead className="text-center text-xs">{getProblemTypeLabel('practice')}</TableHead>
