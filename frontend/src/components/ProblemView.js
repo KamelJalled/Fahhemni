@@ -627,7 +627,11 @@ const ProblemView = () => {
                           ✓ {language === 'en' ? 'Correct! Well done!' : 'صحيح! أحسنت!'}
                         </div>
                         <Button 
-                          onClick={handleNextProblem}
+                          onClick={async () => {
+                            // Mark preparation stage as completed
+                            await submitToBackend();
+                            handleNextProblem();
+                          }}
                           className="w-full bg-gradient-to-r from-green-500 to-emerald-600"
                         >
                           {language === 'en' ? 'Continue to Next Problem →' : 'تابع للمسألة التالية ←'}
