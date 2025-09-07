@@ -299,6 +299,8 @@ const ProblemView = () => {
     setHintsUsed(0);
     setShowEncouragement('');
     setAttempts(0);
+    setShowVoiceInput(false);
+    setShowMathKeyboard(false);
   };
 
   const handleNextProblem = () => {
