@@ -22,8 +22,8 @@ const TeacherDashboard = () => {
       return;
     }
 
-    fetchDashboardData();
-  }, [user, isTeacher, navigate]);
+    fetchDashboardData(selectedClass);
+  }, [user, isTeacher, navigate, selectedClass]);
 
   const fetchDashboardData = async (classFilter = null) => {
     try {
