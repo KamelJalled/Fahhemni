@@ -359,64 +359,76 @@ const Dashboard = () => {
       )}
 
       {/* Problems Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {problems.map((problem) => {
-          const status = getProblemStatus(problem.id, userProgress);
-          const problemProgress = userProgress.section1[problem.id];
-          
-          return (
-            <Card 
-              key={problem.id} 
-              className={`cursor-pointer transition-all hover:shadow-lg ${
-                status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
-              }`}
-              onClick={() => handleProblemClick(problem.id)}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    {status === 'completed' && <CheckCircle className="w-5 h-5 text-green-500 mr-2" />}
-                    {status === 'in-progress' && <Play className="w-5 h-5 text-orange-500 mr-2" />}
-                    {status === 'locked' && <Lock className="w-5 h-5 text-gray-400 mr-2" />}
-                    {status === 'available' && <Play className="w-5 h-5 text-emerald-500 mr-2" />}
-                    <Badge variant={
-                      problem.type === 'preparation' ? 'secondary' :
-                      problem.type === 'explanation' ? 'outline' :
-                      problem.type === 'practice' ? 'default' :
-                      problem.type === 'assessment' ? 'destructive' : 'secondary'
-                    }>
-                      {problem.type.charAt(0).toUpperCase() + problem.type.slice(1)}
-                    </Badge>
+      {selectedSectionData && selectedSectionData.problems && selectedSectionData.problems.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {selectedSectionData.problems.map((problem) => {
+            const status = getProblemStatus(problem.id, selectedSection, userProgress);
+            const problemProgress = userProgress[selectedSection]?.[problem.id] || { completed: false, score: 0, attempts: 0 };
+            
+            return (
+              <Card 
+                key={problem.id} 
+                className={`cursor-pointer transition-all hover:shadow-lg ${
+                  status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
+                }`}
+                onClick={() => handleProblemClick(problem.id, selectedSection)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      {status === 'completed' && <CheckCircle className="w-5 h-5 text-green-500 mr-2" />}
+                      {status === 'in-progress' && <Play className="w-5 h-5 text-orange-500 mr-2" />}
+                      {status === 'locked' && <Lock className="w-5 h-5 text-gray-400 mr-2" />}
+                      {status === 'available' && <Play className="w-5 h-5 text-emerald-500 mr-2" />}
+                      <Badge variant={
+                        problem.type === 'preparation' ? 'secondary' :
+                        problem.type === 'explanation' ? 'outline' :
+                        problem.type === 'practice' ? 'default' :
+                        problem.type === 'assessment' ? 'destructive' : 'secondary'
+                      }>
+                        {text[language][problem.type] || problem.type}
+                      </Badge>
+                    </div>
+                    {problemProgress.score > 0 && (
+                      <span className="text-sm font-medium text-emerald-600">
+                        {problemProgress.score}%
+                      </span>
+                    )}
                   </div>
-                  {problemProgress.score > 0 && (
-                    <span className="text-sm font-medium text-emerald-600">
-                      {problemProgress.score}%
+                  
+                  <div className="text-center mb-4">
+                    <div className="text-2xl font-mono bg-gray-50 p-3 rounded-lg border">
+                      {language === 'en' ? problem.question_en : problem.question_ar}
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center text-sm text-gray-500">
+                    <span>
+                      {status === 'completed' ? text[language].completed :
+                       status === 'in-progress' ? text[language].continue :
+                       status === 'locked' ? text[language].locked :
+                       text[language].start}
                     </span>
-                  )}
-                </div>
-                
-                <div className="text-center mb-4">
-                  <div className="text-2xl font-mono bg-gray-50 p-3 rounded-lg border">
-                    {language === 'en' ? problem.question_en : problem.question_ar}
+                    {problemProgress.attempts > 0 && (
+                      <span>{problemProgress.attempts} {text[language].attempts}</span>
+                    )}
                   </div>
-                </div>
-                
-                <div className="flex justify-between items-center text-sm text-gray-500">
-                  <span>
-                    {status === 'completed' ? text[language].completed :
-                     status === 'in-progress' ? text[language].continue :
-                     status === 'locked' ? text[language].locked :
-                     text[language].start}
-                  </span>
-                  {problemProgress.attempts > 0 && (
-                    <span>{problemProgress.attempts} {text[language].attempts}</span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Card className="mb-6">
+          <CardContent className="p-6 text-center">
+            <p className="text-gray-500">
+              {language === 'en' 
+                ? 'No problems available for this section yet.' 
+                : 'لا توجد مسائل متاحة لهذا القسم بعد.'}
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Badges Section */}
       {userStats.badges.length > 0 && (
