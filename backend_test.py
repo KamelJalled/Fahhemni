@@ -69,8 +69,51 @@ class MathTutoringAPITester:
             self.log_test("Health Check", False, f"Connection error: {str(e)}")
             return False
 
+    def test_student_login_with_class(self):
+        """Test student login endpoint with class selection"""
+        try:
+            # Test with realistic student name and class selection
+            test_classes = ["GR9-A", "GR9-B", "GR9-C", "GR9-D"]
+            all_success = True
+            
+            for class_name in test_classes:
+                student_data = {"username": f"student_{class_name.lower()}", "class_name": class_name}
+                response = self.session.post(
+                    f"{self.base_url}/auth/student-login",
+                    json=student_data,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    required_fields = ["username", "class_name", "created_at", "last_login", "total_points", "badges"]
+                    
+                    if all(field in data for field in required_fields):
+                        if data["class_name"] == class_name:
+                            self.log_test(f"Student Login with Class {class_name}", True, 
+                                        f"Student '{data['username']}' logged in to class {class_name}")
+                        else:
+                            self.log_test(f"Student Login with Class {class_name}", False, 
+                                        f"Expected class {class_name}, got {data.get('class_name')}")
+                            all_success = False
+                    else:
+                        missing = [f for f in required_fields if f not in data]
+                        self.log_test(f"Student Login with Class {class_name}", False, 
+                                    f"Missing fields: {missing}", data)
+                        all_success = False
+                else:
+                    self.log_test(f"Student Login with Class {class_name}", False, 
+                                f"HTTP {response.status_code}", response.text)
+                    all_success = False
+            
+            return all_success
+                
+        except Exception as e:
+            self.log_test("Student Login with Class", False, f"Request error: {str(e)}")
+            return False
+
     def test_student_login(self):
-        """Test student login endpoint"""
+        """Test student login endpoint - legacy method"""
         try:
             # Test with realistic student name
             student_data = {"username": "sarah_ahmed"}
