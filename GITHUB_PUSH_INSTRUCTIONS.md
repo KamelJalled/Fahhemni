@@ -70,11 +70,11 @@ After pushing, check your GitHub repository to ensure:
 4. **Folder**: `/frontend/build` (if available) or root
 5. Save
 
-**Option 3: Vercel (if preferred)**
-1. Import project from GitHub
-2. **Framework**: Other
-3. **Root Directory**: `frontend/build`
-4. Deploy
+**Option 3: Firebase Hosting**
+1. Install Firebase CLI: `npm install -g firebase-tools`
+2. Initialize: `firebase init hosting`
+3. Set public directory to `frontend/build`
+4. Deploy: `firebase deploy`
 
 ### Backend Deployment (API)
 **Option 1: Railway**
