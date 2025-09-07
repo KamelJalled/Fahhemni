@@ -22,12 +22,15 @@ problems_collection = db.problems
 sections_collection = db.sections
 
 async def init_database():
-    """Initialize database with Section 1 problems"""
+    """Initialize database with all sections"""
     
     # Check if data already exists
     existing_section = await sections_collection.find_one({"id": "section1"})
     if existing_section:
-        return  # Data already initialized
+        # Check if we need to add new sections
+        existing_section5 = await sections_collection.find_one({"id": "section5"})
+        if existing_section5:
+            return  # All data already initialized
     
     # Section 1 problems data
     section1_problems = [
