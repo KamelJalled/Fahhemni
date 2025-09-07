@@ -78,7 +78,8 @@ const StudentLogin = () => {
         login(student.username, 'student');
         navigate('/dashboard');
       } else {
-        console.error('Login failed');
+        console.error('Login failed:', response.status, response.statusText);
+        alert(`Login failed: ${response.status} ${response.statusText}`);
       }
     } catch (error) {
       console.error('Login error:', error);
