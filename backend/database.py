@@ -1322,9 +1322,10 @@ async def init_database():
     print("Database initialized with all 5 sections")
 
 # Student operations
-async def create_student(username: str) -> Student:
+async def create_student(username: str, class_name: str = "GR9-A") -> Student:
     student_data = {
         "username": username,
+        "class_name": class_name,
         "created_at": datetime.utcnow(),
         "last_login": datetime.utcnow(),
         "total_points": 0,
