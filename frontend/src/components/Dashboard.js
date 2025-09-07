@@ -17,6 +17,14 @@ const Dashboard = () => {
   const [selectedSection, setSelectedSection] = useState('section1');
   const [loading, setLoading] = useState(true);
 
+  const sections_info = [
+    { id: 'section1', title_en: 'Section 1: One-Step Inequalities', title_ar: 'القسم الأول: المتباينات أحادية الخطوة' },
+    { id: 'section2', title_en: 'Section 2: Two-Step Inequalities', title_ar: 'القسم الثاني: المتباينات ذات الخطوتين' },
+    { id: 'section3', title_en: 'Section 3: Multi-Step Inequalities', title_ar: 'القسم الثالث: المتباينات متعددة الخطوات' },
+    { id: 'section4', title_en: 'Section 4: Variables on Both Sides', title_ar: 'القسم الرابع: المتغيرات في الطرفين' },
+    { id: 'section5', title_en: 'Section 5: Compound Inequalities', title_ar: 'القسم الخامس: المتباينات المركبة' }
+  ];
+
   const badges = [
     { id: "first_steps", name: { en: "First Steps", ar: "الخطوات الأولى" }, description: { en: "Complete your first problem", ar: "أكمل مسألتك الأولى" }, icon: "trophy" },
     { id: "practice_master", name: { en: "Practice Master", ar: "أستاذ التمرين" }, description: { en: "Complete all practice problems", ar: "أكمل جميع مسائل التدريب" }, icon: "star" },
