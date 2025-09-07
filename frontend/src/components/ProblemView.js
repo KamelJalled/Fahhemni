@@ -30,6 +30,9 @@ const ProblemView = () => {
   const [userProgress, setUserProgress] = useState(null);
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showVoiceInput, setShowVoiceInput] = useState(false);
+  const [showMathKeyboard, setShowMathKeyboard] = useState(false);
+  const [activeInputIndex, setActiveInputIndex] = useState(0);
   const [allStepsComplete, setAllStepsComplete] = useState(false);
   const [userAnswer, setUserAnswer] = useState('');
   
