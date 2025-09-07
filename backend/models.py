@@ -20,6 +20,7 @@ class Student(BaseModel):
 
 class StudentCreate(BaseModel):
     username: str = Field(..., min_length=1, max_length=50)
+    class_name: str = Field(default="GR9-A", regex="^GR9-[A-D]$")
 
 class Progress(BaseModel):
     student_username: str
