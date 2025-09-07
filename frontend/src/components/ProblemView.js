@@ -321,6 +321,82 @@ const ProblemView = () => {
     resetProblemState();
   };
 
+  // Voice input handlers
+  const handleVoiceResult = (result) => {
+    if (problem?.step_solutions && problem.step_solutions.length > 0) {
+      const newAnswers = [...stepAnswers];
+      newAnswers[activeInputIndex] = result;
+      setStepAnswers(newAnswers);
+    } else {
+      setUserAnswer(result);
+    }
+    setShowVoiceInput(false);
+  };
+
+  const handleVoiceError = (error) => {
+    toast({
+      title: language === 'ar' ? 'خطأ في الإدخال الصوتي' : 'Voice Input Error',
+      description: error,
+      variant: 'destructive'
+    });
+  };
+
+  // Math keyboard handlers
+  const handleSymbolSelect = (symbol) => {
+    insertSymbolAtCursor(symbol);
+  };
+
+  const handleNumberSelect = (number) => {
+    insertSymbolAtCursor(number);
+  };
+
+  const handleOperatorSelect = (operator) => {
+    insertSymbolAtCursor(` ${operator} `);
+  };
+
+  const handleKeyboardAction = (action) => {
+    switch (action) {
+      case 'clear':
+        if (problem?.step_solutions && problem.step_solutions.length > 0) {
+          const newAnswers = [...stepAnswers];
+          newAnswers[activeInputIndex] = '';
+          setStepAnswers(newAnswers);
+        } else {
+          setUserAnswer('');
+        }
+        break;
+      case 'backspace':
+        if (problem?.step_solutions && problem.step_solutions.length > 0) {
+          const newAnswers = [...stepAnswers];
+          const current = newAnswers[activeInputIndex] || '';
+          newAnswers[activeInputIndex] = current.slice(0, -1);
+          setStepAnswers(newAnswers);
+        } else {
+          setUserAnswer(prev => prev.slice(0, -1));
+        }
+        break;
+      case 'voice':
+        setShowVoiceInput(!showVoiceInput);
+        setShowMathKeyboard(false);
+        break;
+    }
+  };
+
+  const insertSymbolAtCursor = (symbol) => {
+    if (problem?.step_solutions && problem.step_solutions.length > 0) {
+      const newAnswers = [...stepAnswers];
+      const currentValue = newAnswers[activeInputIndex] || '';
+      newAnswers[activeInputIndex] = currentValue + symbol;
+      setStepAnswers(newAnswers);
+    } else {
+      setUserAnswer(prev => prev + symbol);
+    }
+  };
+
+  const handleInputFocus = (index) => {
+    setActiveInputIndex(index);
+  };
+
   const getStepLabel = (stepIndex, step) => {
     if (!step) return '';
     
