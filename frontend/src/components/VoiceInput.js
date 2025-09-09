@@ -117,7 +117,9 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
     if (SpeechRecognition) {
       setIsSupported(true);
       
-      const recognition = new SpeechRecognition();
+      // Only create recognition if it doesn't exist
+      if (!recognitionRef.current) {
+        const recognition = new SpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
