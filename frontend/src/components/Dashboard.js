@@ -260,6 +260,25 @@ const Dashboard = () => {
           <p className="text-gray-600">{text[language].progress}</p>
         </div>
         <div className="flex gap-2">
+          <Button 
+            onClick={() => {
+              // Reset to beginning - clear progress and refresh
+              if (window.confirm(language === 'en' ? 
+                'Are you sure you want to start over? This will reset all your progress.' : 
+                'هل أنت متأكد من أنك تريد البدء من جديد؟ سيؤدي هذا إلى إعادة تعيين كل تقدمك.'
+              )) {
+                // Clear progress but keep user logged in
+                localStorage.removeItem('mathapp_progress');
+                window.location.href = '/dashboard';
+              }
+            }} 
+            variant="outline" 
+            size="sm"
+            className="text-orange-600 border-orange-300 hover:bg-orange-50"
+          >
+            <RotateCcw className="w-4 h-4 mr-2" />
+            {language === 'en' ? 'Start Over' : 'ابدأ من جديد'}
+          </Button>
           <Button onClick={toggleLanguage} variant="outline" size="sm">
             <Globe className="w-4 h-4 mr-2" />
             {language === 'en' ? 'العربية' : 'English'}
