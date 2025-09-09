@@ -366,16 +366,16 @@ const Dashboard = () => {
         </Card>
       )}
 
-      {/* Problems Grid - Fixed Section Visibility with Force Re-render */}
+      {/* Problems Grid - Fixed Section Visibility with Stable Re-render */}
       {selectedSectionData && selectedSectionData.problems && selectedSectionData.problems.length > 0 ? (
-        <div key={`section-${selectedSection}-${Date.now()}`} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
+        <div key={`problems-${selectedSection}`} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
           {selectedSectionData.problems.map((problem) => {
             const status = getProblemStatus(problem.id, selectedSection, userProgress);
             const problemProgress = userProgress[selectedSection]?.[problem.id] || { completed: false, score: 0, attempts: 0 };
             
             return (
               <Card 
-                key={`${selectedSection}-${problem.id}`} 
+                key={`${selectedSection}-${problem.id}-${problem.type || 'problem'}`} 
                 className={`cursor-pointer transition-all hover:shadow-lg ${
                   status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
                 }`}
