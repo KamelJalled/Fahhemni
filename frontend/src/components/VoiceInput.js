@@ -374,25 +374,54 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
   const startListening = async () => {
     if (recognitionRef.current && !isListening) {
       try {
-        // Request microphone permission explicitly with enhanced error handling
+        // Enhanced mobile support - request microphone permission explicitly
         console.log('🎤 Requesting microphone permission...');
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
+        
+        // For mobile browsers, we need to request permission first
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+                // Mobile-specific optimizations
+                sampleRate: 16000,
+                channelCount: 1
+              }
+            });
+            
+            console.log('🎤 Microphone permission granted, starting recognition...');
+            
+            // Stop the stream immediately - we just needed permission
+            stream.getTracks().forEach(track => track.stop());
+          } catch (micError) {
+            console.error('🎤 Microphone permission error:', micError);
+            let errorMessage = 'Failed to access microphone';
+            
+            if (micError.name === 'NotAllowedError') {
+              errorMessage = language === 'ar' 
+                ? 'يرجى السماح بإذن الميكروفون في إعدادات المتصفح. على الجوال، انقر على أيقونة الميكروفون في شريط العنوان.' 
+                : 'Please allow microphone access in browser settings. On mobile, tap the microphone icon in the address bar.';
+            } else if (micError.name === 'NotFoundError') {
+              errorMessage = language === 'ar' 
+                ? 'لم يتم العثور على ميكروفون - تأكد من توصيل ميكروفون أو تشغيل الميكروفون المدمج' 
+                : 'No microphone found - ensure microphone is connected or built-in mic is enabled';
+            }
+            
+            if (onError) {
+              onError(errorMessage);
+            }
+            return;
           }
-        });
+        }
         
-        // Start with audio stream active
-        console.log('🎤 Microphone permission granted, starting recognition...');
-        
-        // Ensure recognition is properly configured
+        // Configure recognition for better mobile performance
         recognitionRef.current.continuous = true;
         recognitionRef.current.interimResults = true;
         recognitionRef.current.maxAlternatives = 1;
         
-        // Set minimum recognition time to prevent immediate shutoff - INCREASED TO 10 SECONDS
+        // Mobile-specific timeout handling
         let recognitionStarted = false;
         let minTimeElapsed = false;
         
@@ -401,6 +430,7 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
           console.log('🎤 Minimum recognition time elapsed (10 seconds)');
         }, 10000);
         
+        // Enhanced event handlers for mobile
         recognitionRef.current.onstart = () => {
           recognitionStarted = true;
           setIsListening(true);
@@ -410,11 +440,13 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
         
         recognitionRef.current.onend = () => {
           clearTimeout(startTimeout);
-          if (recognitionStarted && !minTimeElapsed) {
-            console.log('🎤 Recognition ended too early, restarting...');
-            // Restart if ended before minimum time
+          console.log('🎤 Voice recognition ended');
+          
+          // Auto-restart if ended too early (mobile browsers often do this)
+          if (recognitionStarted && !minTimeElapsed && isListening) {
+            console.log('🎤 Recognition ended too early, attempting restart...');
             setTimeout(() => {
-              if (!isListening) {
+              if (recognitionRef.current && isListening) {
                 try {
                   recognitionRef.current.start();
                 } catch (e) {
@@ -425,37 +457,23 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
               }
             }, 100);
           } else {
-            console.log('🎤 Voice recognition ended normally');
             setIsListening(false);
             setIsProcessing(false);
           }
         };
         
+        // Start recognition
         recognitionRef.current.start();
         
-        // Clean up the stream after starting recognition
-        stream.getTracks().forEach(track => track.stop());
-        
       } catch (error) {
-        console.error('🎤 Microphone access error:', error);
-        let errorMessage = 'Failed to start voice recognition';
-        
-        if (error.name === 'NotAllowedError') {
-          errorMessage = language === 'ar' 
-            ? 'يرجى السماح بإذن الميكروفون في إعدادات المتصفح. قد تحتاج إلى إعادة تحميل الصفحة بعد السماح بالإذن.' 
-            : 'Please allow microphone access in browser settings. You may need to reload the page after granting permission.';
-        } else if (error.name === 'NotFoundError') {
-          errorMessage = language === 'ar' 
-            ? 'لم يتم العثور على ميكروفون - تأكد من توصيل ميكروفون' 
-            : 'No microphone found - please ensure a microphone is connected';
-        } else if (error.name === 'NotReadableError') {
-          errorMessage = language === 'ar' 
-            ? 'الميكروفون قيد الاستخدام في تطبيق آخر' 
-            : 'Microphone is being used by another application';
-        }
+        console.error('🎤 Voice recognition start error:', error);
+        setIsListening(false);
+        setIsProcessing(false);
         
         if (onError) {
-          onError(errorMessage);
+          onError(language === 'ar' 
+            ? 'فشل في بدء التعرف على الصوت - حاول مرة أخرى' 
+            : 'Failed to start voice recognition - please try again');
         }
       }
     }
