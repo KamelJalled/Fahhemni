@@ -79,6 +79,120 @@ class MathTutoringAPITester:
             self.log_test("Health Check", False, f"Connection error: {str(e)}")
             return False
 
+    def test_class_assignment_bug_critical(self):
+        """CRITICAL TEST: Verify class assignment bug - students should be saved with correct class"""
+        try:
+            print("\n🔍 CRITICAL BUG TEST: Class Assignment Verification")
+            print("Testing if students are correctly saved with their selected class...")
+            
+            # Test data for different classes as specified in review request
+            test_students = [
+                {"username": "mobile_test_a", "class_name": "GR9-A"},
+                {"username": "mobile_test_b", "class_name": "GR9-B"}, 
+                {"username": "mobile_test_c", "class_name": "GR9-C"},
+                {"username": "mobile_test_d", "class_name": "GR9-D"}
+            ]
+            
+            all_success = True
+            class_assignment_results = []
+            
+            # Step 1: Register students with different classes
+            for student in test_students:
+                response = self.session.post(
+                    f"{self.base_url}/auth/student-login",
+                    json=student,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    actual_class = data.get("class_name")
+                    expected_class = student["class_name"]
+                    
+                    if actual_class == expected_class:
+                        self.log_test(f"Class Assignment - {student['username']}", True, 
+                                    f"✅ Correctly saved as {actual_class}")
+                        class_assignment_results.append({
+                            "username": student["username"],
+                            "expected": expected_class,
+                            "actual": actual_class,
+                            "correct": True
+                        })
+                    else:
+                        self.log_test(f"Class Assignment - {student['username']}", False, 
+                                    f"❌ CRITICAL BUG: Expected {expected_class}, but saved as {actual_class}")
+                        class_assignment_results.append({
+                            "username": student["username"],
+                            "expected": expected_class,
+                            "actual": actual_class,
+                            "correct": False
+                        })
+                        all_success = False
+                else:
+                    self.log_test(f"Class Assignment - {student['username']}", False, 
+                                f"Failed to register student: HTTP {response.status_code}")
+                    all_success = False
+            
+            # Step 2: Test teacher dashboard filtering for each class
+            print("\n🔍 Testing Teacher Dashboard Class Filtering...")
+            
+            for class_name in ["GR9-A", "GR9-B", "GR9-C", "GR9-D"]:
+                response = self.session.get(f"{self.base_url}/teacher/students?class_filter={class_name}")
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    students = data.get("students", [])
+                    
+                    # Check if filtering works correctly
+                    expected_students = [s for s in test_students if s["class_name"] == class_name]
+                    
+                    if students:
+                        # Verify all returned students belong to the filtered class
+                        correct_class_filter = all(
+                            student.get("class_name") == class_name 
+                            for student in students 
+                            if "class_name" in student
+                        )
+                        
+                        if correct_class_filter:
+                            self.log_test(f"Teacher Dashboard Filter - {class_name}", True, 
+                                        f"✅ Correctly filtered {len(students)} students from {class_name}")
+                        else:
+                            self.log_test(f"Teacher Dashboard Filter - {class_name}", False, 
+                                        f"❌ Filter returned students from wrong classes")
+                            all_success = False
+                    else:
+                        # Empty result is OK if no students in that class
+                        self.log_test(f"Teacher Dashboard Filter - {class_name}", True, 
+                                    f"✅ No students in {class_name} (empty state)")
+                else:
+                    self.log_test(f"Teacher Dashboard Filter - {class_name}", False, 
+                                f"HTTP {response.status_code}")
+                    all_success = False
+            
+            # Summary of class assignment test
+            if all_success:
+                self.log_test("CRITICAL CLASS ASSIGNMENT BUG TEST", True, 
+                            "✅ All students correctly saved with their selected classes")
+            else:
+                failed_assignments = [r for r in class_assignment_results if not r["correct"]]
+                self.log_test("CRITICAL CLASS ASSIGNMENT BUG TEST", False, 
+                            f"❌ CRITICAL BUG CONFIRMED: {len(failed_assignments)} students saved with wrong class")
+                
+                # Print detailed failure information
+                print("\n❌ DETAILED CLASS ASSIGNMENT FAILURES:")
+                for failure in failed_assignments:
+                    print(f"   Student: {failure['username']}")
+                    print(f"   Expected: {failure['expected']}")
+                    print(f"   Actual: {failure['actual']}")
+                    print()
+            
+            return all_success
+            
+        except Exception as e:
+            self.log_test("CRITICAL CLASS ASSIGNMENT BUG TEST", False, f"Test execution error: {str(e)}")
+            return False
+
     def test_student_login_with_class(self):
         """Test student login endpoint with class selection"""
         try:
