@@ -906,8 +906,8 @@ const ProblemView = () => {
                       </div>
                     )}
 
-                    {/* Submit/Try Again/Next Problem Buttons */}
-                    <div className="flex gap-2">
+                    {/* Action Buttons - Mobile Optimized with Sticky Container */}
+                    <div className="continue-button-container flex gap-2">
                       {!isCorrect && !isSubmitted ? (
                         <Button 
                           onClick={handleSubmit}
