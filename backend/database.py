@@ -1392,15 +1392,15 @@ async def get_all_students_stats(class_filter: str = None) -> List[Dict]:
         username = student["username"]
         progress_list = await progress_collection.find({"student_username": username}).to_list(None)
         
-        # Calculate stats
-        total_problems = 6  # Section 1 has 6 problems
+        # Calculate stats across all sections
+        all_problems = await problems_collection.find({}).to_list(None)
+        total_problems = len(all_problems)
         completed_problems = len([p for p in progress_list if p.get("completed", False)])
-        progress_percentage = (completed_problems / total_problems) * 100
+        progress_percentage = (completed_problems / total_problems) * 100 if total_problems > 0 else 0
         
-        # Calculate weighted score
+        # Calculate weighted score across all sections
         total_score = 0
         total_weight = 0
-        problems = await problems_collection.find({"section_id": "section1"}).to_list(None)
         
         for problem in problems:
             progress_item = next((p for p in progress_list if p["problem_id"] == problem["id"]), None)
