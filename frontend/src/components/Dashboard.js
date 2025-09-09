@@ -248,6 +248,9 @@ const Dashboard = () => {
   const overallProgressPercentage = calculateOverallProgress();
   const selectedSectionData = sections.find(s => s.id === selectedSection);
   const selectedSectionProgress = calculateSectionProgress(selectedSection);
+  
+  // Debug section switching
+  console.log(`Dashboard rendering - selectedSection: ${selectedSection}, selectedSectionData:`, selectedSectionData?.id, selectedSectionData?.problems?.length);
 
   return (
     <div className="min-h-screen p-4">
