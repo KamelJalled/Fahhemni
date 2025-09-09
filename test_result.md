@@ -748,13 +748,12 @@ metadata:
 test_plan:
   current_focus:
     - "Voice Input Text-to-Math Conversion Bug"
-    - "Class Assignment Bug - All Students Saved as GR9-A"
     - "Section Navigation Bug - Multiple Sections Visible"
     - "Microphone Permissions and Speech Capture Bug"
     - "Math Keyboard Numeral Toggle Bug"
   stuck_tasks: []
   test_all: false
-  test_priority: "critical_mobile_bugs_first"
+  test_priority: "frontend_mobile_bugs_remaining"
 
 agent_communication:
   - agent: "main"
