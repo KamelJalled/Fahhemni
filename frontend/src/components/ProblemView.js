@@ -153,6 +153,15 @@ const ProblemView = () => {
       stepByStep: "Solve Step by Step:",
       nextStep: "Next Step →",
       showSolution: "Show Solution",
+      completion: {
+        sectionTitle: "🎉 Congratulations!",
+        sectionMessage: "You've completed this section!",
+        finalTitle: "🎉 Demo Completed!",
+        finalMessage: "Thank you for testing Fahhemni. Please share your feedback to help us improve the learning experience!",
+        returnToDashboard: "Return to Dashboard",
+        checking: "Checking...",
+        processing: "Processing your answer..."
+      },
       tryItYourself: "Try It Yourself:",
       checkAnswer: "Check Answer",
       hint: "Hint",
