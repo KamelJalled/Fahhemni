@@ -560,6 +560,40 @@ const ProblemView = () => {
     </div>;
   }
 
+  // Show completion screen when section is finished
+  if (showCompletionScreen) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-xl">
+          <CardContent className="p-8 text-center">
+            <div className="mb-6">
+              <div className="text-6xl mb-4">
+                {completionType === 'final' ? '🎉' : '🏆'}
+              </div>
+              <h1 className="text-2xl font-bold text-green-800 mb-2">
+                {completionType === 'final' 
+                  ? text[language].completion.finalTitle 
+                  : text[language].completion.sectionTitle}
+              </h1>
+              <p className="text-green-700 leading-relaxed">
+                {completionType === 'final' 
+                  ? text[language].completion.finalMessage 
+                  : text[language].completion.sectionMessage}
+              </p>
+            </div>
+            
+            <Button 
+              onClick={() => navigate('/dashboard')}
+              className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+            >
+              {text[language].completion.returnToDashboard}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   const problemProgress = userProgress?.section1[problemId] || { completed: false, score: 0, attempts: 0 };
   const isCompleted = problemProgress.completed;
   const earnedScore = problemProgress.score;
