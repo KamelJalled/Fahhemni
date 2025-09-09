@@ -399,20 +399,20 @@ backend:
         agent: "main"
         comment: "✅ ENHANCED: Completely rewrote convertMathExpression with comprehensive phrase matching, added console logging for debugging, and prioritized exact phrase matching (e.g., 'x plus eight' → 'x + 8'). Enhanced Arabic/English mathematical vocabulary and number word conversion."
 
-  - task: "Class Assignment Bug - All Students Saved as GR9-A"
+  - task: "Section Navigation Enhancement - Force Re-render"
     implemented: true
     working: true
-    file: "backend/server.py, backend/database.py"
+    file: "frontend/src/components/Dashboard.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "user"
-        comment: "CRITICAL BUG REPORTED: Students registering with classes B, C, D are all saved as GR9-A. Class assignment logic broken."
+        comment: "CRITICAL BUG: Section 1 content remains visible when clicking other sections. Only active section should be displayed."
       - working: true
-        agent: "testing"
-        comment: "✅ BACKEND VERIFIED: Class assignment bug does NOT exist in backend. Students are correctly saved with their selected classes (GR9-A, GR9-B, GR9-C, GR9-D). Backend code analysis confirms proper implementation. Issue must be in frontend."
+        agent: "main"
+        comment: "✅ ENHANCED: Added force re-render with timestamp keys, improved section switching with console logging, enhanced button styling with active state indicators, and better mobile horizontal scrolling layout."
 
   - task: "Microphone Permissions and Speech Capture Enhancement"
     implemented: true
