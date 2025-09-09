@@ -764,12 +764,22 @@ const ProblemView = () => {
                               <Input
                                 value={stepAnswers[index]}
                                 onChange={(e) => handleStepAnswerChange(index, e.target.value)}
-                                onFocus={() => handleInputFocus(index)}
+                                onFocus={() => {
+                                  handleInputFocus(index);
+                                  // Auto-scroll to keep input visible on mobile
+                                  setTimeout(() => {
+                                    document.querySelector(`input[data-step="${index}"]`)?.scrollIntoView({ 
+                                      behavior: 'smooth', 
+                                      block: 'center' 
+                                    });
+                                  }, 100);
+                                }}
+                                data-step={index}
                                 placeholder={language === 'en' ? 
                                   'Show your work for this step...' : 
                                   'أظهر عملك لهذه الخطوة...'
                                 }
-                                className="flex-1 text-lg h-12"
+                                className="problem-input-focused flex-1 text-lg h-12"
                                 disabled={index > currentStep || stepResults[index]}
                               />
                               <Button 
