@@ -1,73 +1,99 @@
 <analysis>
-The AI engineer successfully built a comprehensive math tutoring application for Grade 9 Saudi students, focusing on inequalities. The development trajectory highlights an iterative process, starting from initial product requirements, through mock frontend implementation, full-stack backend integration, and rigorous rounds of bug fixes and feature enhancements based on explicit user feedback. Key achievements include a multi-step problem-solving interface with dynamic hints, flexible answer validation for diverse input formats (including Arabic numerals and operators), interactive explanation/preparation stages, robust state management, and a functional teacher dashboard. The engineer also diligently prepared detailed Vercel deployment instructions and initiated the process of setting up the codebase for a GitHub repository push, ensuring a production-ready MVP.
+The AI engineer's work trajectory showcases an iterative development process for a Grade 9 math tutoring app. Initial efforts focused on establishing a full-stack MVP, covering frontend UI, backend API with MongoDB, and core features like problem-solving, hints, and progress tracking. A significant phase involved preparing the application for deployment, first targeting Vercel, then shifting to a generic GitHub push due to user requests, which required extensive refactoring to remove Vercel-specific configurations and ensure a correct production build with proper backend URL integration.
+
+Subsequently, the engineer addressed multiple critical bug reports, including persistent login issues, dashboard display inaccuracies (localization and section visibility), and errors in core functionalities. The latest development cycle involved implementing advanced features such as voice input, a mathematical symbol keyboard, and class management, alongside resolving several complex bugs related to these new additions and existing features like class assignment logic and section navigation. The work concluded with the engineer rebuilding the frontend and backend after applying a batch of bug fixes, indicating that the verification and further refinement of these fixes are the immediate next steps.
 </analysis>
 <product_requirements>
-The application is a math tutoring app for Grade 9 Saudi students learning inequalities.
-**Core Features:**
-*   **Problem Content:** 30 problems across 5 sections, initially focusing on Section 1: One-Step Inequalities. Specific problems for Preparation, Explanation, Practice (2), Assessment, and Exam Prep.
-*   **Language Support:** Arabic/English bilingual with RTL for Arabic. Accepts Western (0-9) and Eastern Arabic (٠-٩) numerals, and x or س variables.
-*   **User Types:** Student login (username only) and Teacher dashboard (access code: teacher2024).
-*   **Learning Interaction:**
-    *   Problem display with proper mathematical notation.
-    *   Multi-step input fields for solving, accepting intermediate correct steps.
-    *   3 progressive Socratic hints per step, hidden by default, revealed via Show Hint button. Hint usage tracked with score penalty.
-    *   Try Again button to clear inputs without leaving the problem.
-    *   Next Problem button after correct answers.
-    *   Interactive Preparation and Explanation sections with Try It Yourself practice after each example.
-    *   Motivational elements (points, badges, encouraging messages).
-*   **Progression & Scoring:**
-    *   Progress tracking per student.
-    *   Progression locks: Practice before Assessment unlocks, Assessment before Exam Prep unlocks (flexible: Assessment can be attempted after one Practice problem with a warning).
-    *   Weighted Scoring: Practice (15% each), Assessment (30%), Exam Prep (30%), Preparation (10%), Explanation (0%).
-*   **Design:** Clean, modern, gamified for teenagers, progress bars, achievements. Adheres to specific UI/UX guidelines (Shadcn components, no direct instructions in problems, clear step labels, no dark gradients).
-*   **Data Persistence:** Initially , transitioned to MongoDB via FastAPI backend.
-*   **Key Bug Fixes/Enhancements:** Removed answer from placeholder, fixed username null error on logout, fixed stage status update bug, ensured complete state reset on navigation/logout, enhanced step validation logic to accept multiple correct answer forms, streamlined explanation stage by removing useless submission box.
+The Math Tutoring App targets Grade 9 Saudi students for learning inequalities.
+**Initial Core Features:**
+*   **Content:** 30 problems, 5 sections (starting with One-Step Inequalities: Preparation, Explanation, Practice, Assessment, Exam Prep).
+*   **Language:** Arabic/English, RTL support, accepts Western/Eastern Arabic numerals, 'x' or 'س' variables.
+*   **Users:** Student login (username) and Teacher dashboard (access code: teacher2024).
+*   **Interaction:** Multi-step input, 3 progressive Socratic hints per step, Try Again, Next Problem, interactive practice, motivational elements.
+*   **Progression/Scoring:** Student progress tracking, progression locks (flexible for Assessment), weighted scoring.
+*   **Design:** Clean, modern, gamified, uses Shadcn UI, no direct instructions in problems.
+*   **Data:** Initially , transitioned to FastAPI/MongoDB.
+
+**Key Bug Fixes/Enhancements during development:** Removed answer from placeholder, fixed username null error on logout, stage status update bug, state reset, enhanced step validation, streamlined explanation stage, removed Vercel dependencies, fixed backend URL for deployment, addressed login/dashboard access issues.
+
+**Latest Enhancements (Partially Implemented):**
+*   **Bug Fixes (PART 1):** Status updating (Preparation/Explanation stages), logout error, step labels, stage navigation button.
+*   **Content Expansion (PART 2):** 4 new sections with 6 problems each: Two-Step, Multi-Step, Variables on Both Sides, Compound Inequalities.
+*   **Input Features (PART 3):** Voice input (microphone button, Arabic/English speech-to-math conversion, permissions, visual indicator) and Mathematical Symbol Keyboard (visual toolbar for symbols, operations, numerals, actions).
+*   **Class Management (PART 4):** Class selection (GR9-A, B, C, D) for students, teacher dashboard filtering by class/section.
+*   **Data Verification (PART 5):** Confirm MongoDB progress storage, admin endpoint to clear test data, ensure persistence.
+
+**Latest Critical Bug Report (Post-MVP Features):**
+*   **Voice Input Fixes:** Post-processing layer for text-to-math conversion, microphone permissions, Arabic vocabulary support.
+*   **Section Navigation Fix:** Ensure only the active section is displayed.
+*   **Class Assignment Bug:** Fix student class registration and teacher dashboard filtering.
+*   **Math Keyboard Layout:** Fix spacing, alignment, symbol clickability, numeral toggle.
+*   **Database Fixes:** Verify 30 problems, 5 sections, clear test data (string username entries).
+Priority Issues for Immediate Fix:
+1. Voice input converts x plus eight to text instead of x + 8
+2. Section 1 content remains visible when clicking other sections
+3. Students registering with classes B, C, D are all saved as GR9-A
+4. Microphone turns off immediately without capturing speech
+5. Math keyboard Eastern/Western numeral toggle not working
 </product_requirements>
 <key_technical_concepts>
 -   **Full-stack Development:** React (Frontend), FastAPI (Backend), MongoDB (Database).
--   **Frontend UI:** Shadcn UI components for modern interface, Tailwind CSS.
--   **Routing:** React Router DOM for SPA navigation.
--   **Backend API:** FastAPI with Pydantic for data models.
--   **Database ORM/ODM:** Motor (async MongoDB driver).
--   **Bilingual Support:** Dynamic language switching, RTL, numeral normalization.
--   **Deployment:** Vercel for serverless architecture.
+-   **Frontend UI/Styling:** Shadcn UI components, Tailwind CSS, React Router DOM.
+-   **Backend Data:** Pydantic for data models, Motor (async MongoDB driver).
+-   **Internationalization:** Bilingual support (Arabic/English), RTL, numeral normalization.
+-   **Deployment:** Generic web hosting, Vercel (initially, then removed).
+-   **Speech Recognition:** Web Speech API.
 </key_technical_concepts>
 <code_architecture>
-The application is structured as a full-stack project with separate  and  directories, alongside project-level configuration and documentation files.
+The application uses a full-stack architecture with distinct  and  directories.
 
 
 
 **Key Files and Their Importance/Changes:**
 
-*   **/app/frontend/src/App.js:** The main React component, managing application-wide routing (using ), global state (like user authentication), and API communication. It was updated to handle login/logout, navigate between views (, , , ), and ensure a complete state reset on logout.
-*   **/app/frontend/src/mock.js:** Initially provided placeholder data for problems and student progress. It was extensively updated to include complex structures for step-by-step solutions, multiple examples for interactive explanation problems, and detailed hint definitions, crucial for frontend-only development and later backend integration.
-*   **/app/frontend/src/components/Dashboard.js:** Displays the list of problem sections and their completion status. Changes include fetching actual progress from the backend, implementing the flexible progression logic (allowing early access to Assessment), and dynamically updating problem card statuses (e.g., Start, In Progress, Completed).
-*   **/app/frontend/src/components/ProblemView.js:** This is the core learning interface. It underwent significant modifications to:
-    *   Render multi-step input fields for problem solving.
-    *   Implement logic for displaying and tracking hidden, progressive hints per step.
-    *   Handle Try Again and Next Problem button functionalities.
-    *   Integrate with the backend for answer submission and step validation.
-    *   Manage interactive practice for Preparation and Explanation examples.
-    *   Normalize student answers to accept various operators and numeral systems.
-    *   Display clear, non-spoiling step labels.
-*   **/app/backend/server.py:** The FastAPI entry point. It was expanded from basic status checks to include a full suite of API endpoints for students (login, submit answer, get problems, get progress) and teachers (dashboard analytics). It also includes database initialization and shutdown logic, and crucial environment variable loading.
-*   **/app/backend/models.py:** Defines the Pydantic models that shape the data for both the API requests/responses and the MongoDB schema (e.g., , , , ). The  model was significantly enhanced to store  for multi-step validation.
-*   **/app/backend/utils.py:** Contains utility functions, notably , which was improved to handle different mathematical operators (, , , ) and both Western and Eastern Arabic numerals for robust answer validation.
-*   **/app/contracts.md:** A documentation file outlining API endpoints, expected data structures, and the integration strategy between frontend and backend.
-*   **/app/vercel.json, DEPLOYMENT.md, deploy.sh, backend/vercel_app.py, frontend/.env.production, .vercelignore:** A suite of files created to support Vercel deployment, including configuration, a detailed guide, and helper scripts for automated setup.
-*   **/app/README.md, setup-github.sh:** Files created or updated to prepare the project for a GitHub repository, including project overview and a script for Git initialization.
+*   **/app/frontend/src/App.js:** Main React component for routing, global state, and authentication. Updated for login/logout and navigation logic, ensuring state reset.
+*   **/app/frontend/src/components/Dashboard.js:** Displays problem sections and progress. Rewritten to fetch and display all 5 sections dynamically, update problem card statuses, and implement localization for stage labels.
+*   **/app/frontend/src/components/ProblemView.js:** Core learning interface. Heavily modified for multi-step inputs, hints, interactive practice, answer normalization, *and integration of VoiceInput and MathKeyboard components*.
+*   **/app/frontend/src/components/StudentLogin.js:** Handles student authentication. Updated to include class selection during registration, and improved error handling.
+*   **/app/frontend/src/components/TeacherDashboard.js:** Teacher analytics. Modified to include class filtering capabilities.
+*   **/app/frontend/src/components/TeacherLogin.js:** Teacher authentication. Improved error handling and updated navigation logic.
+*   **/app/frontend/src/components/VoiceInput.js (NEW):** Implements Web Speech API for voice-to-text, with a new post-processing layer for Arabic/English speech-to-math conversion. Includes microphone permissions and visual indicators.
+*   **/app/frontend/src/components/MathKeyboard.js (NEW):** Provides a visual on-screen keyboard for mathematical symbols and numerals, with improved layout and toggle functionality.
+*   **/app/backend/server.py:** FastAPI entry point. Expanded with API endpoints for students/teachers, database init/shutdown. *Crucially updated for class management (student registration, teacher stats filtering), new admin endpoint to clear test data, and corrected authentication endpoint paths (, )*.
+*   **/app/backend/database.py:** Manages MongoDB interactions. Updated to initialize all 5 new sections with 30 problems, and modified  to correctly filter by class and calculate overall section progress.
+*   **/app/backend/models.py:** Defines Pydantic models. Updated to include  field for Student and related models.
+*   **/app/frontend/.env, /app/frontend/.env.example, /app/frontend/.env.production:** Critical files for environment variables. Repeatedly updated to correctly set  (initially Vercel placeholder, then Hostinger backend URL, finally a generic  placeholder for local dev) and remove Vercel-specific entries.
+*   **/app/frontend/build/ (NEW, UPDATED):** Contains the optimized production build of the frontend, included in the repository for direct deployment to static hosts. Frequently rebuilt to incorporate latest code changes.
+*   **/app/.gitignore, /app/frontend/.gitignore (UPDATED):** Modified to correctly include the  folder while ignoring other unnecessary build artifacts.
+*   **Vercel-related files (, ,  etc.):** Initially created for Vercel deployment, then *removed* based on user's request for generic hosting.
+*   **Documentation files (, ,  etc.):** Updated to reflect generic deployment, removed Vercel references, and new instructions/summaries for GitHub push and deployment.
 </code_architecture>
 <pending_tasks>
--   Generate a complete and clean file list, excluding unnecessary development files like , for a GitHub push.
--   Execute the  script to initialize the local Git repository and commit the application files.
--   Push the entire codebase to a designated remote GitHub repository.
--   Proceed with the Vercel deployment using the provided  guide and  script.
+-   **Voice Input Fixes:** Fully implement post-processing, microphone permissions, Arabic vocabulary support, and test.
+-   **Section Navigation Fix:** Ensure only the active section is displayed with proper CSS transitions, and test.
+-   **Class Assignment Bug Fix:** Verify student registration saves correct class_name and teacher dashboard filtering works as intended, and test.
+-   **Math Keyboard Layout:** Finalize button spacing, alignment, clickability, and numeral toggle functionality, and test.
+-   **Database Fixes:** Verify all 30 problems across 5 sections are correctly loaded, and ensure admin endpoint for clearing test data functions as expected.
+Testing Requirements:
+- Test with actual Grade 9 students and teachers
+- Verify Arabic voice input accuracy
+- Confirm all 30 problems load correctly
+- Validate class filtering in teacher dashboard
 </pending_tasks>
 <current_work>
-The AI engineer's immediate focus is on the final preparations for deployment and version control. The user explicitly requested to push all the actual code files to GitHub. To facilitate this, the engineer has already created a comprehensive set of deployment-related files for Vercel (e.g., , , ) and GitHub setup scripts (, updated ).
+The AI engineer is currently focused on resolving several critical bugs reported by the user to finalize the MVP for classroom testing. This involves addressing issues across multiple features:
+1.  **Voice Input:** Implementing a text-to-math converter for transcription, improving microphone permissions, and enhancing Arabic vocabulary support.
+2.  **Section Navigation:** Correcting a bug where content from non-active sections remained visible.
+3.  **Class Assignment:** Fixing the logic to ensure students are properly assigned to classes during registration and that the teacher dashboard accurately filters students by their registered class. This involved identifying and correcting a hardcoded section in the  function in  and ensuring the  field is correctly handled in the backend  model.
+4.  **Math Keyboard Layout:** Adjusting button spacing, alignment, and ensuring all symbols are clickable, including the numeral toggle.
 
-The very last action in the trajectory indicates that the engineer is currently in the process of refining the file list for the GitHub push, ensuring that only essential application files are included and large, unnecessary directories like  are excluded. This step is crucial for maintaining a clean and manageable repository. All major development, feature implementation, and critical bug fixes have been claimed as successfully completed, making the application a solidified MVP ready for production deployment.
+The engineer has applied a series of file edits across frontend components (, , , , , ) and backend files (, , ) to address these bugs. The last action performed in the trajectory was a command to rebuild the frontend after applying these fixes, indicating the next logical step would be to test these newly implemented changes comprehensively.
+Current Deployment Status:
+- Frontend: Successfully deployed at https://fahhemni.ai (Hostinger)
+- Backend: Successfully deployed at https://fahhemni-backend.onrender.com
+- Database: MongoDB connected and operational
+- Issue: Frontend-backend connection working, but bugs preventing full functionality
 </current_work>
 <optional_next_step>
-
+Rebuild the frontend and backend, then proceed with comprehensive testing to verify all implemented bug fixes.
 </optional_next_step>
