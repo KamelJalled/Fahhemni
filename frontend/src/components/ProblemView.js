@@ -795,6 +795,19 @@ const ProblemView = () => {
                                 className="problem-input-focused flex-1 text-lg h-12"
                                 disabled={index > currentStep || stepResults[index]}
                               />
+                              
+                              {/* Individual Check Step Button */}
+                              {index === currentStep && !stepResults[index] && (
+                                <Button 
+                                  onClick={() => handleCheckStep(index)}
+                                  className="px-4 bg-blue-600 text-white hover:bg-blue-700"
+                                  disabled={!stepAnswers[index]?.trim()}
+                                  size="sm"
+                                >
+                                  {language === 'en' ? 'Check Step' : 'تحقق'}
+                                </Button>
+                              )}
+                              
                               <Button 
                                 variant="outline"
                                 size="sm"
