@@ -204,11 +204,28 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
   }, [language, onResult, onError]);
 
   const convertMathExpression = (spokenText) => {
+    console.log(`🎤 Converting speech: "${spokenText}"`);
     let result = spokenText.toLowerCase();
     const currentLang = language === 'ar' ? 'ar' : 'en';
     
     // Enhanced Arabic mathematical vocabulary
     const arabicMathVocab = {
+      'س زائد ثمانية': 'x + 8',
+      'س زائد سبعة': 'x + 7', 
+      'س زائد ستة': 'x + 6',
+      'س زائد خمسة': 'x + 5',
+      'س زائد أربعة': 'x + 4',
+      'س زائد ثلاثة': 'x + 3',
+      'س زائد اثنان': 'x + 2',
+      'س زائد واحد': 'x + 1',
+      'س ناقص ثمانية': 'x - 8',
+      'س ناقص سبعة': 'x - 7',
+      'س ناقص ستة': 'x - 6',
+      'س ناقص خمسة': 'x - 5',
+      'س ناقص أربعة': 'x - 4',
+      'س ناقص ثلاثة': 'x - 3',
+      'س ناقص اثنان': 'x - 2',
+      'س ناقص واحد': 'x - 1',
       'س زائد': 'x +',
       'س ناقص': 'x -',
       'س أكبر من': 'x >',
@@ -227,15 +244,8 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
       'صفر': '0'
     };
 
-    // Enhanced English mathematical expressions  
+    // Enhanced English mathematical expressions with exact phrase matching
     const englishMathExpressions = {
-      'x plus': 'x +',
-      'x minus': 'x -',
-      'x greater than': 'x >',
-      'x less than': 'x <',
-      'x equals': 'x =',
-      'x greater than or equal': 'x ≥',
-      'x less than or equal': 'x ≤',
       'x plus eight': 'x + 8',
       'x plus seven': 'x + 7',
       'x plus six': 'x + 6',
@@ -251,38 +261,76 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
       'x minus four': 'x - 4',
       'x minus three': 'x - 3',
       'x minus two': 'x - 2',
-      'x minus one': 'x - 1'
+      'x minus one': 'x - 1',
+      'x times eight': 'x × 8',
+      'x times seven': 'x × 7',
+      'x times six': 'x × 6',
+      'x times five': 'x × 5',
+      'x times four': 'x × 4',
+      'x times three': 'x × 3',
+      'x times two': 'x × 2',
+      'x divided by eight': 'x ÷ 8',
+      'x divided by seven': 'x ÷ 7',
+      'x divided by six': 'x ÷ 6',
+      'x divided by five': 'x ÷ 5',
+      'x divided by four': 'x ÷ 4',
+      'x divided by three': 'x ÷ 3',
+      'x divided by two': 'x ÷ 2',
+      'x plus': 'x +',
+      'x minus': 'x -',
+      'x times': 'x ×',
+      'x divided by': 'x ÷',
+      'x greater than': 'x >',
+      'x less than': 'x <',
+      'x equals': 'x =',
+      'x greater than or equal to': 'x ≥',
+      'x less than or equal to': 'x ≤',
+      'variable x': 'x',
+      'the variable x': 'x'
     };
 
-    // Apply language-specific expressions first
+    // First pass: Apply language-specific complete expressions
+    console.log(`🎤 Before conversion: "${result}"`);
+    
     if (currentLang === 'ar') {
       Object.entries(arabicMathVocab).forEach(([phrase, symbol]) => {
-        const regex = new RegExp(phrase, 'gi');
-        result = result.replace(regex, symbol);
+        const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        if (result.includes(phrase)) {
+          result = result.replace(regex, symbol);
+          console.log(`🎤 Arabic conversion: "${phrase}" → "${symbol}"`);
+        }
       });
     } else {
-      Object.entries(englishMathExpressions).forEach(([phrase, symbol]) => {
-        const regex = new RegExp(phrase, 'gi');
-        result = result.replace(regex, symbol);
+      // Sort by length descending to match longer phrases first
+      const sortedExpressions = Object.entries(englishMathExpressions)
+        .sort((a, b) => b[0].length - a[0].length);
+        
+      sortedExpressions.forEach(([phrase, symbol]) => {
+        const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        if (result.includes(phrase)) {
+          result = result.replace(regex, symbol);
+          console.log(`🎤 English conversion: "${phrase}" → "${symbol}"`);
+        }
       });
     }
     
-    // Convert number words to digits
+    // Second pass: Convert remaining number words to digits
     Object.entries(numberWords[currentLang]).forEach(([word, digit]) => {
-      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
       result = result.replace(regex, digit);
     });
     
-    // Convert math terms to symbols
+    // Third pass: Convert remaining math terms to symbols
     Object.entries(mathTerms[currentLang]).forEach(([term, symbol]) => {
-      const regex = new RegExp(`\\b${term}\\b`, 'gi');
+      const regex = new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
       result = result.replace(regex, symbol);
     });
     
     // Clean up extra spaces around operators
-    result = result.replace(/\s*([+\-=<>≤≥])\s*/g, ' $1 ');
+    result = result.replace(/\s*([+\-=<>≤≥×÷])\s*/g, ' $1 ');
     result = result.replace(/\s+/g, ' ').trim();
     
+    console.log(`🎤 Final conversion result: "${result}"`);
     return result;
   };
 
