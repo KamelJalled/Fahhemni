@@ -165,18 +165,22 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
         
         switch (event.error) {
           case 'no-speech':
-            errorMessage = language === 'ar' ? 'لم يتم اكتشاف صوت' : 'No speech detected';
+            errorMessage = language === 'ar' ? 'لم يتم اكتشاف صوت - حاول مرة أخرى' : 'No speech detected - try again';
             break;
           case 'audio-capture':
-            errorMessage = language === 'ar' ? 'فشل في التقاط الصوت' : 'Audio capture failed';
+            errorMessage = language === 'ar' ? 'فشل في التقاط الصوت - تحقق من الميكروفون' : 'Audio capture failed - check microphone';
             break;
           case 'not-allowed':
-            errorMessage = language === 'ar' ? 'تم رفض إذن الميكروفون' : 'Microphone permission denied';
+            errorMessage = language === 'ar' ? 'يرجى السماح بإذن الميكروفون في المتصفح' : 'Please allow microphone permission in browser';
+            break;
+          case 'network':
+            errorMessage = language === 'ar' ? 'خطأ في الشبكة - تحقق من الاتصال' : 'Network error - check connection';
             break;
           default:
             errorMessage = language === 'ar' ? 'خطأ في التعرف على الصوت' : 'Voice recognition error';
         }
         
+        console.error('Voice recognition error:', event.error, errorMessage);
         if (onError) {
           onError(errorMessage);
         }
