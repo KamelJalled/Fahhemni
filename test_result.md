@@ -744,25 +744,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Comprehensive MVP Testing Complete"
+    - "Voice Input Text-to-Math Conversion Bug"
+    - "Class Assignment Bug - All Students Saved as GR9-A"
+    - "Section Navigation Bug - Multiple Sections Visible"
+    - "Microphone Permissions and Speech Capture Bug"
+    - "Math Keyboard Numeral Toggle Bug"
   stuck_tasks: []
-  test_all: true
-  test_priority: "comprehensive_mvp_complete"
+  test_all: false
+  test_priority: "critical_mobile_bugs_first"
 
 agent_communication:
   - agent: "main"
-    message: "Successfully prepared production build and removed all Vercel-specific configurations. Frontend build is complete and ready for static hosting. Backend remains as standard FastAPI app deployable to any platform."
-  - agent: "main"
-    message: "Fixed dependency conflict issue by rebuilding frontend with npm and including build folder in Git repository. All files are committed and ready for GitHub push. Build folder with 5 optimized files included in repository."
-  - agent: "main"
-    message: "CRITICAL BUG FIX: Updated frontend .env to use correct backend URL (https://fahhemni-backend.onrender.com) and rebuilt production build. This fixes CORS errors caused by frontend trying to connect to placeholder URL. Frontend now correctly connects to the deployed backend."
-  - agent: "testing"
-    message: "Completed comprehensive backend API testing. All 8 core API endpoints are working correctly and production-ready. Found one configuration issue: frontend/.env has incorrect REACT_APP_BACKEND_URL (https://inequalityapp.preview.emergentagent.com) which should be updated with the correct external URL. Backend is fully functional on localhost:8001."
-  - agent: "testing"
-    message: "🎉 COMPREHENSIVE TESTING COMPLETE: Successfully tested expanded Math Tutoring App with all 5 sections. VERIFIED: Database initialization with 30 total problems (6 per section), all new problem types working correctly (Two-Step, Multi-Step, Variables on Both Sides, Compound Inequalities), answer submission for all sections, and teacher dashboard handling expanded content. All 12/12 tests passed. Backend is production-ready with expanded content."
-  - agent: "testing"
-    message: "✅ FRONTEND TESTING RESULTS: Fixed critical backend URL configuration issue. Verified most bug fixes are working correctly: step labels improvement ✅, logout error fix ✅, status updating fix ✅, stage navigation ✅. CRITICAL ISSUE FOUND: Dashboard only shows Section 1 - needs update to display all 5 sections. Backend has all 30 problems ready, but frontend Dashboard.js is hardcoded to section1 only."
-  - agent: "testing"
-    message: "🎉 COMPREHENSIVE MVP TESTING COMPLETE (17/17 TESTS PASSED): Successfully verified all review request requirements. ✅ PART 1 - BUG FIXES: Student login with class selection working for all classes (GR9-A, GR9-B, GR9-C, GR9-D), class information stored/retrieved correctly, progress tracking persists between sessions. ✅ PART 2 - CONTENT EXPANSION: All 5 sections available with 30 total problems (6 per section), all problem types working (One-Step, Two-Step, Multi-Step, Variables on Both Sides, Compound Inequalities). ✅ PART 3 - CLASS MANAGEMENT: Teacher dashboard class filtering working for all classes, class-specific progress reports functional, students properly assigned to classes. ✅ PART 4 - DATA VERIFICATION: Admin endpoints functional (GET /api/admin/stats, POST /api/admin/clear-test-data), MongoDB storing all student progress data correctly, data persistence confirmed across sessions. Fixed minor Pydantic compatibility issue (regex→pattern). Backend is production-ready MVP for classroom deployment."
-  - agent: "testing"
-    message: "🎉 FINAL COMPREHENSIVE MVP TESTING COMPLETE (ALL FEATURES VERIFIED): Successfully conducted complete frontend testing of Math Tutoring App MVP. ✅ PART 1 - BUG FIXES VERIFIED: Status updating working (Preparation/Explanation stages change from Start→In Progress→Completed), clean logout working without errors, step labels showing meaningful text ('Step 1: Isolate variable term'), stage navigation button appears after completion. ✅ PART 2 - CONTENT EXPANSION VERIFIED: Dashboard displays all 5 sections (One-Step, Two-Step, Multi-Step, Variables on Both Sides, Compound Inequalities), section navigation working, 30 problems total confirmed. ✅ PART 3 - INPUT FEATURES VERIFIED: Voice Input component loads with mathematical term mappings (English/Arabic), Math Keyboard component with all tabs (Numbers, Symbols, Operations, Actions), inequality symbols (< > ≤ ≥ = ≠), operation symbols (+ - × ÷), number system switching (Western 0-9 vs Eastern ٠-٩). ✅ PART 4 - CLASS MANAGEMENT VERIFIED: Student registration with class selection (GR9-A/B/C/D), teacher dashboard with class filtering, student progress tracking. ✅ PART 5 - LOCALIZATION VERIFIED: Arabic interface switching working, all stage labels display correctly in Arabic (التحضير، الشرح، التدريب، التقييم، الإعداد للاختبار). Complete MVP ready for classroom deployment with all 30 problems, advanced input methods, class management, and bilingual support."
+    message: "CRITICAL MOBILE BUGS IDENTIFIED: User reports 5 critical bugs that need immediate fixing: 1) Voice input text-to-math conversion failing, 2) Section navigation showing multiple sections, 3) Class assignment saving all as GR9-A, 4) Microphone permissions failing, 5) Math keyboard numeral toggle broken. Starting with backend testing to verify class assignment bug and other backend-related issues first."
