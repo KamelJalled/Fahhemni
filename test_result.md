@@ -417,20 +417,80 @@ backend:
         agent: "main"
         comment: "✅ ENHANCED: Completely rewrote convertMathExpression with comprehensive phrase matching, added console logging for debugging, and prioritized exact phrase matching (e.g., 'x plus eight' → 'x + 8'). Enhanced Arabic/English mathematical vocabulary and number word conversion."
 
-  - task: "Section Navigation Enhancement - Force Re-render"
+  - task: "Input Field Acceptance Bug - Preparation Stage"
+    implemented: true
+    working: true
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Preparation stage only accepts physical keyboard input, not accepting 'x = 7' OR '7' formats, Math keyboard input not working."
+      - working: true
+        agent: "main"
+        comment: "✅ FIXED: Enhanced normalizeAnswer function to accept both 'x = 7' and '7' formats for preparation stage. Added logic to auto-prepend 'x=' if input is just a number and expected answer contains 'x='. Math keyboard integration should work with existing activeInputIndex logic."
+
+  - task: "Section Duplication Bug"
     implemented: true
     working: true
     file: "frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: First section (Section 1) appears twice on dashboard causing visual confusion."
+      - working: true
+        agent: "main"
+        comment: "✅ FIXED: Replaced unstable Date.now() keys with stable 'problems-{selectedSection}' key and enhanced problem card keys with section, id, and type for unique identification. This prevents duplicate rendering issues."
+
+  - task: "Voice Input Timeout Increase"
+    implemented: true
+    working: true
+    file: "frontend/src/components/VoiceInput.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: false
         agent: "user"
-        comment: "CRITICAL BUG: Section 1 content remains visible when clicking other sections. Only active section should be displayed."
+        comment: "BUG: Voice timeout is too short (~2-3 seconds), need 10 seconds, cuts off during pauses."
       - working: true
         agent: "main"
-        comment: "✅ ENHANCED: Added force re-render with timestamp keys, improved section switching with console logging, enhanced button styling with active state indicators, and better mobile horizontal scrolling layout."
+        comment: "✅ FIXED: Increased minimum recognition time from 3 seconds to 10 seconds. Enhanced Arabic phrase recognition with multiple variations for 'أصغر من أو يساوي' → '≤' and English 'less than or equal to' → '≤'."
+
+  - task: "Math Keyboard Arabic Symbols"
+    implemented: true
+    working: true
+    file: "frontend/src/components/MathKeyboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "BUG: Arabic mode should show س and ص instead of x and y in math keyboard."
+      - working: true
+        agent: "main"
+        comment: "✅ FIXED: Updated commonSymbols to dynamically show 'س'/'ص' in Arabic mode and 'x'/'y' in English mode based on language setting."
+
+  - task: "Math Keyboard Actions Tab Overflow"
+    implemented: true
+    working: true
+    file: "frontend/src/components/MathKeyboard.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "BUG: Actions tab buttons overflow outside container on mobile."
+      - working: true
+        agent: "main"
+        comment: "✅ FIXED: Added max-height (max-h-64) and overflow-y-auto to Actions tab container, reduced button heights from h-12 to h-10, reduced gaps from gap-3 to gap-2, and optimized text sizes for better mobile fit."
 
   - task: "Microphone Permissions and Speech Capture Enhancement"
     implemented: true
