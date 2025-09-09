@@ -1402,7 +1402,7 @@ async def get_all_students_stats(class_filter: str = None) -> List[Dict]:
         total_score = 0
         total_weight = 0
         
-        for problem in problems:
+        for problem in all_problems:
             progress_item = next((p for p in progress_list if p["problem_id"] == problem["id"]), None)
             if progress_item and progress_item.get("completed", False):
                 total_score += (progress_item.get("score", 0) * problem["weight"]) / 100
@@ -1411,9 +1411,9 @@ async def get_all_students_stats(class_filter: str = None) -> List[Dict]:
         weighted_score = (total_score / total_weight) * 100 if total_weight > 0 else 0
         total_attempts = sum(p.get("attempts", 0) for p in progress_list)
         
-        # Create problems status
+        # Create problems status for all sections
         problems_status = {}
-        for problem in problems:
+        for problem in all_problems:
             progress_item = next((p for p in progress_list if p["problem_id"] == problem["id"]), None)
             problems_status[problem["id"]] = {
                 "completed": progress_item.get("completed", False) if progress_item else False,
