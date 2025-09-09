@@ -355,14 +355,14 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
         recognitionRef.current.interimResults = true;
         recognitionRef.current.maxAlternatives = 1;
         
-        // Set minimum recognition time to prevent immediate shutoff
+        // Set minimum recognition time to prevent immediate shutoff - INCREASED TO 10 SECONDS
         let recognitionStarted = false;
         let minTimeElapsed = false;
         
         const startTimeout = setTimeout(() => {
           minTimeElapsed = true;
-          console.log('🎤 Minimum recognition time elapsed (3 seconds)');
-        }, 3000);
+          console.log('🎤 Minimum recognition time elapsed (10 seconds)');
+        }, 10000);
         
         recognitionRef.current.onstart = () => {
           recognitionStarted = true;
