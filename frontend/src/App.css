@@ -32,3 +32,141 @@
         transform: rotate(360deg);
     }
 }
+
+/* Mobile Optimization Styles */
+@media (max-width: 768px) {
+    /* Touch Target Optimization - Minimum 44x44px */
+    button, .button, [role="button"] {
+        min-height: 44px !important;
+        min-width: 44px !important;
+        padding: 8px 12px !important;
+    }
+    
+    /* Voice Input Button - Prominent on Mobile */
+    .voice-input-button {
+        min-height: 56px !important;
+        min-width: 56px !important;
+        border-radius: 50% !important;
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        z-index: 1000 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Math Keyboard Mobile Positioning */
+    .math-keyboard-container {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 999 !important;
+        background: white !important;
+        border-top: 1px solid #e5e7eb !important;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
+        max-height: 50vh !important;
+        overflow-y: auto !important;
+    }
+    
+    /* Auto-scroll when keyboard opens */
+    .problem-input-focused {
+        scroll-margin-top: 80px !important;
+        scroll-behavior: smooth !important;
+    }
+    
+    /* Section Tabs - Horizontal Scrolling */
+    .section-tabs-container {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 8px !important;
+    }
+    
+    .section-tabs-container::-webkit-scrollbar {
+        height: 4px !important;
+    }
+    
+    .section-tabs-container::-webkit-scrollbar-thumb {
+        background: #cbd5e1 !important;
+        border-radius: 2px !important;
+    }
+    
+    /* Section Tab Buttons */
+    .section-tab-button {
+        flex-shrink: 0 !important;
+        margin-right: 8px !important;
+        min-width: 120px !important;
+    }
+    
+    /* Continue Button Always Visible */
+    .continue-button-container {
+        position: sticky !important;
+        bottom: 0 !important;
+        background: white !important;
+        padding: 16px !important;
+        border-top: 1px solid #e5e7eb !important;
+        margin: 0 -16px -16px -16px !important;
+    }
+    
+    /* Problem Text Responsive */
+    .problem-text {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    /* Hints Display Optimization */
+    .hints-container {
+        max-height: 30vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Input Fields Mobile Optimization */
+    input[type="text"], textarea, .input-field {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        min-height: 44px !important;
+        padding: 12px !important;
+    }
+    
+    /* Modal Optimization for Mobile */
+    .modal-overlay {
+        padding: 16px !important;
+    }
+    
+    .modal-content {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+
+/* Tablet Optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Touch targets still important on tablets */
+    button, .button, [role="button"] {
+        min-height: 40px !important;
+        min-width: 40px !important;
+    }
+    
+    /* Math keyboard can be smaller on tablets */
+    .math-keyboard-container {
+        max-width: 500px !important;
+        margin: 0 auto !important;
+        position: relative !important;
+    }
+}
+
+/* Arabic RTL Mobile Optimization */
+[dir="rtl"] {
+    .voice-input-button {
+        left: 20px !important;
+        right: auto !important;
+    }
+    
+    .section-tab-button {
+        margin-left: 8px !important;
+        margin-right: 0 !important;
+    }
+}
