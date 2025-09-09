@@ -385,12 +385,16 @@ const Dashboard = () => {
         </Card>
       )}
 
-      {/* Problems Grid - Fixed Section Visibility with Stable Re-render */}
+      {/* Problems Grid - Enhanced Section Isolation */}
       {selectedSectionData && selectedSectionData.problems && selectedSectionData.problems.length > 0 ? (
-        <div key={`problems-${selectedSection}`} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
-          {selectedSectionData.problems.map((problem) => {
+        <div key={`section-problems-${selectedSection}`} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
+          {selectedSectionData.problems
+            .filter(problem => problem && problem.id) // Ensure valid problems
+            .map((problem) => {
             const status = getProblemStatus(problem.id, selectedSection, userProgress);
             const problemProgress = userProgress[selectedSection]?.[problem.id] || { completed: false, score: 0, attempts: 0 };
+            
+            console.log(`Rendering problem ${problem.id} from section ${selectedSection}`);
             
             return (
               <Card 
