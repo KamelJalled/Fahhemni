@@ -5,7 +5,6 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Globe, Calculator, Trophy, Star } from 'lucide-react';
-import DebugInfo from './DebugInfo';
 
 const StudentLogin = () => {
   const [username, setUsername] = useState('');
