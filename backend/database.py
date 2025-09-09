@@ -1423,6 +1423,7 @@ async def get_all_students_stats(class_filter: str = None) -> List[Dict]:
         
         stats.append({
             "username": username,
+            "class_name": student.get("class_name", "GR9-A"),  # Include class_name in response
             "progress_percentage": progress_percentage,
             "completed_problems": completed_problems,
             "total_problems": total_problems,
