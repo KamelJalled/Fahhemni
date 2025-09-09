@@ -176,13 +176,14 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
             </div>
 
             {/* Number Grid */}
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-1">
               {(numberSystem === 'western' ? westernNumbers : easternNumbers).map((number) => (
                 <SymbolButton
                   key={number}
                   symbol={number}
                   label={number}
                   onClick={(symbol) => handleSymbolClick(symbol, 'number')}
+                  className="text-center min-w-0"
                 />
               ))}
             </div>
