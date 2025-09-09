@@ -120,12 +120,12 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
       // Only create recognition if it doesn't exist
       if (!recognitionRef.current) {
         const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.maxAlternatives = 1;
-      
-      // Set language based on app language
-      recognition.lang = language === 'ar' ? 'ar-SA' : 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+        
+        // Set language based on app language
+        recognition.lang = language === 'ar' ? 'ar-SA' : 'en-US';
       
       recognition.onstart = () => {
         setIsListening(true);
