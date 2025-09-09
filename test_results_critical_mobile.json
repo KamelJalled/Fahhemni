@@ -1,0 +1,162 @@
+{
+  "summary": {
+    "passed": 6,
+    "total": 6,
+    "success_rate": 1.0
+  },
+  "results": [
+    {
+      "test": "Class Assignment - mobile_test_a",
+      "success": true,
+      "details": "\u2705 Correctly saved as GR9-A",
+      "timestamp": "2025-09-09T07:21:24.487369"
+    },
+    {
+      "test": "Class Assignment - mobile_test_b",
+      "success": true,
+      "details": "\u2705 Correctly saved as GR9-B",
+      "timestamp": "2025-09-09T07:21:24.499535"
+    },
+    {
+      "test": "Class Assignment - mobile_test_c",
+      "success": true,
+      "details": "\u2705 Correctly saved as GR9-C",
+      "timestamp": "2025-09-09T07:21:24.548773"
+    },
+    {
+      "test": "Class Assignment - mobile_test_d",
+      "success": true,
+      "details": "\u2705 Correctly saved as GR9-D",
+      "timestamp": "2025-09-09T07:21:24.597844"
+    },
+    {
+      "test": "Teacher Dashboard Filter - GR9-A",
+      "success": true,
+      "details": "\u2705 Correctly filtered 1 students from GR9-A",
+      "timestamp": "2025-09-09T07:21:24.616338"
+    },
+    {
+      "test": "Teacher Dashboard Filter - GR9-B",
+      "success": true,
+      "details": "\u2705 Correctly filtered 1 students from GR9-B",
+      "timestamp": "2025-09-09T07:21:24.625791"
+    },
+    {
+      "test": "Teacher Dashboard Filter - GR9-C",
+      "success": true,
+      "details": "\u2705 Correctly filtered 1 students from GR9-C",
+      "timestamp": "2025-09-09T07:21:24.637386"
+    },
+    {
+      "test": "Teacher Dashboard Filter - GR9-D",
+      "success": true,
+      "details": "\u2705 Correctly filtered 1 students from GR9-D",
+      "timestamp": "2025-09-09T07:21:24.647784"
+    },
+    {
+      "test": "CRITICAL CLASS ASSIGNMENT BUG TEST",
+      "success": true,
+      "details": "\u2705 All students correctly saved with their selected classes",
+      "timestamp": "2025-09-09T07:21:24.647827"
+    },
+    {
+      "test": "Health Check",
+      "success": true,
+      "details": "API running version 1.0.0",
+      "timestamp": "2025-09-09T07:21:24.654540"
+    },
+    {
+      "test": "Database Init - section1",
+      "success": true,
+      "details": "Found 6 problems for One-Step Inequalities",
+      "timestamp": "2025-09-09T07:21:24.664828"
+    },
+    {
+      "test": "Database Init - section2",
+      "success": true,
+      "details": "Found 6 problems for Two-Step Inequalities",
+      "timestamp": "2025-09-09T07:21:24.672469"
+    },
+    {
+      "test": "Database Init - section3",
+      "success": true,
+      "details": "Found 6 problems for Multi-Step Inequalities",
+      "timestamp": "2025-09-09T07:21:24.679794"
+    },
+    {
+      "test": "Database Init - section4",
+      "success": true,
+      "details": "Found 6 problems for Variables on Both Sides",
+      "timestamp": "2025-09-09T07:21:24.686497"
+    },
+    {
+      "test": "Database Init - section5",
+      "success": true,
+      "details": "Found 6 problems for Compound Inequalities",
+      "timestamp": "2025-09-09T07:21:24.694368"
+    },
+    {
+      "test": "Database Initialization",
+      "success": true,
+      "details": "All 5 sections initialized with 30 total problems",
+      "timestamp": "2025-09-09T07:21:24.694405"
+    },
+    {
+      "test": "Student Login with Class GR9-A",
+      "success": true,
+      "details": "Student 'student_gr9-a' logged in to class GR9-A",
+      "timestamp": "2025-09-09T07:21:24.742352"
+    },
+    {
+      "test": "Student Login with Class GR9-B",
+      "success": true,
+      "details": "Student 'student_gr9-b' logged in to class GR9-B",
+      "timestamp": "2025-09-09T07:21:24.753029"
+    },
+    {
+      "test": "Student Login with Class GR9-C",
+      "success": true,
+      "details": "Student 'student_gr9-c' logged in to class GR9-C",
+      "timestamp": "2025-09-09T07:21:24.760673"
+    },
+    {
+      "test": "Student Login with Class GR9-D",
+      "success": true,
+      "details": "Student 'student_gr9-d' logged in to class GR9-D",
+      "timestamp": "2025-09-09T07:21:24.767652"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-A",
+      "success": true,
+      "details": "Filtered 2 students from class GR9-A",
+      "timestamp": "2025-09-09T07:21:24.801016"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-B",
+      "success": true,
+      "details": "Filtered 2 students from class GR9-B",
+      "timestamp": "2025-09-09T07:21:24.812027"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-C",
+      "success": true,
+      "details": "Filtered 2 students from class GR9-C",
+      "timestamp": "2025-09-09T07:21:24.822794"
+    },
+    {
+      "test": "Teacher Dashboard Class Filter GR9-D",
+      "success": true,
+      "details": "Filtered 2 students from class GR9-D",
+      "timestamp": "2025-09-09T07:21:24.832940"
+    },
+    {
+      "test": "Admin Stats Endpoint",
+      "success": true,
+      "details": "Database stats: 5 sections, 30 problems, 8 students",
+      "timestamp": "2025-09-09T07:21:24.841401"
+    }
+  ],
+  "backend_url": "https://inequalityapp.preview.emergentagent.com/api",
+  "test_timestamp": "2025-09-09T07:21:24.841572",
+  "test_focus": "critical_mobile_optimization"
+}
