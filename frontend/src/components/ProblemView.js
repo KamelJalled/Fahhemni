@@ -220,6 +220,13 @@ const ProblemView = () => {
     if (!currentAnswer) return;
 
     try {
+      // Show loading indicator
+      setIsChecking(true);
+      setCheckingStepIndex(stepIndex);
+      
+      // Add 1.5 second delay for AI processing feel
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       const currentStepSolution = problem.step_solutions[stepIndex];
       const normalizedAnswer = normalizeAnswer(currentAnswer);
       
@@ -263,6 +270,10 @@ const ProblemView = () => {
       }
     } catch (error) {
       console.error('Error checking step:', error);
+    } finally {
+      // Hide loading indicator
+      setIsChecking(false);
+      setCheckingStepIndex(-1);
     }
   };
 
