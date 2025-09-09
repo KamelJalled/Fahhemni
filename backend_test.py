@@ -894,6 +894,54 @@ class MathTutoringAPITester:
             self.log_test("CORS Configuration", False, f"Request error: {str(e)}")
             return False
 
+    def run_critical_mobile_tests(self):
+        """Run critical mobile optimization tests as requested"""
+        print("=" * 80)
+        print("CRITICAL MOBILE OPTIMIZATION BACKEND TESTING")
+        print("=" * 80)
+        print(f"Testing backend at: {self.base_url}")
+        print("Focus: Class Assignment Bug and Mobile Backend Features")
+        print()
+        
+        # Critical tests for mobile optimization bugs
+        critical_tests = [
+            # PRIORITY 1: Class Assignment Bug (CRITICAL)
+            ("🚨 CRITICAL: Class Assignment Bug Test", self.test_class_assignment_bug_critical),
+            
+            # PRIORITY 2: Backend API Endpoints for Mobile Features
+            ("Health Check", self.test_health_check),
+            ("Database Initialization (5 Sections)", self.test_database_initialization),
+            ("Student Login with Class Selection", self.test_student_login_with_class),
+            ("Teacher Dashboard Class Filtering", self.test_teacher_dashboard_class_filtering),
+            ("Admin Stats Endpoint", self.test_admin_stats_endpoint),
+        ]
+        
+        passed = 0
+        total = len(critical_tests)
+        
+        for test_name, test_func in critical_tests:
+            try:
+                result = test_func()
+                if result:
+                    passed += 1
+            except Exception as e:
+                self.log_test(test_name, False, f"Test execution error: {str(e)}")
+        
+        print("=" * 80)
+        print("CRITICAL MOBILE TESTS SUMMARY")
+        print("=" * 80)
+        print(f"Passed: {passed}/{total}")
+        print(f"Failed: {total - passed}/{total}")
+        
+        if passed == total:
+            print("\n🎉 ALL CRITICAL MOBILE TESTS PASSED!")
+            print("✅ Class assignment bug is FIXED")
+        else:
+            print(f"\n⚠️  {total - passed} critical tests failed")
+            print("❌ Class assignment bug or other critical issues detected")
+        
+        return passed, total, self.test_results
+
     def run_all_tests(self):
         """Run all API tests - comprehensive MVP testing"""
         print("=" * 80)
