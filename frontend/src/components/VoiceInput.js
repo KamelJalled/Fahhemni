@@ -126,81 +126,90 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
         
         // Set language based on app language
         recognition.lang = language === 'ar' ? 'ar-SA' : 'en-US';
-      
-      recognition.onstart = () => {
-        setIsListening(true);
-        setTranscript('');
-        console.log('🎤 Microphone started - listening for 5 seconds minimum');
-      };
+        
+        recognition.onstart = () => {
+          setIsListening(true);
+          setTranscript('');
+          console.log('🎤 Microphone started - listening for 10 seconds minimum');
+        };
 
-      recognition.onresult = (event) => {
-        let finalTranscript = '';
-        let interimTranscript = '';
+        recognition.onresult = (event) => {
+          let finalTranscript = '';
+          let interimTranscript = '';
 
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript;
-          } else {
-            interimTranscript += transcript;
-          }
-        }
-
-        setTranscript(interimTranscript || finalTranscript);
-
-        if (finalTranscript) {
-          setIsProcessing(true);
-          const converted = convertMathExpression(finalTranscript.trim());
-          setTimeout(() => {
-            setIsProcessing(false);
-            if (onResult) {
-              onResult(converted);
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+            } else {
+              interimTranscript += transcript;
             }
-          }, 500);
-        }
-      };
+          }
 
-      recognition.onerror = (event) => {
-        setIsListening(false);
-        setIsProcessing(false);
-        let errorMessage = 'Voice recognition error';
-        
-        switch (event.error) {
-          case 'no-speech':
-            errorMessage = language === 'ar' ? 'لم يتم اكتشاف صوت - حاول مرة أخرى' : 'No speech detected - try again';
-            break;
-          case 'audio-capture':
-            errorMessage = language === 'ar' ? 'فشل في التقاط الصوت - تحقق من الميكروفون' : 'Audio capture failed - check microphone';
-            break;
-          case 'not-allowed':
-            errorMessage = language === 'ar' ? 'يرجى السماح بإذن الميكروفون في المتصفح' : 'Please allow microphone permission in browser';
-            break;
-          case 'network':
-            errorMessage = language === 'ar' ? 'خطأ في الشبكة - تحقق من الاتصال' : 'Network error - check connection';
-            break;
-          default:
-            errorMessage = language === 'ar' ? 'خطأ في التعرف على الصوت' : 'Voice recognition error';
-        }
-        
-        console.error('Voice recognition error:', event.error, errorMessage);
-        if (onError) {
-          onError(errorMessage);
-        }
-      };
+          setTranscript(interimTranscript || finalTranscript);
 
-      recognition.onend = () => {
-        setIsListening(false);
-        setIsProcessing(false);
-      };
+          if (finalTranscript) {
+            setIsProcessing(true);
+            const converted = convertMathExpression(finalTranscript.trim());
+            setTimeout(() => {
+              setIsProcessing(false);
+              if (onResult) {
+                onResult(converted);
+              }
+            }, 500);
+          }
+        };
 
-      recognitionRef.current = recognition;
+        recognition.onerror = (event) => {
+          setIsListening(false);
+          setIsProcessing(false);
+          let errorMessage = 'Voice recognition error';
+          
+          switch (event.error) {
+            case 'no-speech':
+              errorMessage = language === 'ar' ? 'لم يتم اكتشاف صوت - حاول مرة أخرى' : 'No speech detected - try again';
+              break;
+            case 'audio-capture':
+              errorMessage = language === 'ar' ? 'فشل في التقاط الصوت - تحقق من الميكروفون' : 'Audio capture failed - check microphone';
+              break;
+            case 'not-allowed':
+              errorMessage = language === 'ar' ? 'يرجى السماح بإذن الميكروفون في المتصفح' : 'Please allow microphone permission in browser';
+              break;
+            case 'network':
+              errorMessage = language === 'ar' ? 'خطأ في الشبكة - تحقق من الاتصال' : 'Network error - check connection';
+              break;
+            default:
+              errorMessage = language === 'ar' ? 'خطأ في التعرف على الصوت' : 'Voice recognition error';
+          }
+          
+          console.error('Voice recognition error:', event.error, errorMessage);
+          if (onError) {
+            onError(errorMessage);
+          }
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+          setIsProcessing(false);
+        };
+
+        recognitionRef.current = recognition;
+      } else {
+        // Update language if it changed
+        recognitionRef.current.lang = language === 'ar' ? 'ar-SA' : 'en-US';
+      }
     } else {
       setIsSupported(false);
     }
 
+    // Cleanup on unmount
     return () => {
       if (recognitionRef.current) {
-        recognitionRef.current.abort();
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {
+          console.log('🎤 Recognition cleanup completed');
+        }
       }
     };
   }, [language, onResult, onError]);
