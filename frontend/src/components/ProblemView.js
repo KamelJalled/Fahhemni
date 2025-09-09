@@ -792,8 +792,8 @@ const ProblemView = () => {
               </CardContent>
             </Card>
 
-            {/* Answer Input - Only for non-explanation problems */}
-            {!problem.show_full_solution && (
+            {/* Answer Input - Show for all problems except pure display problems */}
+            {(!problem.show_full_solution || problem.type === 'explanation') && (
               <Card>
                 <CardContent className="p-6">
                   <div className="space-y-4">
