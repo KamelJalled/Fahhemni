@@ -1013,17 +1013,24 @@ class MathTutoringAPITester:
         return passed, total, self.test_results
 
 def main():
-    """Main test execution"""
+    """Main test execution - Focus on Critical Mobile Optimization Tests"""
+    print("🔍 CRITICAL MOBILE OPTIMIZATION BACKEND TESTING")
+    print("Focus: Class Assignment Bug and Mobile Backend Features")
+    print()
+    
     tester = MathTutoringAPITester(BACKEND_URL)
-    passed, total, results = tester.run_all_tests()
+    
+    # Run critical mobile tests first
+    passed, total, results = tester.run_critical_mobile_tests()
     
     # Save detailed results
-    with open("/app/test_results_detailed.json", "w") as f:
+    with open("/app/test_results_critical_mobile.json", "w") as f:
         json.dump({
             "summary": {"passed": passed, "total": total, "success_rate": passed/total},
             "results": results,
             "backend_url": BACKEND_URL,
-            "test_timestamp": datetime.now().isoformat()
+            "test_timestamp": datetime.now().isoformat(),
+            "test_focus": "critical_mobile_optimization"
         }, f, indent=2)
     
     # Exit with appropriate code
