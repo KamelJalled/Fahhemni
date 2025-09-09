@@ -264,6 +264,7 @@ const StudentLogin = () => {
           ))}
         </div>
       </div>
+      )}
     </div>
   );
 };
