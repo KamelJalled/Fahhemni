@@ -128,6 +128,7 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
       recognition.onstart = () => {
         setIsListening(true);
         setTranscript('');
+        console.log('🎤 Microphone started - listening for 5 seconds minimum');
       };
 
       recognition.onresult = (event) => {
