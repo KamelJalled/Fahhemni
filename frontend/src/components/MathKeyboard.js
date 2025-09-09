@@ -29,8 +29,14 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
   ];
 
   const commonSymbols = [
-    { symbol: 'x', label: { en: 'Variable x', ar: 'المتغير س' } },
-    { symbol: 'y', label: { en: 'Variable y', ar: 'المتغير ص' } },
+    { 
+      symbol: language === 'ar' ? 'س' : 'x', 
+      label: { en: 'Variable x', ar: 'المتغير س' } 
+    },
+    { 
+      symbol: language === 'ar' ? 'ص' : 'y', 
+      label: { en: 'Variable y', ar: 'المتغير ص' } 
+    },
     { symbol: '(', label: { en: 'Open parenthesis', ar: 'قوس مفتوح' } },
     { symbol: ')', label: { en: 'Close parenthesis', ar: 'قوس مغلق' } },
     { symbol: '-', label: { en: 'Negative', ar: 'سالب' } },
