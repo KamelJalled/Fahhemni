@@ -366,22 +366,22 @@ const Dashboard = () => {
         </Card>
       )}
 
-      {/* Problems Grid - Fixed Section Visibility */}
+      {/* Problems Grid - Fixed Section Visibility with Force Re-render */}
       {selectedSectionData && selectedSectionData.problems && selectedSectionData.problems.length > 0 ? (
-        <div key={selectedSection} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
+        <div key={`section-${selectedSection}-${Date.now()}`} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
           {selectedSectionData.problems.map((problem) => {
             const status = getProblemStatus(problem.id, selectedSection, userProgress);
             const problemProgress = userProgress[selectedSection]?.[problem.id] || { completed: false, score: 0, attempts: 0 };
             
             return (
               <Card 
-                key={problem.id} 
+                key={`${selectedSection}-${problem.id}`} 
                 className={`cursor-pointer transition-all hover:shadow-lg ${
                   status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
                 }`}
                 onClick={() => handleProblemClick(problem.id, selectedSection)}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 problem-text">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
                       {status === 'completed' && <CheckCircle className="w-5 h-5 text-green-500 mr-2" />}
@@ -427,12 +427,12 @@ const Dashboard = () => {
           })}
         </div>
       ) : (
-        <Card className="mb-6">
+        <Card key={`empty-${selectedSection}`} className="mb-6">
           <CardContent className="p-6 text-center">
             <p className="text-gray-500">
               {language === 'en' 
-                ? 'No problems available for this section yet.' 
-                : 'لا توجد مسائل متاحة لهذا القسم بعد.'}
+                ? `No problems available for ${selectedSectionData?.title_en || selectedSection} yet.` 
+                : `لا توجد مسائل متاحة لـ ${selectedSectionData?.title_ar || selectedSection} بعد.`}
             </p>
           </CardContent>
         </Card>
