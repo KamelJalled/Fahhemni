@@ -384,17 +384,125 @@ backend:
         agent: "testing"
         comment: "✅ VERIFIED: Admin clear test data endpoint POST /api/admin/clear-test-data working correctly. Properly validates admin key (admin123), clears student and progress data, and returns deletion counts. Security validation working (403 for invalid keys)."
 
-  - task: "Data Persistence Across Sessions"
-    implemented: true
-    working: true
+  - task: "Voice Input Text-to-Math Conversion Bug"
+    implemented: false
+    working: false
+    file: "frontend/src/components/VoiceInput.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Voice input converts 'x plus eight' to text instead of 'x + 8'. Need post-processing layer for speech-to-math conversion."
+
+  - task: "Section Navigation Bug - Multiple Sections Visible"
+    implemented: false
+    working: false
+    file: "frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Section 1 content remains visible when clicking other sections. Only active section should be displayed."
+
+  - task: "Class Assignment Bug - All Students Saved as GR9-A"
+    implemented: false
+    working: false
     file: "backend/server.py, backend/database.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
-      - working: true
-        agent: "testing"
-        comment: "✅ VERIFIED: Data persistence working correctly across sessions. Student progress is properly stored in MongoDB and retrieved accurately. Tested with student creation, progress submission, and retrieval - all data persists correctly."
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Students registering with classes B, C, D are all saved as GR9-A. Class assignment logic broken."
+
+  - task: "Microphone Permissions and Speech Capture Bug"
+    implemented: false
+    working: false
+    file: "frontend/src/components/VoiceInput.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Microphone turns off immediately without capturing speech. Permissions and speech recognition failing."
+
+  - task: "Math Keyboard Numeral Toggle Bug"
+    implemented: false
+    working: false
+    file: "frontend/src/components/MathKeyboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Eastern/Western numeral toggle not working. Toggle functionality broken."
+
+  - task: "Mobile Responsive Design - Touch Targets"
+    implemented: false
+    working: false
+    file: "frontend/src/App.css, frontend/src/components/"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "MOBILE REQUIREMENT: Ensure all buttons are 44x44px minimum touch targets for mobile usability."
+
+  - task: "Mobile Math Keyboard Positioning"
+    implemented: false
+    working: false
+    file: "frontend/src/components/MathKeyboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "MOBILE REQUIREMENT: Math keyboard should not cover input field, auto-scroll when opened."
+
+  - task: "Mobile Section Navigation - Horizontal Scrolling"
+    implemented: false
+    working: false
+    file: "frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "MOBILE REQUIREMENT: Section tabs should be horizontally scrollable on mobile viewports."
+
+  - task: "Mobile Viewport Testing (375px iPhone, 360px Android)"
+    implemented: false
+    working: false
+    file: "frontend/src/components/"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "MOBILE REQUIREMENT: Test all functionality on mobile viewport sizes 375px and 360px."
+
+  - task: "Mobile Arabic RTL Layout Testing"
+    implemented: false
+    working: false
+    file: "frontend/src/App.css, frontend/src/components/"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "MOBILE REQUIREMENT: Verify Arabic RTL layout works correctly on mobile devices."
 
 frontend:
   - task: "Build production frontend"
