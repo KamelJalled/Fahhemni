@@ -59,6 +59,19 @@ const ProblemView = () => {
       .replace(/\s+/g, ' ') // Normalize spaces
       .replace(/\s*([<>=≤≥+\-*/])\s*/g, '$1'); // Remove spaces around operators
     
+    // ENHANCEMENT: For preparation stage, accept both "x = 7" and "7" formats
+    // If the expected answer contains "x =" but user input doesn't, try adding it
+    if (problem && (problem.type === 'preparation' || problem.id?.includes('prep'))) {
+      // If input is just a number/value and expected answer has "x =", add "x ="
+      if (/^-?\d+(\.\d+)?$/.test(normalized) || /^-?\d+(\.\d+)?[<>=≤≥]/.test(normalized)) {
+        // Input is just a number or number with inequality
+        const expectedNormalized = normalizeAnswer(problem.answer || '');
+        if (expectedNormalized.includes('x=') && !normalized.includes('x')) {
+          normalized = 'x=' + normalized;
+        }
+      }
+    }
+    
     return normalized;
   };
 
