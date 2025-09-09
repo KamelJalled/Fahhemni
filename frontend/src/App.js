@@ -125,6 +125,8 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/problem/:problemId" element={<ProblemView />} />
               <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+              {/* Catch-all route - redirect to home */}
+              <Route path="*" element={<StudentLogin />} />
             </Routes>
           </BrowserRouter>
         </LanguageProvider>
