@@ -10,18 +10,8 @@ import sys
 import os
 from datetime import datetime
 
-# Get backend URL from frontend/.env file
-import subprocess
-try:
-    result = subprocess.run(['grep', 'REACT_APP_BACKEND_URL', '/app/frontend/.env'], 
-                          capture_output=True, text=True)
-    if result.returncode == 0:
-        backend_url = result.stdout.split('=')[1].strip()
-        BACKEND_URL = f"{backend_url}/api"
-    else:
-        BACKEND_URL = "http://localhost:8001/api"  # fallback
-except:
-    BACKEND_URL = "http://localhost:8001/api"  # fallback
+# Use backend URL from review request
+BACKEND_URL = "https://fahhemni-backend.onrender.com/api"
 
 # Expected sections and their problem counts
 EXPECTED_SECTIONS = {
