@@ -347,6 +347,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ VERIFIED: Student login with class selection working correctly for all classes (GR9-A, GR9-B, GR9-C, GR9-D). Class information is properly stored and retrieved. Fixed Pydantic compatibility issue by changing 'regex' to 'pattern' parameter in models.py."
+      - working: true
+        agent: "testing"
+        comment: "✅ POST-MOBILE VERIFICATION: Class assignment bug is FIXED. Tested all classes (GR9-A/B/C/D) - students correctly saved with their selected classes. Created test student 'mobile_verify_student' in GR9-B as requested. Class filtering in teacher dashboard working correctly for all classes."
 
   - task: "Teacher Dashboard Class Filtering"
     implemented: true
