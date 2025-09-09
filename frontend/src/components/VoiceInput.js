@@ -208,7 +208,7 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
     let result = spokenText.toLowerCase();
     const currentLang = language === 'ar' ? 'ar' : 'en';
     
-    // Enhanced Arabic mathematical vocabulary
+    // Enhanced Arabic mathematical vocabulary with multiple variations
     const arabicMathVocab = {
       'س زائد ثمانية': 'x + 8',
       'س زائد سبعة': 'x + 7', 
@@ -232,7 +232,19 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
       'س أصغر من': 'x <',
       'س يساوي': 'x =',
       'س أكبر من أو يساوي': 'x ≥',
+      'س أكبر من او يساوي': 'x ≥',
+      'س أكبر أو يساوي': 'x ≥',
       'س أصغر من أو يساوي': 'x ≤',
+      'س أصغر من او يساوي': 'x ≤',
+      'س أصغر أو يساوي': 'x ≤',
+      'أصغر من أو يساوي': '≤',
+      'أصغر من او يساوي': '≤',
+      'أصغر أو يساوي': '≤',
+      'أكبر من أو يساوي': '≥',
+      'أكبر من او يساوي': '≥',
+      'أكبر أو يساوي': '≥',
+      'أصغر من أو يساوى': '≤',
+      'أكبر من أو يساوى': '≥',
       'ثمانية': '8',
       'سبعة': '7',
       'ستة': '6',
