@@ -1,6 +1,11 @@
 import React from 'react';
 
 const DebugInfo = () => {
+  // Only show debug info in development mode
+  if (process.env.NODE_ENV === 'production') {
+    return null;
+  }
+
   return (
     <div style={{ 
       position: 'absolute', 
