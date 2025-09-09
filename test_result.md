@@ -409,16 +409,19 @@ backend:
         comment: "CRITICAL BUG: Section 1 content remains visible when clicking other sections. Only active section should be displayed."
 
   - task: "Class Assignment Bug - All Students Saved as GR9-A"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "backend/server.py, backend/database.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "user"
         comment: "CRITICAL BUG: Students registering with classes B, C, D are all saved as GR9-A. Class assignment logic broken."
+      - working: true
+        agent: "testing"
+        comment: "✅ CRITICAL BUG TESTING COMPLETED: Class assignment is working correctly. Tested students with classes GR9-A, GR9-B, GR9-C, GR9-D - all saved with correct class_name. Backend code analysis shows proper implementation: create_student() function accepts class_name parameter, Student model has validation pattern ^GR9-[A-D]$, no hardcoded assignments found. Teacher dashboard filtering also works correctly for all classes. The reported bug does NOT exist in the current backend implementation."
 
   - task: "Microphone Permissions and Speech Capture Bug"
     implemented: false
