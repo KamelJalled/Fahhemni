@@ -373,13 +373,24 @@ const ProblemView = () => {
     // Get next problem in sequence
     const problemOrder = ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'];
     const currentIndex = problemOrder.indexOf(problemId);
+    
     if (currentIndex < problemOrder.length - 1) {
       const nextProblemId = problemOrder[currentIndex + 1];
       // Reset state before navigating
       resetProblemState();
       navigate(`/problem/${nextProblemId}`);
     } else {
-      navigate('/dashboard');
+      // Completed last problem in section - show completion screen
+      const currentSection = problemId.includes('section1') || problemOrder.includes(problemId) ? 'section1' : 'unknown';
+      
+      // Check if this is the final section (Section 5) - for now treating section1 as demo completion
+      if (currentSection === 'section1') {
+        setCompletionType('final'); // Demo completion
+      } else {
+        setCompletionType('section'); // Regular section completion
+      }
+      
+      setShowCompletionScreen(true);
     }
   };
 
