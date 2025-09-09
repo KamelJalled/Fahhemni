@@ -996,22 +996,25 @@ const ProblemView = () => {
                     {/* Action Buttons - Mobile Optimized with Sticky Container */}
                     <div className="continue-button-container flex gap-2">
                       {!isCorrect && !isSubmitted ? (
-                        <Button 
-                          onClick={handleSubmit}
-                          className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
-                          disabled={
-                            problem.step_solutions ? 
-                              (!stepAnswers[currentStep]?.trim()) :
-                              (!stepAnswers[0]?.trim() && (!allStepsComplete || !userAnswer.trim()))
-                          }
-                        >
-                          {problem.step_solutions && currentStep < (problem.step_solutions?.length - 1) ? 
-                            (language === 'en' ? 'Check Step →' : 'تحقق من الخطوة ←') :
-                            problem.final_answer_required && allStepsComplete ?
-                            (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية') :
-                            text[language].submit
-                          }
-                        </Button>
+                        <>
+                          {/* Main Submit Button - Only show for final answer or non-step problems */}
+                          {((!problem.step_solutions) || (problem.final_answer_required && allStepsComplete)) && (
+                            <Button 
+                              onClick={handleSubmit}
+                              className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+                              disabled={
+                                problem.final_answer_required && allStepsComplete ? 
+                                  (!userAnswer?.trim()) :
+                                  (!stepAnswers[0]?.trim())
+                              }
+                            >
+                              {problem.final_answer_required && allStepsComplete ?
+                                (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية') :
+                                text[language].submit
+                              }
+                            </Button>
+                          )}
+                        </>
                       ) : (
                         <>
                           <Button 
