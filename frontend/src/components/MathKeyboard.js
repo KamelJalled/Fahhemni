@@ -281,10 +281,10 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
           </div>
         )}
 
-        {/* Actions Tab */}
+        {/* Actions Tab - Fixed Overflow */}
         {activeTab === 'actions' && (
-          <div className="space-y-3">
-            <div className="grid grid-cols-1 gap-3">
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            <div className="grid grid-cols-1 gap-2">
               {actions.map(({ id, icon: Icon, label, color }) => (
                 <Button
                   key={id}
@@ -292,12 +292,12 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
                     console.log(`🔧 Action clicked: ${id}`);
                     handleActionClick(id);
                   }}
-                  className={`h-12 text-white ${color}`}
+                  className={`h-10 text-white text-sm ${color}`}
                 >
                   {typeof Icon === 'string' ? (
-                    <span className="text-xl mr-2">{Icon}</span>
+                    <span className="text-lg mr-1">{Icon}</span>
                   ) : (
-                    <Icon className="w-5 h-5 mr-2" />
+                    <Icon className="w-4 h-4 mr-1" />
                   )}
                   {label[language]}
                 </Button>
@@ -307,13 +307,13 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
             {/* Voice Input Button */}
             <Button
               variant="outline"
-              className="w-full h-12 border-blue-300 text-blue-600 hover:bg-blue-50"
+              className="w-full h-10 border-blue-300 text-blue-600 hover:bg-blue-50 text-sm"
               onClick={() => {
                 console.log('🎤 Voice input button clicked');
                 handleActionClick('voice');
               }}
             >
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-1">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                 {text[language].voice}
               </div>
