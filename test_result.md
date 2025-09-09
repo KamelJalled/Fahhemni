@@ -771,14 +771,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Mobile Optimization Testing - All Components"
     - "Voice Input Text-to-Math Conversion Enhancement"
     - "Microphone Permissions and Speech Capture Enhancement"
     - "Math Keyboard Numeral Toggle Enhancement"
     - "Section Navigation Enhancement - Force Re-render"
   stuck_tasks: []
   test_all: false
-  test_priority: "mobile_enhancements_testing"
+  test_priority: "frontend_mobile_enhancements_testing"
 
 agent_communication:
   - agent: "main"
