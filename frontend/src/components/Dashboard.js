@@ -310,38 +310,43 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Sections Navigation */}
+      {/* Sections Navigation - Mobile Optimized */}
       <Card className="mb-6">
         <CardContent className="p-6">
           <h3 className="font-semibold mb-4">{text[language].sections}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
-            {sections.map((section) => {
-              const sectionProgress = calculateSectionProgress(section.id);
-              const isSelected = selectedSection === section.id;
-              const hasProblems = section.problems && section.problems.length > 0;
-              
-              return (
-                <Button
-                  key={section.id}
-                  variant={isSelected ? "default" : "outline"}
-                  className={`h-auto p-4 ${!hasProblems ? 'opacity-50' : ''}`}
-                  onClick={() => setSelectedSection(section.id)}
-                  disabled={!hasProblems}
-                >
-                  <div className="text-center">
-                    <div className="text-sm font-medium mb-1">
-                      {language === 'en' ? section.title_en : section.title_ar}
+          <div className="section-tabs-container">
+            <div className="flex md:grid md:grid-cols-5 gap-2">
+              {sections.map((section) => {
+                const sectionProgress = calculateSectionProgress(section.id);
+                const isSelected = selectedSection === section.id;
+                const hasProblems = section.problems && section.problems.length > 0;
+                
+                return (
+                  <Button
+                    key={section.id}
+                    variant={isSelected ? "default" : "outline"}
+                    className={`section-tab-button h-auto p-4 ${!hasProblems ? 'opacity-50' : ''} ${isSelected ? 'bg-blue-600 text-white' : ''}`}
+                    onClick={() => {
+                      console.log(`Switching to section: ${section.id}`);
+                      setSelectedSection(section.id);
+                    }}
+                    disabled={!hasProblems}
+                  >
+                    <div className="text-center">
+                      <div className="text-sm font-medium mb-1">
+                        {language === 'en' ? section.title_en : section.title_ar}
+                      </div>
+                      <div className="text-xs opacity-75">
+                        {Math.round(sectionProgress)}% {text[language].completed}
+                      </div>
+                      {isSelected && (
+                        <div className="w-full h-0.5 bg-white mt-1 rounded"></div>
+                      )}
                     </div>
-                    <div className="text-xs opacity-75">
-                      {Math.round(sectionProgress)}% {text[language].completed}
-                    </div>
-                    {isSelected && (
-                      <div className="w-full h-0.5 bg-blue-500 mt-1 rounded"></div>
-                    )}
-                  </div>
-                </Button>
-              );
-            })}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </CardContent>
       </Card>
