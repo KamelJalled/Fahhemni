@@ -850,7 +850,7 @@ const ProblemView = () => {
                               setShowVoiceInput(!showVoiceInput);
                               setShowMathKeyboard(false);
                             }}
-                            className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                            className="voice-input-button px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
                             disabled={isCompleted && !isSubmitted}
                             title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
                           >
