@@ -37,6 +37,8 @@ const ProblemView = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [showCompletionScreen, setShowCompletionScreen] = useState(false);
   const [completionType, setCompletionType] = useState('section'); // 'section' or 'final'
+  const [isChecking, setIsChecking] = useState(false);
+  const [checkingStepIndex, setCheckingStepIndex] = useState(-1);
   
   // For interactive explanation/preparation
   const [currentExample, setCurrentExample] = useState(0);
