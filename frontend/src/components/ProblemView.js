@@ -193,6 +193,57 @@ const ProblemView = () => {
     }
   };
 
+  const handleCheckStep = async (stepIndex) => {
+    const currentAnswer = stepAnswers[stepIndex].trim();
+    if (!currentAnswer) return;
+
+    try {
+      const currentStepSolution = problem.step_solutions[stepIndex];
+      const normalizedAnswer = normalizeAnswer(currentAnswer);
+      
+      // Check against all possible answers for this step
+      const possibleAnswers = language === 'en' ? 
+        currentStepSolution.possible_answers : 
+        currentStepSolution.possible_answers_ar;
+      
+      const isStepCorrect = possibleAnswers.some(possibleAnswer => 
+        normalizeAnswer(possibleAnswer) === normalizedAnswer
+      );
+      
+      if (isStepCorrect) {
+        // Step is correct
+        const newStepResults = [...stepResults];
+        newStepResults[stepIndex] = true;
+        setStepResults(newStepResults);
+        
+        if (stepIndex < problem.step_solutions.length - 1) {
+          // Move to next step
+          setCurrentStep(stepIndex + 1);
+          setShowEncouragement(`✅ ${language === 'en' ? 'Great! Now continue with the next step.' : 'رائع! الآن تابع مع الخطوة التالية.'}`);
+          setTimeout(() => setShowEncouragement(''), 2000);
+        } else {
+          // All steps complete - now require final answer if needed
+          if (problem.final_answer_required) {
+            setAllStepsComplete(true);
+            setShowEncouragement(`✅ ${language === 'en' ? 'Excellent! Now enter your final answer below.' : 'ممتاز! الآن أدخل إجابتك النهائية أدناه.'}`);
+            setTimeout(() => setShowEncouragement(''), 3000);
+          } else {
+            // Complete the problem and submit to backend
+            setAllStepsComplete(true);
+            setIsCorrect(true);
+            await submitToBackend();
+          }
+        }
+      } else {
+        // Step is incorrect
+        setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
+        setTimeout(() => setShowEncouragement(''), 3000);
+      }
+    } catch (error) {
+      console.error('Error checking step:', error);
+    }
+  };
+
   const handleSubmit = async () => {
     const currentAnswer = stepAnswers[currentStep].trim();
     if (!currentAnswer && !allStepsComplete) return;
