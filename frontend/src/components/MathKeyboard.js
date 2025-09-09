@@ -218,13 +218,14 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
               <h4 className="text-sm font-medium text-gray-700 mb-2">
                 {language === 'ar' ? 'رموز شائعة' : 'Common Symbols'}
               </h4>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-3 gap-1">
                 {commonSymbols.map(({ symbol, label }) => (
                   <SymbolButton
-                    key={symbol}
-                    symbol={symbol}
+                    key={symbol === ' ' ? 'space' : symbol}
+                    symbol={symbol === ' ' ? '⎵' : symbol}
                     label={label[language]}
-                    onClick={(symbol) => handleSymbolClick(symbol, 'symbol')}
+                    onClick={(sym) => handleSymbolClick(symbol, 'symbol')}
+                    className="min-w-0"
                   />
                 ))}
               </div>
