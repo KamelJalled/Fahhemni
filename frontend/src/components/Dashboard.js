@@ -358,9 +358,9 @@ const Dashboard = () => {
         </Card>
       )}
 
-      {/* Problems Grid */}
+      {/* Problems Grid - Fixed Section Visibility */}
       {selectedSectionData && selectedSectionData.problems && selectedSectionData.problems.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div key={selectedSection} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 transition-all duration-300">
           {selectedSectionData.problems.map((problem) => {
             const status = getProblemStatus(problem.id, selectedSection, userProgress);
             const problemProgress = userProgress[selectedSection]?.[problem.id] || { completed: false, score: 0, attempts: 0 };
