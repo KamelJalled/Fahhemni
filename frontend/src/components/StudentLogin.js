@@ -121,16 +121,51 @@ const StudentLogin = () => {
       </div>
 
       {/* Language Toggle */}
-      <Button
-        onClick={toggleLanguage}
-        variant="outline"
-        size="sm"
-        className="absolute top-4 right-4 z-10"
-      >
-        <Globe className="w-4 h-4 mr-2" />
-        {language === 'en' ? 'العربية' : 'English'}
-      </Button>
+      <div className="absolute top-4 right-4 z-10">
+        <Button onClick={toggleLanguage} variant="outline" size="sm">
+          <Globe className="w-4 h-4 mr-2" />
+          {language === 'en' ? 'العربية' : 'English'}
+        </Button>
+      </div>
 
+      {/* Welcome Screen */}
+      {showWelcome ? (
+        <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200 shadow-xl">
+          <CardHeader className="text-center pb-4">
+            <div className="flex justify-center mb-4">
+              <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-3 rounded-full">
+                <Calculator className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-blue-900 mb-2">
+              {text[language].welcome.title}
+            </CardTitle>
+            <p className="text-blue-700 font-medium">
+              {text[language].welcome.subtitle}
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center space-y-4">
+              <p className="text-gray-700 leading-relaxed">
+                {text[language].welcome.message}
+              </p>
+              
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <p className="text-yellow-800 text-sm font-medium">
+                  {text[language].welcome.note}
+                </p>
+              </div>
+              
+              <Button 
+                onClick={() => setShowWelcome(false)}
+                className="w-full h-12 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700"
+              >
+                {text[language].welcome.continue}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
       <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
