@@ -198,14 +198,14 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
               <h4 className="text-sm font-medium text-gray-700 mb-2">
                 {language === 'ar' ? 'رموز المتباينات' : 'Inequality Symbols'}
               </h4>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1">
                 {inequalitySymbols.map(({ symbol, label }) => (
                   <SymbolButton
                     key={symbol}
                     symbol={symbol}
                     label={label[language]}
                     onClick={(symbol) => handleSymbolClick(symbol, 'symbol')}
-                    className="text-blue-600"
+                    className="text-blue-600 min-w-0"
                   />
                 ))}
               </div>
