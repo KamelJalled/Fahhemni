@@ -11,6 +11,7 @@ const StudentLogin = () => {
   const [username, setUsername] = useState('');
   const [className, setClassName] = useState('GR9-A');
   const [isLoading, setIsLoading] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const { login } = useAuth();
   const { language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
