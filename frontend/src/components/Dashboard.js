@@ -335,6 +335,9 @@ const Dashboard = () => {
                     <div className="text-xs opacity-75">
                       {Math.round(sectionProgress)}% {text[language].completed}
                     </div>
+                    {isSelected && (
+                      <div className="w-full h-0.5 bg-blue-500 mt-1 rounded"></div>
+                    )}
                   </div>
                 </Button>
               );
