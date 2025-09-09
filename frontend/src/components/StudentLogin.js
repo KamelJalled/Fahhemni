@@ -130,21 +130,20 @@ const StudentLogin = () => {
 
       {/* Welcome Screen */}
       {showWelcome ? (
-        <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200 shadow-xl">
-          <CardHeader className="text-center pb-4">
-            <div className="flex justify-center mb-4">
-              <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-3 rounded-full">
-                <Calculator className="w-8 h-8 text-white" />
+        <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200 shadow-xl relative z-20">
+          <CardContent className="p-8 text-center">
+            <div className="mb-6">
+              <div className="text-6xl mb-4">
+                🎓
               </div>
+              <h1 className="text-2xl font-bold text-blue-900 mb-2">
+                {text[language].welcome.title}
+              </h1>
+              <p className="text-blue-700 font-medium">
+                {text[language].welcome.subtitle}
+              </p>
             </div>
-            <CardTitle className="text-2xl font-bold text-blue-900 mb-2">
-              {text[language].welcome.title}
-            </CardTitle>
-            <p className="text-blue-700 font-medium">
-              {text[language].welcome.subtitle}
-            </p>
-          </CardHeader>
-          <CardContent>
+            
             <div className="text-center space-y-4">
               <p className="text-gray-700 leading-relaxed">
                 {text[language].welcome.message}
@@ -157,8 +156,14 @@ const StudentLogin = () => {
               </div>
               
               <Button 
-                onClick={() => setShowWelcome(false)}
-                className="w-full h-12 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('Welcome button clicked - proceeding to login');
+                  setShowWelcome(false);
+                }}
+                className="w-full h-12 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 relative z-30"
+                type="button"
               >
                 {text[language].welcome.continue}
               </Button>
