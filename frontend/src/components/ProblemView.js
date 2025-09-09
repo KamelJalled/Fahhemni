@@ -896,10 +896,17 @@ const ProblemView = () => {
                                 <Button 
                                   onClick={() => handleCheckStep(index)}
                                   className="px-4 bg-blue-600 text-white hover:bg-blue-700"
-                                  disabled={!stepAnswers[index]?.trim()}
+                                  disabled={!stepAnswers[index]?.trim() || (isChecking && checkingStepIndex === index)}
                                   size="sm"
                                 >
-                                  {language === 'en' ? 'Check Step' : 'تحقق'}
+                                  {isChecking && checkingStepIndex === index ? (
+                                    <div className="flex items-center">
+                                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                      {text[language].completion.checking}
+                                    </div>
+                                  ) : (
+                                    language === 'en' ? 'Check Step' : 'تحقق'
+                                  )}
                                 </Button>
                               )}
                               
