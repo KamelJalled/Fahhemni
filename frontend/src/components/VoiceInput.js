@@ -286,13 +286,37 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
     return result;
   };
 
-  const startListening = () => {
+  const startListening = async () => {
     if (recognitionRef.current && !isListening) {
       try {
+        // Request microphone permission explicitly
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        
         recognitionRef.current.start();
+        
+        // Keep microphone active for minimum 5 seconds
+        setTimeout(() => {
+          if (isListening && !transcript) {
+            console.log('🎤 Minimum 5 seconds elapsed, still listening...');
+          }
+        }, 5000);
+        
       } catch (error) {
+        console.error('Microphone access error:', error);
+        let errorMessage = 'Failed to start voice recognition';
+        
+        if (error.name === 'NotAllowedError') {
+          errorMessage = language === 'ar' 
+            ? 'يرجى السماح بإذن الميكروفون في إعدادات المتصفح' 
+            : 'Please allow microphone access in browser settings';
+        } else if (error.name === 'NotFoundError') {
+          errorMessage = language === 'ar' 
+            ? 'لم يتم العثور على ميكروفون' 
+            : 'No microphone found';
+        }
+        
         if (onError) {
-          onError(language === 'ar' ? 'فشل في بدء التعرف على الصوت' : 'Failed to start voice recognition');
+          onError(errorMessage);
         }
       }
     }
