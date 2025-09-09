@@ -401,6 +401,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ POST-MOBILE VERIFICATION: Admin stats endpoint confirmed working correctly. Returns accurate counts: 5 sections, 30 problems, 10 students, database status connected. All statistics properly calculated and returned."
+      - working: true
+        agent: "testing"
+        comment: "✅ FINAL VERIFICATION: Admin stats endpoint confirmed working. Returns 6 sections and 36 problems (expanded database structure), database status connected. Statistics properly calculated and returned."
 
   - task: "Admin Clear Test Data Endpoint"
     implemented: true
