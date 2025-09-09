@@ -1381,7 +1381,7 @@ async def get_problem(problem_id: str) -> Optional[Problem]:
 
 # Teacher operations
 async def get_all_students_stats(class_filter: str = None) -> List[Dict]:
-    """Get statistics for all students, optionally filtered by class"""
+    """Get comprehensive statistics for all students with optional class filtering"""
     query = {}
     if class_filter:
         query["class_name"] = class_filter
