@@ -202,6 +202,66 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
     let result = spokenText.toLowerCase();
     const currentLang = language === 'ar' ? 'ar' : 'en';
     
+    // Enhanced Arabic mathematical vocabulary
+    const arabicMathVocab = {
+      'س زائد': 'x +',
+      'س ناقص': 'x -',
+      'س أكبر من': 'x >',
+      'س أصغر من': 'x <',
+      'س يساوي': 'x =',
+      'س أكبر من أو يساوي': 'x ≥',
+      'س أصغر من أو يساوي': 'x ≤',
+      'ثمانية': '8',
+      'سبعة': '7',
+      'ستة': '6',
+      'خمسة': '5',
+      'أربعة': '4',
+      'ثلاثة': '3',
+      'اثنان': '2',
+      'واحد': '1',
+      'صفر': '0'
+    };
+
+    // Enhanced English mathematical expressions  
+    const englishMathExpressions = {
+      'x plus': 'x +',
+      'x minus': 'x -',
+      'x greater than': 'x >',
+      'x less than': 'x <',
+      'x equals': 'x =',
+      'x greater than or equal': 'x ≥',
+      'x less than or equal': 'x ≤',
+      'x plus eight': 'x + 8',
+      'x plus seven': 'x + 7',
+      'x plus six': 'x + 6',
+      'x plus five': 'x + 5',
+      'x plus four': 'x + 4',
+      'x plus three': 'x + 3',
+      'x plus two': 'x + 2',
+      'x plus one': 'x + 1',
+      'x minus eight': 'x - 8',
+      'x minus seven': 'x - 7',
+      'x minus six': 'x - 6',
+      'x minus five': 'x - 5',
+      'x minus four': 'x - 4',
+      'x minus three': 'x - 3',
+      'x minus two': 'x - 2',
+      'x minus one': 'x - 1'
+    };
+
+    // Apply language-specific expressions first
+    if (currentLang === 'ar') {
+      Object.entries(arabicMathVocab).forEach(([phrase, symbol]) => {
+        const regex = new RegExp(phrase, 'gi');
+        result = result.replace(regex, symbol);
+      });
+    } else {
+      Object.entries(englishMathExpressions).forEach(([phrase, symbol]) => {
+        const regex = new RegExp(phrase, 'gi');
+        result = result.replace(regex, symbol);
+      });
+    }
+    
     // Convert number words to digits
     Object.entries(numberWords[currentLang]).forEach(([word, digit]) => {
       const regex = new RegExp(`\\b${word}\\b`, 'gi');
@@ -214,7 +274,8 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
       result = result.replace(regex, symbol);
     });
     
-    // Clean up spacing
+    // Clean up extra spaces around operators
+    result = result.replace(/\s*([+\-=<>≤≥])\s*/g, ' $1 ');
     result = result.replace(/\s+/g, ' ').trim();
     
     return result;
