@@ -27,6 +27,13 @@ const StudentLogin = () => {
     en: {
       title: "Math Inequalities Tutor",
       subtitle: "Master Grade 9 Inequalities with Interactive Learning",
+      welcome: {
+        title: "Welcome to Fahhemni!",
+        subtitle: "Interactive Math Learning Platform",
+        message: "This is a guided demo showcasing our innovative teaching method. Follow the instructions and use the provided buttons throughout your learning journey. Your feedback helps us improve the learning experience for all students!",
+        continue: "Continue to Login",
+        note: "Demo Version - For Educational Testing"
+      },
       username: "Enter your username",
       class: "Select your class",
       placeholder: "Your username...",
@@ -42,6 +49,13 @@ const StudentLogin = () => {
     ar: {
       title: "مدرس المتباينات الرياضية",
       subtitle: "أتقن متباينات الصف التاسع مع التعلم التفاعلي",
+      welcome: {
+        title: "مرحباً بك في فهّمني!",
+        subtitle: "منصة التعلم الرياضي التفاعلي",
+        message: "هذا عرض توضيحي موجه يُظهر طريقة التدريس المبتكرة لدينا. اتبع التعليمات واستخدم الأزرار المتوفرة خلال رحلة التعلم. ملاحظاتك تساعدنا في تحسين تجربة التعلم لجميع الطلاب!",
+        continue: "المتابعة إلى تسجيل الدخول",
+        note: "نسخة تجريبية - للاختبار التعليمي"
+      },
       username: "أدخل اسم المستخدم",
       class: "اختر صفك",
       placeholder: "اسم المستخدم...",
