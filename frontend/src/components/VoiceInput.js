@@ -289,30 +289,84 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
   const startListening = async () => {
     if (recognitionRef.current && !isListening) {
       try {
-        // Request microphone permission explicitly
-        await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Request microphone permission explicitly with enhanced error handling
+        console.log('🎤 Requesting microphone permission...');
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+        
+        // Start with audio stream active
+        console.log('🎤 Microphone permission granted, starting recognition...');
+        
+        // Ensure recognition is properly configured
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.maxAlternatives = 1;
+        
+        // Set minimum recognition time to prevent immediate shutoff
+        let recognitionStarted = false;
+        let minTimeElapsed = false;
+        
+        const startTimeout = setTimeout(() => {
+          minTimeElapsed = true;
+          console.log('🎤 Minimum recognition time elapsed (3 seconds)');
+        }, 3000);
+        
+        recognitionRef.current.onstart = () => {
+          recognitionStarted = true;
+          setIsListening(true);
+          setTranscript('');
+          console.log('🎤 Voice recognition started successfully');
+        };
+        
+        recognitionRef.current.onend = () => {
+          clearTimeout(startTimeout);
+          if (recognitionStarted && !minTimeElapsed) {
+            console.log('🎤 Recognition ended too early, restarting...');
+            // Restart if ended before minimum time
+            setTimeout(() => {
+              if (!isListening) {
+                try {
+                  recognitionRef.current.start();
+                } catch (e) {
+                  console.log('🎤 Could not restart recognition:', e);
+                  setIsListening(false);
+                  setIsProcessing(false);
+                }
+              }
+            }, 100);
+          } else {
+            console.log('🎤 Voice recognition ended normally');
+            setIsListening(false);
+            setIsProcessing(false);
+          }
+        };
         
         recognitionRef.current.start();
         
-        // Keep microphone active for minimum 5 seconds
-        setTimeout(() => {
-          if (isListening && !transcript) {
-            console.log('🎤 Minimum 5 seconds elapsed, still listening...');
-          }
-        }, 5000);
+        // Clean up the stream after starting recognition
+        stream.getTracks().forEach(track => track.stop());
         
       } catch (error) {
-        console.error('Microphone access error:', error);
+        console.error('🎤 Microphone access error:', error);
         let errorMessage = 'Failed to start voice recognition';
         
         if (error.name === 'NotAllowedError') {
           errorMessage = language === 'ar' 
-            ? 'يرجى السماح بإذن الميكروفون في إعدادات المتصفح' 
-            : 'Please allow microphone access in browser settings';
+            ? 'يرجى السماح بإذن الميكروفون في إعدادات المتصفح. قد تحتاج إلى إعادة تحميل الصفحة بعد السماح بالإذن.' 
+            : 'Please allow microphone access in browser settings. You may need to reload the page after granting permission.';
         } else if (error.name === 'NotFoundError') {
           errorMessage = language === 'ar' 
-            ? 'لم يتم العثور على ميكروفون' 
-            : 'No microphone found';
+            ? 'لم يتم العثور على ميكروفون - تأكد من توصيل ميكروفون' 
+            : 'No microphone found - please ensure a microphone is connected';
+        } else if (error.name === 'NotReadableError') {
+          errorMessage = language === 'ar' 
+            ? 'الميكروفون قيد الاستخدام في تطبيق آخر' 
+            : 'Microphone is being used by another application';
         }
         
         if (onError) {
