@@ -111,7 +111,7 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
   );
 
   return (
-    <Card className="w-full max-w-md mx-auto border-blue-200">
+    <Card className="math-keyboard-container w-full max-w-md mx-auto border-blue-200">
       <CardHeader className="pb-3">
         <CardTitle className="text-center text-blue-900 flex items-center justify-center gap-2">
           <Calculator className="w-5 h-5" />
@@ -155,12 +155,15 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
         {/* Numbers Tab */}
         {activeTab === 'numbers' && (
           <div className="space-y-3">
-            {/* Number System Toggle */}
+            {/* Number System Toggle - Fixed functionality */}
             <div className="flex gap-2 mb-3">
               <Button
                 variant={numberSystem === 'western' ? "default" : "outline"}
                 size="sm"
-                onClick={() => setNumberSystem('western')}
+                onClick={() => {
+                  console.log('🔢 Switching to Western numerals');
+                  setNumberSystem('western');
+                }}
                 className="flex-1 text-xs"
               >
                 <Languages className="w-3 h-3 mr-1" />
@@ -169,7 +172,10 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
               <Button
                 variant={numberSystem === 'eastern' ? "default" : "outline"}
                 size="sm"
-                onClick={() => setNumberSystem('eastern')}
+                onClick={() => {
+                  console.log('🔢 Switching to Eastern numerals');
+                  setNumberSystem('eastern');
+                }}
                 className="flex-1 text-xs"
               >
                 <Languages className="w-3 h-3 mr-1" />
@@ -177,22 +183,32 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
               </Button>
             </div>
 
-            {/* Number Grid */}
-            <div className="grid grid-cols-5 gap-1">
+            {/* Number Grid - Mobile optimized spacing */}
+            <div className="grid grid-cols-5 gap-2">
               {(numberSystem === 'western' ? westernNumbers : easternNumbers).map((number) => (
                 <SymbolButton
                   key={number}
                   symbol={number}
-                  label={number}
-                  onClick={(symbol) => handleSymbolClick(symbol, 'number')}
-                  className="text-center min-w-0"
+                  label={`${text[language].numbers} ${number}`}
+                  onClick={(symbol) => {
+                    console.log(`🔢 Number clicked: ${symbol} (${numberSystem})`);
+                    handleSymbolClick(symbol, 'number');
+                  }}
+                  className="text-center min-w-0 h-12 text-lg"
                 />
               ))}
+            </div>
+            
+            {/* Debug info for number system */}
+            <div className="text-xs text-gray-500 text-center">
+              {language === 'ar' 
+                ? `النظام الحالي: ${numberSystem === 'western' ? 'غربية' : 'شرقية'}` 
+                : `Current: ${numberSystem === 'western' ? 'Western' : 'Eastern'}`}
             </div>
           </div>
         )}
 
-        {/* Symbols Tab */}
+        {/* Symbols Tab - Mobile optimized */}
         {activeTab === 'symbols' && (
           <div className="space-y-4">
             {/* Inequality Symbols */}
@@ -200,14 +216,17 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
               <h4 className="text-sm font-medium text-gray-700 mb-2">
                 {language === 'ar' ? 'رموز المتباينات' : 'Inequality Symbols'}
               </h4>
-              <div className="grid grid-cols-3 gap-1">
+              <div className="grid grid-cols-3 gap-2">
                 {inequalitySymbols.map(({ symbol, label }) => (
                   <SymbolButton
                     key={symbol}
                     symbol={symbol}
                     label={label[language]}
-                    onClick={(symbol) => handleSymbolClick(symbol, 'symbol')}
-                    className="text-blue-600 min-w-0"
+                    onClick={(symbol) => {
+                      console.log(`🔣 Inequality symbol clicked: ${symbol}`);
+                      handleSymbolClick(symbol, 'symbol');
+                    }}
+                    className="text-blue-600 min-w-0 h-12"
                   />
                 ))}
               </div>
@@ -218,14 +237,17 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
               <h4 className="text-sm font-medium text-gray-700 mb-2">
                 {language === 'ar' ? 'رموز شائعة' : 'Common Symbols'}
               </h4>
-              <div className="grid grid-cols-3 gap-1">
+              <div className="grid grid-cols-3 gap-2">
                 {commonSymbols.map(({ symbol, label }) => (
                   <SymbolButton
                     key={symbol === ' ' ? 'space' : symbol}
                     symbol={symbol === ' ' ? '⎵' : symbol}
                     label={label[language]}
-                    onClick={(sym) => handleSymbolClick(symbol, 'symbol')}
-                    className="min-w-0"
+                    onClick={(sym) => {
+                      console.log(`🔣 Common symbol clicked: ${symbol}`);
+                      handleSymbolClick(symbol, 'symbol');
+                    }}
+                    className="min-w-0 h-12"
                   />
                 ))}
               </div>
@@ -233,16 +255,19 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
           </div>
         )}
 
-        {/* Operations Tab */}
+        {/* Operations Tab - Mobile optimized */}
         {activeTab === 'operations' && (
           <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {operations.map(({ symbol, label }) => (
                 <SymbolButton
                   key={symbol}
                   symbol={symbol}
                   label={label[language]}
-                  onClick={(symbol) => handleSymbolClick(symbol, 'operator')}
+                  onClick={(symbol) => {
+                    console.log(`🔣 Operation clicked: ${symbol}`);
+                    handleSymbolClick(symbol, 'operator');
+                  }}
                   className="text-green-600 h-16 text-xl"
                 />
               ))}
@@ -253,11 +278,14 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
         {/* Actions Tab */}
         {activeTab === 'actions' && (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-3">
               {actions.map(({ id, icon: Icon, label, color }) => (
                 <Button
                   key={id}
-                  onClick={() => handleActionClick(id)}
+                  onClick={() => {
+                    console.log(`🔧 Action clicked: ${id}`);
+                    handleActionClick(id);
+                  }}
                   className={`h-12 text-white ${color}`}
                 >
                   {typeof Icon === 'string' ? (
@@ -274,7 +302,10 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
             <Button
               variant="outline"
               className="w-full h-12 border-blue-300 text-blue-600 hover:bg-blue-50"
-              onClick={() => handleActionClick('voice')}
+              onClick={() => {
+                console.log('🎤 Voice input button clicked');
+                handleActionClick('voice');
+              }}
             >
               <div className="flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
