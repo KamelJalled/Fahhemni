@@ -282,12 +282,16 @@ const ProblemView = () => {
   };
 
   const handleSubmit = async () => {
-    const currentAnswer = stepAnswers[currentStep].trim();
-    if (!currentAnswer && !allStepsComplete) return;
-
+    // Add loading delay for better UX
+    setIsChecking(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
     try {
       // For step-by-step problems, validate current step
       if (problem.step_solutions && !allStepsComplete) {
+        const currentAnswer = stepAnswers[currentStep].trim();
+        if (!currentAnswer) return;
+        
         const currentStepSolution = problem.step_solutions[currentStep];
         const normalizedAnswer = normalizeAnswer(currentAnswer);
         
@@ -301,33 +305,28 @@ const ProblemView = () => {
         );
         
         if (isStepCorrect) {
-          // Step is correct
+          // Step is correct - move to next step or complete
           const newStepResults = [...stepResults];
           newStepResults[currentStep] = true;
           setStepResults(newStepResults);
           
           if (currentStep < problem.step_solutions.length - 1) {
-            // Move to next step
             setCurrentStep(currentStep + 1);
             setShowEncouragement(`✅ ${language === 'en' ? 'Great! Now continue with the next step.' : 'رائع! الآن تابع مع الخطوة التالية.'}`);
             setTimeout(() => setShowEncouragement(''), 2000);
+          } else if (problem.final_answer_required) {
+            setAllStepsComplete(true);
+            setShowEncouragement(`✅ ${language === 'en' ? 'Excellent! Now enter your final answer below.' : 'ممتاز! الآن أدخل إجابتك النهائية أدناه.'}`);
+            setTimeout(() => setShowEncouragement(''), 3000);
           } else {
-            // All steps complete - now require final answer if needed
-            if (problem.final_answer_required) {
-              setAllStepsComplete(true);
-              setShowEncouragement(`✅ ${language === 'en' ? 'Excellent! Now enter your final answer below.' : 'ممتاز! الآن أدخل إجابتك النهائية أدناه.'}`);
-              setTimeout(() => setShowEncouragement(''), 3000);
-            } else {
-              // Complete the problem
-              setAllStepsComplete(true);
-              setIsCorrect(true);
-              await submitToBackend();
-            }
+            setAllStepsComplete(true);
+            setIsCorrect(true);
+            await submitToBackend();
           }
         } else {
-          // Step is incorrect
+          setIsCorrect(false);
           setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
-          setTimeout(() => setShowEncouragement(''), 3000);
+          setTimeout(() => setShowEncouragement(''), 7000);
         }
       } else if (problem.final_answer_required && allStepsComplete) {
         // Check final answer with enhanced logging
@@ -349,11 +348,29 @@ const ProblemView = () => {
           setTimeout(() => setShowEncouragement(''), 7000); // FIXED: Extended to 7 seconds
         }
       } else {
-        // Single answer submission (for non-step problems)
-        await submitToBackend();
+        // FIXED: Single answer problems (like preparation stage)
+        const userSubmittedAnswer = stepAnswers[0] || userAnswer;
+        const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
+        const normalizedCorrectAnswer = normalizeAnswer(problem.answer);
+        
+        console.log(`🔍 Single answer validation:
+          User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
+          Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
+          Match: ${normalizedUserAnswer === normalizedCorrectAnswer}`);
+          
+        if (normalizedUserAnswer === normalizedCorrectAnswer) {
+          setIsCorrect(true);
+          await submitToBackend();
+        } else {
+          setIsCorrect(false);
+          setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
+          setTimeout(() => setShowEncouragement(''), 7000);
+        }
       }
     } catch (error) {
       console.error('Error submitting answer:', error);
+    } finally {
+      setIsChecking(false);
     }
   };
 
