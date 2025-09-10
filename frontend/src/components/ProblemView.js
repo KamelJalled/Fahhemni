@@ -1199,7 +1199,7 @@ const ProblemView = () => {
                       {!isCorrect && !isSubmitted ? (
                         <>
                           {/* Main Submit Button - FIXED: Show for preparation stage and final answers */}
-                          {((!problem.step_solutions || problem.step_solutions.length === 0) || (problem.final_answer_required && allStepsComplete)) && (
+                          {(problem.type === 'preparation' || (!problem.step_solutions || problem.step_solutions.length === 0) || (problem.final_answer_required && allStepsComplete)) && (
                             <Button 
                               onClick={handleSubmit}
                               className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
