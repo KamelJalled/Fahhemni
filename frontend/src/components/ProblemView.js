@@ -348,6 +348,11 @@ const ProblemView = () => {
   };
 
   const submitToBackend = async () => {
+    // Get the user's actual answer
+    const userSubmittedAnswer = problem.step_solutions ? 
+      (stepAnswers[problem.step_solutions.length - 1] || userAnswer) : 
+      (stepAnswers[0] || userAnswer);
+      
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_URL}/api/students/${user.username}/attempt`,
       {
@@ -357,7 +362,7 @@ const ProblemView = () => {
         },
         body: JSON.stringify({
           problem_id: problemId,
-          answer: problem.answer,
+          answer: userSubmittedAnswer, // FIXED: Send user's answer, not correct answer
           hints_used: hintsUsed
         }),
       }
