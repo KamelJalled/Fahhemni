@@ -360,6 +360,18 @@ const ProblemView = () => {
           
         if (normalizedUserAnswer === normalizedCorrectAnswer) {
           setIsCorrect(true);
+          
+          // FIXED: Special handling for preparation stage completion
+          if (problem.type === 'preparation' || problem.id?.includes('prep')) {
+            const sectionName = problem.section_title || 'inequality';
+            const completionMessage = language === 'en' 
+              ? `🎉 Great! Let's learn how to solve ${sectionName} problems step by step.`
+              : `🎉 رائع! دعنا نتعلم كيفية حل مسائل ${sectionName} خطوة بخطوة.`;
+            
+            setShowEncouragement(completionMessage);
+            setTimeout(() => setShowEncouragement(''), 5000);
+          }
+          
           await submitToBackend();
         } else {
           setIsCorrect(false);
