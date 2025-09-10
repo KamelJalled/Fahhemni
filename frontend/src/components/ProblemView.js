@@ -398,15 +398,15 @@ const ProblemView = () => {
         if (normalizedUserAnswer === normalizedCorrectAnswer) {
           setIsCorrect(true);
           
-          // FIXED: Special handling for preparation stage completion
+          // FIXED: Special handling for preparation stage completion with learning invitation
           if (problem.type === 'preparation' || problem.id?.includes('prep')) {
-            const sectionName = problem.section_title || 'inequality';
-            const completionMessage = language === 'en' 
-              ? `🎉 Great! Let's learn how to solve ${sectionName} problems step by step.`
-              : `🎉 رائع! دعنا نتعلم كيفية حل مسائل ${sectionName} خطوة بخطوة.`;
+            const sectionName = problem.section_title || 'One-Step Inequalities';
+            const invitationMessage = language === 'en' 
+              ? `🎉 Excellent work! You solved this correctly. Now let's learn how to solve ${sectionName} step by step. Click "Continue to Next Stage" to start the guided learning process.`
+              : `🎉 عمل ممتاز! لقد حللت هذه المسألة بشكل صحيح. الآن دعنا نتعلم كيفية حل ${sectionName} خطوة بخطوة. انقر على "انتقل للمرحلة التالية" لبدء عملية التعلم الموجه.`;
             
-            setShowEncouragement(completionMessage);
-            setTimeout(() => setShowEncouragement(''), 5000);
+            setShowEncouragement(invitationMessage);
+            setTimeout(() => setShowEncouragement(''), 8000); // Extended time for longer message
           }
           
           await submitToBackend();
