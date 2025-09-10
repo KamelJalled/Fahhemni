@@ -1159,7 +1159,8 @@ const ProblemView = () => {
                             />
                           </div>
                         )}
-                        </div>
+                      </>
+                    ) : (
                       // Single answer input for non-step problems
                       <div>
                         <label className="block text-sm font-medium mb-2">
