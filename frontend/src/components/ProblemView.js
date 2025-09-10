@@ -903,9 +903,8 @@ const ProblemView = () => {
             </Card>
 
             {/* Answer Input - FIXED: Show for ALL stages with keyboard support */}
-            {(
-              <Card>
-                <CardContent className="p-6">
+            <Card>
+              <CardContent className="p-6">
                   <div className="space-y-4">
                     {/* Step-by-step inputs for practice problems */}
                     {problem.step_solutions ? (
