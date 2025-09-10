@@ -427,8 +427,8 @@ const VoiceInput = ({ onResult, onError, disabled = false }) => {
         
         const startTimeout = setTimeout(() => {
           minTimeElapsed = true;
-          console.log('🎤 Minimum recognition time elapsed (10 seconds)');
-        }, 10000);
+          console.log('🎤 Minimum recognition time elapsed (15 seconds)');
+        }, 15000); // FIXED: Increased to 15 seconds
         
         // Enhanced event handlers for mobile
         recognitionRef.current.onstart = () => {
