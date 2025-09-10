@@ -330,17 +330,23 @@ const ProblemView = () => {
           setTimeout(() => setShowEncouragement(''), 3000);
         }
       } else if (problem.final_answer_required && allStepsComplete) {
-        // Submit final answer
+        // Check final answer with enhanced logging
         const finalAnswer = stepAnswers[problem.step_solutions?.length || 0] || userAnswer;
         const normalizedFinalAnswer = normalizeAnswer(finalAnswer);
         const normalizedCorrectAnswer = normalizeAnswer(problem.answer);
+        
+        console.log(`🔍 Final answer validation:
+          User answer: "${finalAnswer}" → "${normalizedFinalAnswer}"
+          Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
+          Match: ${normalizedFinalAnswer === normalizedCorrectAnswer}`);
         
         if (normalizedFinalAnswer === normalizedCorrectAnswer) {
           setIsCorrect(true);
           await submitToBackend();
         } else {
+          setIsCorrect(false);
           setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
-          setTimeout(() => setShowEncouragement(''), 3000);
+          setTimeout(() => setShowEncouragement(''), 7000); // FIXED: Extended to 7 seconds
         }
       } else {
         // Single answer submission (for non-step problems)
