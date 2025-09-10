@@ -1185,7 +1185,6 @@ const ProblemView = () => {
                   </div>
                 </CardContent>
               </Card>
-            )}
           </div>
 
           {/* Right Column - Hints (Hidden by Default) */}
