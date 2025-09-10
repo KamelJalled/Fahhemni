@@ -234,10 +234,26 @@ const ProblemView = () => {
       const currentStepSolution = problem.step_solutions[stepIndex];
       const normalizedAnswer = normalizeAnswer(currentAnswer);
       
-      // Check against all possible answers for this step
+      // Enhanced step validation - prevent skipping steps with final answers
       const possibleAnswers = language === 'en' ? 
         currentStepSolution.possible_answers : 
         currentStepSolution.possible_answers_ar;
+      
+      // Check if user entered a final answer instead of step work
+      const userEnteredFinalAnswer = normalizedAnswer.includes('<') || normalizedAnswer.includes('>') || 
+                                   normalizedAnswer.includes('≤') || normalizedAnswer.includes('≥');
+      const stepRequiresWork = currentStepSolution.step_type !== 'final_answer';
+      
+      if (userEnteredFinalAnswer && stepRequiresWork && stepIndex < problem.step_solutions.length - 1) {
+        // User entered final answer in intermediate step - reject it
+        const stepHint = language === 'en' 
+          ? `This step requires showing your work step by step. Don't skip to the final answer. Show: ${currentStepSolution.hint_en || 'your work for this step'}`
+          : `هذه الخطوة تتطلب إظهار عملك خطوة بخطوة. لا تقفز إلى الإجابة النهائية. أظهر: ${currentStepSolution.hint_ar || 'عملك لهذه الخطوة'}`;
+        
+        setShowEncouragement(stepHint);
+        setTimeout(() => setShowEncouragement(''), 7000);
+        return;
+      }
       
       const isStepCorrect = possibleAnswers.some(possibleAnswer => 
         normalizeAnswer(possibleAnswer) === normalizedAnswer
