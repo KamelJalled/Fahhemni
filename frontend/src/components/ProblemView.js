@@ -1205,9 +1205,11 @@ const ProblemView = () => {
                               className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
                               disabled={
                                 isChecking || (
-                                  problem.final_answer_required && allStepsComplete ? 
-                                    (!userAnswer?.trim()) :
-                                    (!stepAnswers[0]?.trim())
+                                  problem.type === 'preparation' ? 
+                                    (!userAnswer?.trim() && !stepAnswers[0]?.trim()) :
+                                    problem.final_answer_required && allStepsComplete ? 
+                                      (!userAnswer?.trim()) :
+                                      (!stepAnswers[0]?.trim())
                                 )
                               }
                             >
