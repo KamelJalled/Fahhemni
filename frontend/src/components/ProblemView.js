@@ -992,8 +992,6 @@ const ProblemView = () => {
                         </h4>
                         
                         {problem.step_solutions.map((step, index) => (
-                        
-                        {problem.step_solutions.map((step, index) => (
                           <div key={index} className={`border rounded-lg p-4 ${
                             index <= currentStep ? 'bg-white' : 'bg-gray-50 opacity-50'
                           }`}>
