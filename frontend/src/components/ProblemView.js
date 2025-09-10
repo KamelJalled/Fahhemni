@@ -47,8 +47,10 @@ const ProblemView = () => {
   const [practiceComplete, setPracticeComplete] = useState([]);
   const [hintsUsed, setHintsUsed] = useState(0);
 
-  // Helper function to normalize answer
+  // FIXED: Enhanced answer normalization with proper validation
   const normalizeAnswer = (answer) => {
+    if (!answer) return '';
+    
     // Convert Arabic numerals to Western and س to x
     const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
     let normalized = answer.toLowerCase()
@@ -56,19 +58,20 @@ const ProblemView = () => {
       .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
       .trim();
     
-    // Normalize operators
+    // Normalize operators and spaces more carefully
     normalized = normalized
       .replace(/÷/g, '/') // Convert ÷ to /
       .replace(/×/g, '*') // Convert × to *
-      .replace(/\s+/g, ' ') // Normalize spaces
-      .replace(/\s*([<>=≤≥+\-*/])\s*/g, '$1'); // Remove spaces around operators
+      .replace(/\s+/g, ' ') // Normalize multiple spaces to single
+      .replace(/\s*([+\-*/=])\s*/g, '$1') // Remove spaces around basic operators
+      .replace(/\s*([<>])\s*/g, '$1') // Remove spaces around inequality signs
+      .replace(/\s*([≤≥])\s*/g, '$1') // Remove spaces around unicode inequalities
+      .replace(/\s*([<>]=?)\s*/g, '$1'); // Handle <= >= combinations
     
     // ENHANCEMENT: For preparation stage, accept both "x = 7" and "7" formats
-    // If the expected answer contains "x =" but user input doesn't, try adding it
     if (problem && (problem.type === 'preparation' || problem.id?.includes('prep'))) {
-      // If input is just a number/value and expected answer has "x =", add "x ="
-      if (/^-?\d+(\.\d+)?$/.test(normalized) || /^-?\d+(\.\d+)?[<>=≤≥]/.test(normalized)) {
-        // Input is just a number or number with inequality
+      // If input is just a number and expected answer has "x =", add "x ="
+      if (/^-?\d+(\.\d+)?$/.test(normalized)) {
         const expectedNormalized = normalizeAnswer(problem.answer || '');
         if (expectedNormalized.includes('x=') && !normalized.includes('x')) {
           normalized = 'x=' + normalized;
@@ -76,6 +79,7 @@ const ProblemView = () => {
       }
     }
     
+    console.log(`🔍 Answer normalization: "${answer}" → "${normalized}"`);
     return normalized;
   };
 
