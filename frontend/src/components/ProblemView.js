@@ -902,8 +902,8 @@ const ProblemView = () => {
               </CardContent>
             </Card>
 
-            {/* Answer Input - Show for all problems except pure display problems */}
-            {(!problem.show_full_solution || problem.type === 'explanation') && (
+            {/* Answer Input - FIXED: Show for ALL stages with keyboard support */}
+            {(
               <Card>
                 <CardContent className="p-6">
                   <div className="space-y-4">
