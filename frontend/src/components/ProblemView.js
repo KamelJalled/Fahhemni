@@ -984,10 +984,62 @@ const ProblemView = () => {
             <Card>
               <CardContent className="p-6">
                   <div className="space-y-4">
-                    {/* Step-by-step inputs for practice problems */}
-                    {problem.step_solutions ? (
+                    {/* FIXED: Force single answer mode for preparation stage */}
+                    {problem.type === 'preparation' || (!problem.step_solutions || problem.step_solutions.length === 0) ? (
+                      /* Single Answer Input for Preparation and Simple Problems */
+                      <div>
+                        <h4 className="font-semibold mb-4 text-emerald-800">
+                          {language === 'en' ? 'Your Answer:' : 'إجابتك:'}
+                        </h4>
+                        <div className="flex gap-2 mb-4">
+                          <Input
+                            value={userAnswer || stepAnswers[0] || ''}
+                            onChange={(e) => {
+                              if (problem.type === 'preparation') {
+                                setUserAnswer(e.target.value);
+                              } else {
+                                handleStepAnswerChange(0, e.target.value);
+                              }
+                            }}
+                            onFocus={() => setActiveInputIndex(0)}
+                            placeholder={language === 'en' ? 
+                              'Enter your answer...' : 
+                              'أدخل إجابتك...'
+                            }
+                            className="flex-1 text-lg h-12"
+                          />
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setActiveInputIndex(0);
+                              setShowVoiceInput(!showVoiceInput);
+                              setShowMathKeyboard(false);
+                            }}
+                            className="voice-input-button px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                            title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
+                          >
+                            <Mic className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setActiveInputIndex(0);
+                              setShowMathKeyboard(!showMathKeyboard);
+                              setShowVoiceInput(false);
+                            }}
+                            className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                            title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                          >
+                            <Keyboard className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Step-by-Step Input for Complex Problems */
                       <>
-                        <h4 className="font-semibold text-lg mb-4">
+                        <h4 className="font-semibold mb-4 text-emerald-800">
                           {language === 'en' ? 'Solve Step by Step:' : 'حل خطوة بخطوة:'}
                         </h4>
                         
