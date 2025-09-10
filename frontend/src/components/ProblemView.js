@@ -401,8 +401,21 @@ const ProblemView = () => {
           await submitToBackend();
         } else {
           setIsCorrect(false);
-          setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
-          setTimeout(() => setShowEncouragement(''), 7000);
+          
+          // Enhanced error feedback with hints after multiple attempts
+          setAttempts(prev => prev + 1);
+          
+          let errorMessage;
+          if (attempts >= 1) {
+            errorMessage = language === 'en' 
+              ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the Explanation stage for help!`
+              : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع مرحلة الشرح للمساعدة!`;
+          } else {
+            errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
+          }
+          
+          setShowEncouragement(errorMessage);
+          setTimeout(() => setShowEncouragement(''), 7000); // Extended to 7 seconds
         }
       }
     } catch (error) {
