@@ -1175,21 +1175,29 @@ const ProblemView = () => {
                     <div className="continue-button-container flex gap-2">
                       {!isCorrect && !isSubmitted ? (
                         <>
-                          {/* Main Submit Button - Only show for final answer or non-step problems */}
-                          {((!problem.step_solutions) || (problem.final_answer_required && allStepsComplete)) && (
+                          {/* Main Submit Button - FIXED: Show for preparation stage and final answers */}
+                          {((!problem.step_solutions || problem.step_solutions.length === 0) || (problem.final_answer_required && allStepsComplete)) && (
                             <Button 
                               onClick={handleSubmit}
                               className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
                               disabled={
-                                problem.final_answer_required && allStepsComplete ? 
-                                  (!userAnswer?.trim()) :
-                                  (!stepAnswers[0]?.trim())
+                                isChecking || (
+                                  problem.final_answer_required && allStepsComplete ? 
+                                    (!userAnswer?.trim()) :
+                                    (!stepAnswers[0]?.trim())
+                                )
                               }
                             >
-                              {problem.final_answer_required && allStepsComplete ?
-                                (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية') :
-                                text[language].submit
-                              }
+                              {isChecking ? (
+                                <div className="flex items-center">
+                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                  {text[language].completion.checking}
+                                </div>
+                              ) : (
+                                problem.final_answer_required && allStepsComplete ?
+                                  (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية') :
+                                  (language === 'en' ? 'Submit Answer' : 'إرسال الإجابة')
+                              )}
                             </Button>
                           )}
                         </>
