@@ -69,6 +69,169 @@ class MathTutoringAPITester:
             self.log_test("Health Check", False, f"Connection error: {str(e)}")
             return False
 
+    def test_infinite_recursion_bug_fix_critical(self):
+        """CRITICAL TEST: Verify infinite recursion bug fix in answer validation"""
+        try:
+            print("\n🔍 CRITICAL BUG TEST: Infinite Recursion Fix in Answer Validation")
+            print("Testing answer validation system after fixing the infinite recursion bug...")
+            
+            # Step 1: Create test student as specified in review request
+            test_student = {"username": "validation_test_student", "class_name": "GR9-A"}
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Student Registration for Validation Test", False, 
+                            f"Failed to create test student: HTTP {response.status_code}")
+                return False
+            
+            data = response.json()
+            if data.get("class_name") != "GR9-A":
+                self.log_test("Student Registration for Validation Test", False, 
+                            f"Expected class GR9-A, got {data.get('class_name')}")
+                return False
+            
+            self.log_test("Student Registration for Validation Test", True, 
+                        f"✅ Created test student 'validation_test_student' in class GR9-A")
+            
+            # Step 2: Test answer submission for prep1 (problem: x + 8 = 15)
+            # This is the critical test - these submissions should NOT cause stack overflow
+            test_cases = [
+                {
+                    "answer": "7",
+                    "expected_correct": True,
+                    "description": "Submit answer '7' for prep1 - should be CORRECT"
+                },
+                {
+                    "answer": "x=7", 
+                    "expected_correct": True,
+                    "description": "Submit answer 'x=7' for prep1 - should also be CORRECT"
+                },
+                {
+                    "answer": "5",
+                    "expected_correct": False,
+                    "description": "Submit answer '5' for prep1 - should be WRONG"
+                }
+            ]
+            
+            all_validation_success = True
+            
+            for i, test_case in enumerate(test_cases, 1):
+                print(f"\n   Test Case {i}: {test_case['description']}")
+                
+                attempt_data = {
+                    "problem_id": "prep1",
+                    "answer": test_case["answer"],
+                    "hints_used": 0
+                }
+                
+                try:
+                    response = self.session.post(
+                        f"{self.base_url}/students/validation_test_student/attempt",
+                        json=attempt_data,
+                        headers={"Content-Type": "application/json"},
+                        timeout=10  # Set timeout to catch infinite recursion
+                    )
+                    
+                    if response.status_code == 200:
+                        data = response.json()
+                        
+                        # Check required fields are present
+                        required_fields = ["score", "correct", "attempts"]
+                        missing_fields = [f for f in required_fields if f not in data]
+                        
+                        if missing_fields:
+                            self.log_test(f"Answer Validation Test Case {i}", False, 
+                                        f"Missing required fields: {missing_fields}")
+                            all_validation_success = False
+                            continue
+                        
+                        # Verify correctness
+                        actual_correct = data.get("correct")
+                        expected_correct = test_case["expected_correct"]
+                        
+                        if actual_correct == expected_correct:
+                            self.log_test(f"Answer Validation Test Case {i}", True, 
+                                        f"✅ Answer '{test_case['answer']}' correctly evaluated as {actual_correct}, score: {data.get('score')}")
+                        else:
+                            self.log_test(f"Answer Validation Test Case {i}", False, 
+                                        f"❌ Answer '{test_case['answer']}' expected {expected_correct}, got {actual_correct}")
+                            all_validation_success = False
+                        
+                        # Check for feedback field (mentioned in success criteria)
+                        if "feedback" not in data:
+                            print(f"   Note: 'feedback' field not present in response (may be optional)")
+                        
+                    else:
+                        self.log_test(f"Answer Validation Test Case {i}", False, 
+                                    f"HTTP {response.status_code}: {response.text}")
+                        all_validation_success = False
+                        
+                except requests.exceptions.Timeout:
+                    self.log_test(f"Answer Validation Test Case {i}", False, 
+                                "❌ CRITICAL: Request timed out - possible infinite recursion still present")
+                    all_validation_success = False
+                    
+                except Exception as e:
+                    self.log_test(f"Answer Validation Test Case {i}", False, 
+                                f"❌ CRITICAL: Request failed with error: {str(e)}")
+                    all_validation_success = False
+            
+            # Step 3: Verify progress update after correct answers
+            print(f"\n   Testing Progress Update Verification...")
+            
+            try:
+                response = self.session.get(f"{self.base_url}/students/validation_test_student/progress")
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    if ("progress" in data and 
+                        "section1" in data["progress"] and 
+                        "prep1" in data["progress"]["section1"]):
+                        
+                        prep1_progress = data["progress"]["section1"]["prep1"]
+                        
+                        if prep1_progress.get("completed") == True:
+                            self.log_test("Progress Update Verification", True, 
+                                        f"✅ Progress properly updated - prep1 marked as completed")
+                        else:
+                            self.log_test("Progress Update Verification", False, 
+                                        f"❌ Progress not updated - prep1 completed: {prep1_progress.get('completed')}")
+                            all_validation_success = False
+                    else:
+                        self.log_test("Progress Update Verification", False, 
+                                    "❌ Progress structure incomplete", data)
+                        all_validation_success = False
+                else:
+                    self.log_test("Progress Update Verification", False, 
+                                f"HTTP {response.status_code}: {response.text}")
+                    all_validation_success = False
+                    
+            except Exception as e:
+                self.log_test("Progress Update Verification", False, 
+                            f"Request error: {str(e)}")
+                all_validation_success = False
+            
+            # Final summary
+            if all_validation_success:
+                self.log_test("CRITICAL INFINITE RECURSION BUG FIX TEST", True, 
+                            "✅ All answer validation tests PASSED - No stack overflow errors, proper responses returned")
+            else:
+                self.log_test("CRITICAL INFINITE RECURSION BUG FIX TEST", False, 
+                            "❌ Answer validation system has issues - Bug may not be fully fixed")
+            
+            return all_validation_success
+            
+        except Exception as e:
+            self.log_test("CRITICAL INFINITE RECURSION BUG FIX TEST", False, 
+                        f"Test execution error: {str(e)}")
+            return False
+
     def test_class_assignment_bug_critical(self):
         """CRITICAL TEST: Verify class assignment bug - students should be saved with correct class"""
         try:
