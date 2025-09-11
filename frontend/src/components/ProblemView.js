@@ -1094,23 +1094,23 @@ const ProblemView = () => {
                                   <Button 
                                     onClick={() => {
                                       console.log('🔍 Explanation stage - checking step 1, index:', index);
-                                      console.log('🔍 User answer:', explanationPracticeAnswer);
+                                      console.log('🔍 User answer:', explanationStep1Answer);
                                       
-                                      // FIXED: Proper validation for each example
-                                      const normalized = normalizeAnswer(explanationPracticeAnswer);
+                                      // FIXED: Use the same validation system as Practice stages
+                                      const normalized = normalizeAnswer(explanationStep1Answer);
                                       let step1Correct = false;
                                       
                                       if (index === 0) {
-                                        // Example 1: x + 3 ≥ 11 -> subtract 4 -> x + 3 - 4 ≥ 11 - 4 or x ≥ 11 - 4 or x ≥ 7
-                                        const step1Answers = ['x+3-4≥11-4', 'x≥11-4', 'x≥7', 'x-1≥7'];
+                                        // Example 1: x + 4 ≥ 11 -> subtract 4 -> x ≥ 7
+                                        const step1Answers = ['x≥7', 'x≥11-4', 'x+4-4≥11-4'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       } else if (index === 1) {
-                                        // Example 2: 4x > 16 -> divide by 4 -> 4x/4 > 16/4 or x > 4
-                                        const step1Answers = ['4x/4>16/4', 'x>16/4', 'x>4'];
+                                        // Example 2: 2x > 8 -> divide by 2 -> x > 4
+                                        const step1Answers = ['x>4', 'x>8/2', '2x/2>8/2'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       } else if (index === 2) {
-                                        // Example 3: -3x ≥ 15 -> divide by -3 and flip -> -3x/-3 ≤ 15/-3 or x ≤ -5
-                                        const step1Answers = ['-3x/-3≤15/-3', 'x≤15/-3', 'x≤-5'];
+                                        // Example 3: -3x ≥ 15 -> divide by -3 and flip -> x ≤ -5
+                                        const step1Answers = ['x≤-5', 'x≤15/-3', '-3x/-3≤15/-3'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       }
                                       
@@ -1118,29 +1118,29 @@ const ProblemView = () => {
                                       
                                       if (step1Correct) {
                                         setExplanationStep(1);
-                                        setShowEncouragement(language === 'en' ? "Excellent! Now simplify" : "ممتاز! الآن بسّط");
+                                        setShowEncouragement(language === 'en' ? "Excellent! That's correct!" : "ممتاز! هذا صحيح!");
                                         setTimeout(() => setShowEncouragement(''), 3000);
                                       } else {
                                         let errorMsg = '';
                                         if (index === 0) {
                                           errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to subtract 4 from BOTH sides"
-                                            : "ليس تماماً. تذكر أن تطرح 4 من الطرفين";
+                                            ? "Not quite. Remember to subtract 4 from BOTH sides. The answer should be x ≥ 7."
+                                            : "ليس تماماً. تذكر أن تطرح 4 من الطرفين. الإجابة يجب أن تكون x ≥ 7.";
                                         } else if (index === 1) {
                                           errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to divide both sides by 4"
-                                            : "ليس تماماً. تذكر أن تقسم الطرفين على 4";
+                                            ? "Not quite. Remember to divide both sides by 2. The answer should be x > 4."
+                                            : "ليس تماماً. تذكر أن تقسم الطرفين على 2. الإجابة يجب أن تكون x > 4.";
                                         } else if (index === 2) {
                                           errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign"
-                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة";
+                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign. The answer should be x ≤ -5."
+                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة. الإجابة يجب أن تكون x ≤ -5.";
                                         }
                                         setShowEncouragement(errorMsg);
                                         setTimeout(() => setShowEncouragement(''), 5000);
                                       }
                                     }}
                                     className="w-full bg-blue-500 hover:bg-blue-600"
-                                    disabled={!explanationPracticeAnswer.trim()}
+                                    disabled={!explanationStep1Answer.trim()}
                                   >
                                     {language === 'en' ? 'Check Step 1' : 'تحقق من الخطوة 1'}
                                   </Button>
