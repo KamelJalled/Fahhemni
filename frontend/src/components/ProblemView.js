@@ -314,6 +314,49 @@ const ProblemView = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     try {
+      // CRITICAL FIX: Force preparation stage to use simple validation
+      if (problem.type === 'preparation') {
+        console.log('🔍 PREPARATION STAGE VALIDATION');
+        
+        const userSubmittedAnswer = userAnswer?.trim() || stepAnswers[0]?.trim() || '';
+        const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
+        const normalizedCorrectAnswer = normalizeAnswer(problem.answer || '');
+        
+        console.log(`🔍 Preparation answer validation:
+          User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
+          Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
+          Match: ${normalizedUserAnswer === normalizedCorrectAnswer}`);
+          
+        if (normalizedUserAnswer === normalizedCorrectAnswer) {
+          // CORRECT ANSWER
+          setIsCorrect(true);
+          
+          const sectionName = problem.section_title || 'One-Step Inequalities';
+          const successMessage = language === 'en' 
+            ? `✅ Correct! Well done! Now let's learn how to solve ${sectionName} step by step.`
+            : `✅ صحيح! أحسنت! الآن دعنا نتعلم كيفية حل ${sectionName} خطوة بخطوة.`;
+          
+          setShowEncouragement(successMessage);
+          setTimeout(() => setShowEncouragement(''), 8000);
+          
+          await submitToBackend();
+        } else {
+          // WRONG ANSWER
+          setIsCorrect(false);
+          setAttempts(prev => prev + 1);
+          
+          const errorMessage = language === 'en' 
+            ? `❌ Try again. The correct answer format is "x = number" or just "number".`
+            : `❌ حاول مرة أخرى. الشكل الصحيح للإجابة هو "س = رقم" أو فقط "رقم".`;
+          
+          setShowEncouragement(errorMessage);
+          setTimeout(() => setShowEncouragement(''), 7000);
+        }
+        
+        setIsSubmitted(true);
+        return; // Exit early for preparation stage
+      }
+      
       // For step-by-step problems, validate current step
       if (problem.step_solutions && !allStepsComplete) {
         const currentAnswer = stepAnswers[currentStep].trim();
