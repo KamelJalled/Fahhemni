@@ -864,17 +864,17 @@ const ProblemView = () => {
             <CardContent>
               {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
-            {/* COMPREHENSIVE EXPLANATION STAGE CONTENT */}
+            {/* COMPREHENSIVE EXPLANATION STAGE CONTENT - FULL WIDTH */}
             {problem.show_full_solution && problem.explanation_en && (
-              <Card className="mb-6">
+              <Card className="mb-6 w-full">
                 <CardContent className="p-8">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-l-4 border-blue-500 mb-6">
-                    <h3 className="font-bold text-xl mb-4 text-blue-800 flex items-center">
-                      <BookOpen className="w-6 h-6 mr-2" />
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border-l-4 border-blue-500 mb-6">
+                    <h3 className="font-bold text-2xl mb-6 text-blue-800 flex items-center justify-center">
+                      <BookOpen className="w-8 h-8 mr-3" />
                       {language === 'en' ? 'Complete Guide to Solving Inequalities' : 'دليل شامل لحل المتباينات'}
                     </h3>
                     
-                    <div className="prose prose-blue max-w-none">
+                    <div className="prose prose-blue max-w-none text-lg">
                       <div className="whitespace-pre-wrap text-blue-700 leading-relaxed">
                         {language === 'en' ? problem.explanation_en : problem.explanation_ar}
                       </div>
