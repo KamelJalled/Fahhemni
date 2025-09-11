@@ -1047,6 +1047,55 @@ class MathTutoringAPITester:
             self.log_test("CORS Configuration", False, f"Request error: {str(e)}")
             return False
 
+    def run_infinite_recursion_bug_tests(self):
+        """Run critical infinite recursion bug fix tests as requested in review"""
+        print("=" * 80)
+        print("CRITICAL PHASE 1 VERIFICATION: Infinite Recursion Bug Fix Testing")
+        print("=" * 80)
+        print(f"Testing backend at: {self.base_url}")
+        print("Focus: Answer validation system after fixing infinite recursion bug")
+        print()
+        
+        # Critical tests for infinite recursion bug fix
+        critical_tests = [
+            # PRIORITY 1: Infinite Recursion Bug Fix (CRITICAL)
+            ("🚨 CRITICAL: Infinite Recursion Bug Fix Test", self.test_infinite_recursion_bug_fix_critical),
+            
+            # PRIORITY 2: Supporting Backend Tests
+            ("Health Check", self.test_health_check),
+            ("Student Login with Class Selection", self.test_student_login_with_class),
+            ("Teacher Login", self.test_teacher_login),
+        ]
+        
+        passed = 0
+        total = len(critical_tests)
+        
+        for test_name, test_func in critical_tests:
+            try:
+                result = test_func()
+                if result:
+                    passed += 1
+            except Exception as e:
+                self.log_test(test_name, False, f"Test execution error: {str(e)}")
+        
+        print("=" * 80)
+        print("INFINITE RECURSION BUG FIX TESTS SUMMARY")
+        print("=" * 80)
+        print(f"Passed: {passed}/{total}")
+        print(f"Failed: {total - passed}/{total}")
+        
+        if passed == total:
+            print("\n🎉 ALL CRITICAL TESTS PASSED!")
+            print("✅ Infinite recursion bug is FIXED")
+            print("✅ Answer validation system working correctly")
+            print("✅ Both '7' and 'x=7' formats work for preparation problems")
+            print("✅ Progress tracking works after correct answers")
+        else:
+            print(f"\n⚠️  {total - passed} critical tests failed")
+            print("❌ Infinite recursion bug or answer validation issues detected")
+        
+        return passed, total, self.test_results
+
     def run_critical_mobile_tests(self):
         """Run critical mobile optimization tests as requested"""
         print("=" * 80)
