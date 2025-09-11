@@ -10,8 +10,8 @@ import sys
 import os
 from datetime import datetime
 
-# Use backend URL from review request
-BACKEND_URL = "https://fahhemni-backend.onrender.com/api"
+# Use backend URL from frontend/.env as specified in review request
+BACKEND_URL = "https://gradeninemaths.preview.emergentagent.com/api"
 
 # Expected sections and their problem counts
 EXPECTED_SECTIONS = {
