@@ -47,8 +47,8 @@ const ProblemView = () => {
   const [practiceComplete, setPracticeComplete] = useState([]);
   const [hintsUsed, setHintsUsed] = useState(0);
 
-  // FIXED: Enhanced answer normalization with proper validation
-  const normalizeAnswer = (answer) => {
+  // Helper function for basic normalization without recursion
+  const basicNormalizeAnswer = (answer) => {
     if (!answer) return '';
     
     // Convert Arabic numerals to Western and س to x
@@ -68,11 +68,21 @@ const ProblemView = () => {
       .replace(/\s*([≤≥])\s*/g, '$1') // Remove spaces around unicode inequalities
       .replace(/\s*([<>]=?)\s*/g, '$1'); // Handle <= >= combinations
     
+    return normalized;
+  };
+
+  // FIXED: Enhanced answer normalization with proper validation (NO RECURSION)
+  const normalizeAnswer = (answer) => {
+    if (!answer) return '';
+    
+    let normalized = basicNormalizeAnswer(answer);
+    
     // ENHANCEMENT: For preparation stage, accept both "x = 7" and "7" formats
     if (problem && (problem.type === 'preparation' || problem.id?.includes('prep'))) {
       // If input is just a number and expected answer has "x =", add "x ="
       if (/^-?\d+(\.\d+)?$/.test(normalized)) {
-        const expectedNormalized = normalizeAnswer(problem.answer || '');
+        // Use basicNormalizeAnswer to avoid recursion
+        const expectedNormalized = basicNormalizeAnswer(problem.answer || '');
         if (expectedNormalized.includes('x=') && !normalized.includes('x')) {
           normalized = 'x=' + normalized;
         }
