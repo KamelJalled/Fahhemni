@@ -1079,8 +1079,8 @@ const ProblemView = () => {
                                 {/* Step 1 - FIXED: No placeholders, correct instructions for each example */}
                                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                                   <h5 className="font-semibold text-blue-800 mb-3">
-                                    {/* FIXED: Correct step instructions for each example based on database */}
-                                    {index === 0 && (language === 'en' ? 'Step 1: Subtract 3 from both sides' : 'الخطوة 1: اطرح 3 من الطرفين')}
+                                    {/* FIXED: Correct step instructions for actual displayed problems */}
+                                    {index === 0 && (language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين')}
                                     {index === 1 && (language === 'en' ? 'Step 1: Divide both sides by 4' : 'الخطوة 1: اقسم الطرفين على 4')}
                                     {index === 2 && (language === 'en' ? 'Step 1: Divide both sides by -3 (flip the inequality sign!)' : 'الخطوة 1: اقسم الطرفين على -3 (اقلب إشارة المتباينة!)')}
                                   </h5>
