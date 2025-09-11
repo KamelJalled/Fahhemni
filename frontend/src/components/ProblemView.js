@@ -865,215 +865,247 @@ const ProblemView = () => {
               <CardContent>
                 {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
-            {/* Show explanation or preparation content */}
+            {/* COMPREHENSIVE EXPLANATION STAGE CONTENT */}
             {problem.show_full_solution && problem.explanation_en && (
               <Card className="mb-6">
-                <CardContent className="p-6">
-                  <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                    <h4 className="font-semibold mb-2 text-blue-800">
-                      {text[language].explanation}
-                    </h4>
-                    <pre className="whitespace-pre-wrap text-sm text-blue-700">
-                      {language === 'en' ? problem.explanation_en : problem.explanation_ar}
-                    </pre>
+                <CardContent className="p-8">
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-l-4 border-blue-500 mb-6">
+                    <h3 className="font-bold text-xl mb-4 text-blue-800 flex items-center">
+                      <BookOpen className="w-6 h-6 mr-2" />
+                      {language === 'en' ? 'Complete Guide to Solving Inequalities' : 'دليل شامل لحل المتباينات'}
+                    </h3>
+                    
+                    <div className="prose prose-blue max-w-none">
+                      <div className="whitespace-pre-wrap text-blue-700 leading-relaxed">
+                        {language === 'en' ? problem.explanation_en : problem.explanation_ar}
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Interactive Examples for Explanation */}
+            {/* INTERACTIVE PRACTICE EXAMPLES */}
             {problem.interactive_examples && (
               <Card className="mb-6">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-center text-xl font-bold text-gray-800">
+                    {language === 'en' ? '🎯 Practice Examples' : '🎯 أمثلة تطبيقية'}
+                  </CardTitle>
+                  <p className="text-center text-gray-600 text-sm">
+                    {language === 'en' 
+                      ? 'Practice what you learned with these guided examples'
+                      : 'تدرب على ما تعلمته مع هذه الأمثلة الموجهة'}
+                  </p>
+                </CardHeader>
+                
                 <CardContent className="p-6">
-                  <div className="space-y-6">
+                  {/* HORIZONTAL LAYOUT FOR EXAMPLES */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {problem.interactive_examples.map((example, index) => (
-                      <div key={index} className="border rounded-lg p-4">
-                        <h4 className="font-semibold text-lg mb-3 text-blue-700">
-                          {language === 'en' ? example.title_en : example.title_ar}
-                        </h4>
-                        
-                        {/* Show example */}
-                        <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                          <div className="text-xl font-mono text-center mb-2">
-                            {language === 'en' ? example.problem_en : example.problem_ar}
+                      <div key={index} className="border-2 border-gray-200 rounded-lg p-4 bg-white hover:shadow-lg transition-shadow">
+                        {/* Example Header */}
+                        <div className="text-center mb-4">
+                          <h4 className="font-bold text-lg text-blue-700 mb-2">
+                            {language === 'en' ? example.title_en : example.title_ar}
+                          </h4>
+                          <div className="bg-gray-100 p-3 rounded-lg">
+                            <div className="text-xl font-mono text-center text-gray-800">
+                              {language === 'en' ? example.problem_en : example.problem_ar}
+                            </div>
                           </div>
-                          
-                          {(showExample && currentExample === index) && (
-                            <div className="mt-4 text-sm">
-                              <pre className="whitespace-pre-wrap text-gray-700">
+                        </div>
+
+                        {/* Show Solution Button */}
+                        {(!showExample || currentExample !== index) && (
+                          <div className="text-center mb-4">
+                            <Button 
+                              onClick={() => {
+                                setCurrentExample(index);
+                                setShowExample(true);
+                              }}
+                              className="w-full bg-blue-500 hover:bg-blue-600"
+                              variant="default"
+                            >
+                              {language === 'en' ? '👁️ Show Solution' : '👁️ إظهار الحل'}
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Solution Display */}
+                        {showExample && currentExample === index && (
+                          <>
+                            <div className="bg-green-50 p-4 rounded-lg mb-4 border border-green-200">
+                              <h5 className="font-semibold text-green-800 mb-2">
+                                {language === 'en' ? '💡 Step-by-Step Solution:' : '💡 الحل خطوة بخطوة:'}
+                              </h5>
+                              <pre className="whitespace-pre-wrap text-sm text-green-700 leading-relaxed">
                                 {language === 'en' ? example.solution_en : example.solution_ar}
                               </pre>
                             </div>
-                          )}
-                          
-                          {!showExample && currentExample === index && (
-                            <Button 
-                              onClick={() => setShowExample(true)}
-                              className="mt-2 w-full"
-                              variant="outline"
-                            >
-                              {language === 'en' ? 'Show Solution' : 'إظهار الحل'}
-                            </Button>
-                          )}
-                        </div>
 
-                        {/* Practice problem */}
-                        {showExample && currentExample === index && (
-                          <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                            <h5 className="font-medium mb-2 text-yellow-800">
-                              {language === 'en' ? 'Try It Yourself:' : 'جربه بنفسك:'}
-                            </h5>
-                            <div className="text-lg font-mono text-center mb-3">
-                              {language === 'en' ? example.practice_question_en : example.practice_question_ar}
-                            </div>
-                            
-                            <div className="mb-3">
-                              <Input
-                                value={practiceAnswer}
-                                onChange={(e) => setPracticeAnswer(e.target.value)}
-                                onFocus={() => setActiveInputIndex(index)}
-                                placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
-                                className="mb-2"
-                              />
+                            {/* Practice Section */}
+                            <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                              <h5 className="font-semibold text-yellow-800 mb-3 text-center">
+                                {language === 'en' ? '✏️ Now You Try:' : '✏️ الآن جربه بنفسك:'}
+                              </h5>
                               
-                              {/* Voice Input and Math Keyboard buttons for each example */}
-                              <div className="flex gap-2 justify-center">
-                                {/* Voice Input Button */}
-                                <Button 
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => {
-                                    setActiveInputIndex(index);
-                                    setShowVoiceInput(!showVoiceInput);
-                                    setShowMathKeyboard(false);
-                                  }}
-                                  className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
-                                  title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
-                                >
-                                  <Mic className="w-4 h-4" />
-                                </Button>
-                                
-                                {/* Math Keyboard Button */}
-                                <Button 
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => {
-                                    setActiveInputIndex(index);
-                                    setShowMathKeyboard(!showMathKeyboard);
-                                    setShowVoiceInput(false);
-                                  }}
-                                  className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
-                                  title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
-                                >
-                                  <Keyboard className="w-4 h-4" />
-                                </Button>
+                              <div className="text-center mb-3">
+                                <div className="bg-white p-2 rounded border text-lg font-mono text-gray-800">
+                                  {language === 'en' ? example.practice_question_en : example.practice_question_ar}
+                                </div>
                               </div>
                               
-                              {/* Voice Input Component for explanation examples */}
-                              {showVoiceInput && activeInputIndex === index && (
-                                <div className="mt-2">
-                                  <VoiceInput
-                                    onResult={(result) => {
-                                      setPracticeAnswer(result);
+                              {/* Input Field with Voice and Keyboard */}
+                              <div className="space-y-3">
+                                <Input
+                                  value={practiceAnswer}
+                                  onChange={(e) => setPracticeAnswer(e.target.value)}
+                                  onFocus={() => setActiveInputIndex(index)}
+                                  placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
+                                  className="text-center text-lg font-mono"
+                                />
+                                
+                                {/* Voice Input and Math Keyboard Buttons */}
+                                <div className="flex justify-center gap-2">
+                                  <Button 
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      setActiveInputIndex(index);
+                                      setShowVoiceInput(!showVoiceInput);
+                                      setShowMathKeyboard(false);
+                                    }}
+                                    className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                                    title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
+                                  >
+                                    <Mic className="w-4 h-4" />
+                                  </Button>
+                                  
+                                  <Button 
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      setActiveInputIndex(index);
+                                      setShowMathKeyboard(!showMathKeyboard);
                                       setShowVoiceInput(false);
                                     }}
-                                    onError={handleVoiceError}
-                                    language={language}
-                                    isActive={showVoiceInput}
-                                  />
+                                    className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                    title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                                  >
+                                    <Keyboard className="w-4 h-4" />
+                                  </Button>
                                 </div>
-                              )}
 
-                              {/* Math Keyboard Component for explanation examples */}
-                              {showMathKeyboard && activeInputIndex === index && (
-                                <div className="mt-2">
-                                  <MathKeyboard
-                                    onSymbolSelect={(symbol) => {
-                                      setPracticeAnswer(prev => prev + symbol);
-                                    }}
-                                    onNumberSelect={(number) => {
-                                      setPracticeAnswer(prev => prev + number);
-                                    }}
-                                    onOperatorSelect={(operator) => {
-                                      setPracticeAnswer(prev => prev + ` ${operator} `);
-                                    }}
-                                    onAction={(action) => {
-                                      if (action === 'clear') {
-                                        setPracticeAnswer('');
-                                      } else if (action === 'backspace') {
-                                        setPracticeAnswer(prev => prev.slice(0, -1));
-                                      } else if (action === 'voice') {
-                                        setShowVoiceInput(!showVoiceInput);
-                                        setShowMathKeyboard(false);
+                                {/* Check Answer Button */}
+                                <Button 
+                                  onClick={() => {
+                                    const correct = normalizeAnswer(practiceAnswer) === normalizeAnswer(example.practice_answer);
+                                    if (correct) {
+                                      const newPracticeComplete = [...practiceComplete];
+                                      newPracticeComplete[index] = true;
+                                      setPracticeComplete(newPracticeComplete);
+                                      setPracticeAnswer('');
+                                      
+                                      // Auto-move to next example
+                                      if (index < problem.interactive_examples.length - 1) {
+                                        setTimeout(() => {
+                                          setCurrentExample(index + 1);
+                                          setShowExample(false);
+                                        }, 2000);
                                       }
-                                    }}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                            
-                            <Button 
-                              onClick={() => {
-                                const correct = normalizeAnswer(practiceAnswer) === normalizeAnswer(example.practice_answer);
-                                if (correct) {
-                                  const newPracticeComplete = [...practiceComplete];
-                                  newPracticeComplete[index] = true;
-                                  setPracticeComplete(newPracticeComplete);
-                                  setPracticeAnswer('');
-                                  if (index < problem.interactive_examples.length - 1) {
-                                    setCurrentExample(index + 1);
-                                    setShowExample(false);
-                                  }
-                                } else {
-                                  setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
-                                  setTimeout(() => setShowEncouragement(''), 3000);
-                                }
-                              }}
-                              className="w-full"
-                              disabled={!practiceAnswer.trim()}
-                            >
-                              {language === 'en' ? 'Check Answer' : 'تحقق من الإجابة'}
-                            </Button>
-                            
-                            {practiceComplete[index] && (
-                              <div className="mt-2 p-2 bg-green-100 text-green-800 rounded text-center">
-                                ✓ {language === 'en' ? 'Correct! Well done!' : 'صحيح! أحسنت!'}
+                                    } else {
+                                      setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
+                                      setTimeout(() => setShowEncouragement(''), 3000);
+                                    }
+                                  }}
+                                  className="w-full bg-green-500 hover:bg-green-600"
+                                  disabled={!practiceAnswer.trim()}
+                                >
+                                  {language === 'en' ? '✓ Check Answer' : '✓ تحقق من الإجابة'}
+                                </Button>
+
+                                {/* Success Message */}
+                                {practiceComplete[index] && (
+                                  <div className="bg-green-100 border border-green-300 text-green-800 p-3 rounded text-center font-semibold">
+                                    🎉 {language === 'en' ? 'Perfect! Well done!' : 'ممتاز! أحسنت!'}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
+                            </div>
+                          </>
                         )}
                       </div>
                     ))}
-                    
-                    {/* Mark explanation complete when all examples practiced */}
-                    {practiceComplete.length === problem.interactive_examples.length && 
-                     practiceComplete.every(completed => completed) && (
-                      <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
-                        <div className="text-green-600 mb-3">
-                          <CheckCircle className="w-12 h-12 mx-auto mb-2" />
-                          <h3 className="text-lg font-semibold">
-                            {language === 'en' ? 'Explanation Complete!' : 'اكتمل الشرح!'}
-                          </h3>
-                          <p className="text-sm">
-                            {language === 'en' 
-                              ? 'You have successfully practiced all examples. Ready for the next challenge!' 
-                              : 'لقد تدربت بنجاح على جميع الأمثلة. جاهز للتحدي التالي!'
-                            }
-                          </p>
-                        </div>
-                        <Button 
-                          onClick={async () => {
-                            // Mark stage as completed
-                            await submitToBackend();
-                            handleNextProblem();
-                          }}
-                          className="bg-gradient-to-r from-green-500 to-emerald-600"
-                        >
-                          {language === 'en' ? 'Continue to Practice Problems →' : 'تابع لمسائل التدريب ←'}
-                        </Button>
-                      </div>
-                    )}
                   </div>
+                  
+                  {/* Global Voice Input Component */}
+                  {showVoiceInput && (
+                    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <VoiceInput
+                        onResult={(result) => {
+                          setPracticeAnswer(result);
+                          setShowVoiceInput(false);
+                        }}
+                        onError={handleVoiceError}
+                        language={language}
+                        isActive={showVoiceInput}
+                      />
+                    </div>
+                  )}
+
+                  {/* Global Math Keyboard Component */}
+                  {showMathKeyboard && (
+                    <div className="mt-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                      <MathKeyboard
+                        onSymbolSelect={(symbol) => {
+                          setPracticeAnswer(prev => prev + symbol);
+                        }}
+                        onNumberSelect={(number) => {
+                          setPracticeAnswer(prev => prev + number);
+                        }}
+                        onOperatorSelect={(operator) => {
+                          setPracticeAnswer(prev => prev + ` ${operator} `);
+                        }}
+                        onAction={(action) => {
+                          if (action === 'clear') {
+                            setPracticeAnswer('');
+                          } else if (action === 'backspace') {
+                            setPracticeAnswer(prev => prev.slice(0, -1));
+                          } else if (action === 'voice') {
+                            setShowVoiceInput(!showVoiceInput);
+                            setShowMathKeyboard(false);
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Completion Message */}
+                  {practiceComplete.length === problem.interactive_examples.length && 
+                   practiceComplete.every(completed => completed) && (
+                    <div className="mt-6 text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                      <div className="text-green-600 mb-3">
+                        <CheckCircle className="w-16 h-16 mx-auto mb-4" />
+                        <h3 className="text-2xl font-bold mb-2">
+                          {language === 'en' ? '🎊 Explanation Complete!' : '🎊 اكتمل الشرح!'}
+                        </h3>
+                        <p className="text-lg">
+                          {language === 'en' 
+                            ? 'Outstanding work! You have mastered all the examples. Ready for the practice stage!' 
+                            : 'عمل رائع! لقد أتقنت جميع الأمثلة. جاهز لمرحلة التطبيق!'}
+                        </p>
+                      </div>
+                      
+                      <Button 
+                        onClick={handleNextProblem}
+                        className="mt-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 text-lg font-semibold"
+                      >
+                        <Trophy className="w-5 h-5 mr-2" />
+                        {language === 'en' ? 'Continue to Practice Stage →' : 'انتقل لمرحلة التطبيق ←'}
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
