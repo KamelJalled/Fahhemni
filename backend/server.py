@@ -114,9 +114,9 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
         current_attempts = current_problem_progress.attempts if current_problem_progress else 0
         new_attempts = current_attempts + 1
         
-        # Check if answer is correct
-        normalized_answer = normalize_answer(attempt.answer)
-        normalized_correct = normalize_answer(problem.answer)
+        # Check if answer is correct - enhanced for preparation stage
+        normalized_answer = normalize_answer(attempt.answer, problem.type, problem.answer)
+        normalized_correct = normalize_answer(problem.answer, problem.type, problem.answer)
         is_correct = normalized_answer == normalized_correct
         
         # Calculate score
