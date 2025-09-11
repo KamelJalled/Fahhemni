@@ -386,17 +386,20 @@ const ProblemView = () => {
       return;
     }
     
-    // Validate current step
+    // Validate current step against possible answers
     const normalizedUserAnswer = normalizeAnswer(currentAnswer);
-    const normalizedExpected = normalizeAnswer(
-      language === 'en' ? currentStepData.answer_en : currentStepData.answer_ar
-    );
+    const possibleAnswers = language === 'en' ? currentStepData.possible_answers : currentStepData.possible_answers_ar;
     
-    const isStepCorrect = normalizedUserAnswer === normalizedExpected;
+    let isStepCorrect = false;
+    if (possibleAnswers) {
+      isStepCorrect = possibleAnswers.some(possibleAnswer => 
+        normalizeAnswer(possibleAnswer) === normalizedUserAnswer
+      );
+    }
     
     console.log(`🔍 Step ${currentStep + 1} validation:
       User: "${currentAnswer}" → "${normalizedUserAnswer}"
-      Expected: "${currentStepData.answer_en}" → "${normalizedExpected}"
+      Possible answers: ${JSON.stringify(possibleAnswers)}
       Correct: ${isStepCorrect}`);
     
     if (isStepCorrect) {
@@ -418,6 +421,7 @@ const ProblemView = () => {
       if (currentStep < expectedStepAnswers.length - 1) {
         // Move to next step
         setCurrentStep(currentStep + 1);
+        setAttempts(0); // Reset attempts for new step
         setShowEncouragement(`${encouragingMessage} ${language === 'en' ? 'Now for the next step...' : 'الآن للخطوة التالية...'}`);
       } else {
         // All steps complete
@@ -441,12 +445,14 @@ const ProblemView = () => {
           : `ليس صحيحاً تماماً. دعنا نفكر في هذه الخطوة بعناية. ${currentStepData.hint_ar || 'حاول تحليل ما تحتاج لفعله هنا.'}`;
       } else if (currentAttempts === 2) {
         stepFeedback = language === 'en' 
-          ? `Still not quite right. Here's a hint: ${currentStepData.hint_en || 'Think about the inverse operation needed.'}`
-          : `ما زال غير صحيح تماماً. إليك تلميح: ${currentStepData.hint_ar || 'فكر في العملية العكسية المطلوبة.'}`;
+          ? `Still not quite right. Here's a hint: ${currentStepData.step_en || 'Think about the inverse operation needed.'}`
+          : `ما زال غير صحيح تماماً. إليك تلميح: ${currentStepData.step_ar || 'فكر في العملية العكسية المطلوبة.'}`;
       } else {
+        // Show correct approach and move to next step
+        const correctAnswer = possibleAnswers?.[0] || 'See explanation';
         stepFeedback = language === 'en' 
-          ? `Let me show you the correct approach for this step: ${currentStepData.explanation_en || currentStepData.answer_en}`
-          : `دعني أوضح لك المنهج الصحيح لهذه الخطوة: ${currentStepData.explanation_ar || currentStepData.answer_ar}`;
+          ? `Let me show you the correct approach for this step: ${correctAnswer}`
+          : `دعني أوضح لك المنهج الصحيح لهذه الخطوة: ${correctAnswer}`;
         
         // After showing the answer, move to next step
         setTimeout(() => {
