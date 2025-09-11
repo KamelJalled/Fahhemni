@@ -1,99 +1,71 @@
 <analysis>
-The AI engineer's work trajectory showcases an iterative development process for a Grade 9 math tutoring app. Initial efforts focused on establishing a full-stack MVP, covering frontend UI, backend API with MongoDB, and core features like problem-solving, hints, and progress tracking. A significant phase involved preparing the application for deployment, first targeting Vercel, then shifting to a generic GitHub push due to user requests, which required extensive refactoring to remove Vercel-specific configurations and ensure a correct production build with proper backend URL integration.
+The previous AI engineer initiated an iterative development process for a Grade 9 math tutoring app. Key phases included establishing an MVP, refactoring for generic deployment (removing Vercel dependencies), and addressing numerous bug reports. Significant work involved mobile optimization (responsive design, touch targets, keyboard positioning), and resolving recurring critical issues related to the backend URL configuration in the frontend  file, which inexplicably reverted multiple times.
 
-Subsequently, the engineer addressed multiple critical bug reports, including persistent login issues, dashboard display inaccuracies (localization and section visibility), and errors in core functionalities. The latest development cycle involved implementing advanced features such as voice input, a mathematical symbol keyboard, and class management, alongside resolving several complex bugs related to these new additions and existing features like class assignment logic and section navigation. The work concluded with the engineer rebuilding the frontend and backend after applying a batch of bug fixes, indicating that the verification and further refinement of these fixes are the immediate next steps.
+Subsequently, the engineer focused on core functional bugs such as voice input reliability, Math Keyboard integration across stages, section duplication, and most critically, answer validation. The Class Assignment Bug was disproven on the backend, pointing to a frontend display issue. Extensive modifications were made to  to standardize input, implement individual step checks, and enhance feedback. The trajectory concludes with the discovery of a critical  in the  function, indicating an infinite recursion loop, which is currently blocking further progress on validation.
 </analysis>
 <product_requirements>
-The Math Tutoring App targets Grade 9 Saudi students for learning inequalities.
-**Initial Core Features:**
-*   **Content:** 30 problems, 5 sections (starting with One-Step Inequalities: Preparation, Explanation, Practice, Assessment, Exam Prep).
-*   **Language:** Arabic/English, RTL support, accepts Western/Eastern Arabic numerals, 'x' or 'س' variables.
-*   **Users:** Student login (username) and Teacher dashboard (access code: teacher2024).
-*   **Interaction:** Multi-step input, 3 progressive Socratic hints per step, Try Again, Next Problem, interactive practice, motivational elements.
-*   **Progression/Scoring:** Student progress tracking, progression locks (flexible for Assessment), weighted scoring.
-*   **Design:** Clean, modern, gamified, uses Shadcn UI, no direct instructions in problems.
-*   **Data:** Initially , transitioned to FastAPI/MongoDB.
+The Math Tutoring App aims to teach Grade 9 Saudi students inequalities. Initially, it featured 30 problems across 5 sections (One-Step Inequalities), with bilingual (Arabic/English) support, student/teacher logins, multi-step input, progressive Socratic hints, and progress tracking, using FastAPI/MongoDB.
 
-**Key Bug Fixes/Enhancements during development:** Removed answer from placeholder, fixed username null error on logout, stage status update bug, state reset, enhanced step validation, streamlined explanation stage, removed Vercel dependencies, fixed backend URL for deployment, addressed login/dashboard access issues.
-
-**Latest Enhancements (Partially Implemented):**
-*   **Bug Fixes (PART 1):** Status updating (Preparation/Explanation stages), logout error, step labels, stage navigation button.
-*   **Content Expansion (PART 2):** 4 new sections with 6 problems each: Two-Step, Multi-Step, Variables on Both Sides, Compound Inequalities.
-*   **Input Features (PART 3):** Voice input (microphone button, Arabic/English speech-to-math conversion, permissions, visual indicator) and Mathematical Symbol Keyboard (visual toolbar for symbols, operations, numerals, actions).
-*   **Class Management (PART 4):** Class selection (GR9-A, B, C, D) for students, teacher dashboard filtering by class/section.
-*   **Data Verification (PART 5):** Confirm MongoDB progress storage, admin endpoint to clear test data, ensure persistence.
-
-**Latest Critical Bug Report (Post-MVP Features):**
-*   **Voice Input Fixes:** Post-processing layer for text-to-math conversion, microphone permissions, Arabic vocabulary support.
-*   **Section Navigation Fix:** Ensure only the active section is displayed.
-*   **Class Assignment Bug:** Fix student class registration and teacher dashboard filtering.
-*   **Math Keyboard Layout:** Fix spacing, alignment, symbol clickability, numeral toggle.
-*   **Database Fixes:** Verify 30 problems, 5 sections, clear test data (string username entries).
-Priority Issues for Immediate Fix:
-1. Voice input converts x plus eight to text instead of x + 8
-2. Section 1 content remains visible when clicking other sections
-3. Students registering with classes B, C, D are all saved as GR9-A
-4. Microphone turns off immediately without capturing speech
-5. Math keyboard Eastern/Western numeral toggle not working
+**Key enhancements and bug fixes include:**
+*   **Mobile Optimization:** Responsive design, thumb-friendly buttons, math keyboard positioning, scrollable section tabs, auto-scroll on input focus, voice input permissions on mobile.
+*   **Input Features:** Voice input (Arabic/English speech-to-math, improved recognition, longer timeout), Mathematical Symbol Keyboard (visual toolbar for symbols, numerals, actions).
+*   **Class Management:** Student class selection (GR9-A, B, C, D), teacher dashboard filtering.
+*   **User Experience:** Welcome screen, end-of-section/demo messages, loading indicators, Start Over button, extended feedback timings for correct/wrong answers.
+*   **Core Bug Fixes:** Persistent login, dashboard display, section navigation, class assignment, database issues, text-to-math conversion.
+*   **Critical Blocking Bugs (latest):** Correct answer validation for all 30 problems, page refresh 404 errors, Submit Final Answer button functionality in Preparation stage, keyboard not working in Explanation/Assessment/Exam Prep stages, voice input not inserting text.
 </product_requirements>
 <key_technical_concepts>
--   **Full-stack Development:** React (Frontend), FastAPI (Backend), MongoDB (Database).
--   **Frontend UI/Styling:** Shadcn UI components, Tailwind CSS, React Router DOM.
--   **Backend Data:** Pydantic for data models, Motor (async MongoDB driver).
--   **Internationalization:** Bilingual support (Arabic/English), RTL, numeral normalization.
--   **Deployment:** Generic web hosting, Vercel (initially, then removed).
--   **Speech Recognition:** Web Speech API.
+-   **Full-stack Development:** React.js (Frontend), FastAPI (Backend), MongoDB (Database).
+-   **Frontend UI/Styling:** Shadcn UI, Tailwind CSS, React Router DOM.
+-   **Backend Data Handling:** Pydantic models, Motor (async MongoDB driver).
+-   **Internationalization:** Arabic/English, RTL support, numeral normalization.
+-   **Speech Recognition:** Web Speech API with post-processing.
+-   **Deployment:** Generic web hosting (Hostinger, Render), Kubernetes container environment.
 </key_technical_concepts>
 <code_architecture>
-The application uses a full-stack architecture with distinct  and  directories.
+The application employs a full-stack architecture with distinct  and  directories.
 
 
 
 **Key Files and Their Importance/Changes:**
 
-*   **/app/frontend/src/App.js:** Main React component for routing, global state, and authentication. Updated for login/logout and navigation logic, ensuring state reset.
-*   **/app/frontend/src/components/Dashboard.js:** Displays problem sections and progress. Rewritten to fetch and display all 5 sections dynamically, update problem card statuses, and implement localization for stage labels.
-*   **/app/frontend/src/components/ProblemView.js:** Core learning interface. Heavily modified for multi-step inputs, hints, interactive practice, answer normalization, *and integration of VoiceInput and MathKeyboard components*.
-*   **/app/frontend/src/components/StudentLogin.js:** Handles student authentication. Updated to include class selection during registration, and improved error handling.
-*   **/app/frontend/src/components/TeacherDashboard.js:** Teacher analytics. Modified to include class filtering capabilities.
-*   **/app/frontend/src/components/TeacherLogin.js:** Teacher authentication. Improved error handling and updated navigation logic.
-*   **/app/frontend/src/components/VoiceInput.js (NEW):** Implements Web Speech API for voice-to-text, with a new post-processing layer for Arabic/English speech-to-math conversion. Includes microphone permissions and visual indicators.
-*   **/app/frontend/src/components/MathKeyboard.js (NEW):** Provides a visual on-screen keyboard for mathematical symbols and numerals, with improved layout and toggle functionality.
-*   **/app/backend/server.py:** FastAPI entry point. Expanded with API endpoints for students/teachers, database init/shutdown. *Crucially updated for class management (student registration, teacher stats filtering), new admin endpoint to clear test data, and corrected authentication endpoint paths (, )*.
-*   **/app/backend/database.py:** Manages MongoDB interactions. Updated to initialize all 5 new sections with 30 problems, and modified  to correctly filter by class and calculate overall section progress.
-*   **/app/backend/models.py:** Defines Pydantic models. Updated to include  field for Student and related models.
-*   **/app/frontend/.env, /app/frontend/.env.example, /app/frontend/.env.production:** Critical files for environment variables. Repeatedly updated to correctly set  (initially Vercel placeholder, then Hostinger backend URL, finally a generic  placeholder for local dev) and remove Vercel-specific entries.
-*   **/app/frontend/build/ (NEW, UPDATED):** Contains the optimized production build of the frontend, included in the repository for direct deployment to static hosts. Frequently rebuilt to incorporate latest code changes.
-*   **/app/.gitignore, /app/frontend/.gitignore (UPDATED):** Modified to correctly include the  folder while ignoring other unnecessary build artifacts.
-*   **Vercel-related files (, ,  etc.):** Initially created for Vercel deployment, then *removed* based on user's request for generic hosting.
-*   **Documentation files (, ,  etc.):** Updated to reflect generic deployment, removed Vercel references, and new instructions/summaries for GitHub push and deployment.
+*   ****: Main React component for routing and authentication context.
+    *   **Changes**: Added catch-all route for better error handling on refresh,  uses  for state persistence.
+*   ****: Displays problem sections and progress.
+    *   **Changes**: Refactored to fetch and display sections dynamically, implemented stable React keys for rendering, added Start Over button, and addressed mobile horizontal scrolling.
+*   ****: Core learning interface.
+    *   **Importance**: Handles problem display, user input, hints, validation, and progression.
+    *   **Changes**: Extensively modified for multi-step inputs, hints, integration of  and . Latest changes include fixing  to use , enhancing  for inequalities, adding individual Check Step buttons, implementing completion messages for stages, extending feedback timings, enabling keyboard/voice input for *all* stages by adjusting conditional rendering, and standardizing input logic for Preparation stage.
+*   ****: Handles student authentication and class selection.
+    *   **Changes**: Added a welcome screen with demo instructions before login, fixed Arabic translation error, resolved button clickability issues via z-index adjustment, removed debug banner.
+*   ****: Implements Web Speech API.
+    *   **Changes**: Improved microphone permissions for mobile, enhanced text-to-math conversion (e.g., x plus eight to x + 8, Arabic 'أصغر من أو يساوي' to '≤'), increased timeout to 15 seconds, fixed system hang on second use by improving  cleanup.
+*   ****: Provides a visual on-screen keyboard.
+    *   **Changes**: Fixed Arabic mode to show 'س' and 'ص' instead of 'x' and 'y', improved layout for Action tab overflow, ensured numeral toggle functionality.
+*   ****: Displays debugging information.
+    *   **Changes**: Modified to hide in production environments ().
+*   ****: Critical for frontend environment variables.
+    *   **Changes**: Repeatedly updated to  due to persistent reversion issues, then verified by restarting frontend server.
 </code_architecture>
 <pending_tasks>
--   **Voice Input Fixes:** Fully implement post-processing, microphone permissions, Arabic vocabulary support, and test.
--   **Section Navigation Fix:** Ensure only the active section is displayed with proper CSS transitions, and test.
--   **Class Assignment Bug Fix:** Verify student registration saves correct class_name and teacher dashboard filtering works as intended, and test.
--   **Math Keyboard Layout:** Finalize button spacing, alignment, clickability, and numeral toggle functionality, and test.
--   **Database Fixes:** Verify all 30 problems across 5 sections are correctly loaded, and ensure admin endpoint for clearing test data functions as expected.
-Testing Requirements:
-- Test with actual Grade 9 students and teachers
-- Verify Arabic voice input accuracy
-- Confirm all 30 problems load correctly
-- Validate class filtering in teacher dashboard
+-   **Answer Validation Fix:** Resolve the infinite recursion in  to correctly process and validate user input.
+-   **Preparation Stage Completion:** Ensure status updates to Completed and shows Continue to Explanation Stage after correct answer.
+-   **Explanation Stage Redesign:** Implement horizontal layout (3 examples side-by-side), single input field per example, clear visual/audio feedback, move input box up, ensure voice input inserts text.
+-   **Page Refresh Bug:** Address 404 errors on refresh, ensuring state persistence or graceful redirection.
+-   **Navigation Improvements:** Add Previous Stage button, ensure Continue to Next Stage only appears after all problems in a stage are complete, fix blank screen after Exam Prep.
 </pending_tasks>
 <current_work>
-The AI engineer is currently focused on resolving several critical bugs reported by the user to finalize the MVP for classroom testing. This involves addressing issues across multiple features:
-1.  **Voice Input:** Implementing a text-to-math converter for transcription, improving microphone permissions, and enhancing Arabic vocabulary support.
-2.  **Section Navigation:** Correcting a bug where content from non-active sections remained visible.
-3.  **Class Assignment:** Fixing the logic to ensure students are properly assigned to classes during registration and that the teacher dashboard accurately filters students by their registered class. This involved identifying and correcting a hardcoded section in the  function in  and ensuring the  field is correctly handled in the backend  model.
-4.  **Math Keyboard Layout:** Adjusting button spacing, alignment, and ensuring all symbols are clickable, including the numeral toggle.
+The AI engineer is currently in the process of fixing a critical bug in the  component, specifically related to the answer validation logic for the Preparation stage. Following user feedback that answer validation was broken (not showing correct/wrong feedback), the engineer debugged the  function. The immediate discovery, as confirmed by console logs in Chat Message 614, is a . This indicates an infinite recursion loop within the  function, causing the validation process to crash before any feedback can be displayed to the user. This bug is blocking further progress on accurately validating student answers and providing instructional feedback. The last action was observing this critical error after rebuilding the frontend with added debugging. 
+Critical Issue: Answer validation was working in early versions but keeps breaking with each iteration due to regression - new fixes overwrite working code without proper testing.
 
-The engineer has applied a series of file edits across frontend components (, , , , , ) and backend files (, , ) to address these bugs. The last action performed in the trajectory was a command to rebuild the frontend after applying these fixes, indicating the next logical step would be to test these newly implemented changes comprehensively.
-Current Deployment Status:
-- Frontend: Successfully deployed at https://fahhemni.ai (Hostinger)
-- Backend: Successfully deployed at https://fahhemni-backend.onrender.com
-- Database: MongoDB connected and operational
-- Issue: Frontend-backend connection working, but bugs preventing full functionality
 </current_work>
 <optional_next_step>
-Rebuild the frontend and backend, then proceed with comprehensive testing to verify all implemented bug fixes.
+The immediate next step is to fix the  by correcting the infinite recursion within the  function in .
+CRITICAL: The normalizeAnswer function has infinite recursion causing stack overflow. 
+Fix this FIRST before any other changes:
+1. Find and fix the recursion in normalizeAnswer
+2. Test that answer validation works
+3. Only then proceed with other fixes
+
+DO NOT remove or break existing working features while fixing new ones.
 </optional_next_step>
