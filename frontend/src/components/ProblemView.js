@@ -910,7 +910,7 @@ const ProblemView = () => {
                             setShowExample(false); // Reset to show button state
                             setPracticeAnswer(''); // Clear practice answer when switching tabs
                           }}
-                          className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                          className={`whitespace-nowrap py-3 px-6 border-b-2 font-semibold text-lg ${
                             currentExample === index
                               ? 'border-blue-500 text-blue-600'
                               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
