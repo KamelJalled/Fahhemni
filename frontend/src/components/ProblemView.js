@@ -601,7 +601,10 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    if (problem?.step_solutions && problem.step_solutions.length > 0) {
+    // STEP 1 FIX: Force preparation stage to use userAnswer
+    if (problem.type === 'preparation') {
+      setUserAnswer(prev => prev + symbol);
+    } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
       const newAnswers = [...stepAnswers];
       const currentValue = newAnswers[activeInputIndex] || '';
       newAnswers[activeInputIndex] = currentValue + symbol;
