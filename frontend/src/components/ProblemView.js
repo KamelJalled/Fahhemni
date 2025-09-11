@@ -1014,7 +1014,7 @@ const ProblemView = () => {
 
                         {/* Solution Display */}
                         {showExample && (
-                          <>
+                          <div>
                             <div className="bg-green-50 p-8 rounded-lg mb-8 border border-green-200 max-w-5xl mx-auto">
                               <h4 className="font-bold text-2xl text-green-800 mb-6">
                                 {language === 'en' ? '💡 Step-by-Step Solution:' : '💡 الحل خطوة بخطوة:'}
@@ -1036,6 +1036,8 @@ const ProblemView = () => {
                                 </div>
                               </div>
                               
+                              {/* Step-by-Step Practice */}
+                              <div className="space-y-6">
                                 {/* Step 1 - FIXED: No placeholders, correct instructions for each example */}
                                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                                   <h5 className="font-semibold text-blue-800 mb-3">
