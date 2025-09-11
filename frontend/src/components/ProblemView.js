@@ -322,32 +322,49 @@ const ProblemView = () => {
         const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
         const normalizedCorrectAnswer = normalizeAnswer(problem.answer || '');
         
+        // ENHANCED: Accept both "7" and "x=7" formats for preparation
+        const acceptableAnswers = [
+          normalizedCorrectAnswer,
+          normalizedCorrectAnswer.replace('x=', ''), // Remove x= if present
+          'x=' + normalizedCorrectAnswer.replace('x=', ''), // Add x= if not present
+        ].filter(Boolean);
+        
+        const isCorrect = acceptableAnswers.includes(normalizedUserAnswer);
+        
         console.log(`🔍 Preparation answer validation:
           User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
           Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
-          Match: ${normalizedUserAnswer === normalizedCorrectAnswer}`);
+          Acceptable answers: ${JSON.stringify(acceptableAnswers)}
+          Match: ${isCorrect}`);
           
-        if (normalizedUserAnswer === normalizedCorrectAnswer) {
-          // CORRECT ANSWER
+        if (isCorrect) {
+          // ✅ CORRECT ANSWER - Green success message
           setIsCorrect(true);
           
-          const sectionName = problem.section_title || 'One-Step Inequalities';
           const successMessage = language === 'en' 
-            ? `✅ Correct! Well done! Now let's learn how to solve ${sectionName} step by step.`
-            : `✅ صحيح! أحسنت! الآن دعنا نتعلم كيفية حل ${sectionName} خطوة بخطوة.`;
+            ? `✅ Correct! Well done!`
+            : `✅ صحيح! أحسنت!`;
           
           setShowEncouragement(successMessage);
           setTimeout(() => setShowEncouragement(''), 8000);
           
           await submitToBackend();
         } else {
-          // WRONG ANSWER
+          // ❌ WRONG ANSWER - Red error message with hint progression
           setIsCorrect(false);
           setAttempts(prev => prev + 1);
           
-          const errorMessage = language === 'en' 
-            ? `❌ Try again. The correct answer format is "x = number" or just "number".`
-            : `❌ حاول مرة أخرى. الشكل الصحيح للإجابة هو "س = رقم" أو فقط "رقم".`;
+          let errorMessage;
+          if (attempts >= 2) {
+            // After 3 attempts, show skip option
+            errorMessage = language === 'en' 
+              ? `❌ Try again. Having trouble? You can skip to the Explanation stage to learn how to solve this.`
+              : `❌ حاول مرة أخرى. تواجه صعوبة؟ يمكنك الانتقال إلى مرحلة الشرح لتعلم كيفية الحل.`;
+          } else {
+            errorMessage = language === 'en' 
+              ? `❌ Try again. You can enter just "7" or "x = 7".`
+              : `❌ حاول مرة أخرى. يمكنك إدخال "٧" فقط أو "س = ٧".`;
+          }
           
           setShowEncouragement(errorMessage);
           setTimeout(() => setShowEncouragement(''), 7000);
