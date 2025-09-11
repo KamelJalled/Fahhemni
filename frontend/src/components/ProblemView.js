@@ -1132,8 +1132,8 @@ const ProblemView = () => {
                                       let step1Correct = false;
                                       
                                       if (index === 0) {
-                                        // Example 1: x + 3 ≥ 11 -> subtract 3 -> x ≥ 8
-                                        const step1Answers = ['x≥8', 'x≥11-3', 'x+3-3≥11-3'];
+                                        // Example 1: x + 4 ≤ 9 -> subtract 4 -> x ≤ 5
+                                        const step1Answers = ['x≤5', 'x≤9-4', 'x+4-4≤9-4'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       } else if (index === 1) {
                                         // Example 2: 4x > 16 -> divide by 4 -> x > 4
