@@ -1055,9 +1055,9 @@ const ProblemView = () => {
                                   </h5>
                                   
                                   <Input
-                                    value={explanationPracticeAnswer}
-                                    onChange={(e) => setExplanationPracticeAnswer(e.target.value)}
-                                    placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
+                                    value={explanationStep1Answer}
+                                    onChange={(e) => setExplanationStep1Answer(e.target.value)}
+                                    placeholder=""
                                     className="mb-3 text-center text-lg font-mono"
                                   />
                                   
