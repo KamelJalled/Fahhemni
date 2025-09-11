@@ -1168,46 +1168,58 @@ const ProblemView = () => {
                                     <Button 
                                       onClick={() => {
                                         console.log('🔍 Explanation stage - checking step 2, index:', index);
+                                        console.log('🔍 User Step 2 answer:', explanationStep2Answer);
                                         console.log('🔍 Expected answer:', example.practice_answer);
                                         
-                                        const correct = normalizeAnswer(explanationPracticeAnswer) === normalizeAnswer(example.practice_answer);
+                                        const correct = normalizeAnswer(explanationStep2Answer) === normalizeAnswer(example.practice_answer);
                                         console.log('🔍 Step 2 correct:', correct);
                                         
                                         if (correct) {
                                           const newPracticeComplete = [...practiceComplete];
                                           newPracticeComplete[index] = true;
                                           setPracticeComplete(newPracticeComplete);
-                                          setExplanationPracticeAnswer('');
+                                          
+                                          // Reset states for this example
+                                          setExplanationStep1Answer('');
+                                          setExplanationStep2Answer('');
                                           setExplanationStep(0);
                                           
-                                          // Auto-move to next example
+                                          setShowEncouragement(language === 'en' ? "Perfect! Well done!" : "ممتاز! أحسنت!");
+                                          
+                                          // Auto-move to next example after 3 seconds
                                           if (index < problem.interactive_examples.length - 1) {
                                             setTimeout(() => {
                                               setCurrentExample(index + 1);
                                               setShowExample(false);
+                                              setShowEncouragement('');
+                                            }, 3000);
+                                          } else {
+                                            // All examples completed
+                                            setTimeout(() => {
+                                              setShowEncouragement('');
                                             }, 3000);
                                           }
                                         } else {
                                           let errorMsg = '';
                                           if (index === 0) {
                                             errorMsg = language === 'en' 
-                                              ? "Check your calculation. What is 11 - 4?"
-                                              : "تحقق من حسابك. كم يساوي 11 - 4؟";
+                                              ? "The final answer should be exactly: x ≥ 7"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ 7";
                                           } else if (index === 1) {
                                             errorMsg = language === 'en' 
-                                              ? "Check your calculation. What is 16 ÷ 4?"
-                                              : "تحقق من حسابك. كم يساوي 16 ÷ 4؟";
+                                              ? "The final answer should be exactly: x > 4"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x > 4";
                                           } else if (index === 2) {
                                             errorMsg = language === 'en' 
-                                              ? "Check your calculation. What is 15 ÷ (-3)?"
-                                              : "تحقق من حسابك. كم يساوي 15 ÷ (-3)؟";
+                                              ? "The final answer should be exactly: x ≤ -5"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≤ -5";
                                           }
                                           setShowEncouragement(errorMsg);
                                           setTimeout(() => setShowEncouragement(''), 5000);
                                         }
                                       }}
                                       className="w-full bg-green-500 hover:bg-green-600"
-                                      disabled={!explanationPracticeAnswer.trim()}
+                                      disabled={!explanationStep2Answer.trim()}
                                     >
                                       {language === 'en' ? 'Check Final Answer' : 'تحقق من الإجابة النهائية'}
                                     </Button>
