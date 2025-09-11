@@ -324,9 +324,9 @@ const ProblemView = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     try {
-      // CRITICAL FIX: Force preparation stage to use simple validation
+      // CRITICAL FIX: Progressive three-try system for preparation stage
       if (problem.type === 'preparation') {
-        console.log('🔍 PREPARATION STAGE VALIDATION');
+        console.log('🔍 PREPARATION STAGE VALIDATION WITH PROGRESSIVE SYSTEM');
         
         const userSubmittedAnswer = userAnswer?.trim() || stepAnswers[0]?.trim() || '';
         const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
@@ -348,36 +348,62 @@ const ProblemView = () => {
           Match: ${isCorrect}`);
           
         if (isCorrect) {
-          // ✅ CORRECT ANSWER - Green success message
+          // ✅ CORRECT ANSWER - Congratulations with invitation to explanation
           setIsCorrect(true);
           
-          const successMessage = language === 'en' 
-            ? `✅ Correct! Well done!`
-            : `✅ صحيح! أحسنت!`;
+          const congratsMessage = language === 'en' 
+            ? `🎉 Excellent, that's correct! Great job solving this inequality. Would you like to review the detailed step-by-step solution in the explanation stage?`
+            : `🎉 ممتاز، هذا صحيح! عمل رائع في حل هذه المتباينة. هل تود مراجعة الحل التفصيلي خطوة بخطوة في مرحلة الشرح؟`;
           
-          setShowEncouragement(successMessage);
-          setTimeout(() => setShowEncouragement(''), 8000);
+          setShowEncouragement(congratsMessage);
+          setTimeout(() => setShowEncouragement(''), 10000);
           
           await submitToBackend();
         } else {
-          // ❌ WRONG ANSWER - Red error message with hint progression
+          // ❌ WRONG ANSWER - Progressive three-try system
           setIsCorrect(false);
           setAttempts(prev => prev + 1);
+          const currentAttempts = attempts + 1; // Since setAttempts is async
           
           let errorMessage;
-          if (attempts >= 2) {
-            // After 3 attempts, show skip option
+          let shouldShowHint = false;
+          
+          if (currentAttempts === 1) {
+            // First incorrect attempt - show encouragement + first hint
             errorMessage = language === 'en' 
-              ? `❌ Try again. Having trouble? You can skip to the Explanation stage to learn how to solve this.`
-              : `❌ حاول مرة أخرى. تواجه صعوبة؟ يمكنك الانتقال إلى مرحلة الشرح لتعلم كيفية الحل.`;
+              ? `Not quite, please try again. 💡 Let me show you the first hint to help you out.`
+              : `ليس تماماً، يرجى المحاولة مرة أخرى. 💡 دعني أوضح لك الإرشاد الأول لمساعدتك.`;
+            
+            // Auto-show first hint
+            if (problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) {
+              const newShowHints = [...showHints];
+              newShowHints[0] = true;
+              setShowHints(newShowHints);
+              setHintsUsed(1);
+              shouldShowHint = true;
+            }
+          } else if (currentAttempts === 2) {
+            // Second incorrect attempt - encourage using second hint
+            errorMessage = language === 'en' 
+              ? `Still not quite right. 💡 Please check the second hint for more guidance on solving this type of inequality.`
+              : `ما زال غير صحيح تماماً. 💡 يرجى مراجعة الإرشاد الثاني للحصول على مزيد من التوجيه في حل هذا النوع من المتباينات.`;
+            
+            // Auto-show second hint if available
+            if ((problem.hints_en?.length > 1) || (problem.hints_ar?.length > 1)) {
+              const newShowHints = [...showHints];
+              newShowHints[1] = true;
+              setShowHints(newShowHints);
+              setHintsUsed(Math.max(2, hintsUsed));
+            }
           } else {
+            // Third+ incorrect attempt - guide to explanation stage
             errorMessage = language === 'en' 
-              ? `❌ Try again. You can enter just "7" or "x = 7".`
-              : `❌ حاول مرة أخرى. يمكنك إدخال "٧" فقط أو "س = ٧".`;
+              ? `No problem, this can be tricky. Let's head to the explanation stage to understand the solving process better. Click "Skip to Next Stage" below to continue your learning journey.`
+              : `لا مشكلة، قد يكون هذا صعباً. دعنا ننتقل لمرحلة الشرح لفهم عملية الحل بشكل أفضل. انقر على "انتقل للمرحلة التالية" أدناه لمتابعة رحلة التعلم.`;
           }
           
           setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), 7000);
+          setTimeout(() => setShowEncouragement(''), shouldShowHint ? 12000 : 8000); // Longer timeout when showing hints
         }
         
         setIsSubmitted(true);
