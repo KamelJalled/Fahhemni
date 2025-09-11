@@ -976,46 +976,46 @@ const ProblemView = () => {
                               </div>
                               
                               {/* Input Field with Voice and Keyboard */}
-                              <div className="space-y-4">
-                                <div className="max-w-sm mx-auto">
+                              <div className="space-y-6">
+                                <div className="max-w-md mx-auto">
                                   <Input
                                     value={practiceAnswer}
                                     onChange={(e) => setPracticeAnswer(e.target.value)}
                                     onFocus={() => setActiveInputIndex(index)}
                                     placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
-                                    className="text-center text-lg font-mono"
+                                    className="text-center text-xl font-mono h-14"
                                   />
                                 </div>
                                 
                                 {/* Voice Input and Math Keyboard Buttons */}
-                                <div className="flex justify-center gap-3">
+                                <div className="flex justify-center gap-4">
                                   <Button 
                                     variant="outline"
-                                    size="sm"
+                                    size="lg"
                                     onClick={() => {
                                       setActiveInputIndex(index);
                                       setShowVoiceInput(!showVoiceInput);
                                       setShowMathKeyboard(false);
                                     }}
-                                    className="px-4 py-2 border-blue-300 text-blue-600 hover:bg-blue-50"
+                                    className="px-6 py-3 border-blue-300 text-blue-600 hover:bg-blue-50"
                                     title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
                                   >
-                                    <Mic className="w-4 h-4 mr-2" />
+                                    <Mic className="w-5 h-5 mr-2" />
                                     {language === 'en' ? 'Voice' : 'صوت'}
                                   </Button>
                                   
                                   <Button 
                                     variant="outline"
-                                    size="sm"
+                                    size="lg"
                                     onClick={() => {
                                       setActiveInputIndex(index);
                                       setShowMathKeyboard(!showMathKeyboard);
                                       setShowVoiceInput(false);
                                     }}
-                                    className="px-4 py-2 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                    className="px-6 py-3 border-purple-300 text-purple-600 hover:bg-purple-50"
                                     title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
                                   >
-                                    <Keyboard className="w-4 h-4 mr-2" />
+                                    <Keyboard className="w-5 h-5 mr-2" />
                                     {language === 'en' ? 'Keyboard' : 'لوحة'}
                                   </Button>
                                 </div>
