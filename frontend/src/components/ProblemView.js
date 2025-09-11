@@ -349,19 +349,27 @@ const ProblemView = () => {
   };
 
   const handleSubmit = async () => {
-    // Add loading delay for better UX
     setIsChecking(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     try {
       const stageType = getStageType(problem.type, problem.id);
       
-      if (stageType === 'learning') {
-        // LEARNING STAGES: Step-by-step guided solving
-        await handleLearningStageSubmission();
-      } else {
-        // TESTING STAGES: Final answer only with 3-attempt rule
-        await handleTestingStageSubmission();
+      switch (stageType) {
+        case 'preparation':
+          await handlePreparationStage();
+          break;
+        case 'explanation':
+          await handleExplanationStage();
+          break;
+        case 'practice':
+          await handlePracticeStage();
+          break;
+        case 'assessment':
+          await handleAssessmentStage();
+          break;
+        default:
+          await handlePreparationStage();
       }
     } catch (error) {
       console.error('Error submitting answer:', error);
@@ -370,10 +378,95 @@ const ProblemView = () => {
     }
   };
 
-  const handleLearningStageSubmission = async () => {
-    console.log('🎓 LEARNING STAGE: Step-by-step guided solving');
+  // 1. PREPARATION STAGE: Final answer only with auto-hints
+  const handlePreparationStage = async () => {
+    console.log('🎯 PREPARATION STAGE: Final answer with auto-hints');
     
-    // For learning stages, guide through each step
+    const userSubmittedAnswer = userAnswer?.trim();
+    if (!userSubmittedAnswer) {
+      setShowEncouragement(language === 'en' ? 'Please enter your final answer.' : 'يرجى إدخال إجابتك النهائية.');
+      setTimeout(() => setShowEncouragement(''), 3000);
+      return;
+    }
+    
+    const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
+    const normalizedCorrectAnswer = normalizeAnswer(problem.answer || '');
+    
+    const acceptableAnswers = [
+      normalizedCorrectAnswer,
+      normalizedCorrectAnswer.replace('x=', ''),
+      'x=' + normalizedCorrectAnswer.replace('x=', ''),
+    ].filter(Boolean);
+    
+    const isCorrect = acceptableAnswers.includes(normalizedUserAnswer);
+    
+    if (isCorrect) {
+      // ✅ CORRECT ANSWER
+      setIsCorrect(true);
+      const successMessage = language === 'en' 
+        ? `🎉 Excellent! That's correct! Ready to learn the step-by-step process?`
+        : `🎉 ممتاز! هذا صحيح! جاهز لتعلم العملية خطوة بخطوة؟`;
+      
+      setShowEncouragement(successMessage);
+      setTimeout(() => setShowEncouragement(''), 5000);
+      await submitToBackend();
+    } else {
+      // ❌ WRONG ANSWER - Auto-show hints
+      setIsCorrect(false);
+      setAttempts(prev => prev + 1);
+      const currentAttempts = attempts + 1;
+      
+      if (currentAttempts === 1) {
+        // First wrong attempt - auto-show Hint 1
+        let errorMessage = language === 'en' ? 'Try again.' : 'حاول مرة أخرى.';
+        
+        if (problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) {
+          const hint1 = language === 'en' ? problem.hints_en[0] : problem.hints_ar[0];
+          errorMessage += ` 💡 ${hint1}`;
+          setHintsUsed(1);
+        }
+        
+        setShowEncouragement(errorMessage);
+        setTimeout(() => setShowEncouragement(''), 8000);
+        
+      } else if (currentAttempts === 2) {
+        // Second wrong attempt - auto-show Hint 2
+        let errorMessage = language === 'en' ? 'Try again.' : 'حاول مرة أخرى.';
+        
+        if (problem.hints_en?.length > 1 || problem.hints_ar?.length > 1) {
+          const hint2 = language === 'en' ? problem.hints_en[1] : problem.hints_ar[1];
+          errorMessage += ` 💡 ${hint2}`;
+          setHintsUsed(2);
+        }
+        
+        setShowEncouragement(errorMessage);
+        setTimeout(() => setShowEncouragement(''), 8000);
+        
+      } else {
+        // Third wrong attempt - guide to explanation
+        const redirectMessage = language === 'en' 
+          ? `Having trouble? Let's learn how to solve this step by step.`
+          : `تواجه صعوبة؟ دعنا نتعلم كيفية حل هذا خطوة بخطوة.`;
+        
+        setShowEncouragement(redirectMessage);
+        setShowRedirectionButton(true);
+        setTimeout(() => setShowEncouragement(''), 6000);
+      }
+    }
+    
+    setIsSubmitted(true);
+  };
+
+  // 2. EXPLANATION STAGE: Teaching + step-by-step practice (handled in tabbed interface)
+  const handleExplanationStage = async () => {
+    // This is handled in the tabbed interface section
+    console.log('📚 EXPLANATION STAGE: Handled in tabbed interface');
+  };
+
+  // 3. PRACTICE STAGE: Step-by-step guided (no hints)
+  const handlePracticeStage = async () => {
+    console.log('📝 PRACTICE STAGE: Step-by-step guided');
+    
     const currentAnswer = stepAnswers[currentStep]?.trim() || '';
     
     if (!currentAnswer) {
@@ -384,7 +477,6 @@ const ProblemView = () => {
       return;
     }
     
-    // Get current step's expected answer and hints
     const expectedStepAnswers = problem.step_solutions || [];
     const currentStepData = expectedStepAnswers[currentStep];
     
@@ -393,7 +485,6 @@ const ProblemView = () => {
       return;
     }
     
-    // Validate current step against possible answers
     const normalizedUserAnswer = normalizeAnswer(currentAnswer);
     const possibleAnswers = language === 'en' ? currentStepData.possible_answers : currentStepData.possible_answers_ar;
     
@@ -404,88 +495,46 @@ const ProblemView = () => {
       );
     }
     
-    console.log(`🔍 Step ${currentStep + 1} validation:
-      User: "${currentAnswer}" → "${normalizedUserAnswer}"
-      Possible answers: ${JSON.stringify(possibleAnswers)}
-      Correct: ${isStepCorrect}`);
-    
     if (isStepCorrect) {
       // ✅ CORRECT STEP
       const newStepResults = [...stepResults];
       newStepResults[currentStep] = true;
       setStepResults(newStepResults);
       
-      // Provide encouraging feedback
-      const stepFeedback = [
-        language === 'en' ? "Excellent! That's correct." : "ممتاز! هذا صحيح.",
-        language === 'en' ? "Perfect! You're on the right track." : "مثالي! أنت على الطريق الصحيح.",
-        language === 'en' ? "Great job! Let's continue." : "عمل رائع! دعنا نكمل.",
-        language === 'en' ? "Correct! Well reasoned." : "صحيح! تفكير سليم."
-      ];
-      
-      const encouragingMessage = stepFeedback[Math.floor(Math.random() * stepFeedback.length)];
-      
       if (currentStep < expectedStepAnswers.length - 1) {
-        // Move to next step
         setCurrentStep(currentStep + 1);
-        setAttempts(0); // Reset attempts for new step
-        setShowEncouragement(`${encouragingMessage} ${language === 'en' ? 'Now for the next step...' : 'الآن للخطوة التالية...'}`);
+        setAttempts(0);
+        setShowEncouragement(language === 'en' ? "Good! Now for the next step..." : "جيد! الآن للخطوة التالية...");
       } else {
-        // All steps complete
         setAllStepsComplete(true);
         setIsCorrect(true);
-        setShowEncouragement(`🎉 ${encouragingMessage} ${language === 'en' ? 'You have successfully solved the problem step by step!' : 'لقد حللت المسألة بنجاح خطوة بخطوة!'}`);
+        setShowEncouragement(language === 'en' ? "🎉 Perfect! You've mastered this problem!" : "🎉 ممتاز! لقد أتقنت هذه المسألة!");
         await submitToBackend();
       }
       
-      setTimeout(() => setShowEncouragement(''), 5000);
+      setTimeout(() => setShowEncouragement(''), 4000);
       
     } else {
-      // ❌ INCORRECT STEP
-      setAttempts(prev => prev + 1);
-      const currentAttempts = attempts + 1;
+      // ❌ WRONG STEP - Specific feedback (no hints needed)
+      const stepInstruction = language === 'en' ? currentStepData.step_en : currentStepData.step_ar;
+      const feedback = language === 'en' 
+        ? `Not quite. Remember: ${stepInstruction}`
+        : `ليس تماماً. تذكر: ${stepInstruction}`;
       
-      let stepFeedback;
-      if (currentAttempts === 1) {
-        stepFeedback = language === 'en' 
-          ? `Not quite right. Let's think about this step carefully. ${currentStepData.hint_en || 'Try to break down what you need to do here.'}`
-          : `ليس صحيحاً تماماً. دعنا نفكر في هذه الخطوة بعناية. ${currentStepData.hint_ar || 'حاول تحليل ما تحتاج لفعله هنا.'}`;
-      } else if (currentAttempts === 2) {
-        stepFeedback = language === 'en' 
-          ? `Still not quite right. Here's a hint: ${currentStepData.step_en || 'Think about the inverse operation needed.'}`
-          : `ما زال غير صحيح تماماً. إليك تلميح: ${currentStepData.step_ar || 'فكر في العملية العكسية المطلوبة.'}`;
-      } else {
-        // Show correct approach and move to next step
-        const correctAnswer = possibleAnswers?.[0] || 'See explanation';
-        stepFeedback = language === 'en' 
-          ? `Let me show you the correct approach for this step: ${correctAnswer}`
-          : `دعني أوضح لك المنهج الصحيح لهذه الخطوة: ${correctAnswer}`;
-        
-        // After showing the answer, move to next step
-        setTimeout(() => {
-          if (currentStep < expectedStepAnswers.length - 1) {
-            setCurrentStep(currentStep + 1);
-            setAttempts(0); // Reset attempts for new step
-          }
-        }, 4000);
-      }
-      
-      setShowEncouragement(stepFeedback);
-      setTimeout(() => setShowEncouragement(''), 8000);
+      setShowEncouragement(feedback);
+      setTimeout(() => setShowEncouragement(''), 6000);
     }
     
     setIsSubmitted(true);
   };
 
-  const handleTestingStageSubmission = async () => {
-    console.log('📝 TESTING STAGE: Final answer validation with 3-attempt rule');
+  // 4. ASSESSMENT & EXAM PREP: Final answer with score penalties
+  const handleAssessmentStage = async () => {
+    console.log('🏆 ASSESSMENT STAGE: Final answer with penalties');
     
-    const userSubmittedAnswer = userAnswer?.trim() || stepAnswers[0]?.trim() || '';
-    
+    const userSubmittedAnswer = userAnswer?.trim();
     if (!userSubmittedAnswer) {
-      setShowEncouragement(language === 'en' 
-        ? 'Please enter your final answer.'
-        : 'يرجى إدخال إجابتك النهائية.');
+      setShowEncouragement(language === 'en' ? 'Please enter your final answer.' : 'يرجى إدخال إجابتك النهائية.');
       setTimeout(() => setShowEncouragement(''), 3000);
       return;
     }
@@ -493,110 +542,63 @@ const ProblemView = () => {
     const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
     const normalizedCorrectAnswer = normalizeAnswer(problem.answer || '');
     
-    // ENHANCED: Accept both "7" and "x=7" formats for testing stages
     const acceptableAnswers = [
       normalizedCorrectAnswer,
-      normalizedCorrectAnswer.replace('x=', ''), // Remove x= if present
-      'x=' + normalizedCorrectAnswer.replace('x=', ''), // Add x= if not present
+      normalizedCorrectAnswer.replace('x=', ''),
+      'x=' + normalizedCorrectAnswer.replace('x=', ''),
     ].filter(Boolean);
     
     const isCorrect = acceptableAnswers.includes(normalizedUserAnswer);
     
-    console.log(`🔍 Testing stage validation:
-      User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
-      Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
-      Acceptable answers: ${JSON.stringify(acceptableAnswers)}
-      Match: ${isCorrect}`);
-      
     if (isCorrect) {
-      // ✅ CORRECT FINAL ANSWER
+      // ✅ CORRECT ANSWER
       setIsCorrect(true);
+      const scoreDisplay = currentScore < 100 
+        ? `Score: ${currentScore}% - ${hintsUsed} hint${hintsUsed > 1 ? 's' : ''} used`
+        : 'Score: 100% - Perfect!';
       
-      // PREPARATION STAGE: Progressive feedback system
-      if (problem.type === 'preparation') {
-        const congratsMessage = language === 'en' 
-          ? `🎉 Excellent, that's correct! Great job solving this inequality. Would you like to review the detailed step-by-step solution in the explanation stage?`
-          : `🎉 ممتاز، هذا صحيح! عمل رائع في حل هذه المتباينة. هل تود مراجعة الحل التفصيلي خطوة بخطوة في مرحلة الشرح؟`;
-        
-        setShowEncouragement(congratsMessage);
-        setTimeout(() => setShowEncouragement(''), 10000);
-      } else {
-        // Other testing stages
-        const successMessage = language === 'en' 
-          ? `✅ Correct! Well done solving this inequality.`
-          : `✅ صحيح! أحسنت في حل هذه المتباينة.`;
-        
-        setShowEncouragement(successMessage);
-        setTimeout(() => setShowEncouragement(''), 5000);
-      }
+      const successMessage = language === 'en' 
+        ? `✅ Correct! ${scoreDisplay}`
+        : `✅ صحيح! النتيجة: ${currentScore}%`;
       
+      setShowEncouragement(successMessage);
+      setTimeout(() => setShowEncouragement(''), 5000);
       await submitToBackend();
     } else {
-      // ❌ WRONG ANSWER - 3-attempt rule with mandatory redirection
+      // ❌ WRONG ANSWER - Auto-show hints with penalties
       setIsCorrect(false);
       setAttempts(prev => prev + 1);
       const currentAttempts = attempts + 1;
       
-      if (currentAttempts >= 3) {
-        // MANDATORY REDIRECTION AFTER 3 FAILED ATTEMPTS
+      if (currentAttempts <= 2) {
+        // Deduct points for hint usage
+        const newScore = currentScore - (15 * currentAttempts); // 15% penalty per hint
+        setCurrentScore(Math.max(newScore, 10)); // Minimum 10%
+        setHintsUsed(currentAttempts);
+        
+        const hintIndex = currentAttempts - 1;
+        let errorMessage = language === 'en' ? 'Try again.' : 'حاول مرة أخرى.';
+        
+        if (problem.hints_en?.length > hintIndex && problem.hints_ar?.length > hintIndex) {
+          const hint = language === 'en' ? problem.hints_en[hintIndex] : problem.hints_ar[hintIndex];
+          errorMessage += ` 💡 ${hint}`;
+        }
+        
+        const scoreDisplay = `Score: ${Math.max(newScore, 10)}% - ${currentAttempts} hint${currentAttempts > 1 ? 's' : ''} used`;
+        errorMessage += ` (${scoreDisplay})`;
+        
+        setShowEncouragement(errorMessage);
+        setTimeout(() => setShowEncouragement(''), 10000);
+        
+      } else {
+        // Third attempt - redirect to explanation
         const redirectMessage = language === 'en' 
-          ? `It seems this concept needs more review. Let's go back to the Explanation Stage to master the steps. Understanding the process will help you solve these problems more confidently.`
-          : `يبدو أن هذا المفهوم يحتاج إلى مزيد من المراجعة. دعنا نعود إلى مرحلة الشرح لإتقان الخطوات. فهم العملية سيساعدك على حل هذه المسائل بثقة أكبر.`;
+          ? `Review the Explanation stage to master this concept.`
+          : `راجع مرحلة الشرح لإتقان هذا المفهوم.`;
         
         setShowEncouragement(redirectMessage);
-        
-        // Show redirection button after 3 seconds
-        setTimeout(() => {
-          setShowRedirectionButton(true);
-        }, 3000);
-        
-        setTimeout(() => setShowEncouragement(''), 12000);
-      } else {
-        // Progressive feedback for preparation stage
-        if (problem.type === 'preparation') {
-          let errorMessage;
-          let shouldShowHint = false;
-          
-          if (currentAttempts === 1) {
-            // First incorrect attempt - show encouragement + first hint
-            errorMessage = language === 'en' 
-              ? `Not quite, please try again. 💡 Let me show you the first hint to help you out.`
-              : `ليس تماماً، يرجى المحاولة مرة أخرى. 💡 دعني أوضح لك الإرشاد الأول لمساعدتك.`;
-            
-            // Auto-show first hint
-            if (problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) {
-              const newShowHints = [...showHints];
-              newShowHints[0] = true;
-              setShowHints(newShowHints);
-              setHintsUsed(1);
-              shouldShowHint = true;
-            }
-          } else if (currentAttempts === 2) {
-            // Second incorrect attempt - encourage using second hint
-            errorMessage = language === 'en' 
-              ? `Still not quite right. 💡 Please check the second hint for more guidance on solving this type of inequality.`
-              : `ما زال غير صحيح تماماً. 💡 يرجى مراجعة الإرشاد الثاني للحصول على مزيد من التوجيه في حل هذا النوع من المتباينات.`;
-            
-            // Auto-show second hint if available
-            if ((problem.hints_en?.length > 1) || (problem.hints_ar?.length > 1)) {
-              const newShowHints = [...showHints];
-              newShowHints[1] = true;
-              setShowHints(newShowHints);
-              setHintsUsed(Math.max(2, hintsUsed));
-            }
-          }
-          
-          setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), shouldShowHint ? 12000 : 8000);
-        } else {
-          // Other testing stages - simpler feedback
-          const errorMessage = language === 'en' 
-            ? `Not quite right. Try again! (${3 - currentAttempts} attempts remaining)`
-            : `ليس صحيحاً تماماً. حاول مرة أخرى! (${3 - currentAttempts} محاولات متبقية)`;
-          
-          setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), 5000);
-        }
+        setShowRedirectionButton(true);
+        setTimeout(() => setShowEncouragement(''), 6000);
       }
     }
     
