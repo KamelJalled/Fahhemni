@@ -810,7 +810,7 @@ const ProblemView = () => {
   return (
     <div className="min-h-screen p-4">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 max-w-7xl mx-auto">
         <Button onClick={() => navigate('/dashboard')} variant="outline">
           <ArrowLeft className="w-4 h-4 mr-2" />
           {text[language].back}
@@ -821,7 +821,8 @@ const ProblemView = () => {
         </Button>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      {/* Main Content Container - Expanded Width */}
+      <div className="max-w-7xl mx-auto w-full">
         {/* Problem Header */}
         <Card className="mb-6">
           <CardHeader>
