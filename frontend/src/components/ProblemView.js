@@ -884,24 +884,24 @@ const ProblemView = () => {
               </Card>
             )}
 
-            {/* INTERACTIVE PRACTICE EXAMPLES - TABBED INTERFACE */}
+            {/* INTERACTIVE PRACTICE EXAMPLES - TABBED INTERFACE - FULL WIDTH */}
             {problem.interactive_examples && (
-              <Card className="mb-6">
+              <Card className="mb-6 w-full">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-center text-xl font-bold text-gray-800">
+                  <CardTitle className="text-center text-2xl font-bold text-gray-800">
                     {language === 'en' ? '🎯 Practice Examples' : '🎯 أمثلة تطبيقية'}
                   </CardTitle>
-                  <p className="text-center text-gray-600 text-sm">
+                  <p className="text-center text-gray-600 text-base">
                     {language === 'en' 
                       ? 'Practice what you learned with these guided examples'
                       : 'تدرب على ما تعلمته مع هذه الأمثلة الموجهة'}
                   </p>
                 </CardHeader>
                 
-                <CardContent className="p-6">
-                  {/* TABBED NAVIGATION */}
-                  <div className="border-b border-gray-200 mb-6">
-                    <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                <CardContent className="p-8">
+                  {/* TABBED NAVIGATION - EXPANDED */}
+                  <div className="border-b border-gray-200 mb-8">
+                    <nav className="-mb-px flex justify-center space-x-12" aria-label="Tabs">
                       {problem.interactive_examples.map((example, index) => (
                         <button
                           key={index}
