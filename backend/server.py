@@ -122,12 +122,15 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
         # Calculate score
         score = calculate_score(new_attempts, attempt.hints_used, is_correct)
         
-        # Update progress
+        # Update progress - once completed, it stays completed
+        was_already_completed = current_problem_progress.completed if current_problem_progress else False
+        is_now_completed = was_already_completed or is_correct
+        
         progress_data = {
             "student_username": username,
             "section_id": "section1",
             "problem_id": attempt.problem_id,
-            "completed": is_correct,
+            "completed": is_now_completed,
             "score": score if is_correct else (current_problem_progress.score if current_problem_progress else 0),
             "attempts": new_attempts,
             "hints_used": attempt.hints_used
