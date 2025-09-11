@@ -484,35 +484,79 @@ const ProblemView = () => {
         if (normalizedUserAnswer === normalizedCorrectAnswer) {
           setIsCorrect(true);
           
-          // FIXED: Special handling for preparation stage completion with learning invitation
+          // SUCCESS: Preparation stage completion with congratulations
           if (problem.type === 'preparation' || problem.id?.includes('prep')) {
-            const sectionName = problem.section_title || 'One-Step Inequalities';
-            const invitationMessage = language === 'en' 
-              ? `🎉 Excellent work! You solved this correctly. Now let's learn how to solve ${sectionName} step by step. Click "Continue to Next Stage" to start the guided learning process.`
-              : `🎉 عمل ممتاز! لقد حللت هذه المسألة بشكل صحيح. الآن دعنا نتعلم كيفية حل ${sectionName} خطوة بخطوة. انقر على "انتقل للمرحلة التالية" لبدء عملية التعلم الموجه.`;
+            const congratsMessage = language === 'en' 
+              ? `🎉 Excellent, that's correct! Great job solving this inequality. Would you like to review the detailed step-by-step solution in the explanation stage?`
+              : `🎉 ممتاز، هذا صحيح! عمل رائع في حل هذه المتباينة. هل تود مراجعة الحل التفصيلي خطوة بخطوة في مرحلة الشرح؟`;
             
-            setShowEncouragement(invitationMessage);
-            setTimeout(() => setShowEncouragement(''), 8000); // Extended time for longer message
+            setShowEncouragement(congratsMessage);
+            setTimeout(() => setShowEncouragement(''), 10000); // Extended time for longer message
           }
           
           await submitToBackend();
         } else {
           setIsCorrect(false);
           
-          // Enhanced error feedback with hints after multiple attempts
+          // NEW: Progressive three-try system for preparation stage
           setAttempts(prev => prev + 1);
+          const currentAttempts = attempts + 1; // Since setAttempts is async
           
-          let errorMessage;
-          if (attempts >= 1) {
-            errorMessage = language === 'en' 
-              ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the Explanation stage for help!`
-              : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع مرحلة الشرح للمساعدة!`;
+          if (problem.type === 'preparation' || problem.id?.includes('prep')) {
+            let errorMessage;
+            let shouldShowHint = false;
+            
+            if (currentAttempts === 1) {
+              // First incorrect attempt - show encouragement + first hint
+              errorMessage = language === 'en' 
+                ? `Not quite, please try again. 💡 Let me show you the first hint to help you out.`
+                : `ليس تماماً، يرجى المحاولة مرة أخرى. 💡 دعني أوضح لك الإرشاد الأول لمساعدتك.`;
+              
+              // Auto-show first hint
+              if (problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) {
+                const newShowHints = [...showHints];
+                newShowHints[0] = true;
+                setShowHints(newShowHints);
+                setHintsUsed(1);
+                shouldShowHint = true;
+              }
+            } else if (currentAttempts === 2) {
+              // Second incorrect attempt - encourage using second hint
+              errorMessage = language === 'en' 
+                ? `Still not quite right. 💡 Please check the second hint for more guidance on solving this type of inequality.`
+                : `ما زال غير صحيح تماماً. 💡 يرجى مراجعة الإرشاد الثاني للحصول على مزيد من التوجيه في حل هذا النوع من المتباينات.`;
+              
+              // Auto-show second hint if available
+              if ((problem.hints_en?.length > 1) || (problem.hints_ar?.length > 1)) {
+                const newShowHints = [...showHints];
+                newShowHints[1] = true;
+                setShowHints(newShowHints);
+                setHintsUsed(Math.max(2, hintsUsed));
+              }
+            } else {
+              // Third+ incorrect attempt - guide to explanation stage
+              errorMessage = language === 'en' 
+                ? `No problem, this can be tricky. Let's head to the explanation stage to understand the solving process better. Click "Skip to Next Stage" below to continue your learning journey.`
+                : `لا مشكلة، قد يكون هذا صعباً. دعنا ننتقل لمرحلة الشرح لفهم عملية الحل بشكل أفضل. انقر على "انتقل للمرحلة التالية" أدناه لمتابعة رحلة التعلم.`;
+            }
+            
+            setShowEncouragement(errorMessage);
+            setTimeout(() => setShowEncouragement(''), shouldShowHint ? 12000 : 8000); // Longer timeout when showing hints
+            
           } else {
-            errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
+            // For other stages, use original logic
+            let errorMessage;
+            if (currentAttempts >= 2) {
+              errorMessage = language === 'en' 
+                ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the hints for help!`
+                : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع الإرشادات للمساعدة!`;
+            } else {
+              errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
+            }
+            
+            setShowEncouragement(errorMessage);
+            setTimeout(() => setShowEncouragement(''), 7000);
           }
-          
-          setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), 7000); // Extended to 7 seconds
         }
       }
     } catch (error) {
