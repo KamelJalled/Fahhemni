@@ -1262,172 +1262,325 @@ const ProblemView = () => {
               </CardContent>
             </Card>
 
-            {/* INPUT INTERFACE FOR ALL STAGES - GENERALIZED FROM PREPARATION */}
-            {/* Show input interface for non-explanation stages */}
+            {/* DUAL INTERACTION MODEL: Learning vs Testing Stages */}
             {problem.type !== 'explanation' && (
-            <Card>
-              <CardContent className="p-6">
-                <h4 className="font-semibold mb-4 text-emerald-800">
-                  {language === 'en' ? 'Your Answer:' : 'إجابتك:'}
-                </h4>
-                
-                {/* Single Input Field - Works for all stages */}
-                <Input
-                  value={userAnswer}
-                  onChange={(e) => setUserAnswer(e.target.value)}
-                  onFocus={() => setActiveInputIndex(0)}
-                  placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
-                  className="mb-4 text-lg h-12"
-                />
-                
-                {/* Buttons Row - Voice Input + Math Keyboard + Submit */}
-                <div className="flex gap-2 mb-4">
-                  <Button 
-                    onClick={() => {
-                      console.log('🔍 Submit button clicked for stage:', problem?.type);
-                      console.log('🔍 Current userAnswer:', userAnswer);
-                      handleSubmit();
-                    }}
-                    className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600"
-                    disabled={isChecking || !userAnswer?.trim()}
-                  >
-                    {isChecking ? (
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                        {text[language].completion.checking}
+              <Card>
+                <CardContent className="p-6">
+                  {getStageType(problem.type, problem.id) === 'learning' ? (
+                    // LEARNING STAGES: Step-by-step guided solving
+                    <div>
+                      <h4 className="font-semibold mb-4 text-blue-800 flex items-center">
+                        <BookOpen className="w-5 h-5 mr-2" />
+                        {language === 'en' ? `Step ${currentStep + 1}: Solve Step-by-Step` : `الخطوة ${currentStep + 1}: حل خطوة بخطوة`}
+                      </h4>
+                      
+                      {/* Step Progress Indicator */}
+                      <div className="mb-4">
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          {[0, 1, 2].map((step) => (
+                            <div
+                              key={step}
+                              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                                step < currentStep
+                                  ? 'bg-green-500 text-white'
+                                  : step === currentStep
+                                  ? 'bg-blue-500 text-white'
+                                  : 'bg-gray-200 text-gray-500'
+                              }`}
+                            >
+                              {step + 1}
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-sm text-gray-600 text-center">
+                          {language === 'en' ? 'Complete each step to solve the inequality' : 'أكمل كل خطوة لحل المتباينة'}
+                        </p>
                       </div>
-                    ) : (
-                      language === 'en' ? 'Submit Answer' : 'إرسال الإجابة'
-                    )}
-                  </Button>
-                  
-                  {/* Voice Input Button - FIXED: Now included in UI */}
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setActiveInputIndex(0);
-                      setShowVoiceInput(!showVoiceInput);
-                      setShowMathKeyboard(false);
-                    }}
-                    className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
-                    title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
-                  >
-                    <Mic className="w-4 h-4" />
-                  </Button>
-                  
-                  {/* Math Keyboard Button */}
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setActiveInputIndex(0);
-                      setShowMathKeyboard(!showMathKeyboard);
-                      setShowVoiceInput(false);
-                    }}
-                    className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
-                    title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
-                  >
-                    <Keyboard className="w-4 h-4" />
-                  </Button>
-                </div>
 
-                {/* Voice Input Component - FIXED: Now rendered in UI */}
-                {showVoiceInput && (
-                  <div className="mt-4">
-                    <VoiceInput
-                      onResult={handleVoiceResult}
-                      onError={handleVoiceError}
-                      language={language}
-                      isActive={showVoiceInput}
-                    />
-                  </div>
-                )}
-
-                {/* Math Keyboard Component */}
-                {showMathKeyboard && (
-                  <div className="mt-4">
-                    <MathKeyboard
-                      onSymbolSelect={handleSymbolSelect}
-                      onNumberSelect={handleNumberSelect}
-                      onOperatorSelect={handleOperatorSelect}
-                      onAction={handleKeyboardAction}
-                    />
-                  </div>
-                )}
-
-                {/* Enhanced Encouragement Message with Colors */}
-                {showEncouragement && (
-                  <div className={`mt-4 p-3 rounded-lg ${
-                    showEncouragement.includes('✅') ? 'bg-green-50 border border-green-200' :
-                    showEncouragement.includes('❌') ? 'bg-red-50 border border-red-200' :
-                    'bg-yellow-50 border border-yellow-200'
-                  }`}>
-                    <p className={`text-center font-medium ${
-                      showEncouragement.includes('✅') ? 'text-green-800' :
-                      showEncouragement.includes('❌') ? 'text-red-800' :
-                      'text-yellow-800'
-                    }`}>
-                      {showEncouragement}
-                    </p>
-                  </div>
-                )}
-
-                {/* Action Buttons - Enhanced for All Stages */}
-                <div className="mt-4 flex gap-2">
-                  {/* Continue to Next Stage - Only after correct answer */}
-                  {isCorrect && (
-                    <Button 
-                      onClick={handleNextProblem}
-                      className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
-                    >
-                      <Trophy className="w-4 h-4 mr-2" />
-                      {problem.type === 'preparation' && (language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←')}
-                      {problem.type === 'assessment' && (language === 'en' ? 'Continue to Exam Prep →' : 'انتقل لإعداد الاختبار ←')}
-                      {problem.type === 'examprep' && (language === 'en' ? 'Complete Section →' : 'إكمال القسم ←')}
-                      {!['preparation', 'assessment', 'examprep'].includes(problem.type) && (language === 'en' ? 'Continue →' : 'متابعة ←')}
-                    </Button>
+                      {/* Current Step Question */}
+                      <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <h5 className="font-medium text-blue-800 mb-2">
+                          {problem.step_solutions?.[currentStep] 
+                            ? (language === 'en' ? problem.step_solutions[currentStep].question_en : problem.step_solutions[currentStep].question_ar)
+                            : (language === 'en' ? `What is the first step to solve this inequality?` : `ما هي الخطوة الأولى لحل هذه المتباينة؟`)}
+                        </h5>
+                      </div>
+                      
+                      {/* Step Input */}
+                      <Input
+                        value={stepAnswers[currentStep] || ''}
+                        onChange={(e) => {
+                          const newStepAnswers = [...stepAnswers];
+                          newStepAnswers[currentStep] = e.target.value;
+                          setStepAnswers(newStepAnswers);
+                        }}
+                        onFocus={() => setActiveInputIndex(currentStep)}
+                        placeholder={language === 'en' ? `Enter your answer for step ${currentStep + 1}...` : `أدخل إجابتك للخطوة ${currentStep + 1}...`}
+                        className="mb-4 text-lg h-12"
+                      />
+                    </div>
+                  ) : (
+                    // TESTING STAGES: Final answer only
+                    <div>
+                      <h4 className="font-semibold mb-4 text-emerald-800 flex items-center">
+                        <Target className="w-5 h-5 mr-2" />
+                        {language === 'en' ? 'Final Answer:' : 'الإجابة النهائية:'}
+                      </h4>
+                      
+                      {/* Attempt Counter */}
+                      {attempts > 0 && attempts < 3 && (
+                        <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                          <p className="text-orange-800 text-sm">
+                            {language === 'en' 
+                              ? `Attempt ${attempts} of 3. ${3 - attempts} attempts remaining.`
+                              : `المحاولة ${attempts} من 3. ${3 - attempts} محاولات متبقية.`}
+                          </p>
+                        </div>
+                      )}
+                      
+                      {/* Final Answer Input */}
+                      <Input
+                        value={userAnswer}
+                        onChange={(e) => setUserAnswer(e.target.value)}
+                        onFocus={() => setActiveInputIndex(0)}
+                        placeholder={language === 'en' ? 'Enter your final answer (e.g., x < 4)...' : 'أدخل إجابتك النهائية (مثال: س < 4)...'}
+                        className="mb-4 text-lg h-12"
+                      />
+                    </div>
                   )}
                   
-                  {/* Skip to Next Stage - After 3 failed attempts */}
-                  {!isCorrect && attempts >= 3 && (
+                  {/* Common Buttons Row */}
+                  <div className="flex gap-2 mb-4">
                     <Button 
                       onClick={() => {
-                        // Navigate to next stage based on current stage
-                        const nextStageMap = {
-                          'preparation': 'explanation1',
-                          'assessment': 'examprep1',
-                          'examprep': '/dashboard'
-                        };
-                        const nextStage = nextStageMap[problem.type];
-                        if (nextStage === '/dashboard') {
-                          navigate('/dashboard');
-                        } else {
-                          navigate(`/problem/${nextStage}`);
-                        }
+                        console.log('🔍 Submit button clicked for stage:', problem?.type);
+                        console.log('🔍 Current stage type:', getStageType(problem.type, problem.id));
+                        handleSubmit();
                       }}
-                      className="flex-1 h-12 bg-gradient-to-r from-orange-500 to-amber-600"
-                      variant="outline"
+                      className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600"
+                      disabled={isChecking || (getStageType(problem.type, problem.id) === 'learning' 
+                        ? !stepAnswers[currentStep]?.trim() 
+                        : !userAnswer?.trim())}
                     >
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Skip to Next Stage' : 'انتقل للمرحلة التالية'}
+                      {isChecking ? (
+                        <div className="flex items-center">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                          {text[language].completion.checking}
+                        </div>
+                      ) : (
+                        getStageType(problem.type, problem.id) === 'learning'
+                          ? (language === 'en' ? 'Submit Step' : 'إرسال الخطوة')
+                          : (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية')
+                      )}
                     </Button>
-                  )}
-                  
-                  {/* Try Again - Only after wrong answer */}
-                  {isSubmitted && !isCorrect && attempts < 3 && (
+                    
+                    {/* Voice Input Button */}
                     <Button 
-                      onClick={handleTryAgain}
-                      className="flex-1 h-12"
                       variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setActiveInputIndex(getStageType(problem.type, problem.id) === 'learning' ? currentStep : 0);
+                        setShowVoiceInput(!showVoiceInput);
+                        setShowMathKeyboard(false);
+                      }}
+                      className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                      title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
                     >
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      {text[language].tryAgain}
+                      <Mic className="w-4 h-4" />
                     </Button>
+                    
+                    {/* Math Keyboard Button */}
+                    <Button 
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setActiveInputIndex(getStageType(problem.type, problem.id) === 'learning' ? currentStep : 0);
+                        setShowMathKeyboard(!showMathKeyboard);
+                        setShowVoiceInput(false);
+                      }}
+                      className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                      title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                    >
+                      <Keyboard className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  {/* Voice Input Component */}
+                  {showVoiceInput && (
+                    <div className="mt-4">
+                      <VoiceInput
+                        onResult={(result) => {
+                          if (getStageType(problem.type, problem.id) === 'learning') {
+                            const newStepAnswers = [...stepAnswers];
+                            newStepAnswers[currentStep] = result;
+                            setStepAnswers(newStepAnswers);
+                          } else {
+                            setUserAnswer(result);
+                          }
+                          setShowVoiceInput(false);
+                        }}
+                        onError={handleVoiceError}
+                        language={language}
+                        isActive={showVoiceInput}
+                      />
+                    </div>
                   )}
-                </div>
-              </CardContent>
-            </Card>
+
+                  {/* Math Keyboard Component */}
+                  {showMathKeyboard && (
+                    <div className="mt-4">
+                      <MathKeyboard
+                        onSymbolSelect={(symbol) => {
+                          if (getStageType(problem.type, problem.id) === 'learning') {
+                            const newStepAnswers = [...stepAnswers];
+                            newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '') + symbol;
+                            setStepAnswers(newStepAnswers);
+                          } else {
+                            setUserAnswer(prev => prev + symbol);
+                          }
+                        }}
+                        onNumberSelect={(number) => {
+                          if (getStageType(problem.type, problem.id) === 'learning') {
+                            const newStepAnswers = [...stepAnswers];
+                            newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '') + number;
+                            setStepAnswers(newStepAnswers);
+                          } else {
+                            setUserAnswer(prev => prev + number);
+                          }
+                        }}
+                        onOperatorSelect={(operator) => {
+                          if (getStageType(problem.type, problem.id) === 'learning') {
+                            const newStepAnswers = [...stepAnswers];
+                            newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '') + ` ${operator} `;
+                            setStepAnswers(newStepAnswers);
+                          } else {
+                            setUserAnswer(prev => prev + ` ${operator} `);
+                          }
+                        }}
+                        onAction={(action) => {
+                          if (action === 'clear') {
+                            if (getStageType(problem.type, problem.id) === 'learning') {
+                              const newStepAnswers = [...stepAnswers];
+                              newStepAnswers[currentStep] = '';
+                              setStepAnswers(newStepAnswers);
+                            } else {
+                              setUserAnswer('');
+                            }
+                          } else if (action === 'backspace') {
+                            if (getStageType(problem.type, problem.id) === 'learning') {
+                              const newStepAnswers = [...stepAnswers];
+                              newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '').slice(0, -1);
+                              setStepAnswers(newStepAnswers);
+                            } else {
+                              setUserAnswer(prev => prev.slice(0, -1));
+                            }
+                          } else if (action === 'voice') {
+                            setShowVoiceInput(!showVoiceInput);
+                            setShowMathKeyboard(false);
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Enhanced Encouragement Message with Colors */}
+                  {showEncouragement && (
+                    <div className={`mt-4 p-3 rounded-lg ${
+                      showEncouragement.includes('✅') || showEncouragement.includes('🎉') || showEncouragement.includes('Excellent') || showEncouragement.includes('Perfect') ? 'bg-green-50 border border-green-200' :
+                      showEncouragement.includes('❌') || showEncouragement.includes('Not quite') || showEncouragement.includes('Still not') ? 'bg-red-50 border border-red-200' :
+                      'bg-yellow-50 border border-yellow-200'
+                    }`}>
+                      <p className={`text-center font-medium ${
+                        showEncouragement.includes('✅') || showEncouragement.includes('🎉') || showEncouragement.includes('Excellent') || showEncouragement.includes('Perfect') ? 'text-green-800' :
+                        showEncouragement.includes('❌') || showEncouragement.includes('Not quite') || showEncouragement.includes('Still not') ? 'text-red-800' :
+                        'text-yellow-800'
+                      }`}>
+                        {showEncouragement}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* MANDATORY REDIRECTION BUTTON - Testing Stages Only */}
+                  {showRedirectionButton && getStageType(problem.type, problem.id) === 'testing' && (
+                    <div className="mt-4">
+                      <Button 
+                        onClick={() => navigate('/problem/explanation1')}
+                        className="w-full h-12 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
+                      >
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        {language === 'en' ? '📚 Go to Explanation Stage' : '📚 انتقل لمرحلة الشرح'}
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Action Buttons - Enhanced for All Stages */}
+                  <div className="mt-4 flex gap-2">
+                    {/* Continue to Next Stage - Only after correct answer or all steps complete */}
+                    {(isCorrect || allStepsComplete) && (
+                      <Button 
+                        onClick={handleNextProblem}
+                        className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
+                      >
+                        <Trophy className="w-4 h-4 mr-2" />
+                        {problem.type === 'preparation' && (language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←')}
+                        {problem.type === 'assessment' && (language === 'en' ? 'Continue to Exam Prep →' : 'انتقل لإعداد الاختبار ←')}
+                        {problem.type === 'examprep' && (language === 'en' ? 'Complete Section →' : 'إكمال القسم ←')}
+                        {getStageType(problem.type, problem.id) === 'learning' && (language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←')}
+                        {!['preparation', 'assessment', 'examprep'].includes(problem.type) && getStageType(problem.type, problem.id) === 'testing' && (language === 'en' ? 'Continue →' : 'متابعة ←')}
+                      </Button>
+                    )}
+                    
+                    {/* Skip to Next Stage - After 3 failed attempts in testing stages */}
+                    {!isCorrect && !allStepsComplete && attempts >= 3 && getStageType(problem.type, problem.id) === 'testing' && (
+                      <Button 
+                        onClick={() => {
+                          // Navigate to next stage based on current stage
+                          const nextStageMap = {
+                            'preparation': 'explanation1',
+                            'assessment': 'examprep1',
+                            'examprep': '/dashboard'
+                          };
+                          const nextStage = nextStageMap[problem.type];
+                          if (nextStage === '/dashboard') {
+                            navigate('/dashboard');
+                          } else {
+                            navigate(`/problem/${nextStage}`);
+                          }
+                        }}
+                        className="flex-1 h-12 bg-gradient-to-r from-orange-500 to-amber-600"
+                        variant="outline"
+                      >
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        {language === 'en' ? 'Skip to Next Stage' : 'انتقل للمرحلة التالية'}
+                      </Button>
+                    )}
+                    
+                    {/* Try Again - Only after wrong answer and under 3 attempts */}
+                    {isSubmitted && !isCorrect && !allStepsComplete && attempts < 3 && getStageType(problem.type, problem.id) === 'testing' && (
+                      <Button 
+                        onClick={() => {
+                          setIsSubmitted(false);
+                          setShowEncouragement('');
+                          if (getStageType(problem.type, problem.id) === 'learning') {
+                            // For learning stages, clear current step
+                            const newStepAnswers = [...stepAnswers];
+                            newStepAnswers[currentStep] = '';
+                            setStepAnswers(newStepAnswers);
+                          } else {
+                            // For testing stages, clear final answer
+                            setUserAnswer('');
+                          }
+                        }}
+                        className="flex-1 h-12"
+                        variant="outline"
+                      >
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        {text[language].tryAgain}
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
             )}
 
           {/* Hints Section - Moved to Full Width */}
