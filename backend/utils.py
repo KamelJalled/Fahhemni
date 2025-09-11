@@ -40,10 +40,15 @@ def normalize_answer(answer: str, problem_type: str = None, expected_answer: str
     
     # ENHANCEMENT: For preparation stage, accept both "x = 7" and "7" formats
     if problem_type == 'preparation' or (expected_answer and 'prep' in str(expected_answer)):
+        # If input has "x=" and expected answer is just a number, remove "x=" from input
+        if 'x=' in normalized and expected_answer:
+            expected_normalized = basic_normalize_answer(expected_answer)
+            if re.match(r'^-?\d+(\.\d+)?$', expected_normalized):
+                # Remove "x=" from the input to match the expected format
+                normalized = re.sub(r'^x=', '', normalized)
         # If input is just a number and expected answer has "x =", add "x ="
-        if re.match(r'^-?\d+(\.\d+)?$', normalized):
-            # Use basic_normalize_answer to avoid recursion
-            expected_normalized = basic_normalize_answer(expected_answer or '')
+        elif re.match(r'^-?\d+(\.\d+)?$', normalized) and expected_answer:
+            expected_normalized = basic_normalize_answer(expected_answer)
             if 'x=' in expected_normalized and 'x' not in normalized:
                 normalized = 'x=' + normalized
     
