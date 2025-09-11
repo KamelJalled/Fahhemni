@@ -524,65 +524,21 @@ const ProblemView = () => {
         } else {
           setIsCorrect(false);
           
-          // NEW: Progressive three-try system for preparation stage
+          // For other stages, use original logic
           setAttempts(prev => prev + 1);
-          const currentAttempts = attempts + 1; // Since setAttempts is async
+          const currentAttempts = attempts + 1;
           
-          if (problem.type === 'preparation' || problem.id?.includes('prep')) {
-            let errorMessage;
-            let shouldShowHint = false;
-            
-            if (currentAttempts === 1) {
-              // First incorrect attempt - show encouragement + first hint
-              errorMessage = language === 'en' 
-                ? `Not quite, please try again. 💡 Let me show you the first hint to help you out.`
-                : `ليس تماماً، يرجى المحاولة مرة أخرى. 💡 دعني أوضح لك الإرشاد الأول لمساعدتك.`;
-              
-              // Auto-show first hint
-              if (problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) {
-                const newShowHints = [...showHints];
-                newShowHints[0] = true;
-                setShowHints(newShowHints);
-                setHintsUsed(1);
-                shouldShowHint = true;
-              }
-            } else if (currentAttempts === 2) {
-              // Second incorrect attempt - encourage using second hint
-              errorMessage = language === 'en' 
-                ? `Still not quite right. 💡 Please check the second hint for more guidance on solving this type of inequality.`
-                : `ما زال غير صحيح تماماً. 💡 يرجى مراجعة الإرشاد الثاني للحصول على مزيد من التوجيه في حل هذا النوع من المتباينات.`;
-              
-              // Auto-show second hint if available
-              if ((problem.hints_en?.length > 1) || (problem.hints_ar?.length > 1)) {
-                const newShowHints = [...showHints];
-                newShowHints[1] = true;
-                setShowHints(newShowHints);
-                setHintsUsed(Math.max(2, hintsUsed));
-              }
-            } else {
-              // Third+ incorrect attempt - guide to explanation stage
-              errorMessage = language === 'en' 
-                ? `No problem, this can be tricky. Let's head to the explanation stage to understand the solving process better. Click "Skip to Next Stage" below to continue your learning journey.`
-                : `لا مشكلة، قد يكون هذا صعباً. دعنا ننتقل لمرحلة الشرح لفهم عملية الحل بشكل أفضل. انقر على "انتقل للمرحلة التالية" أدناه لمتابعة رحلة التعلم.`;
-            }
-            
-            setShowEncouragement(errorMessage);
-            setTimeout(() => setShowEncouragement(''), shouldShowHint ? 12000 : 8000); // Longer timeout when showing hints
-            
+          let errorMessage;
+          if (currentAttempts >= 2) {
+            errorMessage = language === 'en' 
+              ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the hints for help!`
+              : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع الإرشادات للمساعدة!`;
           } else {
-            // For other stages, use original logic
-            let errorMessage;
-            if (currentAttempts >= 2) {
-              errorMessage = language === 'en' 
-                ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the hints for help!`
-                : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع الإرشادات للمساعدة!`;
-            } else {
-              errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
-            }
-            
-            setShowEncouragement(errorMessage);
-            setTimeout(() => setShowEncouragement(''), 7000);
+            errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
           }
+          
+          setShowEncouragement(errorMessage);
+          setTimeout(() => setShowEncouragement(''), 7000);
         }
       }
     } catch (error) {
