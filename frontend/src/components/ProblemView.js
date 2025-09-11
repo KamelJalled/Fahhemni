@@ -1053,14 +1053,16 @@ const ProblemView = () => {
               </CardContent>
             </Card>
 
-            {/* STEP 1: CLEAN PREPARATION STAGE INPUT - EXACT COPY FROM PRACTICE */}
+            {/* INPUT INTERFACE FOR ALL STAGES - GENERALIZED FROM PREPARATION */}
+            {/* Show input interface for non-explanation stages */}
+            {problem.type !== 'explanation' && (
             <Card>
               <CardContent className="p-6">
                 <h4 className="font-semibold mb-4 text-emerald-800">
                   {language === 'en' ? 'Your Answer:' : 'إجابتك:'}
                 </h4>
                 
-                {/* Single Input Field - Exact copy from Practice stage */}
+                {/* Single Input Field - Works for all stages */}
                 <Input
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
@@ -1069,13 +1071,12 @@ const ProblemView = () => {
                   className="mb-4 text-lg h-12"
                 />
                 
-                {/* Buttons Row */}
+                {/* Buttons Row - Voice Input + Math Keyboard + Submit */}
                 <div className="flex gap-2 mb-4">
                   <Button 
                     onClick={() => {
-                      console.log('🔍 Submit button clicked for preparation stage');
+                      console.log('🔍 Submit button clicked for stage:', problem?.type);
                       console.log('🔍 Current userAnswer:', userAnswer);
-                      console.log('🔍 Problem type:', problem?.type);
                       handleSubmit();
                     }}
                     className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600"
@@ -1091,13 +1092,29 @@ const ProblemView = () => {
                     )}
                   </Button>
                   
-                  {/* Math Keyboard Button - Exact copy from Practice */}
+                  {/* Voice Input Button - FIXED: Now included in UI */}
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setActiveInputIndex(0);
+                      setShowVoiceInput(!showVoiceInput);
+                      setShowMathKeyboard(false);
+                    }}
+                    className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                    title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
+                  >
+                    <Mic className="w-4 h-4" />
+                  </Button>
+                  
+                  {/* Math Keyboard Button */}
                   <Button 
                     variant="outline"
                     size="sm"
                     onClick={() => {
                       setActiveInputIndex(0);
                       setShowMathKeyboard(!showMathKeyboard);
+                      setShowVoiceInput(false);
                     }}
                     className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
                     title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
@@ -1106,7 +1123,19 @@ const ProblemView = () => {
                   </Button>
                 </div>
 
-                {/* Math Keyboard Component - Exact copy from Practice */}
+                {/* Voice Input Component - FIXED: Now rendered in UI */}
+                {showVoiceInput && (
+                  <div className="mt-4">
+                    <VoiceInput
+                      onResult={handleVoiceResult}
+                      onError={handleVoiceError}
+                      language={language}
+                      isActive={showVoiceInput}
+                    />
+                  </div>
+                )}
+
+                {/* Math Keyboard Component */}
                 {showMathKeyboard && (
                   <div className="mt-4">
                     <MathKeyboard
@@ -1135,7 +1164,7 @@ const ProblemView = () => {
                   </div>
                 )}
 
-                {/* Action Buttons - Enhanced for Preparation Stage */}
+                {/* Action Buttons - Enhanced for All Stages */}
                 <div className="mt-4 flex gap-2">
                   {/* Continue to Next Stage - Only after correct answer */}
                   {isCorrect && (
@@ -1144,19 +1173,35 @@ const ProblemView = () => {
                       className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
                     >
                       <Trophy className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←'}
+                      {problem.type === 'preparation' && (language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←')}
+                      {problem.type === 'assessment' && (language === 'en' ? 'Continue to Exam Prep →' : 'انتقل لإعداد الاختبار ←')}
+                      {problem.type === 'examprep' && (language === 'en' ? 'Complete Section →' : 'إكمال القسم ←')}
+                      {!['preparation', 'assessment', 'examprep'].includes(problem.type) && (language === 'en' ? 'Continue →' : 'متابعة ←')}
                     </Button>
                   )}
                   
-                  {/* Skip to Explanation - Only after 3 failed attempts */}
+                  {/* Skip to Next Stage - After 3 failed attempts */}
                   {!isCorrect && attempts >= 3 && (
                     <Button 
-                      onClick={() => navigate('/problem/explanation1')}
+                      onClick={() => {
+                        // Navigate to next stage based on current stage
+                        const nextStageMap = {
+                          'preparation': 'explanation1',
+                          'assessment': 'examprep1',
+                          'examprep': '/dashboard'
+                        };
+                        const nextStage = nextStageMap[problem.type];
+                        if (nextStage === '/dashboard') {
+                          navigate('/dashboard');
+                        } else {
+                          navigate(`/problem/${nextStage}`);
+                        }
+                      }}
                       className="flex-1 h-12 bg-gradient-to-r from-orange-500 to-amber-600"
                       variant="outline"
                     >
                       <BookOpen className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Skip to Explanation' : 'انتقل للشرح'}
+                      {language === 'en' ? 'Skip to Next Stage' : 'انتقل للمرحلة التالية'}
                     </Button>
                   )}
                   
@@ -1174,6 +1219,7 @@ const ProblemView = () => {
                 </div>
               </CardContent>
             </Card>
+            )}
           </div>
 
           {/* Right Column - Hints (Hidden by Default) */}
