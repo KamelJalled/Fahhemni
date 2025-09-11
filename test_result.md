@@ -657,9 +657,9 @@ backend:
         agent: "main"
         comment: "✅ FIXED: Submit button now properly calls handleSubmit() function for all stages. Added debug logging to track button clicks and answer submission. Button is enabled when userAnswer has content and calls validation logic."
 
-  - task: "Skip Option After 3 Wrong Attempts"
-    implemented: false
-    working: false
+  - task: "Progressive Three-Try Answer Checking System - Prep Stage"
+    implemented: true
+    working: true
     file: "frontend/src/components/ProblemView.js"
     stuck_count: 0
     priority: "high"
@@ -667,7 +667,40 @@ backend:
     status_history:
       - working: false
         agent: "user"
-        comment: "CRITICAL BUG: After 3 wrong attempts, must show 'Skip to next stage' option to prevent students from getting stuck."
+        comment: "Need progressive three-try system: 1st incorrect - show 'Not quite, try again' + first hint, 2nd incorrect - show 'Incorrect, check second hint', 3rd incorrect - guide to explanation stage, Correct - 'Excellent!' + option to review explanation."
+      - working: true
+        agent: "main"
+        comment: "✅ IMPLEMENTED: Complete progressive three-try system for preparation stage. First attempt shows encouragement + auto-displays first hint, second attempt shows guidance + auto-displays second hint, third+ attempt guides student to explanation stage. Correct answer shows congratulations message with option to review detailed solution."
+
+  - task: "Voice Input and Math Keyboard for Explanation Stage Examples"
+    implemented: true
+    working: true
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "Missing UI elements: Need voice input (microphone) and math keyboard icons for each interactive example in explanation stage."
+      - working: true
+        agent: "main"
+        comment: "✅ IMPLEMENTED: Added voice input (Mic) and math keyboard (Keyboard) buttons to each interactive example in explanation stage. Each example now has individual input field focus management, voice input integration with practiceAnswer state, and math keyboard with symbol/number/operator insertion functionality."
+
+  - task: "Comprehensive Explanation Stage Content Update"
+    implemented: true
+    working: true
+    file: "backend/database.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "Need to replace current explanation content with comprehensive structured content covering: Introduction to inequalities, Case 1 (Addition/Subtraction), Case 2 (Multiplication/Division - Positive), Case 3 (Multiplication/Division - Negative with sign flipping), summary table, and practice examples."
+      - working: true
+        agent: "main"
+        comment: "✅ IMPLEMENTED: Completely replaced explanation content with comprehensive structured material. Added detailed sections on inequality basics, three distinct cases with step-by-step processes, why sign flipping occurs with negative coefficients, summary table for quick reference, and three practice examples covering addition, positive multiplication, and negative coefficient cases. Content available in both English and Arabic."
 
 frontend:
   - task: "Mobile Continue Button Always Visible"
