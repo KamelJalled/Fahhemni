@@ -1020,7 +1020,7 @@ const ProblemView = () => {
                               </pre>
                             </div>
 
-                            {/* Practice Section */}
+                            {/* FIXED: Practice Section with Step-by-Step Guidance */}
                             <div className="bg-yellow-50 p-8 rounded-lg border border-yellow-200 max-w-3xl mx-auto">
                               <h4 className="font-bold text-2xl text-yellow-800 mb-6 text-center">
                                 {language === 'en' ? '✏️ Now You Try:' : '✏️ الآن جربه بنفسك:'}
@@ -1032,80 +1032,120 @@ const ProblemView = () => {
                                 </div>
                               </div>
                               
-                              {/* Input Field with Voice and Keyboard */}
+                              {/* Step-by-Step Practice */}
                               <div className="space-y-6">
-                                <div className="max-w-md mx-auto">
-                                  <Input
-                                    value={practiceAnswer}
-                                    onChange={(e) => setPracticeAnswer(e.target.value)}
-                                    onFocus={() => setActiveInputIndex(index)}
-                                    placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
-                                    className="text-center text-xl font-mono h-14"
-                                  />
-                                </div>
-                                
-                                {/* Voice Input and Math Keyboard Buttons */}
-                                <div className="flex justify-center gap-4">
-                                  <Button 
-                                    variant="outline"
-                                    size="lg"
-                                    onClick={() => {
-                                      setActiveInputIndex(index);
-                                      setShowVoiceInput(!showVoiceInput);
-                                      setShowMathKeyboard(false);
-                                    }}
-                                    className="px-6 py-3 border-blue-300 text-blue-600 hover:bg-blue-50"
-                                    title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
-                                  >
-                                    <Mic className="w-5 h-5 mr-2" />
-                                    {language === 'en' ? 'Voice' : 'صوت'}
-                                  </Button>
+                                {/* Step 1 */}
+                                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                  <h5 className="font-semibold text-blue-800 mb-3">
+                                    {language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين'}
+                                  </h5>
                                   
+                                  <Input
+                                    value={explanationPracticeAnswer}
+                                    onChange={(e) => setExplanationPracticeAnswer(e.target.value)}
+                                    placeholder={language === 'en' ? 'Enter: x + 4 - 4 ≤ 9 - 4' : 'أدخل: س + 4 - 4 ≤ 9 - 4'}
+                                    className="mb-3 text-center text-lg font-mono"
+                                  />
+                                  
+                                  <div className="flex justify-center gap-3 mb-3">
+                                    <Button 
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => {
+                                        setActiveInputIndex(index);
+                                        setShowVoiceInput(!showVoiceInput);
+                                        setShowMathKeyboard(false);
+                                      }}
+                                      className="px-4 py-2 border-blue-300 text-blue-600 hover:bg-blue-50"
+                                    >
+                                      <Mic className="w-4 h-4 mr-2" />
+                                      {language === 'en' ? 'Voice' : 'صوت'}
+                                    </Button>
+                                    
+                                    <Button 
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => {
+                                        setActiveInputIndex(index);
+                                        setShowMathKeyboard(!showMathKeyboard);
+                                        setShowVoiceInput(false);
+                                      }}
+                                      className="px-4 py-2 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                    >
+                                      <Keyboard className="w-4 h-4 mr-2" />
+                                      {language === 'en' ? 'Keyboard' : 'لوحة'}
+                                    </Button>
+                                  </div>
+
                                   <Button 
-                                    variant="outline"
-                                    size="lg"
                                     onClick={() => {
-                                      setActiveInputIndex(index);
-                                      setShowMathKeyboard(!showMathKeyboard);
-                                      setShowVoiceInput(false);
+                                      const step1Answers = ['x+4-4≤9-4', 'x≤9-4', 'x+0≤9-4'];
+                                      const normalized = normalizeAnswer(explanationPracticeAnswer);
+                                      const isCorrect = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      
+                                      if (isCorrect) {
+                                        setExplanationStep(1);
+                                        setShowEncouragement(language === 'en' ? "Good! Now simplify" : "جيد! الآن بسّط");
+                                        setTimeout(() => setShowEncouragement(''), 3000);
+                                      } else {
+                                        setShowEncouragement(language === 'en' 
+                                          ? "Not quite. Remember to subtract 4 from BOTH sides"
+                                          : "ليس تماماً. تذكر أن تطرح 4 من الطرفين");
+                                        setTimeout(() => setShowEncouragement(''), 5000);
+                                      }
                                     }}
-                                    className="px-6 py-3 border-purple-300 text-purple-600 hover:bg-purple-50"
-                                    title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                                    className="w-full bg-blue-500 hover:bg-blue-600"
+                                    disabled={!explanationPracticeAnswer.trim()}
                                   >
-                                    <Keyboard className="w-5 h-5 mr-2" />
-                                    {language === 'en' ? 'Keyboard' : 'لوحة'}
+                                    {language === 'en' ? 'Check Step 1' : 'تحقق من الخطوة 1'}
                                   </Button>
                                 </div>
 
-                                {/* Check Answer Button */}
-                                <div className="text-center">
-                                  <Button 
-                                    onClick={() => {
-                                      const correct = normalizeAnswer(practiceAnswer) === normalizeAnswer(example.practice_answer);
-                                      if (correct) {
-                                        const newPracticeComplete = [...practiceComplete];
-                                        newPracticeComplete[index] = true;
-                                        setPracticeComplete(newPracticeComplete);
-                                        setPracticeAnswer('');
-                                        
-                                        // Auto-move to next example after 3 seconds
-                                        if (index < problem.interactive_examples.length - 1) {
-                                          setTimeout(() => {
-                                            setCurrentExample(index + 1);
-                                            setShowExample(false);
-                                          }, 3000);
+                                {/* Step 2 - Only show if Step 1 is complete */}
+                                {explanationStep >= 1 && (
+                                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <h5 className="font-semibold text-green-800 mb-3">
+                                      {language === 'en' ? 'Step 2: Write the simplified answer' : 'الخطوة 2: اكتب الإجابة المبسطة'}
+                                    </h5>
+                                    
+                                    <Input
+                                      value={explanationPracticeAnswer}
+                                      onChange={(e) => setExplanationPracticeAnswer(e.target.value)}
+                                      placeholder={language === 'en' ? 'Enter: x ≤ 5' : 'أدخل: س ≤ 5'}
+                                      className="mb-3 text-center text-lg font-mono"
+                                    />
+
+                                    <Button 
+                                      onClick={() => {
+                                        const correct = normalizeAnswer(explanationPracticeAnswer) === normalizeAnswer(example.practice_answer);
+                                        if (correct) {
+                                          const newPracticeComplete = [...practiceComplete];
+                                          newPracticeComplete[index] = true;
+                                          setPracticeComplete(newPracticeComplete);
+                                          setExplanationPracticeAnswer('');
+                                          setExplanationStep(0);
+                                          
+                                          // Auto-move to next example
+                                          if (index < problem.interactive_examples.length - 1) {
+                                            setTimeout(() => {
+                                              setCurrentExample(index + 1);
+                                              setShowExample(false);
+                                            }, 3000);
+                                          }
+                                        } else {
+                                          setShowEncouragement(language === 'en' 
+                                            ? "Check your calculation. What is 9 - 4?"
+                                            : "تحقق من حسابك. كم يساوي 9 - 4؟");
+                                          setTimeout(() => setShowEncouragement(''), 5000);
                                         }
-                                      } else {
-                                        setShowEncouragement(text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]);
-                                        setTimeout(() => setShowEncouragement(''), 3000);
-                                      }
-                                    }}
-                                    className="px-12 py-4 text-xl bg-green-500 hover:bg-green-600"
-                                    disabled={!practiceAnswer.trim()}
-                                  >
-                                    {language === 'en' ? '✓ Check Answer' : '✓ تحقق من الإجابة'}
-                                  </Button>
-                                </div>
+                                      }}
+                                      className="w-full bg-green-500 hover:bg-green-600"
+                                      disabled={!explanationPracticeAnswer.trim()}
+                                    >
+                                      {language === 'en' ? 'Check Final Answer' : 'تحقق من الإجابة النهائية'}
+                                    </Button>
+                                  </div>
+                                )}
 
                                 {/* Success Message */}
                                 {practiceComplete[index] && (
