@@ -678,17 +678,22 @@ const ProblemView = () => {
       resetProblemState();
       navigate(`/problem/${nextProblemId}`);
     } else {
-      // Completed last problem in section - show completion screen
-      const currentSection = problemId.includes('section1') || problemOrder.includes(problemId) ? 'section1' : 'unknown';
+      // FIXED: Completed examprep1 - navigate to dashboard with message to start next section
+      console.log('🎯 Completed examprep1 - redirecting to dashboard');
+      resetProblemState();
       
-      // Check if this is the final section (Section 5) - for now treating section1 as demo completion
-      if (currentSection === 'section1') {
-        setCompletionType('final'); // Demo completion
-      } else {
-        setCompletionType('section'); // Regular section completion
-      }
+      // Show completion message and redirect to dashboard
+      const completionMessage = language === 'en' 
+        ? 'Great job! You can now start the next section.'
+        : 'أحسنت! يمكنك الآن البدء في القسم التالي.';
       
-      setShowCompletionScreen(true);
+      // Redirect to dashboard to select next section
+      navigate('/dashboard', { 
+        state: { 
+          message: completionMessage,
+          completedSection: 'section1' 
+        }
+      });
     }
   };
 
