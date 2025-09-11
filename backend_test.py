@@ -1215,24 +1215,24 @@ class MathTutoringAPITester:
         return passed, total, self.test_results
 
 def main():
-    """Main test execution - Focus on Critical Mobile Optimization Tests"""
-    print("🔍 CRITICAL MOBILE OPTIMIZATION BACKEND TESTING")
-    print("Focus: Class Assignment Bug and Mobile Backend Features")
+    """Main test execution - Focus on Infinite Recursion Bug Fix"""
+    print("🔍 CRITICAL PHASE 1 VERIFICATION: Test the infinite recursion bug fix in answer validation")
+    print("Focus: Answer validation system after fixing the infinite recursion bug")
     print()
     
     tester = MathTutoringAPITester(BACKEND_URL)
     
-    # Run critical mobile tests first
-    passed, total, results = tester.run_critical_mobile_tests()
+    # Run infinite recursion bug fix tests first
+    passed, total, results = tester.run_infinite_recursion_bug_tests()
     
     # Save detailed results
-    with open("/app/test_results_critical_mobile.json", "w") as f:
+    with open("/app/test_results_infinite_recursion_fix.json", "w") as f:
         json.dump({
             "summary": {"passed": passed, "total": total, "success_rate": passed/total},
             "results": results,
             "backend_url": BACKEND_URL,
             "test_timestamp": datetime.now().isoformat(),
-            "test_focus": "critical_mobile_optimization"
+            "test_focus": "infinite_recursion_bug_fix"
         }, f, indent=2)
     
     # Exit with appropriate code
