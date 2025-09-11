@@ -666,7 +666,9 @@ const ProblemView = () => {
     setShowRedirectionButton(false);
     setCurrentScore(100); // Reset score
     setExplanationStep(0); // Reset explanation step
-    setExplanationPracticeAnswer(''); // Reset explanation practice answer
+    setExplanationPracticeAnswer(''); // Reset explanation practice answer (legacy)
+    setExplanationStep1Answer(''); // Reset explanation step 1
+    setExplanationStep2Answer(''); // Reset explanation step 2
   };
 
   const handleNextProblem = () => {
