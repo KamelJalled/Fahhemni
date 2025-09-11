@@ -1196,6 +1196,37 @@ const ProblemView = () => {
                                       className="mb-3 text-center text-lg font-mono"
                                     />
 
+                                    {/* FIXED: Add Voice and Keyboard buttons for Step 2 */}
+                                    <div className="flex justify-center gap-3 mb-3">
+                                      <Button 
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          setActiveInputIndex(index);
+                                          setShowVoiceInput(!showVoiceInput);
+                                          setShowMathKeyboard(false);
+                                        }}
+                                        className="px-4 py-2 border-green-300 text-green-600 hover:bg-green-50"
+                                      >
+                                        <Mic className="w-4 h-4 mr-2" />
+                                        {language === 'en' ? 'Voice' : 'صوت'}
+                                      </Button>
+                                      
+                                      <Button 
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          setActiveInputIndex(index);
+                                          setShowMathKeyboard(!showMathKeyboard);
+                                          setShowVoiceInput(false);
+                                        }}
+                                        className="px-4 py-2 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                      >
+                                        <Keyboard className="w-4 h-4 mr-2" />
+                                        {language === 'en' ? 'Keyboard' : 'لوحة'}
+                                      </Button>
+                                    </div>
+
                                     <Button 
                                       onClick={() => {
                                         console.log('🔍 Explanation stage - checking step 2, index:', index);
