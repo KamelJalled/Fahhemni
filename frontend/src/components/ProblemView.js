@@ -1114,13 +1114,13 @@ const ProblemView = () => {
                   {/* Completion Message */}
                   {practiceComplete.length === problem.interactive_examples.length && 
                    practiceComplete.every(completed => completed) && (
-                    <div className="mt-8 text-center p-8 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
-                      <div className="text-green-600 mb-4">
-                        <CheckCircle className="w-20 h-20 mx-auto mb-4" />
-                        <h3 className="text-3xl font-bold mb-3">
+                    <div className="mt-12 text-center p-10 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200 max-w-4xl mx-auto">
+                      <div className="text-green-600 mb-6">
+                        <CheckCircle className="w-24 h-24 mx-auto mb-6" />
+                        <h3 className="text-4xl font-bold mb-4">
                           {language === 'en' ? '🎊 Explanation Complete!' : '🎊 اكتمل الشرح!'}
                         </h3>
-                        <p className="text-xl">
+                        <p className="text-2xl">
                           {language === 'en' 
                             ? 'Outstanding work! You have mastered all the examples. Ready for the practice stage!' 
                             : 'عمل رائع! لقد أتقنت جميع الأمثلة. جاهز لمرحلة التطبيق!'}
@@ -1129,9 +1129,9 @@ const ProblemView = () => {
                       
                       <Button 
                         onClick={handleNextProblem}
-                        className="mt-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-4 text-xl font-semibold"
+                        className="mt-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-16 py-6 text-2xl font-semibold"
                       >
-                        <Trophy className="w-6 h-6 mr-3" />
+                        <Trophy className="w-8 h-8 mr-4" />
                         {language === 'en' ? 'Continue to Practice Stage →' : 'انتقل لمرحلة التطبيق ←'}
                       </Button>
                     </div>
