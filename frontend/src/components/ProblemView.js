@@ -853,18 +853,16 @@ const ProblemView = () => {
           </CardHeader>
         </Card>
 
-        {/* Problem Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Problem */}
-          <div>
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-center">
-                  {language === 'en' ? 'Solve the inequality:' : 'حل المتباينة:'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
+        <div className="grid grid-cols-1 gap-6">
+          {/* Problem Card */}
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-center">
+                {language === 'en' ? 'Solve the inequality:' : 'حل المتباينة:'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
             {/* COMPREHENSIVE EXPLANATION STAGE CONTENT */}
             {problem.show_full_solution && problem.explanation_en && (
