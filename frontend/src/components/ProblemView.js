@@ -1306,7 +1306,7 @@ const ProblemView = () => {
                       <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                         <h5 className="font-medium text-blue-800 mb-2">
                           {problem.step_solutions?.[currentStep] 
-                            ? (language === 'en' ? problem.step_solutions[currentStep].question_en : problem.step_solutions[currentStep].question_ar)
+                            ? (language === 'en' ? problem.step_solutions[currentStep].step_en : problem.step_solutions[currentStep].step_ar)
                             : (language === 'en' ? `What is the first step to solve this inequality?` : `ما هي الخطوة الأولى لحل هذه المتباينة؟`)}
                         </h5>
                       </div>
