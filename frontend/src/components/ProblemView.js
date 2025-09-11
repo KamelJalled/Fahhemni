@@ -705,7 +705,16 @@ const ProblemView = () => {
 
   // Voice input handlers
   const handleVoiceResult = (result) => {
-    if (problem?.step_solutions && problem.step_solutions.length > 0) {
+    if (problem?.type === 'explanation') {
+      // FIXED: Handle explanation stage voice input for step 1 and step 2
+      if (explanationStep === 0) {
+        // Step 1
+        setExplanationStep1Answer(result);
+      } else if (explanationStep === 1) {
+        // Step 2
+        setExplanationStep2Answer(result);
+      }
+    } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
       const newAnswers = [...stepAnswers];
       newAnswers[activeInputIndex] = result;
       setStepAnswers(newAnswers);
