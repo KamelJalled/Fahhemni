@@ -1265,8 +1265,8 @@ const ProblemView = () => {
                                           let errorMsg = '';
                                           if (index === 0) {
                                             errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x ≥ 7"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ 7";
+                                              ? "The final answer should be exactly: x ≥ 8"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ 8";
                                           } else if (index === 1) {
                                             errorMsg = language === 'en' 
                                               ? "The final answer should be exactly: x > 4"
