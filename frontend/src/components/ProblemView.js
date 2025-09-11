@@ -945,12 +945,90 @@ const ProblemView = () => {
                               {language === 'en' ? example.practice_question_en : example.practice_question_ar}
                             </div>
                             
-                            <Input
-                              value={practiceAnswer}
-                              onChange={(e) => setPracticeAnswer(e.target.value)}
-                              placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
-                              className="mb-3"
-                            />
+                            <div className="mb-3">
+                              <Input
+                                value={practiceAnswer}
+                                onChange={(e) => setPracticeAnswer(e.target.value)}
+                                onFocus={() => setActiveInputIndex(index)}
+                                placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
+                                className="mb-2"
+                              />
+                              
+                              {/* Voice Input and Math Keyboard buttons for each example */}
+                              <div className="flex gap-2 justify-center">
+                                {/* Voice Input Button */}
+                                <Button 
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setActiveInputIndex(index);
+                                    setShowVoiceInput(!showVoiceInput);
+                                    setShowMathKeyboard(false);
+                                  }}
+                                  className="px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
+                                  title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
+                                >
+                                  <Mic className="w-4 h-4" />
+                                </Button>
+                                
+                                {/* Math Keyboard Button */}
+                                <Button 
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setActiveInputIndex(index);
+                                    setShowMathKeyboard(!showMathKeyboard);
+                                    setShowVoiceInput(false);
+                                  }}
+                                  className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                  title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                                >
+                                  <Keyboard className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              
+                              {/* Voice Input Component for explanation examples */}
+                              {showVoiceInput && activeInputIndex === index && (
+                                <div className="mt-2">
+                                  <VoiceInput
+                                    onResult={(result) => {
+                                      setPracticeAnswer(result);
+                                      setShowVoiceInput(false);
+                                    }}
+                                    onError={handleVoiceError}
+                                    language={language}
+                                    isActive={showVoiceInput}
+                                  />
+                                </div>
+                              )}
+
+                              {/* Math Keyboard Component for explanation examples */}
+                              {showMathKeyboard && activeInputIndex === index && (
+                                <div className="mt-2">
+                                  <MathKeyboard
+                                    onSymbolSelect={(symbol) => {
+                                      setPracticeAnswer(prev => prev + symbol);
+                                    }}
+                                    onNumberSelect={(number) => {
+                                      setPracticeAnswer(prev => prev + number);
+                                    }}
+                                    onOperatorSelect={(operator) => {
+                                      setPracticeAnswer(prev => prev + ` ${operator} `);
+                                    }}
+                                    onAction={(action) => {
+                                      if (action === 'clear') {
+                                        setPracticeAnswer('');
+                                      } else if (action === 'backspace') {
+                                        setPracticeAnswer(prev => prev.slice(0, -1));
+                                      } else if (action === 'voice') {
+                                        setShowVoiceInput(!showVoiceInput);
+                                        setShowMathKeyboard(false);
+                                      }
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
                             
                             <Button 
                               onClick={() => {
