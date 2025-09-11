@@ -1043,7 +1043,7 @@ const ProblemView = () => {
                                         setTimeout(() => setShowEncouragement(''), 3000);
                                       }
                                     }}
-                                    className="px-8 py-3 text-lg bg-green-500 hover:bg-green-600"
+                                    className="px-12 py-4 text-xl bg-green-500 hover:bg-green-600"
                                     disabled={!practiceAnswer.trim()}
                                   >
                                     {language === 'en' ? '✓ Check Answer' : '✓ تحقق من الإجابة'}
@@ -1052,10 +1052,10 @@ const ProblemView = () => {
 
                                 {/* Success Message */}
                                 {practiceComplete[index] && (
-                                  <div className="bg-green-100 border border-green-300 text-green-800 p-4 rounded text-center font-semibold">
+                                  <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded text-center font-semibold text-lg">
                                     🎉 {language === 'en' ? 'Perfect! Well done!' : 'ممتاز! أحسنت!'}
                                     {index < problem.interactive_examples.length - 1 && (
-                                      <p className="text-sm mt-2">
+                                      <p className="text-base mt-2">
                                         {language === 'en' ? 'Moving to next example in 3 seconds...' : 'الانتقال للمثال التالي خلال 3 ثوان...'}
                                       </p>
                                     )}
