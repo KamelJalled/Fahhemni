@@ -1155,8 +1155,8 @@ const ProblemView = () => {
                                         let errorMsg = '';
                                         if (index === 0) {
                                           errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to subtract 3 from BOTH sides. The answer should be x ≥ 8."
-                                            : "ليس تماماً. تذكر أن تطرح 3 من الطرفين. الإجابة يجب أن تكون x ≥ 8.";
+                                            ? "Not quite. Remember to subtract 4 from BOTH sides. The answer should be x ≤ 5."
+                                            : "ليس تماماً. تذكر أن تطرح 4 من الطرفين. الإجابة يجب أن تكون x ≤ 5.";
                                         } else if (index === 1) {
                                           errorMsg = language === 'en' 
                                             ? "Not quite. Remember to divide both sides by 4. The answer should be x > 4."
