@@ -594,6 +594,70 @@ backend:
         agent: "main"
         comment: "✅ IMPLEMENTED: Added problem-input-focused CSS class, auto-scroll behavior on input focus, continue-button-container sticky positioning, and voice-input-button mobile optimizations with 56px fixed positioning."
 
+  - task: "Infinite Recursion Bug in normalizeAnswer Function"
+    implemented: true
+    working: true
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: RangeError: Maximum call stack size exceeded at normalizeAnswer causing answer validation to crash before any feedback can be displayed."
+      - working: true
+        agent: "main"
+        comment: "✅ FIXED: Resolved infinite recursion by creating basicNormalizeAnswer helper function to avoid recursive call on line 75. The normalizeAnswer function was calling itself when checking preparation stage expected answers. Now uses separate non-recursive basicNormalizeAnswer for both user input and expected answer normalization."
+
+  - task: "Submit Final Answer Button Not Working - Preparation Stage"
+    implemented: false
+    working: false
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Submit Final Answer button in Preparation stage does nothing when clicked."
+
+  - task: "Virtual Keyboard Not Working in Assessment/Exam Prep Stages"
+    implemented: false
+    working: false
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Virtual keyboard works in Practice stage but not in Assessment/Exam Prep stages."
+
+  - task: "Voice Input Not Inserting Text into Fields"
+    implemented: false
+    working: false
+    file: "frontend/src/components/VoiceInput.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Voice input captures speech but doesn't insert the converted text into input fields."
+
+  - task: "Skip Option After 3 Wrong Attempts"
+    implemented: false
+    working: false
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: After 3 wrong attempts, must show 'Skip to next stage' option to prevent students from getting stuck."
+
+frontend:
   - task: "Mobile Continue Button Always Visible"
     implemented: true
     working: true
@@ -605,8 +669,6 @@ backend:
       - working: true
         agent: "main"
         comment: "✅ IMPLEMENTED: Added continue-button-container CSS class with sticky bottom positioning to ensure 'Continue to Next Stage' button remains visible on mobile without scrolling."
-
-frontend:
   - task: "Build production frontend"
     implemented: true
     working: true
