@@ -1386,13 +1386,11 @@ const ProblemView = () => {
               </CardContent>
             </Card>
             )}
-          </div>
 
-          {/* Right Column - Hints (Hidden by Default) */}
+          {/* Hints Section - Moved to Full Width */}
           {(problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) && !problem.show_full_solution && (
-            <div>
-              <Card>
-                <CardHeader>
+            <Card>
+              <CardHeader>
                   <CardTitle className="flex items-center">
                     <Lightbulb className="w-5 h-5 mr-2 text-yellow-500" />
                     {language === 'en' ? 'Hints' : 'الإرشادات'}
