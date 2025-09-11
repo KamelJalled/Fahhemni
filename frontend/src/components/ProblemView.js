@@ -980,306 +980,98 @@ const ProblemView = () => {
               </CardContent>
             </Card>
 
-            {/* Answer Input - FIXED: Show for ALL stages with keyboard support */}
+            {/* STEP 1: CLEAN PREPARATION STAGE INPUT - EXACT COPY FROM PRACTICE */}
             <Card>
               <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {/* FIXED: Force single answer mode for preparation stage */}
-                    {problem.type === 'preparation' || (!problem.step_solutions || problem.step_solutions.length === 0) ? (
-                      /* Single Answer Input for Preparation and Simple Problems */
-                      <div>
-                        <h4 className="font-semibold mb-4 text-emerald-800">
-                          {language === 'en' ? 'Your Answer:' : 'إجابتك:'}
-                        </h4>
-                        <div className="flex gap-2 mb-4">
-                          <Input
-                            value={userAnswer || stepAnswers[0] || ''}
-                            onChange={(e) => {
-                              if (problem.type === 'preparation') {
-                                setUserAnswer(e.target.value);
-                              } else {
-                                handleStepAnswerChange(0, e.target.value);
-                              }
-                            }}
-                            onFocus={() => setActiveInputIndex(0)}
-                            placeholder={language === 'en' ? 
-                              'Enter your answer...' : 
-                              'أدخل إجابتك...'
-                            }
-                            className="flex-1 text-lg h-12"
-                          />
-                          <Button 
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setActiveInputIndex(0);
-                              setShowVoiceInput(!showVoiceInput);
-                              setShowMathKeyboard(false);
-                            }}
-                            className="voice-input-button px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
-                            title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
-                          >
-                            <Mic className="w-4 h-4" />
-                          </Button>
-                          <Button 
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setActiveInputIndex(0);
-                              setShowMathKeyboard(!showMathKeyboard);
-                              setShowVoiceInput(false);
-                            }}
-                            className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
-                            title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
-                          >
-                            <Keyboard className="w-4 h-4" />
-                          </Button>
-                        </div>
+                <h4 className="font-semibold mb-4 text-emerald-800">
+                  {language === 'en' ? 'Your Answer:' : 'إجابتك:'}
+                </h4>
+                
+                {/* Single Input Field - Exact copy from Practice stage */}
+                <Input
+                  value={userAnswer}
+                  onChange={(e) => setUserAnswer(e.target.value)}
+                  onFocus={() => setActiveInputIndex(0)}
+                  placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
+                  className="mb-4 text-lg h-12"
+                />
+                
+                {/* Buttons Row */}
+                <div className="flex gap-2 mb-4">
+                  <Button 
+                    onClick={handleSubmit}
+                    className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600"
+                    disabled={isChecking || !userAnswer?.trim()}
+                  >
+                    {isChecking ? (
+                      <div className="flex items-center">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        {text[language].completion.checking}
                       </div>
                     ) : (
-                      /* Step-by-Step Input for Complex Problems */
-                      <>
-                        <h4 className="font-semibold mb-4 text-emerald-800">
-                          {language === 'en' ? 'Solve Step by Step:' : 'حل خطوة بخطوة:'}
-                        </h4>
-                        
-                        {problem.step_solutions.map((step, index) => (
-                          <div key={index} className={`border rounded-lg p-4 ${
-                            index <= currentStep ? 'bg-white' : 'bg-gray-50 opacity-50'
-                          }`}>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 ${
-                                  stepResults[index] ? 'bg-green-500 text-white' : 
-                                  index === currentStep ? 'bg-blue-500 text-white' : 
-                                  'bg-gray-300 text-gray-600'
-                                }`}>
-                                  {stepResults[index] ? '✓' : index + 1}
-                                </span>
-                                <div>
-                                  <div className="font-medium text-sm text-gray-600">
-                                    {getStepLabel(index, step)}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex gap-2">
-                              <Input
-                                value={stepAnswers[index]}
-                                onChange={(e) => handleStepAnswerChange(index, e.target.value)}
-                                onFocus={() => {
-                                  handleInputFocus(index);
-                                  // Auto-scroll to keep input visible on mobile
-                                  setTimeout(() => {
-                                    document.querySelector(`input[data-step="${index}"]`)?.scrollIntoView({ 
-                                      behavior: 'smooth', 
-                                      block: 'center' 
-                                    });
-                                  }, 100);
-                                }}
-                                data-step={index}
-                                placeholder={language === 'en' ? 
-                                  'Show your work for this step...' : 
-                                  'أظهر عملك لهذه الخطوة...'
-                                }
-                                className="problem-input-focused flex-1 text-lg h-12"
-                                disabled={index > currentStep || stepResults[index]}
-                              />
-                              
-                              {/* Individual Check Step Button */}
-                              {index === currentStep && !stepResults[index] && (
-                                <Button 
-                                  onClick={() => handleCheckStep(index)}
-                                  className="px-4 bg-blue-600 text-white hover:bg-blue-700"
-                                  disabled={!stepAnswers[index]?.trim() || (isChecking && checkingStepIndex === index)}
-                                  size="sm"
-                                >
-                                  {isChecking && checkingStepIndex === index ? (
-                                    <div className="flex items-center">
-                                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                      {text[language].completion.checking}
-                                    </div>
-                                  ) : (
-                                    language === 'en' ? 'Check Step' : 'تحقق'
-                                  )}
-                                </Button>
-                              )}
-                              
-                              <Button 
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setActiveInputIndex(index);
-                                  setShowVoiceInput(!showVoiceInput);
-                                  setShowMathKeyboard(false);
-                                }}
-                                className="voice-input-button px-3 border-blue-300 text-blue-600 hover:bg-blue-50"
-                                disabled={index > currentStep || stepResults[index]}
-                                title={language === 'ar' ? 'إدخال صوتي' : 'Voice Input'}
-                              >
-                                <Mic className="w-4 h-4" />
-                              </Button>
-                              <Button 
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setActiveInputIndex(index);
-                                  setShowMathKeyboard(!showMathKeyboard);
-                                  setShowVoiceInput(false);
-                                }}
-                                className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
-                                disabled={index > currentStep || stepResults[index]}
-                                title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
-                              >
-                                <Keyboard className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-
-                        {/* Final Answer Box (if required) */}
-                        {problem.final_answer_required && allStepsComplete && (
-                          <div className="border-2 border-green-200 rounded-lg p-4 bg-green-50">
-                            <div className="flex items-center mb-2">
-                              <span className="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mr-3 bg-green-500 text-white">
-                                ✓
-                              </span>
-                              <label className="font-medium text-green-800">
-                                {language === 'en' ? 'Final Answer:' : 'الإجابة النهائية:'}
-                              </label>
-                            </div>
-                            <Input
-                              value={userAnswer}
-                              onChange={(e) => setUserAnswer(e.target.value)}
-                              placeholder={language === 'en' ? 
-                                'Enter your final answer (e.g., x = 7)' : 
-                                'أدخل إجابتك النهائية (مثال: س = ٧)'
-                              }
-                              className="text-lg h-12 bg-white"
-                            />
-                          </div>
-                        )}
-                      </>
+                      language === 'en' ? 'Submit Answer' : 'إرسال الإجابة'
                     )}
+                  </Button>
+                  
+                  {/* Math Keyboard Button - Exact copy from Practice */}
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setActiveInputIndex(0);
+                      setShowMathKeyboard(!showMathKeyboard);
+                    }}
+                    className="px-3 border-purple-300 text-purple-600 hover:bg-purple-50"
+                    title={language === 'ar' ? 'لوحة مفاتيح رياضية' : 'Math Keyboard'}
+                  >
+                    <Keyboard className="w-4 h-4" />
+                  </Button>
+                </div>
 
-                    {/* Voice Input Component */}
-                    {showVoiceInput && (
-                      <div className="mt-4">
-                        <VoiceInput
-                          onResult={handleVoiceResult}
-                          onError={handleVoiceError}
-                          disabled={false}
-                        />
-                      </div>
-                    )}
-
-                    {/* Math Keyboard Component */}
-                    {showMathKeyboard && (
-                      <div className="mt-4">
-                        <MathKeyboard
-                          onSymbolSelect={handleSymbolSelect}
-                          onNumberSelect={handleNumberSelect}
-                          onOperatorSelect={handleOperatorSelect}
-                          onAction={handleKeyboardAction}
-                        />
-                      </div>
-                    )}
-
-                    {/* Encouragement Message */}
-                    {showEncouragement && (
-                      <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                        <p className="text-yellow-800 text-center font-medium">
-                          {showEncouragement}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Action Buttons - Mobile Optimized with Sticky Container */}
-                    <div className="continue-button-container flex gap-2">
-                      {!isCorrect && !isSubmitted ? (
-                        <>
-                          {/* Main Submit Button - FIXED: Show for preparation stage and final answers */}
-                          {(problem.type === 'preparation' || (!problem.step_solutions || problem.step_solutions.length === 0) || (problem.final_answer_required && allStepsComplete)) && (
-                            <Button 
-                              onClick={handleSubmit}
-                              className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
-                              disabled={
-                                isChecking || (
-                                  problem.type === 'preparation' ? 
-                                    (!userAnswer?.trim() && !stepAnswers[0]?.trim()) :
-                                    problem.final_answer_required && allStepsComplete ? 
-                                      (!userAnswer?.trim()) :
-                                      (!stepAnswers[0]?.trim())
-                                )
-                              }
-                            >
-                              {isChecking ? (
-                                <div className="flex items-center">
-                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                  {text[language].completion.checking}
-                                </div>
-                              ) : (
-                                problem.final_answer_required && allStepsComplete ?
-                                  (language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية') :
-                                  (language === 'en' ? 'Submit Answer' : 'إرسال الإجابة')
-                              )}
-                            </Button>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <Button 
-                            onClick={handleTryAgain}
-                            className="flex-1 h-12"
-                            variant="outline"
-                          >
-                            <RotateCcw className="w-4 h-4 mr-2" />
-                            {text[language].tryAgain}
-                          </Button>
-                          
-                          {(allStepsComplete || isCorrect) && (
-                            <Button 
-                              onClick={handleNextProblem}
-                              className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
-                            >
-                              <Trophy className="w-4 h-4 mr-2" />
-                              {language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←'}
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </div>
-
-                    {/* Result Display */}
-                    {(isSubmitted || allStepsComplete) && (
-                      <div className={`p-4 rounded-lg border ${
-                        (isCorrect || allStepsComplete)
-                          ? 'bg-green-50 border-green-200 text-green-800' 
-                          : 'bg-red-50 border-red-200 text-red-800'
-                      }`}>
-                        <div className="flex items-center">
-                          {(isCorrect || allStepsComplete) ? (
-                            <CheckCircle className="w-5 h-5 mr-2" />
-                          ) : (
-                            <XCircle className="w-5 h-5 mr-2" />
-                          )}
-                          <span className="font-medium">
-                            {(isCorrect || allStepsComplete) ? text[language].correct : text[language].incorrect}
-                          </span>
-                        </div>
-                        
-                        {/* Show correct answer only for non-assessment problems */}
-                        {!isCorrect && !allStepsComplete && !problem.hide_answer && (
-                          <div className="mt-2 text-sm">
-                            {language === 'en' ? 'Correct answer: ' : 'الإجابة الصحيحة: '}
-                            <span className="font-mono">{problem.answer}</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                {/* Math Keyboard Component - Exact copy from Practice */}
+                {showMathKeyboard && (
+                  <div className="mt-4">
+                    <MathKeyboard
+                      onSymbolSelect={handleSymbolSelect}
+                      onNumberSelect={handleNumberSelect}
+                      onOperatorSelect={handleOperatorSelect}
+                      onAction={handleKeyboardAction}
+                    />
                   </div>
-                </CardContent>
-              </Card>
+                )}
+
+                {/* Encouragement Message - Exact copy from Practice */}
+                {showEncouragement && (
+                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p className="text-yellow-800 text-center font-medium">
+                      {showEncouragement}
+                    </p>
+                  </div>
+                )}
+
+                {/* Success/Continue Buttons - Only show after correct answer */}
+                {isCorrect && (
+                  <div className="mt-4 flex gap-2">
+                    <Button 
+                      onClick={handleTryAgain}
+                      className="flex-1 h-12"
+                      variant="outline"
+                    >
+                      <RotateCcw className="w-4 h-4 mr-2" />
+                      {text[language].tryAgain}
+                    </Button>
+                    
+                    <Button 
+                      onClick={handleNextProblem}
+                      className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
+                    >
+                      <Trophy className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←'}
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
 
           {/* Right Column - Hints (Hidden by Default) */}
