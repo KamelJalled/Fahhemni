@@ -687,20 +687,20 @@ backend:
         agent: "main"
         comment: "✅ IMPLEMENTED: Added voice input (Mic) and math keyboard (Keyboard) buttons to each interactive example in explanation stage. Each example now has individual input field focus management, voice input integration with practiceAnswer state, and math keyboard with symbol/number/operator insertion functionality."
 
-  - task: "Comprehensive Explanation Stage Content Update"
+  - task: "Tabbed Interface for Explanation Stage"
     implemented: true
     working: true
-    file: "backend/database.py"
+    file: "frontend/src/components/ProblemView.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: false
         agent: "user"
-        comment: "Need to replace current explanation content with comprehensive structured content covering: Introduction to inequalities, Case 1 (Addition/Subtraction), Case 2 (Multiplication/Division - Positive), Case 3 (Multiplication/Division - Negative with sign flipping), summary table, and practice examples."
+        comment: "Three-column layout makes text very cramped and hard to follow. Need tabbed interface with clickable tabs: 'Example 1: Addition/Subtraction', 'Example 2: Multiplication', 'Example 3: Negative Coefficient'. Display only one example's content at a time using full width. First tab should be active by default."
       - working: true
         agent: "main"
-        comment: "✅ IMPLEMENTED: Completely replaced explanation content with comprehensive structured material. Added detailed sections on inequality basics, three distinct cases with step-by-step processes, why sign flipping occurs with negative coefficients, summary table for quick reference, and three practice examples covering addition, positive multiplication, and negative coefficient cases. Content available in both English and Arabic."
+        comment: "✅ IMPLEMENTED: Complete tabbed interface redesign for explanation stage. Features: 1) Clean tab navigation with proper styling (blue underline for active tab, hover effects), 2) Full-width content display for each example, 3) Larger text sizes for better readability, 4) First tab active by default, 5) Auto-progression to next tab after successful completion, 6) Improved button layouts with text labels ('Voice', 'Keyboard'), 7) Enhanced visual design with proper spacing and centered layouts, 8) Better user experience with 3-second delay notification before tab switching."
 
 frontend:
   - task: "Mobile Continue Button Always Visible"
