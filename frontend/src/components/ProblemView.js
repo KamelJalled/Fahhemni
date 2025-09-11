@@ -925,14 +925,14 @@ const ProblemView = () => {
                   {/* SINGLE EXAMPLE CONTENT - FULL WIDTH */}
                   {problem.interactive_examples.map((example, index) => (
                     currentExample === index && (
-                      <div key={index} className="w-full">
+                      <div key={index} className="w-full max-w-6xl mx-auto">
                         {/* Example Header */}
-                        <div className="text-center mb-6">
-                          <h3 className="font-bold text-2xl text-blue-700 mb-4">
+                        <div className="text-center mb-8">
+                          <h3 className="font-bold text-3xl text-blue-700 mb-6">
                             {language === 'en' ? example.title_en : example.title_ar}
                           </h3>
-                          <div className="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
-                            <div className="text-2xl font-mono text-center text-gray-800">
+                          <div className="bg-gray-100 p-8 rounded-lg max-w-2xl mx-auto">
+                            <div className="text-3xl font-mono text-center text-gray-800">
                               {language === 'en' ? example.problem_en : example.problem_ar}
                             </div>
                           </div>
@@ -940,10 +940,10 @@ const ProblemView = () => {
 
                         {/* Show Solution Button */}
                         {!showExample && (
-                          <div className="text-center mb-6">
+                          <div className="text-center mb-8">
                             <Button 
                               onClick={() => setShowExample(true)}
-                              className="px-8 py-3 text-lg bg-blue-500 hover:bg-blue-600"
+                              className="px-12 py-4 text-xl bg-blue-500 hover:bg-blue-600"
                               variant="default"
                             >
                               {language === 'en' ? '👁️ Show Solution' : '👁️ إظهار الحل'}
