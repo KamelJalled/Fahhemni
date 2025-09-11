@@ -72,26 +72,30 @@ const ProblemView = () => {
     return normalized;
   };
 
-  // CRITICAL: Determine stage type for Socratic AI Tutoring model
+  // UPDATED: Redesigned stage structure for proper Socratic tutoring
   const getStageType = (problemType, problemId) => {
-    // LEARNING STAGES: Step-by-step guided solving
-    if (problemType === 'explanation' || 
-        problemType === 'practice' || 
-        problemId?.includes('practice')) {
-      return 'learning';
+    // PREPARATION STAGE: Final answer only with auto-hints
+    if (problemType === 'preparation' || problemId?.includes('prep')) {
+      return 'preparation';
     }
     
-    // TESTING STAGES: Final answer only
-    if (problemType === 'preparation' || 
-        problemType === 'assessment' || 
-        problemType === 'examprep' ||
-        problemId?.includes('prep') ||
-        problemId?.includes('assess') ||
-        problemId?.includes('exam')) {
-      return 'testing';
+    // EXPLANATION STAGE: Teaching + step-by-step practice
+    if (problemType === 'explanation') {
+      return 'explanation';
     }
     
-    return 'testing'; // Default to testing for safety
+    // PRACTICE STAGES: Step-by-step guided (no hints needed)
+    if (problemType === 'practice' || problemId?.includes('practice')) {
+      return 'practice';
+    }
+    
+    // ASSESSMENT & EXAM PREP: Final answer with score penalties
+    if (problemType === 'assessment' || problemType === 'examprep' ||
+        problemId?.includes('assess') || problemId?.includes('exam')) {
+      return 'assessment';
+    }
+    
+    return 'preparation'; // Default
   };
 
   // FIXED: Enhanced answer normalization with proper validation (NO RECURSION)
