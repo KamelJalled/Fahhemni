@@ -1153,15 +1153,15 @@ const ProblemView = () => {
                                       {language === 'en' ? 'Step 2: Write the simplified answer' : 'الخطوة 2: اكتب الإجابة المبسطة'}
                                     </h5>
                                     
-                                    {/* Show Step 1 answer above Step 2 input */}
+                                    {/* FIXED: Show Step 1 answer above Step 2 input */}
                                     <div className="mb-3 p-2 bg-blue-100 rounded text-center text-sm text-blue-800">
-                                      {language === 'en' ? 'Your Step 1: ' : 'خطوتك الأولى: '}{explanationPracticeAnswer}
+                                      {language === 'en' ? 'Your Step 1: ' : 'خطوتك الأولى: '}{explanationStep1Answer}
                                     </div>
                                     
                                     <Input
-                                      value={explanationPracticeAnswer}
-                                      onChange={(e) => setExplanationPracticeAnswer(e.target.value)}
-                                      placeholder={language === 'en' ? 'Enter final answer...' : 'أدخل الإجابة النهائية...'}
+                                      value={explanationStep2Answer}
+                                      onChange={(e) => setExplanationStep2Answer(e.target.value)}
+                                      placeholder=""
                                       className="mb-3 text-center text-lg font-mono"
                                     />
 
