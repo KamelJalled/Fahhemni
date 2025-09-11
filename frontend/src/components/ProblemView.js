@@ -1499,7 +1499,6 @@ const ProblemView = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
           )}
         </div>
       </div>
