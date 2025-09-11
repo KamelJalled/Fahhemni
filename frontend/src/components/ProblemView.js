@@ -1103,18 +1103,50 @@ const ProblemView = () => {
                   </div>
                 )}
 
-                {/* Encouragement Message - Exact copy from Practice */}
+                {/* Enhanced Encouragement Message with Colors */}
                 {showEncouragement && (
-                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p className="text-yellow-800 text-center font-medium">
+                  <div className={`mt-4 p-3 rounded-lg ${
+                    showEncouragement.includes('✅') ? 'bg-green-50 border border-green-200' :
+                    showEncouragement.includes('❌') ? 'bg-red-50 border border-red-200' :
+                    'bg-yellow-50 border border-yellow-200'
+                  }`}>
+                    <p className={`text-center font-medium ${
+                      showEncouragement.includes('✅') ? 'text-green-800' :
+                      showEncouragement.includes('❌') ? 'text-red-800' :
+                      'text-yellow-800'
+                    }`}>
                       {showEncouragement}
                     </p>
                   </div>
                 )}
 
-                {/* Success/Continue Buttons - Only show after correct answer */}
-                {isCorrect && (
-                  <div className="mt-4 flex gap-2">
+                {/* Action Buttons - Enhanced for Preparation Stage */}
+                <div className="mt-4 flex gap-2">
+                  {/* Continue to Next Stage - Only after correct answer */}
+                  {isCorrect && (
+                    <Button 
+                      onClick={handleNextProblem}
+                      className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
+                    >
+                      <Trophy className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←'}
+                    </Button>
+                  )}
+                  
+                  {/* Skip to Explanation - Only after 3 failed attempts */}
+                  {!isCorrect && attempts >= 3 && (
+                    <Button 
+                      onClick={() => navigate('/problem/explanation1')}
+                      className="flex-1 h-12 bg-gradient-to-r from-orange-500 to-amber-600"
+                      variant="outline"
+                    >
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Skip to Explanation' : 'انتقل للشرح'}
+                    </Button>
+                  )}
+                  
+                  {/* Try Again - Only after wrong answer */}
+                  {isSubmitted && !isCorrect && attempts < 3 && (
                     <Button 
                       onClick={handleTryAgain}
                       className="flex-1 h-12"
@@ -1123,16 +1155,8 @@ const ProblemView = () => {
                       <RotateCcw className="w-4 h-4 mr-2" />
                       {text[language].tryAgain}
                     </Button>
-                    
-                    <Button 
-                      onClick={handleNextProblem}
-                      className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
-                    >
-                      <Trophy className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←'}
-                    </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
