@@ -954,23 +954,23 @@ const ProblemView = () => {
                         {/* Solution Display */}
                         {showExample && (
                           <>
-                            <div className="bg-green-50 p-6 rounded-lg mb-6 border border-green-200 max-w-4xl mx-auto">
-                              <h4 className="font-bold text-lg text-green-800 mb-4">
+                            <div className="bg-green-50 p-8 rounded-lg mb-8 border border-green-200 max-w-5xl mx-auto">
+                              <h4 className="font-bold text-2xl text-green-800 mb-6">
                                 {language === 'en' ? '💡 Step-by-Step Solution:' : '💡 الحل خطوة بخطوة:'}
                               </h4>
-                              <pre className="whitespace-pre-wrap text-base text-green-700 leading-relaxed font-mono">
+                              <pre className="whitespace-pre-wrap text-lg text-green-700 leading-relaxed font-mono">
                                 {language === 'en' ? example.solution_en : example.solution_ar}
                               </pre>
                             </div>
 
                             {/* Practice Section */}
-                            <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 max-w-2xl mx-auto">
-                              <h4 className="font-bold text-lg text-yellow-800 mb-4 text-center">
+                            <div className="bg-yellow-50 p-8 rounded-lg border border-yellow-200 max-w-3xl mx-auto">
+                              <h4 className="font-bold text-2xl text-yellow-800 mb-6 text-center">
                                 {language === 'en' ? '✏️ Now You Try:' : '✏️ الآن جربه بنفسك:'}
                               </h4>
                               
-                              <div className="text-center mb-4">
-                                <div className="bg-white p-4 rounded border text-xl font-mono text-gray-800 max-w-sm mx-auto">
+                              <div className="text-center mb-6">
+                                <div className="bg-white p-6 rounded border text-2xl font-mono text-gray-800 max-w-lg mx-auto">
                                   {language === 'en' ? example.practice_question_en : example.practice_question_ar}
                                 </div>
                               </div>
