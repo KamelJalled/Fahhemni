@@ -1220,7 +1220,6 @@ const ProblemView = () => {
                                 )}
                               </div>
                             </div>
-                            </div>
                           </div>
                         )}
                       </div>
