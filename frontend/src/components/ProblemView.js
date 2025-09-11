@@ -71,6 +71,28 @@ const ProblemView = () => {
     return normalized;
   };
 
+  // CRITICAL: Determine stage type for Socratic AI Tutoring model
+  const getStageType = (problemType, problemId) => {
+    // LEARNING STAGES: Step-by-step guided solving
+    if (problemType === 'explanation' || 
+        problemType === 'practice' || 
+        problemId?.includes('practice')) {
+      return 'learning';
+    }
+    
+    // TESTING STAGES: Final answer only
+    if (problemType === 'preparation' || 
+        problemType === 'assessment' || 
+        problemType === 'examprep' ||
+        problemId?.includes('prep') ||
+        problemId?.includes('assess') ||
+        problemId?.includes('exam')) {
+      return 'testing';
+    }
+    
+    return 'testing'; // Default to testing for safety
+  };
+
   // FIXED: Enhanced answer normalization with proper validation (NO RECURSION)
   const normalizeAnswer = (answer) => {
     if (!answer) return '';
