@@ -1062,7 +1062,12 @@ const ProblemView = () => {
                 {/* Buttons Row */}
                 <div className="flex gap-2 mb-4">
                   <Button 
-                    onClick={handleSubmit}
+                    onClick={() => {
+                      console.log('🔍 Submit button clicked for preparation stage');
+                      console.log('🔍 Current userAnswer:', userAnswer);
+                      console.log('🔍 Problem type:', problem?.type);
+                      handleSubmit();
+                    }}
                     className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600"
                     disabled={isChecking || !userAnswer?.trim()}
                   >
