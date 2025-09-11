@@ -661,6 +661,10 @@ const ProblemView = () => {
     setAttempts(0);
     setShowVoiceInput(false);
     setShowMathKeyboard(false);
+    setShowRedirectionButton(false);
+    setCurrentScore(100); // Reset score
+    setExplanationStep(0); // Reset explanation step
+    setExplanationPracticeAnswer(''); // Reset explanation practice answer
   };
 
   const handleNextProblem = () => {
