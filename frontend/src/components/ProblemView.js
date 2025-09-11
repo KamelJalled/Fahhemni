@@ -347,47 +347,200 @@ const ProblemView = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     try {
-      // CRITICAL FIX: Progressive three-try system for preparation stage
+      const stageType = getStageType(problem.type, problem.id);
+      
+      if (stageType === 'learning') {
+        // LEARNING STAGES: Step-by-step guided solving
+        await handleLearningStageSubmission();
+      } else {
+        // TESTING STAGES: Final answer only with 3-attempt rule
+        await handleTestingStageSubmission();
+      }
+    } catch (error) {
+      console.error('Error submitting answer:', error);
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const handleLearningStageSubmission = async () => {
+    console.log('🎓 LEARNING STAGE: Step-by-step guided solving');
+    
+    // For learning stages, guide through each step
+    const currentAnswer = stepAnswers[currentStep]?.trim() || '';
+    
+    if (!currentAnswer) {
+      setShowEncouragement(language === 'en' 
+        ? 'Please enter your answer for this step.'
+        : 'يرجى إدخال إجابتك لهذه الخطوة.');
+      setTimeout(() => setShowEncouragement(''), 3000);
+      return;
+    }
+    
+    // Get current step's expected answer and hints
+    const expectedStepAnswers = problem.step_solutions || [];
+    const currentStepData = expectedStepAnswers[currentStep];
+    
+    if (!currentStepData) {
+      console.error('No step data found for current step:', currentStep);
+      return;
+    }
+    
+    // Validate current step
+    const normalizedUserAnswer = normalizeAnswer(currentAnswer);
+    const normalizedExpected = normalizeAnswer(
+      language === 'en' ? currentStepData.answer_en : currentStepData.answer_ar
+    );
+    
+    const isStepCorrect = normalizedUserAnswer === normalizedExpected;
+    
+    console.log(`🔍 Step ${currentStep + 1} validation:
+      User: "${currentAnswer}" → "${normalizedUserAnswer}"
+      Expected: "${currentStepData.answer_en}" → "${normalizedExpected}"
+      Correct: ${isStepCorrect}`);
+    
+    if (isStepCorrect) {
+      // ✅ CORRECT STEP
+      const newStepResults = [...stepResults];
+      newStepResults[currentStep] = true;
+      setStepResults(newStepResults);
+      
+      // Provide encouraging feedback
+      const stepFeedback = [
+        language === 'en' ? "Excellent! That's correct." : "ممتاز! هذا صحيح.",
+        language === 'en' ? "Perfect! You're on the right track." : "مثالي! أنت على الطريق الصحيح.",
+        language === 'en' ? "Great job! Let's continue." : "عمل رائع! دعنا نكمل.",
+        language === 'en' ? "Correct! Well reasoned." : "صحيح! تفكير سليم."
+      ];
+      
+      const encouragingMessage = stepFeedback[Math.floor(Math.random() * stepFeedback.length)];
+      
+      if (currentStep < expectedStepAnswers.length - 1) {
+        // Move to next step
+        setCurrentStep(currentStep + 1);
+        setShowEncouragement(`${encouragingMessage} ${language === 'en' ? 'Now for the next step...' : 'الآن للخطوة التالية...'}`);
+      } else {
+        // All steps complete
+        setAllStepsComplete(true);
+        setIsCorrect(true);
+        setShowEncouragement(`🎉 ${encouragingMessage} ${language === 'en' ? 'You have successfully solved the problem step by step!' : 'لقد حللت المسألة بنجاح خطوة بخطوة!'}`);
+        await submitToBackend();
+      }
+      
+      setTimeout(() => setShowEncouragement(''), 5000);
+      
+    } else {
+      // ❌ INCORRECT STEP
+      setAttempts(prev => prev + 1);
+      const currentAttempts = attempts + 1;
+      
+      let stepFeedback;
+      if (currentAttempts === 1) {
+        stepFeedback = language === 'en' 
+          ? `Not quite right. Let's think about this step carefully. ${currentStepData.hint_en || 'Try to break down what you need to do here.'}`
+          : `ليس صحيحاً تماماً. دعنا نفكر في هذه الخطوة بعناية. ${currentStepData.hint_ar || 'حاول تحليل ما تحتاج لفعله هنا.'}`;
+      } else if (currentAttempts === 2) {
+        stepFeedback = language === 'en' 
+          ? `Still not quite right. Here's a hint: ${currentStepData.hint_en || 'Think about the inverse operation needed.'}`
+          : `ما زال غير صحيح تماماً. إليك تلميح: ${currentStepData.hint_ar || 'فكر في العملية العكسية المطلوبة.'}`;
+      } else {
+        stepFeedback = language === 'en' 
+          ? `Let me show you the correct approach for this step: ${currentStepData.explanation_en || currentStepData.answer_en}`
+          : `دعني أوضح لك المنهج الصحيح لهذه الخطوة: ${currentStepData.explanation_ar || currentStepData.answer_ar}`;
+        
+        // After showing the answer, move to next step
+        setTimeout(() => {
+          if (currentStep < expectedStepAnswers.length - 1) {
+            setCurrentStep(currentStep + 1);
+            setAttempts(0); // Reset attempts for new step
+          }
+        }, 4000);
+      }
+      
+      setShowEncouragement(stepFeedback);
+      setTimeout(() => setShowEncouragement(''), 8000);
+    }
+    
+    setIsSubmitted(true);
+  };
+
+  const handleTestingStageSubmission = async () => {
+    console.log('📝 TESTING STAGE: Final answer validation with 3-attempt rule');
+    
+    const userSubmittedAnswer = userAnswer?.trim() || stepAnswers[0]?.trim() || '';
+    
+    if (!userSubmittedAnswer) {
+      setShowEncouragement(language === 'en' 
+        ? 'Please enter your final answer.'
+        : 'يرجى إدخال إجابتك النهائية.');
+      setTimeout(() => setShowEncouragement(''), 3000);
+      return;
+    }
+    
+    const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
+    const normalizedCorrectAnswer = normalizeAnswer(problem.answer || '');
+    
+    // ENHANCED: Accept both "7" and "x=7" formats for testing stages
+    const acceptableAnswers = [
+      normalizedCorrectAnswer,
+      normalizedCorrectAnswer.replace('x=', ''), // Remove x= if present
+      'x=' + normalizedCorrectAnswer.replace('x=', ''), // Add x= if not present
+    ].filter(Boolean);
+    
+    const isCorrect = acceptableAnswers.includes(normalizedUserAnswer);
+    
+    console.log(`🔍 Testing stage validation:
+      User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
+      Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
+      Acceptable answers: ${JSON.stringify(acceptableAnswers)}
+      Match: ${isCorrect}`);
+      
+    if (isCorrect) {
+      // ✅ CORRECT FINAL ANSWER
+      setIsCorrect(true);
+      
+      // PREPARATION STAGE: Progressive feedback system
       if (problem.type === 'preparation') {
-        console.log('🔍 PREPARATION STAGE VALIDATION WITH PROGRESSIVE SYSTEM');
+        const congratsMessage = language === 'en' 
+          ? `🎉 Excellent, that's correct! Great job solving this inequality. Would you like to review the detailed step-by-step solution in the explanation stage?`
+          : `🎉 ممتاز، هذا صحيح! عمل رائع في حل هذه المتباينة. هل تود مراجعة الحل التفصيلي خطوة بخطوة في مرحلة الشرح؟`;
         
-        const userSubmittedAnswer = userAnswer?.trim() || stepAnswers[0]?.trim() || '';
-        const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
-        const normalizedCorrectAnswer = normalizeAnswer(problem.answer || '');
+        setShowEncouragement(congratsMessage);
+        setTimeout(() => setShowEncouragement(''), 10000);
+      } else {
+        // Other testing stages
+        const successMessage = language === 'en' 
+          ? `✅ Correct! Well done solving this inequality.`
+          : `✅ صحيح! أحسنت في حل هذه المتباينة.`;
         
-        // ENHANCED: Accept both "7" and "x=7" formats for preparation
-        const acceptableAnswers = [
-          normalizedCorrectAnswer,
-          normalizedCorrectAnswer.replace('x=', ''), // Remove x= if present
-          'x=' + normalizedCorrectAnswer.replace('x=', ''), // Add x= if not present
-        ].filter(Boolean);
+        setShowEncouragement(successMessage);
+        setTimeout(() => setShowEncouragement(''), 5000);
+      }
+      
+      await submitToBackend();
+    } else {
+      // ❌ WRONG ANSWER - 3-attempt rule with mandatory redirection
+      setIsCorrect(false);
+      setAttempts(prev => prev + 1);
+      const currentAttempts = attempts + 1;
+      
+      if (currentAttempts >= 3) {
+        // MANDATORY REDIRECTION AFTER 3 FAILED ATTEMPTS
+        const redirectMessage = language === 'en' 
+          ? `It seems this concept needs more review. Let's go back to the Explanation Stage to master the steps. Understanding the process will help you solve these problems more confidently.`
+          : `يبدو أن هذا المفهوم يحتاج إلى مزيد من المراجعة. دعنا نعود إلى مرحلة الشرح لإتقان الخطوات. فهم العملية سيساعدك على حل هذه المسائل بثقة أكبر.`;
         
-        const isCorrect = acceptableAnswers.includes(normalizedUserAnswer);
+        setShowEncouragement(redirectMessage);
         
-        console.log(`🔍 Preparation answer validation:
-          User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
-          Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
-          Acceptable answers: ${JSON.stringify(acceptableAnswers)}
-          Match: ${isCorrect}`);
-          
-        if (isCorrect) {
-          // ✅ CORRECT ANSWER - Congratulations with invitation to explanation
-          setIsCorrect(true);
-          
-          const congratsMessage = language === 'en' 
-            ? `🎉 Excellent, that's correct! Great job solving this inequality. Would you like to review the detailed step-by-step solution in the explanation stage?`
-            : `🎉 ممتاز، هذا صحيح! عمل رائع في حل هذه المتباينة. هل تود مراجعة الحل التفصيلي خطوة بخطوة في مرحلة الشرح؟`;
-          
-          setShowEncouragement(congratsMessage);
-          setTimeout(() => setShowEncouragement(''), 10000);
-          
-          await submitToBackend();
-        } else {
-          // ❌ WRONG ANSWER - Progressive three-try system
-          setIsCorrect(false);
-          setAttempts(prev => prev + 1);
-          const currentAttempts = attempts + 1; // Since setAttempts is async
-          
+        // Show redirection button after 3 seconds
+        setTimeout(() => {
+          setShowRedirectionButton(true);
+        }, 3000);
+        
+        setTimeout(() => setShowEncouragement(''), 12000);
+      } else {
+        // Progressive feedback for preparation stage
+        if (problem.type === 'preparation') {
           let errorMessage;
           let shouldShowHint = false;
           
@@ -418,157 +571,23 @@ const ProblemView = () => {
               setShowHints(newShowHints);
               setHintsUsed(Math.max(2, hintsUsed));
             }
-          } else {
-            // Third+ incorrect attempt - guide to explanation stage
-            errorMessage = language === 'en' 
-              ? `No problem, this can be tricky. Let's head to the explanation stage to understand the solving process better. Click "Skip to Next Stage" below to continue your learning journey.`
-              : `لا مشكلة، قد يكون هذا صعباً. دعنا ننتقل لمرحلة الشرح لفهم عملية الحل بشكل أفضل. انقر على "انتقل للمرحلة التالية" أدناه لمتابعة رحلة التعلم.`;
           }
           
           setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), shouldShowHint ? 12000 : 8000); // Longer timeout when showing hints
-        }
-        
-        setIsSubmitted(true);
-        return; // Exit early for preparation stage
-      }
-      
-      // For step-by-step problems, validate current step
-      if (problem.step_solutions && !allStepsComplete) {
-        const currentAnswer = stepAnswers[currentStep].trim();
-        if (!currentAnswer) return;
-        
-        const currentStepSolution = problem.step_solutions[currentStep];
-        const normalizedAnswer = normalizeAnswer(currentAnswer);
-        
-        // Check against all possible answers for this step
-        const possibleAnswers = language === 'en' ? 
-          currentStepSolution.possible_answers : 
-          currentStepSolution.possible_answers_ar;
-        
-        const isStepCorrect = possibleAnswers.some(possibleAnswer => 
-          normalizeAnswer(possibleAnswer) === normalizedAnswer
-        );
-        
-        if (isStepCorrect) {
-          // Step is correct - move to next step or complete
-          const newStepResults = [...stepResults];
-          newStepResults[currentStep] = true;
-          setStepResults(newStepResults);
-          
-          if (currentStep < problem.step_solutions.length - 1) {
-            setCurrentStep(currentStep + 1);
-            setShowEncouragement(`✅ ${language === 'en' ? 'Great! Now continue with the next step.' : 'رائع! الآن تابع مع الخطوة التالية.'}`);
-            setTimeout(() => setShowEncouragement(''), 2000);
-          } else if (problem.final_answer_required) {
-            setAllStepsComplete(true);
-            setShowEncouragement(`✅ ${language === 'en' ? 'Excellent! Now enter your final answer below.' : 'ممتاز! الآن أدخل إجابتك النهائية أدناه.'}`);
-            setTimeout(() => setShowEncouragement(''), 3000);
-          } else {
-            setAllStepsComplete(true);
-            setIsCorrect(true);
-            await submitToBackend();
-          }
+          setTimeout(() => setShowEncouragement(''), shouldShowHint ? 12000 : 8000);
         } else {
-          setIsCorrect(false);
-          
-          // Enhanced error feedback with hints after multiple attempts
-          setAttempts(prev => prev + 1);
-          
-          let errorMessage;
-          if (attempts >= 1) {
-            errorMessage = language === 'en' 
-              ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the Explanation stage for help!`
-              : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع مرحلة الشرح للمساعدة!`;
-          } else {
-            errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
-          }
+          // Other testing stages - simpler feedback
+          const errorMessage = language === 'en' 
+            ? `Not quite right. Try again! (${3 - currentAttempts} attempts remaining)`
+            : `ليس صحيحاً تماماً. حاول مرة أخرى! (${3 - currentAttempts} محاولات متبقية)`;
           
           setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), 7000); // Extended to 7 seconds
-        }
-      } else if (problem.final_answer_required && allStepsComplete) {
-        // Check final answer with enhanced logging
-        const finalAnswer = stepAnswers[problem.step_solutions?.length || 0] || userAnswer;
-        const normalizedFinalAnswer = normalizeAnswer(finalAnswer);
-        const normalizedCorrectAnswer = normalizeAnswer(problem.answer);
-        
-        console.log(`🔍 Final answer validation:
-          User answer: "${finalAnswer}" → "${normalizedFinalAnswer}"
-          Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
-          Match: ${normalizedFinalAnswer === normalizedCorrectAnswer}`);
-        
-        if (normalizedFinalAnswer === normalizedCorrectAnswer) {
-          setIsCorrect(true);
-          await submitToBackend();
-        } else {
-          setIsCorrect(false);
-          
-          // Enhanced error feedback with hints after multiple attempts
-          setAttempts(prev => prev + 1);
-          
-          let errorMessage;
-          if (attempts >= 1) {
-            errorMessage = language === 'en' 
-              ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the Explanation stage for help!`
-              : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع مرحلة الشرح للمساعدة!`;
-          } else {
-            errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
-          }
-          
-          setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), 7000); // Extended to 7 seconds
-        }
-      } else {
-        // FIXED: Single answer problems (like preparation stage)
-        const userSubmittedAnswer = stepAnswers[0] || userAnswer;
-        const normalizedUserAnswer = normalizeAnswer(userSubmittedAnswer);
-        const normalizedCorrectAnswer = normalizeAnswer(problem.answer);
-        
-        console.log(`🔍 Single answer validation:
-          User answer: "${userSubmittedAnswer}" → "${normalizedUserAnswer}"
-          Correct answer: "${problem.answer}" → "${normalizedCorrectAnswer}"
-          Match: ${normalizedUserAnswer === normalizedCorrectAnswer}`);
-          
-        if (normalizedUserAnswer === normalizedCorrectAnswer) {
-          setIsCorrect(true);
-          
-          // SUCCESS: Preparation stage completion with congratulations
-          if (problem.type === 'preparation' || problem.id?.includes('prep')) {
-            const congratsMessage = language === 'en' 
-              ? `🎉 Excellent, that's correct! Great job solving this inequality. Would you like to review the detailed step-by-step solution in the explanation stage?`
-              : `🎉 ممتاز، هذا صحيح! عمل رائع في حل هذه المتباينة. هل تود مراجعة الحل التفصيلي خطوة بخطوة في مرحلة الشرح؟`;
-            
-            setShowEncouragement(congratsMessage);
-            setTimeout(() => setShowEncouragement(''), 10000); // Extended time for longer message
-          }
-          
-          await submitToBackend();
-        } else {
-          setIsCorrect(false);
-          
-          // For other stages, use original logic
-          setAttempts(prev => prev + 1);
-          const currentAttempts = attempts + 1;
-          
-          let errorMessage;
-          if (currentAttempts >= 2) {
-            errorMessage = language === 'en' 
-              ? `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 Tip: Review the hints for help!`
-              : `${text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)]} 💡 نصيحة: راجع الإرشادات للمساعدة!`;
-          } else {
-            errorMessage = text[language].encouragement[Math.floor(Math.random() * text[language].encouragement.length)];
-          }
-          
-          setShowEncouragement(errorMessage);
-          setTimeout(() => setShowEncouragement(''), 7000);
+          setTimeout(() => setShowEncouragement(''), 5000);
         }
       }
-    } catch (error) {
-      console.error('Error submitting answer:', error);
-    } finally {
-      setIsChecking(false);
     }
+    
+    setIsSubmitted(true);
   };
 
   const submitToBackend = async () => {
