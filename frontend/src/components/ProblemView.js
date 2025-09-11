@@ -47,7 +47,6 @@ const ProblemView = () => {
   const [practiceComplete, setPracticeComplete] = useState([]);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showRedirectionButton, setShowRedirectionButton] = useState(false);
-  const [showRedirectionButton, setShowRedirectionButton] = useState(false);
 
   // Helper function for basic normalization without recursion
   const basicNormalizeAnswer = (answer) => {
