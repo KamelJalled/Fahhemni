@@ -945,6 +945,21 @@ frontend:
         agent: "testing"
         comment: "✅ VERIFIED: Language switching working throughout the entire app. Arabic/English toggle functional on all pages, Arabic stage labels display correctly (التحضير، الشرح، التدريب، التقييم، الإعداد للاختبار), RTL support working, all new features work in both languages."
 
+  - task: "Socratic AI Tutoring Model: Dual Stage Interaction"
+    implemented: true
+    working: true
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "CRITICAL MISSING FEATURE: Must differentiate between learning stages (step-by-step process) and testing stages (final answer focus). Learning stages need interactive steps with targeted hints and conversational feedback. Testing stages need 3-attempt rule with mandatory redirection to explanation after failure."
+      - working: true
+        agent: "main"
+        comment: "✅ IMPLEMENTED: Complete Socratic AI Tutoring model with dual interaction system. 1) Learning Stages (explanation, practice): Step-by-step guided solving with progress indicators, individual step validation, encouraging feedback, attempt reset per step. 2) Testing Stages (preparation, assessment, examprep): Final answer only, 3-attempt rule, progressive hints, mandatory redirection button to explanation stage after 3 failures. Added getStageType() helper, separate submission handlers, enhanced UI with stage-specific interfaces, proper voice/keyboard integration for both modes."
+
 metadata:
   created_by: "main_agent"
   version: "2.3"
