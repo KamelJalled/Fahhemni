@@ -10,7 +10,7 @@
 ### 1. Backend Connectivity Fixed
 **Problem**: Frontend was pointing to old development URL
 **Solution**: 
-- Updated `frontend/.env` from `https://gradeninemaths.preview.emergentagent.com` to `http://localhost:8001`
+- Updated `frontend/.env` from `https://math-tutor-app.preview.emergentagent.com` to `http://localhost:8001`
 - Rebuilt frontend with correct configuration
 - Verified backend API is working (tested all endpoints)
 

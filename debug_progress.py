@@ -6,7 +6,7 @@ Debug script to check progress update issue
 import requests
 import json
 
-BACKEND_URL = "https://gradeninemaths.preview.emergentagent.com/api"
+BACKEND_URL = "https://math-tutor-app.preview.emergentagent.com/api"
 
 def debug_progress():
     # Create student

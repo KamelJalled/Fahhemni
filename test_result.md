@@ -265,7 +265,7 @@ backend:
     status_history:
       - working: false
         agent: "testing"
-        comment: "CRITICAL: frontend/.env contains incorrect REACT_APP_BACKEND_URL (https://gradeninemaths.preview.emergentagent.com) - needs correct external URL for production deployment"
+        comment: "CRITICAL: frontend/.env contains incorrect REACT_APP_BACKEND_URL (https://math-tutor-app.preview.emergentagent.com) - needs correct external URL for production deployment"
       - working: true
         agent: "testing"
         comment: "✅ FIXED: Updated frontend/.env to use correct backend URL (http://localhost:8001). Frontend can now successfully connect to backend API. Verified with API calls working correctly."
