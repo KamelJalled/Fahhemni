@@ -12,11 +12,41 @@ def convert_to_western_numerals(text: str) -> str:
                         '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'}
     return re.sub(r'[٠-٩]', lambda x: arabic_to_western[x.group()], text)
 
-def normalize_answer(answer: str) -> str:
-    """Normalize answer for comparison - convert Arabic numerals to Western and س to x"""
+def basic_normalize_answer(answer: str) -> str:
+    """Basic normalization without preparation stage logic"""
+    if not answer:
+        return ''
+    
+    # Convert Arabic numerals to Western and س to x
     normalized = convert_to_western_numerals(answer.lower().replace('س', 'x').strip())
-    # Remove extra spaces around operators
-    normalized = re.sub(r'\s*([<>=≤≥])\s*', r'\1', normalized)
+    
+    # Normalize operators and spaces more carefully
+    normalized = re.sub(r'÷', '/', normalized)  # Convert ÷ to /
+    normalized = re.sub(r'×', '*', normalized)  # Convert × to *
+    normalized = re.sub(r'\s+', ' ', normalized)  # Normalize multiple spaces to single
+    normalized = re.sub(r'\s*([+\-*/=])\s*', r'\1', normalized)  # Remove spaces around basic operators
+    normalized = re.sub(r'\s*([<>])\s*', r'\1', normalized)  # Remove spaces around inequality signs
+    normalized = re.sub(r'\s*([≤≥])\s*', r'\1', normalized)  # Remove spaces around unicode inequalities
+    normalized = re.sub(r'\s*([<>]=?)\s*', r'\1', normalized)  # Handle <= >= combinations
+    
+    return normalized
+
+def normalize_answer(answer: str, problem_type: str = None, expected_answer: str = None) -> str:
+    """Enhanced normalize answer for comparison - handles preparation stage logic"""
+    if not answer:
+        return ''
+    
+    normalized = basic_normalize_answer(answer)
+    
+    # ENHANCEMENT: For preparation stage, accept both "x = 7" and "7" formats
+    if problem_type == 'preparation' or (expected_answer and 'prep' in str(expected_answer)):
+        # If input is just a number and expected answer has "x =", add "x ="
+        if re.match(r'^-?\d+(\.\d+)?$', normalized):
+            # Use basic_normalize_answer to avoid recursion
+            expected_normalized = basic_normalize_answer(expected_answer or '')
+            if 'x=' in expected_normalized and 'x' not in normalized:
+                normalized = 'x=' + normalized
+    
     return normalized
 
 def calculate_score(attempts: int, hints_used: int, is_correct: bool) -> int:
