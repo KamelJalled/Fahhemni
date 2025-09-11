@@ -1071,7 +1071,7 @@ const ProblemView = () => {
                   
                   {/* Global Voice Input Component */}
                   {showVoiceInput && (
-                    <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 max-w-md mx-auto">
+                    <div className="mt-10 p-6 bg-blue-50 rounded-lg border border-blue-200 max-w-lg mx-auto">
                       <VoiceInput
                         onResult={(result) => {
                           setPracticeAnswer(result);
@@ -1086,7 +1086,7 @@ const ProblemView = () => {
 
                   {/* Global Math Keyboard Component */}
                   {showMathKeyboard && (
-                    <div className="mt-8 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="mt-10 p-6 bg-purple-50 rounded-lg border border-purple-200 max-w-4xl mx-auto">
                       <MathKeyboard
                         onSymbolSelect={(symbol) => {
                           setPracticeAnswer(prev => prev + symbol);
