@@ -1441,6 +1441,22 @@ const ProblemView = () => {
                               </div>
                             </div>
 
+                            {/* Show completed steps above current step */}
+                            {currentStep > 0 && (
+                              <div className="mb-4">
+                                <h5 className="font-medium text-gray-700 mb-2">
+                                  {language === 'en' ? 'Your previous steps:' : 'خطواتك السابقة:'}
+                                </h5>
+                                {stepAnswers.slice(0, currentStep).map((answer, index) => (
+                                  answer && (
+                                    <div key={index} className="mb-2 p-2 bg-blue-100 rounded text-sm text-blue-800">
+                                      {language === 'en' ? `Step ${index + 1}: ` : `الخطوة ${index + 1}: `}{answer}
+                                    </div>
+                                  )
+                                ))}
+                              </div>
+                            )}
+
                             {/* Explicit Step Instruction */}
                             <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
                               <h5 className="font-medium text-green-800 mb-2">
