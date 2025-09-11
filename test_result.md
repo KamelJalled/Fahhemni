@@ -695,11 +695,11 @@ backend:
 
   - task: "Tabbed Interface for Explanation Stage"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/components/ProblemView.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "user"
@@ -707,6 +707,9 @@ backend:
       - working: true
         agent: "main"
         comment: "✅ IMPLEMENTED: Complete tabbed interface redesign for explanation stage. Features: 1) Clean tab navigation with proper styling (blue underline for active tab, hover effects), 2) Full-width content display for each example, 3) Larger text sizes for better readability, 4) First tab active by default, 5) Auto-progression to next tab after successful completion, 6) Improved button layouts with text labels ('Voice', 'Keyboard'), 7) Enhanced visual design with proper spacing and centered layouts, 8) Better user experience with 3-second delay notification before tab switching."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE: Step 1 validation not working properly. Correct answers (x ≤ 5) are being rejected by validation logic. Console logs show normalization working but validation fails. The tabbed interface is visually correct with all 3 examples, proper step instructions, empty input fields, and functional Voice/Keyboard buttons, but the core validation functionality is broken and needs immediate debugging."
 
 frontend:
   - task: "Mobile Continue Button Always Visible"
