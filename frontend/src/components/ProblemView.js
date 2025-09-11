@@ -1036,18 +1036,19 @@ const ProblemView = () => {
                                 </div>
                               </div>
                               
-                              {/* Step-by-Step Practice */}
-                              <div className="space-y-6">
-                                {/* Step 1 */}
+                                {/* Step 1 - FIXED: No placeholders, correct instructions for each example */}
                                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                                   <h5 className="font-semibold text-blue-800 mb-3">
-                                    {language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين'}
+                                    {/* Dynamic step instruction based on example type */}
+                                    {index === 0 && (language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين')}
+                                    {index === 1 && (language === 'en' ? 'Step 1: Divide both sides by 4' : 'الخطوة 1: اقسم الطرفين على 4')}
+                                    {index === 2 && (language === 'en' ? 'Step 1: Divide both sides by -3 (flip the inequality sign!)' : 'الخطوة 1: اقسم الطرفين على -3 (اقلب إشارة المتباينة!)')}
                                   </h5>
                                   
                                   <Input
                                     value={explanationPracticeAnswer}
                                     onChange={(e) => setExplanationPracticeAnswer(e.target.value)}
-                                    placeholder={language === 'en' ? 'Enter: x + 4 - 4 ≤ 9 - 4' : 'أدخل: س + 4 - 4 ≤ 9 - 4'}
+                                    placeholder={language === 'en' ? 'Enter your answer...' : 'أدخل إجابتك...'}
                                     className="mb-3 text-center text-lg font-mono"
                                   />
                                   
@@ -1083,18 +1084,49 @@ const ProblemView = () => {
 
                                   <Button 
                                     onClick={() => {
-                                      const step1Answers = ['x+4-4≤9-4', 'x≤9-4', 'x+0≤9-4'];
-                                      const normalized = normalizeAnswer(explanationPracticeAnswer);
-                                      const isCorrect = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      console.log('🔍 Explanation stage - checking step 1, index:', index);
+                                      console.log('🔍 User answer:', explanationPracticeAnswer);
                                       
-                                      if (isCorrect) {
+                                      // FIXED: Proper validation for each example
+                                      const normalized = normalizeAnswer(explanationPracticeAnswer);
+                                      let step1Correct = false;
+                                      
+                                      if (index === 0) {
+                                        // Example 1: x + 3 ≥ 11 -> subtract 4 -> x + 3 - 4 ≥ 11 - 4 or x ≥ 11 - 4 or x ≥ 7
+                                        const step1Answers = ['x+3-4≥11-4', 'x≥11-4', 'x≥7', 'x-1≥7'];
+                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      } else if (index === 1) {
+                                        // Example 2: 4x > 16 -> divide by 4 -> 4x/4 > 16/4 or x > 4
+                                        const step1Answers = ['4x/4>16/4', 'x>16/4', 'x>4'];
+                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      } else if (index === 2) {
+                                        // Example 3: -3x ≥ 15 -> divide by -3 and flip -> -3x/-3 ≤ 15/-3 or x ≤ -5
+                                        const step1Answers = ['-3x/-3≤15/-3', 'x≤15/-3', 'x≤-5'];
+                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      }
+                                      
+                                      console.log('🔍 Step 1 correct:', step1Correct);
+                                      
+                                      if (step1Correct) {
                                         setExplanationStep(1);
-                                        setShowEncouragement(language === 'en' ? "Good! Now simplify" : "جيد! الآن بسّط");
+                                        setShowEncouragement(language === 'en' ? "Excellent! Now simplify" : "ممتاز! الآن بسّط");
                                         setTimeout(() => setShowEncouragement(''), 3000);
                                       } else {
-                                        setShowEncouragement(language === 'en' 
-                                          ? "Not quite. Remember to subtract 4 from BOTH sides"
-                                          : "ليس تماماً. تذكر أن تطرح 4 من الطرفين");
+                                        let errorMsg = '';
+                                        if (index === 0) {
+                                          errorMsg = language === 'en' 
+                                            ? "Not quite. Remember to subtract 4 from BOTH sides"
+                                            : "ليس تماماً. تذكر أن تطرح 4 من الطرفين";
+                                        } else if (index === 1) {
+                                          errorMsg = language === 'en' 
+                                            ? "Not quite. Remember to divide both sides by 4"
+                                            : "ليس تماماً. تذكر أن تقسم الطرفين على 4";
+                                        } else if (index === 2) {
+                                          errorMsg = language === 'en' 
+                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign"
+                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة";
+                                        }
+                                        setShowEncouragement(errorMsg);
                                         setTimeout(() => setShowEncouragement(''), 5000);
                                       }
                                     }}
@@ -1112,16 +1144,26 @@ const ProblemView = () => {
                                       {language === 'en' ? 'Step 2: Write the simplified answer' : 'الخطوة 2: اكتب الإجابة المبسطة'}
                                     </h5>
                                     
+                                    {/* Show Step 1 answer above Step 2 input */}
+                                    <div className="mb-3 p-2 bg-blue-100 rounded text-center text-sm text-blue-800">
+                                      {language === 'en' ? 'Your Step 1: ' : 'خطوتك الأولى: '}{explanationPracticeAnswer}
+                                    </div>
+                                    
                                     <Input
                                       value={explanationPracticeAnswer}
                                       onChange={(e) => setExplanationPracticeAnswer(e.target.value)}
-                                      placeholder={language === 'en' ? 'Enter: x ≤ 5' : 'أدخل: س ≤ 5'}
+                                      placeholder={language === 'en' ? 'Enter final answer...' : 'أدخل الإجابة النهائية...'}
                                       className="mb-3 text-center text-lg font-mono"
                                     />
 
                                     <Button 
                                       onClick={() => {
+                                        console.log('🔍 Explanation stage - checking step 2, index:', index);
+                                        console.log('🔍 Expected answer:', example.practice_answer);
+                                        
                                         const correct = normalizeAnswer(explanationPracticeAnswer) === normalizeAnswer(example.practice_answer);
+                                        console.log('🔍 Step 2 correct:', correct);
+                                        
                                         if (correct) {
                                           const newPracticeComplete = [...practiceComplete];
                                           newPracticeComplete[index] = true;
@@ -1137,9 +1179,21 @@ const ProblemView = () => {
                                             }, 3000);
                                           }
                                         } else {
-                                          setShowEncouragement(language === 'en' 
-                                            ? "Check your calculation. What is 9 - 4?"
-                                            : "تحقق من حسابك. كم يساوي 9 - 4؟");
+                                          let errorMsg = '';
+                                          if (index === 0) {
+                                            errorMsg = language === 'en' 
+                                              ? "Check your calculation. What is 11 - 4?"
+                                              : "تحقق من حسابك. كم يساوي 11 - 4؟";
+                                          } else if (index === 1) {
+                                            errorMsg = language === 'en' 
+                                              ? "Check your calculation. What is 16 ÷ 4?"
+                                              : "تحقق من حسابك. كم يساوي 16 ÷ 4؟";
+                                          } else if (index === 2) {
+                                            errorMsg = language === 'en' 
+                                              ? "Check your calculation. What is 15 ÷ (-3)?"
+                                              : "تحقق من حسابك. كم يساوي 15 ÷ (-3)؟";
+                                          }
+                                          setShowEncouragement(errorMsg);
                                           setTimeout(() => setShowEncouragement(''), 5000);
                                         }
                                       }}
@@ -1150,19 +1204,6 @@ const ProblemView = () => {
                                     </Button>
                                   </div>
                                 )}
-
-                                {/* Success Message */}
-                                {practiceComplete[index] && (
-                                  <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded text-center font-semibold text-lg">
-                                    🎉 {language === 'en' ? 'Perfect! Well done!' : 'ممتاز! أحسنت!'}
-                                    {index < problem.interactive_examples.length - 1 && (
-                                      <p className="text-base mt-2">
-                                        {language === 'en' ? 'Moving to next example in 3 seconds...' : 'الانتقال للمثال التالي خلال 3 ثوان...'}
-                                      </p>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
                             </div>
                           </>
                         )}
