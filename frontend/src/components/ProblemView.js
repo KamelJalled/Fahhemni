@@ -47,6 +47,9 @@ const ProblemView = () => {
   const [practiceComplete, setPracticeComplete] = useState([]);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showRedirectionButton, setShowRedirectionButton] = useState(false);
+  const [currentScore, setCurrentScore] = useState(100); // Start with 100%
+  const [explanationStep, setExplanationStep] = useState(0); // For explanation stage step tracking
+  const [explanationPracticeAnswer, setExplanationPracticeAnswer] = useState(''); // For explanation practice
 
   // Helper function for basic normalization without recursion
   const basicNormalizeAnswer = (answer) => {
