@@ -774,8 +774,16 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    // STEP 1 FIX: Force preparation stage to use userAnswer
-    if (problem.type === 'preparation') {
+    // FIXED: Handle explanation stage keyboard input for step 1 and step 2
+    if (problem.type === 'explanation') {
+      if (explanationStep === 0) {
+        // Step 1
+        setExplanationStep1Answer(prev => prev + symbol);
+      } else if (explanationStep === 1) {
+        // Step 2
+        setExplanationStep2Answer(prev => prev + symbol);
+      }
+    } else if (problem.type === 'preparation') {
       setUserAnswer(prev => prev + symbol);
     } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
       const newAnswers = [...stepAnswers];
