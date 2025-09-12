@@ -662,10 +662,7 @@ const ProblemView = () => {
     setShowMathKeyboard(false);
     setShowRedirectionButton(false);
     setCurrentScore(100); // Reset score
-    setExplanationStep(0); // Reset explanation step
-    setExplanationPracticeAnswer(''); // Reset explanation practice answer (legacy)
-    setExplanationStep1Answer(''); // Reset explanation step 1
-    setExplanationStep2Answer(''); // Reset explanation step 2
+    setExplanationAnswers(['', '', '']); // Reset explanation answers
   };
 
   const handleNextProblem = () => {
