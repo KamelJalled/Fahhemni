@@ -48,10 +48,7 @@ const ProblemView = () => {
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showRedirectionButton, setShowRedirectionButton] = useState(false);
   const [currentScore, setCurrentScore] = useState(100); // Start with 100%
-  const [explanationStep, setExplanationStep] = useState(0); // For explanation stage step tracking
-  const [explanationPracticeAnswer, setExplanationPracticeAnswer] = useState(''); // For explanation practice (legacy)
-  const [explanationStep1Answer, setExplanationStep1Answer] = useState(''); // For explanation step 1
-  const [explanationStep2Answer, setExplanationStep2Answer] = useState(''); // For explanation step 2
+  const [explanationAnswers, setExplanationAnswers] = useState(['', '', '']); // One answer per example (simplified approach)
 
   // Helper function for basic normalization without recursion
   const basicNormalizeAnswer = (answer) => {
