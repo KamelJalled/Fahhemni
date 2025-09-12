@@ -1091,7 +1091,7 @@ const ProblemView = () => {
                                   <h5 className="font-semibold text-blue-800 mb-3">
                                     {/* FIXED: Correct step instructions for actual displayed problems */}
                                     {index === 0 && (language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين')}
-                                    {index === 1 && (language === 'en' ? 'Step 1: Divide both sides by 4' : 'الخطوة 1: اقسم الطرفين على 4')}
+                                    {index === 1 && (language === 'en' ? 'Step 1: Divide both sides by 2' : 'الخطوة 1: اقسم الطرفين على 2')}
                                     {index === 2 && (language === 'en' ? 'Step 1: Divide both sides by -3 (flip the inequality sign!)' : 'الخطوة 1: اقسم الطرفين على -3 (اقلب إشارة المتباينة!)')}
                                   </h5>
                                   
