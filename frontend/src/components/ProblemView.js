@@ -663,6 +663,7 @@ const ProblemView = () => {
     setShowMathKeyboard(false);
     setShowRedirectionButton(false);
     setCurrentScore(100); // Reset score
+    setExplanationStep(0); // Reset explanation step
     setExplanationAnswers(['', '', '']); // Reset explanation answers
   };
 
