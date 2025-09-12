@@ -1167,26 +1167,6 @@ const ProblemView = () => {
                                   </Button>
                                 </div>
                               </div>
-                                            errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x > 4"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x > 4";
-                                          } else if (index === 2) {
-                                            errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x ≥ -4"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ -4";
-                                          }
-                                          setShowEncouragement(errorMsg);
-                                          setTimeout(() => setShowEncouragement(''), 5000);
-                                        }
-                                      }}
-                                      className="w-full bg-green-500 hover:bg-green-600"
-                                      disabled={!explanationStep2Answer.trim()}
-                                    >
-                                      {language === 'en' ? 'Check Final Answer' : 'تحقق من الإجابة النهائية'}
-                                    </Button>
-                                  </div>
-                                )}
-
                                 {/* Success Message */}
                                 {practiceComplete[index] && (
                                   <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded text-center font-semibold text-lg">
