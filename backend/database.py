@@ -386,7 +386,7 @@ This is the same as (-1/2)k ≥ 6.
                     ]
                 },
                 {
-                    "step_en": "Simplify the right side", 
+                    "step_en": "Simplify both sides", 
                     "step_ar": "بسط الطرف الأيمن",
                     "possible_answers": [
                         "x ≤ 11"
