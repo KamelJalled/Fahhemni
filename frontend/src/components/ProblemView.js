@@ -794,14 +794,14 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    // FIXED: Handle explanation stage keyboard input based on focused input field
+    // FIXED: Copy exact keyboard handling from Practice stage for Explanation stage
     if (problem.type === 'explanation') {
-      // Use activeInputIndex to determine which step input to update
+      // Use the same logic as Practice stage - use activeInputIndex to determine which input to update
       if (explanationStep === 0) {
-        // Step 1 - always update step 1 answer
+        // Step 1 - update step 1 answer
         setExplanationStep1Answer(prev => prev + symbol);
       } else if (explanationStep >= 1) {
-        // Step 2 - always update step 2 answer  
+        // Step 2 - update step 2 answer  
         setExplanationStep2Answer(prev => prev + symbol);
       } else {
         // Default to step 1 if no step is active
@@ -810,6 +810,7 @@ const ProblemView = () => {
     } else if (problem.type === 'preparation') {
       setUserAnswer(prev => prev + symbol);
     } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
+      // Practice stage - this is the working code we want to copy
       const newAnswers = [...stepAnswers];
       const currentValue = newAnswers[activeInputIndex] || '';
       newAnswers[activeInputIndex] = currentValue + symbol;
