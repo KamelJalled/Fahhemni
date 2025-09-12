@@ -741,17 +741,10 @@ const ProblemView = () => {
     switch (action) {
       case 'clear':
         if (problem.type === 'explanation') {
-          // activeInputIndex format: exampleIndex * 10 + stepIndex
-          const currentStepForInput = activeInputIndex % 10;
-          
-          if (currentStepForInput === 1) {
-            setExplanationStep1Answer('');
-          } else if (currentStepForInput === 2) {
-            setExplanationStep2Answer('');
-          } else {
-            // Default to step 1
-            setExplanationStep1Answer('');
-          }
+          // Use the same logic as Practice stage - clear current example's answer
+          const newAnswers = [...explanationAnswers];
+          newAnswers[currentExample] = '';
+          setExplanationAnswers(newAnswers);
         } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
           const newAnswers = [...stepAnswers];
           newAnswers[activeInputIndex] = '';
@@ -762,17 +755,10 @@ const ProblemView = () => {
         break;
       case 'backspace':
         if (problem.type === 'explanation') {
-          // activeInputIndex format: exampleIndex * 10 + stepIndex
-          const currentStepForInput = activeInputIndex % 10;
-          
-          if (currentStepForInput === 1) {
-            setExplanationStep1Answer(prev => prev.slice(0, -1));
-          } else if (currentStepForInput === 2) {
-            setExplanationStep2Answer(prev => prev.slice(0, -1));
-          } else {
-            // Default to step 1
-            setExplanationStep1Answer(prev => prev.slice(0, -1));
-          }
+          // Use the same logic as Practice stage - backspace current example's answer
+          const newAnswers = [...explanationAnswers];
+          newAnswers[currentExample] = newAnswers[currentExample].slice(0, -1);
+          setExplanationAnswers(newAnswers);
         } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
           const newAnswers = [...stepAnswers];
           const current = newAnswers[activeInputIndex] || '';
