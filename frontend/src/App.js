@@ -102,8 +102,10 @@ const AuthProvider = ({ children }) => {
       console.log('Logout request completed');
     }
     
-    // Navigate to home page
-    window.location.href = '/';
+    // Navigate to home page immediately without flash
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 100); // Small delay to ensure state is cleared
   };
 
   return (
