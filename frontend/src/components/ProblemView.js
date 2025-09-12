@@ -1126,6 +1126,7 @@ const ProblemView = () => {
                                   <Input
                                     value={explanationStep1Answer}
                                     onChange={(e) => setExplanationStep1Answer(e.target.value)}
+                                    onFocus={() => setActiveInputIndex(index * 10 + 1)}
                                     placeholder=""
                                     className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
                                   />
