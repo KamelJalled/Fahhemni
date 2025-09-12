@@ -1219,7 +1219,7 @@ const ProblemView = () => {
                                       value={explanationStep2Answer}
                                       onChange={(e) => setExplanationStep2Answer(e.target.value)}
                                       placeholder=""
-                                      className="mb-3 text-center text-lg font-mono"
+                                      className="mb-3 text-center text-lg font-mono border-2 border-green-300 bg-white p-3 min-h-[50px]"
                                     />
 
                                     {/* FIXED: Add Voice and Keyboard buttons for Step 2 */}
