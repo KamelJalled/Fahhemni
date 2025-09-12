@@ -1441,7 +1441,24 @@ const ProblemView = () => {
               </Card>
             )}
               </CardContent>
-            </Card>
+                
+                {/* COPIED FROM PRACTICE STAGE: Error Message Display Component */}
+                {showEncouragement && (
+                  <div className={`mt-4 mx-6 mb-4 p-3 rounded-lg ${
+                    showEncouragement.includes('✅') || showEncouragement.includes('🎉') || showEncouragement.includes('Excellent') || showEncouragement.includes('Perfect') ? 'bg-green-50 border border-green-200' :
+                    showEncouragement.includes('❌') || showEncouragement.includes('Not quite') || showEncouragement.includes('Try again') ? 'bg-red-50 border border-red-200' :
+                    'bg-yellow-50 border border-yellow-200'
+                  }`}>
+                    <p className={`text-center font-medium ${
+                      showEncouragement.includes('✅') || showEncouragement.includes('🎉') || showEncouragement.includes('Excellent') || showEncouragement.includes('Perfect') ? 'text-green-800' :
+                      showEncouragement.includes('❌') || showEncouragement.includes('Not quite') || showEncouragement.includes('Try again') ? 'text-red-800' :
+                      'text-yellow-800'
+                    }`}>
+                      {showEncouragement}
+                    </p>
+                  </div>
+                )}
+              </Card>
 
             {/* REDESIGNED DUAL INTERACTION MODEL */}
             {problem.type !== 'explanation' && (
