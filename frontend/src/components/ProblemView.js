@@ -1221,22 +1221,14 @@ const ProblemView = () => {
                                             }, 3000);
                                           }
                                         } else {
-                                          let errorMsg = '';
-                                          if (index === 0) {
-                                            errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x ≤ 5"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≤ 5";
-                                          } else if (index === 1) {
-                                            errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x > 4"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x > 4";
-                                          } else if (index === 2) {
-                                            errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x ≥ -4"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ -4";
-                                          }
-                                          setShowEncouragement(errorMsg);
-                                          setTimeout(() => setShowEncouragement(''), 5000);
+                                          // ❌ WRONG FINAL ANSWER - Copy Practice stage error handling exactly
+                                          const stepInstruction = language === 'en' ? 'Write the simplified answer' : 'اكتب الإجابة المبسطة';
+                                          const feedback = language === 'en' 
+                                            ? `Not quite. Remember: ${stepInstruction}`
+                                            : `ليس تماماً. تذكر: ${stepInstruction}`;
+                                          
+                                          setShowEncouragement(feedback);
+                                          setTimeout(() => setShowEncouragement(''), 6000);
                                         }
                                       }}
                                       className="w-full bg-green-500 hover:bg-green-600"
