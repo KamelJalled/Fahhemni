@@ -1267,9 +1267,13 @@ const ProblemView = () => {
                                               setShowEncouragement('');
                                             }, 3000);
                                           } else {
-                                            // All examples completed
-                                            setTimeout(() => {
+                                            // All examples completed - mark as complete and submit to backend
+                                            setAllStepsComplete(true);
+                                            setIsCorrect(true);
+                                            setTimeout(async () => {
                                               setShowEncouragement('');
+                                              // Submit completion to backend like Practice stage does
+                                              await submitToBackend();
                                             }, 3000);
                                           }
                                         } else {
