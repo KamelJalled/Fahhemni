@@ -796,15 +796,30 @@ const ProblemView = () => {
   const insertSymbolAtCursor = (symbol) => {
     // FIXED: Copy exact keyboard handling from Practice stage for Explanation stage
     if (problem.type === 'explanation') {
-      // Use the same logic as Practice stage - use activeInputIndex to determine which input to update
+      // For explanation stage, use activeInputIndex to determine which step to update
+      // Step 1 = activeInputIndex * 2, Step 2 = activeInputIndex * 2 + 1
+      // But since we have separate state variables, check explanationStep
+      console.log('🔍 Explanation keyboard input:', symbol, 'explanationStep:', explanationStep, 'activeInputIndex:', activeInputIndex);
+      
       if (explanationStep === 0) {
         // Step 1 - update step 1 answer
-        setExplanationStep1Answer(prev => prev + symbol);
+        console.log('🔍 Updating explanationStep1Answer');
+        setExplanationStep1Answer(prev => {
+          const newValue = prev + symbol;
+          console.log('🔍 New Step 1 value:', newValue);
+          return newValue;
+        });
       } else if (explanationStep >= 1) {
         // Step 2 - update step 2 answer  
-        setExplanationStep2Answer(prev => prev + symbol);
+        console.log('🔍 Updating explanationStep2Answer');
+        setExplanationStep2Answer(prev => {
+          const newValue = prev + symbol;
+          console.log('🔍 New Step 2 value:', newValue);
+          return newValue;
+        });
       } else {
         // Default to step 1 if no step is active
+        console.log('🔍 Default to Step 1');
         setExplanationStep1Answer(prev => prev + symbol);
       }
     } else if (problem.type === 'preparation') {
