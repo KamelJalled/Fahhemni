@@ -794,23 +794,24 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    // FIXED: Copy exact keyboard handling from Practice stage for Explanation stage
+    // FIXED: Use activeInputIndex to determine which specific input field to update
     if (problem.type === 'explanation') {
-      // For explanation stage, use activeInputIndex to determine which step to update
-      // Step 1 = activeInputIndex * 2, Step 2 = activeInputIndex * 2 + 1
-      // But since we have separate state variables, check explanationStep
-      console.log('🔍 Explanation keyboard input:', symbol, 'explanationStep:', explanationStep, 'activeInputIndex:', activeInputIndex);
+      console.log('🔍 Explanation keyboard input:', symbol, 'activeInputIndex:', activeInputIndex);
       
-      if (explanationStep === 0) {
-        // Step 1 - update step 1 answer
+      // activeInputIndex format: exampleIndex * 10 + stepIndex
+      // Example: Example 0 Step 1 = 1, Example 0 Step 2 = 2, Example 1 Step 1 = 11, etc.
+      const currentStepForInput = activeInputIndex % 10;
+      
+      if (currentStepForInput === 1) {
+        // Step 1 input
         console.log('🔍 Updating explanationStep1Answer');
         setExplanationStep1Answer(prev => {
           const newValue = prev + symbol;
           console.log('🔍 New Step 1 value:', newValue);
           return newValue;
         });
-      } else if (explanationStep >= 1) {
-        // Step 2 - update step 2 answer  
+      } else if (currentStepForInput === 2) {
+        // Step 2 input
         console.log('🔍 Updating explanationStep2Answer');
         setExplanationStep2Answer(prev => {
           const newValue = prev + symbol;
@@ -818,7 +819,7 @@ const ProblemView = () => {
           return newValue;
         });
       } else {
-        // Default to step 1 if no step is active
+        // Default to step 1 if no specific step is identified
         console.log('🔍 Default to Step 1');
         setExplanationStep1Answer(prev => prev + symbol);
       }
