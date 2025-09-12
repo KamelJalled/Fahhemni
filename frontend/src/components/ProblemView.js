@@ -776,39 +776,21 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    // FIXED: Use activeInputIndex to determine which specific input field to update
+    // Use the same logic as Practice stage for Explanation stage
     if (problem.type === 'explanation') {
-      console.log('🔍 Explanation keyboard input:', symbol, 'activeInputIndex:', activeInputIndex);
+      console.log('🔍 Explanation keyboard input:', symbol, 'currentExample:', currentExample);
       
-      // activeInputIndex format: exampleIndex * 10 + stepIndex
-      // Example: Example 0 Step 1 = 1, Example 0 Step 2 = 2, Example 1 Step 1 = 11, etc.
-      const currentStepForInput = activeInputIndex % 10;
+      // Update the current example's answer - same logic as Practice stage
+      const newAnswers = [...explanationAnswers];
+      const currentValue = newAnswers[currentExample] || '';
+      newAnswers[currentExample] = currentValue + symbol;
+      setExplanationAnswers(newAnswers);
       
-      if (currentStepForInput === 1) {
-        // Step 1 input
-        console.log('🔍 Updating explanationStep1Answer');
-        setExplanationStep1Answer(prev => {
-          const newValue = prev + symbol;
-          console.log('🔍 New Step 1 value:', newValue);
-          return newValue;
-        });
-      } else if (currentStepForInput === 2) {
-        // Step 2 input
-        console.log('🔍 Updating explanationStep2Answer');
-        setExplanationStep2Answer(prev => {
-          const newValue = prev + symbol;
-          console.log('🔍 New Step 2 value:', newValue);
-          return newValue;
-        });
-      } else {
-        // Default to step 1 if no specific step is identified
-        console.log('🔍 Default to Step 1');
-        setExplanationStep1Answer(prev => prev + symbol);
-      }
+      console.log('🔍 Updated explanation answer for example', currentExample, ':', newAnswers[currentExample]);
     } else if (problem.type === 'preparation') {
       setUserAnswer(prev => prev + symbol);
     } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
-      // Practice stage - this is the working code we want to copy
+      // Practice stage - this is the working code we're copying
       const newAnswers = [...stepAnswers];
       const currentValue = newAnswers[activeInputIndex] || '';
       newAnswers[activeInputIndex] = currentValue + symbol;
