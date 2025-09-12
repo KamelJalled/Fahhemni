@@ -1078,6 +1078,25 @@ const ProblemView = () => {
                                     {index === 2 && (language === 'en' ? 'Step 1: Divide both sides by -3 (flip the inequality sign!)' : 'الخطوة 1: اقسم الطرفين على -3 (اقلب إشارة المتباينة!)')}
                                   </h5>
                                   
+                                  {/* Simple Symbol Shortcut Buttons */}
+                                  <div className="flex justify-center gap-2 mb-3">
+                                    {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
+                                      <Button
+                                        key={symbol}
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          const newAnswers = [...explanationAnswers];
+                                          newAnswers[index] = (newAnswers[index] || '') + symbol;
+                                          setExplanationAnswers(newAnswers);
+                                        }}
+                                        className="px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50"
+                                      >
+                                        {symbol}
+                                      </Button>
+                                    ))}
+                                  </div>
+                                  
                                   <Input
                                     value={explanationAnswers[index] || ''}
                                     onChange={(e) => {
@@ -1092,7 +1111,7 @@ const ProblemView = () => {
                                   
                                   {/* Instruction to use physical keyboard */}
                                   <p className="text-center text-sm text-gray-600 mb-3">
-                                    {language === 'en' ? 'Type your answer using your keyboard' : 'اكتب إجابتك باستخدام لوحة المفاتيح'}
+                                    {language === 'en' ? 'Type letters/numbers, click buttons for symbols' : 'اكتب الحروف/الأرقام، انقر على الأزرار للرموز'}
                                   </p>
 
                                   <Button 
