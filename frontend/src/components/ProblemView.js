@@ -1173,8 +1173,8 @@ const ProblemView = () => {
                                             : "ليس تماماً. تذكر أن تقسم الطرفين على 2. الإجابة يجب أن تكون x > 4.";
                                         } else if (index === 2) {
                                           errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign. The answer should be x ≥ -5."
-                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة. الإجابة يجب أن تكون x ≥ -5.";
+                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign. The answer should be x ≥ -4."
+                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة. الإجابة يجب أن تكون x ≥ -4.";
                                         }
                                         setShowEncouragement(errorMsg);
                                         setTimeout(() => setShowEncouragement(''), 5000);
