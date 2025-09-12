@@ -1190,10 +1190,7 @@ const ProblemView = () => {
                   {showVoiceInput && (
                     <div className="mt-10 p-6 bg-blue-50 rounded-lg border border-blue-200 max-w-lg mx-auto">
                       <VoiceInput
-                        onResult={(result) => {
-                          setPracticeAnswer(result);
-                          setShowVoiceInput(false);
-                        }}
+                        onResult={handleVoiceResult}
                         onError={handleVoiceError}
                         language={language}
                         isActive={showVoiceInput}
