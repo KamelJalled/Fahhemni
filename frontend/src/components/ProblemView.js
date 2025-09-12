@@ -1146,12 +1146,12 @@ const ProblemView = () => {
                                         const step1Answers = ['x≤5', 'x≤9-4', 'x+4-4≤9-4'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       } else if (index === 1) {
-                                        // Example 2: 4x > 16 -> divide by 4 -> x > 4
-                                        const step1Answers = ['x>4', 'x>16/4', '4x/4>16/4'];
+                                        // Example 2: 2x > 8 -> divide by 2 -> x > 4
+                                        const step1Answers = ['x>4', 'x>8/2', '2x/2>8/2', '2x÷2>8÷2'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       } else if (index === 2) {
                                         // Example 3: -3x ≥ 15 -> divide by -3 and flip -> x ≤ -5
-                                        const step1Answers = ['x≤-5', 'x≤15/-3', '-3x/-3≤15/-3'];
+                                        const step1Answers = ['x≤-5', 'x≤15/-3', '-3x/-3≤15/-3', '-3x÷-3≤15÷-3'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       }
                                       
