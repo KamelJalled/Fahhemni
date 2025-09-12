@@ -1266,10 +1266,24 @@ const ProblemView = () => {
                                           }
                                         } else {
                                           // ❌ WRONG FINAL ANSWER - Copy Practice stage error handling exactly
-                                          const stepInstruction = language === 'en' ? 'Write the simplified answer' : 'اكتب الإجابة المبسطة';
+                                          let stepInstruction = '';
+                                          if (index === 0) {
+                                            stepInstruction = language === 'en' 
+                                              ? 'Simplify to get x ≤ 5' 
+                                              : 'بسط للحصول على x ≤ 5';
+                                          } else if (index === 1) {
+                                            stepInstruction = language === 'en' 
+                                              ? 'Simplify to get x > 4' 
+                                              : 'بسط للحصول على x > 4';
+                                          } else if (index === 2) {
+                                            stepInstruction = language === 'en' 
+                                              ? 'Simplify to get x ≥ -4' 
+                                              : 'بسط للحصول على x ≥ -4';
+                                          }
+                                          
                                           const feedback = language === 'en' 
-                                            ? `Not quite. Remember: ${stepInstruction}`
-                                            : `ليس تماماً. تذكر: ${stepInstruction}`;
+                                            ? `Not quite. You need to ${stepInstruction}`
+                                            : `ليس تماماً. تحتاج إلى ${stepInstruction}`;
                                           
                                           setShowEncouragement(feedback);
                                           setTimeout(() => setShowEncouragement(''), 6000);
