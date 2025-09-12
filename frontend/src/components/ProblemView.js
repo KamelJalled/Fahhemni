@@ -704,7 +704,7 @@ const ProblemView = () => {
   // Voice input handlers
   const handleVoiceResult = (result) => {
     if (problem?.type === 'explanation') {
-      // Use the same logic as Practice stage - update the current example's answer
+      // For explanation stage, update the current example's answer
       const newAnswers = [...explanationAnswers];
       newAnswers[currentExample] = result;
       setExplanationAnswers(newAnswers);
