@@ -417,6 +417,18 @@ backend:
         agent: "testing"
         comment: "✅ VERIFIED: Admin clear test data endpoint POST /api/admin/clear-test-data working correctly. Properly validates admin key (admin123), clears student and progress data, and returns deletion counts. Security validation working (403 for invalid keys)."
 
+  - task: "Admin Clear All Data Endpoint"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: New DELETE /api/admin/clear-all-data endpoint working correctly. Successfully tested: 1) Created test student and progress data (44 students, 36 progress records initially), 2) DELETE request returned status 200 with success message 'All student data cleared successfully', 3) Verified database collections emptied (0 students, 0 progress records after clearing). Endpoint functions as expected for clearing all student records and progress data from database."
+
   - task: "Voice Input Text-to-Math Conversion Enhancement"
     implemented: true
     working: true
