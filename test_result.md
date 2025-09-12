@@ -995,13 +995,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Voice Input Text-to-Math Conversion Enhancement"
-    - "Microphone Permissions and Speech Capture Enhancement"
-    - "Math Keyboard Numeral Toggle Enhancement"
-    - "Section Navigation Enhancement - Force Re-render"
+    - "Admin Clear All Data Endpoint"
   stuck_tasks: []
   test_all: false
-  test_priority: "frontend_mobile_enhancements_testing"
+  test_priority: "admin_clear_data_testing"
 
 agent_communication:
   - agent: "main"
