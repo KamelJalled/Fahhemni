@@ -1283,8 +1283,8 @@ const ProblemView = () => {
                                               : "الإجابة النهائية يجب أن تكون بالضبط: x > 4";
                                           } else if (index === 2) {
                                             errorMsg = language === 'en' 
-                                              ? "The final answer should be exactly: x ≤ -5"
-                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≤ -5";
+                                              ? "The final answer should be exactly: x ≥ -5"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ -5";
                                           }
                                           setShowEncouragement(errorMsg);
                                           setTimeout(() => setShowEncouragement(''), 5000);
