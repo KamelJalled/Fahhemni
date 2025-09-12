@@ -1242,7 +1242,8 @@ const ProblemView = () => {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => {
-                                          setActiveInputIndex(index);
+                                          // Set activeInputIndex to exampleIndex * 10 + 2 (Step 2)
+                                          setActiveInputIndex(index * 10 + 2);
                                           setShowVoiceInput(!showVoiceInput);
                                           setShowMathKeyboard(false);
                                         }}
@@ -1256,7 +1257,8 @@ const ProblemView = () => {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => {
-                                          setActiveInputIndex(index);
+                                          // Set activeInputIndex to exampleIndex * 10 + 2 (Step 2)
+                                          setActiveInputIndex(index * 10 + 2);
                                           setShowMathKeyboard(!showMathKeyboard);
                                           setShowVoiceInput(false);
                                         }}
