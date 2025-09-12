@@ -1147,16 +1147,22 @@ const ProblemView = () => {
                                         // ❌ WRONG STEP - Copy Practice stage error handling exactly
                                         let stepInstruction = '';
                                         if (index === 0) {
-                                          stepInstruction = language === 'en' ? 'Subtract 4 from both sides' : 'اطرح 4 من الطرفين';
+                                          stepInstruction = language === 'en' 
+                                            ? 'Subtract 4 from both sides. Try: x + 4 - 4 ≤ 9 - 4' 
+                                            : 'اطرح 4 من الطرفين. جرب: x + 4 - 4 ≤ 9 - 4';
                                         } else if (index === 1) {
-                                          stepInstruction = language === 'en' ? 'Divide both sides by 2' : 'اقسم الطرفين على 2';
+                                          stepInstruction = language === 'en' 
+                                            ? 'Divide both sides by 2. Try: 2x/2 > 8/2' 
+                                            : 'اقسم الطرفين على 2. جرب: 2x/2 > 8/2';
                                         } else if (index === 2) {
-                                          stepInstruction = language === 'en' ? 'Divide both sides by -3 (flip the inequality sign!)' : 'اقسم الطرفين على -3 (اقلب إشارة المتباينة!)';
+                                          stepInstruction = language === 'en' 
+                                            ? 'Divide both sides by -3 and flip inequality. Try: -3x/-3 ≥ 12/-3' 
+                                            : 'اقسم الطرفين على -3 واقلب إشارة المتباينة. جرب: -3x/-3 ≥ 12/-3';
                                         }
                                         
                                         const feedback = language === 'en' 
-                                          ? `Not quite. Remember: ${stepInstruction}`
-                                          : `ليس تماماً. تذكر: ${stepInstruction}`;
+                                          ? `Not quite. You need to ${stepInstruction}`
+                                          : `ليس تماماً. تحتاج إلى ${stepInstruction}`;
                                         
                                         setShowEncouragement(feedback);
                                         setTimeout(() => setShowEncouragement(''), 6000);
