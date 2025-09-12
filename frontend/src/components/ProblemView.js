@@ -788,14 +788,18 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    // FIXED: Handle explanation stage keyboard input for step 1 and step 2
+    // FIXED: Handle explanation stage keyboard input based on focused input field
     if (problem.type === 'explanation') {
+      // Use activeInputIndex to determine which step input to update
       if (explanationStep === 0) {
-        // Step 1
+        // Step 1 - always update step 1 answer
         setExplanationStep1Answer(prev => prev + symbol);
-      } else if (explanationStep === 1) {
-        // Step 2
+      } else if (explanationStep >= 1) {
+        // Step 2 - always update step 2 answer  
         setExplanationStep2Answer(prev => prev + symbol);
+      } else {
+        // Default to step 1 if no step is active
+        setExplanationStep1Answer(prev => prev + symbol);
       }
     } else if (problem.type === 'preparation') {
       setUserAnswer(prev => prev + symbol);
