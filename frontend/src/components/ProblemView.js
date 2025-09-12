@@ -1148,16 +1148,16 @@ const ProblemView = () => {
                                         let stepInstruction = '';
                                         if (index === 0) {
                                           stepInstruction = language === 'en' 
-                                            ? 'Subtract 4 from both sides. Try: x + 4 - 4 ≤ 9 - 4' 
-                                            : 'اطرح 4 من الطرفين. جرب: x + 4 - 4 ≤ 9 - 4';
+                                            ? 'subtract 4 from both sides' 
+                                            : 'اطرح 4 من الطرفين';
                                         } else if (index === 1) {
                                           stepInstruction = language === 'en' 
-                                            ? 'Divide both sides by 2. Try: 2x/2 > 8/2' 
-                                            : 'اقسم الطرفين على 2. جرب: 2x/2 > 8/2';
+                                            ? 'divide both sides by 2' 
+                                            : 'اقسم الطرفين على 2';
                                         } else if (index === 2) {
                                           stepInstruction = language === 'en' 
-                                            ? 'Divide both sides by -3 and flip inequality. Try: -3x/-3 ≥ 12/-3' 
-                                            : 'اقسم الطرفين على -3 واقلب إشارة المتباينة. جرب: -3x/-3 ≥ 12/-3';
+                                            ? 'divide both sides by -3 and flip the inequality sign' 
+                                            : 'اقسم الطرفين على -3 واقلب إشارة المتباينة';
                                         }
                                         
                                         const feedback = language === 'en' 
