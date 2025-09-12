@@ -1150,8 +1150,8 @@ const ProblemView = () => {
                                         const step1Answers = ['x>4', 'x>8/2', '2x/2>8/2', '2x÷2>8÷2'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       } else if (index === 2) {
-                                        // Example 3: -3x ≥ 15 -> divide by -3 and flip -> x ≤ -5
-                                        const step1Answers = ['x≤-5', 'x≤15/-3', '-3x/-3≤15/-3', '-3x÷-3≤15÷-3'];
+                                        // Example 3: -3x ≤ 15 -> divide by -3 and flip -> x ≥ -5
+                                        const step1Answers = ['x≥-5', 'x≥15/-3', '-3x/-3≥15/-3', '-3x÷-3≥15÷-3'];
                                         step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
                                       }
                                       
