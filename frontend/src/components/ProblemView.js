@@ -1115,7 +1115,7 @@ const ProblemView = () => {
                                     value={explanationStep1Answer}
                                     onChange={(e) => setExplanationStep1Answer(e.target.value)}
                                     placeholder=""
-                                    className="mb-3 text-center text-lg font-mono"
+                                    className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
                                   />
                                   
                                   <div className="flex justify-center gap-3 mb-3">
