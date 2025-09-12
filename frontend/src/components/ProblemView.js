@@ -753,8 +753,11 @@ const ProblemView = () => {
         if (problem.type === 'explanation') {
           if (explanationStep === 0) {
             setExplanationStep1Answer('');
-          } else if (explanationStep === 1) {
+          } else if (explanationStep >= 1) {
             setExplanationStep2Answer('');
+          } else {
+            // Default to step 1
+            setExplanationStep1Answer('');
           }
         } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
           const newAnswers = [...stepAnswers];
@@ -768,8 +771,11 @@ const ProblemView = () => {
         if (problem.type === 'explanation') {
           if (explanationStep === 0) {
             setExplanationStep1Answer(prev => prev.slice(0, -1));
-          } else if (explanationStep === 1) {
+          } else if (explanationStep >= 1) {
             setExplanationStep2Answer(prev => prev.slice(0, -1));
+          } else {
+            // Default to step 1
+            setExplanationStep1Answer(prev => prev.slice(0, -1));
           }
         } else if (problem?.step_solutions && problem.step_solutions.length > 0) {
           const newAnswers = [...stepAnswers];
