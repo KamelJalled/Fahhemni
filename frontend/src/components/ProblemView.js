@@ -778,7 +778,7 @@ const ProblemView = () => {
   };
 
   const insertSymbolAtCursor = (symbol) => {
-    // Use the same logic as Practice stage for Explanation stage
+    // Use Practice stage logic for Explanation stage (simplified management)
     if (problem.type === 'explanation') {
       console.log('🔍 Explanation keyboard input:', symbol, 'currentExample:', currentExample);
       
