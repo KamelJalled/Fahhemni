@@ -1067,11 +1067,15 @@ const ProblemView = () => {
                                 </div>
                               </div>
                               
-                              {/* SIMPLIFIED: Single Input Practice (like Practice stage) */}
+                              {/* RESTORED: Step-by-Step Practice with Simplified Input Management */}
                               <div className="space-y-6">
-                                <div className="p-6 bg-blue-50 rounded-lg border border-blue-200">
-                                  <h5 className="font-semibold text-blue-800 mb-4 text-center text-lg">
-                                    {language === 'en' ? 'Now solve it step-by-step and enter your final answer:' : 'الآن حلها خطوة بخطوة وأدخل إجابتك النهائية:'}
+                                {/* Step 1 - Restored with simplified input management */}
+                                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                  <h5 className="font-semibold text-blue-800 mb-3">
+                                    {/* Step instructions for each example */}
+                                    {index === 0 && (language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين')}
+                                    {index === 1 && (language === 'en' ? 'Step 1: Divide both sides by 2' : 'الخطوة 1: اقسم الطرفين على 2')}
+                                    {index === 2 && (language === 'en' ? 'Step 1: Divide both sides by -3 (flip the inequality sign!)' : 'الخطوة 1: اقسم الطرفين على -3 (اقلب إشارة المتباينة!)')}
                                   </h5>
                                   
                                   <Input
@@ -1083,10 +1087,10 @@ const ProblemView = () => {
                                     }}
                                     onFocus={() => setActiveInputIndex(index)}
                                     placeholder=""
-                                    className="mb-4 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
+                                    className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
                                   />
                                   
-                                  <div className="flex justify-center gap-3 mb-4">
+                                  <div className="flex justify-center gap-3 mb-3">
                                     <Button 
                                       variant="outline"
                                       size="sm"
@@ -1118,68 +1122,181 @@ const ProblemView = () => {
 
                                   <Button 
                                     onClick={() => {
-                                      console.log('🔍 Explanation stage - checking answer, index:', index);
+                                      console.log('🔍 Explanation stage - checking step 1, index:', index);
                                       console.log('🔍 User answer:', explanationAnswers[index]);
-                                      console.log('🔍 Expected answer:', example.practice_answer);
                                       
-                                      const correct = normalizeAnswer(explanationAnswers[index]) === normalizeAnswer(example.practice_answer);
-                                      console.log('🔍 Answer correct:', correct);
+                                      // Use the same validation system as before
+                                      const normalized = normalizeAnswer(explanationAnswers[index]);
+                                      let step1Correct = false;
                                       
-                                      if (correct) {
-                                        const newPracticeComplete = [...practiceComplete];
-                                        newPracticeComplete[index] = true;
-                                        setPracticeComplete(newPracticeComplete);
-                                        
-                                        // Clear answer for this example
-                                        const newAnswers = [...explanationAnswers];
-                                        newAnswers[index] = '';
-                                        setExplanationAnswers(newAnswers);
-                                        
-                                        setShowEncouragement(language === 'en' ? "Perfect! Well done!" : "ممتاز! أحسنت!");
-                                        
-                                        // Auto-move to next example after 3 seconds
-                                        if (index < problem.interactive_examples.length - 1) {
-                                          setTimeout(() => {
-                                            setCurrentExample(index + 1);
-                                            setShowExample(false);
-                                            setShowEncouragement('');
-                                          }, 3000);
-                                        } else {
-                                          // All examples completed - mark as complete and submit to backend
-                                          setAllStepsComplete(true);
-                                          setIsCorrect(true);
-                                          setTimeout(async () => {
-                                            setShowEncouragement('');
-                                            // Submit completion to backend like Practice stage does
-                                            await submitToBackend();
-                                          }, 3000);
-                                        }
+                                      if (index === 0) {
+                                        // Example 1: x + 4 ≤ 9 -> subtract 4 -> x ≤ 5
+                                        const step1Answers = ['x≤5', 'x≤9-4', 'x+4-4≤9-4'];
+                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      } else if (index === 1) {
+                                        // Example 2: 2x > 8 -> divide by 2 -> x > 4
+                                        const step1Answers = ['x>4', 'x>8/2', '2x/2>8/2', '2x÷2>8÷2'];
+                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      } else if (index === 2) {
+                                        // Example 3: -3x ≤ 12 -> divide by -3 and flip -> x ≥ -4
+                                        const step1Answers = ['x≥-4', 'x≥12/-3', '-3x/-3≥12/-3', '-3x÷-3≥12÷-3'];
+                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      }
+                                      
+                                      console.log('🔍 Step 1 correct:', step1Correct);
+                                      
+                                      if (step1Correct) {
+                                        setExplanationStep(1);
+                                        setShowEncouragement(language === 'en' ? "Excellent! That's correct!" : "ممتاز! هذا صحيح!");
+                                        setTimeout(() => setShowEncouragement(''), 3000);
                                       } else {
-                                        const errorMsg = language === 'en' 
-                                          ? "Not quite right. Try again and make sure to follow the step-by-step process."
-                                          : "ليس صحيحاً تماماً. حاول مرة أخرى وتأكد من اتباع العملية خطوة بخطوة.";
+                                        let errorMsg = '';
+                                        if (index === 0) {
+                                          errorMsg = language === 'en' 
+                                            ? "Not quite. Remember to subtract 4 from BOTH sides. The answer should be x ≤ 5."
+                                            : "ليس تماماً. تذكر أن تطرح 4 من الطرفين. الإجابة يجب أن تكون x ≤ 5.";
+                                        } else if (index === 1) {
+                                          errorMsg = language === 'en' 
+                                            ? "Not quite. Remember to divide both sides by 2. The answer should be x > 4."
+                                            : "ليس تماماً. تذكر أن تقسم الطرفين على 2. الإجابة يجب أن تكون x > 4.";
+                                        } else if (index === 2) {
+                                          errorMsg = language === 'en' 
+                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign. The answer should be x ≥ -4."
+                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة. الإجابة يجب أن تكون x ≥ -4.";
+                                        }
                                         setShowEncouragement(errorMsg);
                                         setTimeout(() => setShowEncouragement(''), 5000);
                                       }
                                     }}
-                                    className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+                                    className="w-full bg-blue-500 hover:bg-blue-600"
                                     disabled={!explanationAnswers[index]?.trim()}
                                   >
-                                    {language === 'en' ? 'Check Answer' : 'تحقق من الإجابة'}
+                                    {language === 'en' ? 'Check Step 1' : 'تحقق من الخطوة 1'}
                                   </Button>
-                                
-                                  {/* Success Message */}
-                                  {practiceComplete[index] && (
-                                    <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded text-center font-semibold text-lg mt-4">
-                                      🎉 {language === 'en' ? 'Perfect! Well done!' : 'ممتاز! أحسنت!'}
-                                      {index < problem.interactive_examples.length - 1 && (
-                                        <p className="text-base mt-2">
-                                          {language === 'en' ? 'Moving to next example in 3 seconds...' : 'الانتقال للمثال التالي خلال 3 ثوان...'}
-                                        </p>
-                                      )}
-                                    </div>
-                                  )}
                                 </div>
+
+                                {/* Step 2 - Only show if Step 1 is complete, also with simplified input management */}
+                                {explanationStep >= 1 && (
+                                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <h5 className="font-semibold text-green-800 mb-3">
+                                      {language === 'en' ? 'Step 2: Write the simplified answer' : 'الخطوة 2: اكتب الإجابة المبسطة'}
+                                    </h5>
+                                    
+                                    {/* Show Step 1 answer above Step 2 input */}
+                                    <div className="mb-3 p-2 bg-blue-100 rounded text-center text-sm text-blue-800">
+                                      {language === 'en' ? 'Your Step 1: ' : 'خطوتك الأولى: '}{explanationAnswers[index]}
+                                    </div>
+                                    
+                                    <Input
+                                      value={explanationAnswers[index] || ''}
+                                      onChange={(e) => {
+                                        const newAnswers = [...explanationAnswers];
+                                        newAnswers[index] = e.target.value;
+                                        setExplanationAnswers(newAnswers);
+                                      }}
+                                      onFocus={() => setActiveInputIndex(index)}
+                                      placeholder=""
+                                      className="mb-3 text-center text-lg font-mono border-2 border-green-300 bg-white p-3 min-h-[50px]"
+                                    />
+
+                                    {/* Voice and Keyboard buttons for Step 2 */}
+                                    <div className="flex justify-center gap-3 mb-3">
+                                      <Button 
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          setActiveInputIndex(index);
+                                          setShowVoiceInput(!showVoiceInput);
+                                          setShowMathKeyboard(false);
+                                        }}
+                                        className="px-4 py-2 border-green-300 text-green-600 hover:bg-green-50"
+                                      >
+                                        <Mic className="w-4 h-4 mr-2" />
+                                        {language === 'en' ? 'Voice' : 'صوت'}
+                                      </Button>
+                                      
+                                      <Button 
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          setActiveInputIndex(index);
+                                          setShowMathKeyboard(!showMathKeyboard);
+                                          setShowVoiceInput(false);
+                                        }}
+                                        className="px-4 py-2 border-purple-300 text-purple-600 hover:bg-purple-50"
+                                      >
+                                        <Keyboard className="w-4 h-4 mr-2" />
+                                        {language === 'en' ? 'Keyboard' : 'لوحة'}
+                                      </Button>
+                                    </div>
+
+                                    <Button 
+                                      onClick={() => {
+                                        console.log('🔍 Explanation stage - checking step 2, index:', index);
+                                        console.log('🔍 User Step 2 answer:', explanationAnswers[index]);
+                                        console.log('🔍 Expected answer:', example.practice_answer);
+                                        
+                                        const correct = normalizeAnswer(explanationAnswers[index]) === normalizeAnswer(example.practice_answer);
+                                        console.log('🔍 Step 2 correct:', correct);
+                                        
+                                        if (correct) {
+                                          const newPracticeComplete = [...practiceComplete];
+                                          newPracticeComplete[index] = true;
+                                          setPracticeComplete(newPracticeComplete);
+                                          
+                                          // Reset answer for this example
+                                          const newAnswers = [...explanationAnswers];
+                                          newAnswers[index] = '';
+                                          setExplanationAnswers(newAnswers);
+                                          
+                                          // Reset explanation step
+                                          setExplanationStep(0);
+                                          
+                                          setShowEncouragement(language === 'en' ? "Perfect! Well done!" : "ممتاز! أحسنت!");
+                                          
+                                          // Auto-move to next example after 3 seconds
+                                          if (index < problem.interactive_examples.length - 1) {
+                                            setTimeout(() => {
+                                              setCurrentExample(index + 1);
+                                              setShowExample(false);
+                                              setShowEncouragement('');
+                                            }, 3000);
+                                          } else {
+                                            // All examples completed - mark as complete and submit to backend
+                                            setAllStepsComplete(true);
+                                            setIsCorrect(true);
+                                            setTimeout(async () => {
+                                              setShowEncouragement('');
+                                              // Submit completion to backend like Practice stage does
+                                              await submitToBackend();
+                                            }, 3000);
+                                          }
+                                        } else {
+                                          let errorMsg = '';
+                                          if (index === 0) {
+                                            errorMsg = language === 'en' 
+                                              ? "The final answer should be exactly: x ≤ 5"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≤ 5";
+                                          } else if (index === 1) {
+                                            errorMsg = language === 'en' 
+                                              ? "The final answer should be exactly: x > 4"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x > 4";
+                                          } else if (index === 2) {
+                                            errorMsg = language === 'en' 
+                                              ? "The final answer should be exactly: x ≥ -4"
+                                              : "الإجابة النهائية يجب أن تكون بالضبط: x ≥ -4";
+                                          }
+                                          setShowEncouragement(errorMsg);
+                                          setTimeout(() => setShowEncouragement(''), 5000);
+                                        }
+                                      }}
+                                      className="w-full bg-green-500 hover:bg-green-600"
+                                      disabled={!explanationAnswers[index]?.trim()}
+                                    >
+                                      {language === 'en' ? 'Check Final Answer' : 'تحقق من الإجابة النهائية'}
+                                    </Button>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
