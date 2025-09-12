@@ -961,6 +961,108 @@ class MathTutoringAPITester:
             self.log_test("Admin Clear Data Endpoint", False, f"Request error: {str(e)}")
             return False
 
+    def test_admin_clear_all_data_endpoint(self):
+        """Test new admin clear-all-data endpoint as requested in review"""
+        try:
+            print("\n🔍 TESTING NEW ADMIN CLEAR-ALL-DATA ENDPOINT")
+            print("Testing DELETE /api/admin/clear-all-data endpoint...")
+            
+            # Step 1: Create some test data first to verify clearing works
+            test_student = {"username": "clear_test_student", "class_name": "GR9-A"}
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Admin Clear All Data - Test Data Setup", False, 
+                            f"Failed to create test student: HTTP {response.status_code}")
+                return False
+            
+            self.log_test("Admin Clear All Data - Test Data Setup", True, 
+                        "✅ Created test student for clearing verification")
+            
+            # Step 2: Submit some progress to create progress records
+            attempt_data = {
+                "problem_id": "prep1",
+                "answer": "7",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/clear_test_student/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                self.log_test("Admin Clear All Data - Progress Setup", True, 
+                            "✅ Created test progress record")
+            else:
+                self.log_test("Admin Clear All Data - Progress Setup", False, 
+                            f"Failed to create progress: HTTP {response.status_code}")
+                # Continue anyway - we still have student data to clear
+            
+            # Step 3: Test the new DELETE /api/admin/clear-all-data endpoint
+            response = self.session.delete(f"{self.base_url}/admin/clear-all-data")
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Check for success message
+                if "message" in data and "cleared" in data["message"].lower():
+                    self.log_test("Admin Clear All Data - DELETE Request", True, 
+                                f"✅ Status 200 response with success message: {data['message']}")
+                    delete_success = True
+                else:
+                    self.log_test("Admin Clear All Data - DELETE Request", False, 
+                                f"Missing or invalid success message in response: {data}")
+                    delete_success = False
+            else:
+                self.log_test("Admin Clear All Data - DELETE Request", False, 
+                            f"Expected status 200, got {response.status_code}: {response.text}")
+                delete_success = False
+            
+            # Step 4: Verify data is actually cleared by checking admin stats
+            response = self.session.get(f"{self.base_url}/admin/stats")
+            
+            if response.status_code == 200:
+                stats = response.json()
+                
+                students_count = stats.get("total_students", -1)
+                progress_count = stats.get("total_progress_records", -1)
+                
+                if students_count == 0 and progress_count == 0:
+                    self.log_test("Admin Clear All Data - Verification", True, 
+                                "✅ Database collections emptied - 0 students, 0 progress records")
+                    verification_success = True
+                else:
+                    self.log_test("Admin Clear All Data - Verification", False, 
+                                f"❌ Data not fully cleared - {students_count} students, {progress_count} progress records remain")
+                    verification_success = False
+            else:
+                self.log_test("Admin Clear All Data - Verification", False, 
+                            f"Failed to verify clearing: HTTP {response.status_code}")
+                verification_success = False
+            
+            # Final result
+            overall_success = delete_success and verification_success
+            
+            if overall_success:
+                self.log_test("ADMIN CLEAR ALL DATA ENDPOINT TEST", True, 
+                            "✅ NEW ENDPOINT WORKING: DELETE /api/admin/clear-all-data successfully clears all student data")
+            else:
+                self.log_test("ADMIN CLEAR ALL DATA ENDPOINT TEST", False, 
+                            "❌ NEW ENDPOINT ISSUES: Clear-all-data endpoint not working properly")
+            
+            return overall_success
+                
+        except Exception as e:
+            self.log_test("Admin Clear All Data Endpoint", False, f"Request error: {str(e)}")
+            return False
+
     def test_data_persistence(self):
         """Test data persistence across sessions"""
         try:
