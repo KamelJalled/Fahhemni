@@ -743,7 +743,7 @@ const ProblemView = () => {
     switch (action) {
       case 'clear':
         if (problem.type === 'explanation') {
-          // Use the same logic as Practice stage - clear current example's answer
+          // Clear the current example's answer
           const newAnswers = [...explanationAnswers];
           newAnswers[currentExample] = '';
           setExplanationAnswers(newAnswers);
@@ -757,7 +757,7 @@ const ProblemView = () => {
         break;
       case 'backspace':
         if (problem.type === 'explanation') {
-          // Use the same logic as Practice stage - backspace current example's answer
+          // Backspace the current example's answer
           const newAnswers = [...explanationAnswers];
           newAnswers[currentExample] = newAnswers[currentExample].slice(0, -1);
           setExplanationAnswers(newAnswers);
