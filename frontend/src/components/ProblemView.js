@@ -1297,6 +1297,18 @@ const ProblemView = () => {
                                     </Button>
                                   </div>
                                 )}
+
+                                {/* Success Message */}
+                                {practiceComplete[index] && (
+                                  <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded text-center font-semibold text-lg">
+                                    🎉 {language === 'en' ? 'Perfect! Well done!' : 'ممتاز! أحسنت!'}
+                                    {index < problem.interactive_examples.length - 1 && (
+                                      <p className="text-base mt-2">
+                                        {language === 'en' ? 'Moving to next example in 3 seconds...' : 'الانتقال للمثال التالي خلال 3 ثوان...'}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
