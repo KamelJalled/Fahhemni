@@ -1125,22 +1125,22 @@ const ProblemView = () => {
                                         setShowEncouragement(language === 'en' ? "Excellent! That's correct!" : "ممتاز! هذا صحيح!");
                                         setTimeout(() => setShowEncouragement(''), 3000);
                                       } else {
-                                        let errorMsg = '';
+                                        // ❌ WRONG STEP - Copy Practice stage error handling exactly
+                                        let stepInstruction = '';
                                         if (index === 0) {
-                                          errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to subtract 4 from BOTH sides. The answer should be x ≤ 5."
-                                            : "ليس تماماً. تذكر أن تطرح 4 من الطرفين. الإجابة يجب أن تكون x ≤ 5.";
+                                          stepInstruction = language === 'en' ? 'Subtract 4 from both sides' : 'اطرح 4 من الطرفين';
                                         } else if (index === 1) {
-                                          errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to divide both sides by 2. The answer should be x > 4."
-                                            : "ليس تماماً. تذكر أن تقسم الطرفين على 2. الإجابة يجب أن تكون x > 4.";
+                                          stepInstruction = language === 'en' ? 'Divide both sides by 2' : 'اقسم الطرفين على 2';
                                         } else if (index === 2) {
-                                          errorMsg = language === 'en' 
-                                            ? "Not quite. Remember to divide by -3 AND flip the inequality sign. The answer should be x ≥ -4."
-                                            : "ليس تماماً. تذكر أن تقسم على -3 واقلب إشارة المتباينة. الإجابة يجب أن تكون x ≥ -4.";
+                                          stepInstruction = language === 'en' ? 'Divide both sides by -3 (flip the inequality sign!)' : 'اقسم الطرفين على -3 (اقلب إشارة المتباينة!)';
                                         }
-                                        setShowEncouragement(errorMsg);
-                                        setTimeout(() => setShowEncouragement(''), 5000);
+                                        
+                                        const feedback = language === 'en' 
+                                          ? `Not quite. Remember: ${stepInstruction}`
+                                          : `ليس تماماً. تذكر: ${stepInstruction}`;
+                                        
+                                        setShowEncouragement(feedback);
+                                        setTimeout(() => setShowEncouragement(''), 6000);
                                       }
                                     }}
                                     className="w-full bg-blue-500 hover:bg-blue-600"
