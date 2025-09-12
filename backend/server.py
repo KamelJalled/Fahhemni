@@ -51,6 +51,19 @@ async def logout():
     """Logout user"""
     return {"message": "Logged out successfully"}
 
+@api_router.delete("/admin/clear-all-data")
+async def clear_all_data():
+    """Clear all student records and progress data"""
+    try:
+        # Delete all students
+        await students_collection.delete_many({})
+        # Delete all progress records
+        await progress_collection.delete_many({})
+        
+        return {"message": "All student data cleared successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error clearing data: {str(e)}")
+
 # Student progress endpoints
 @api_router.get("/students/{username}/progress")
 async def get_progress(username: str):
