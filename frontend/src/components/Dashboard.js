@@ -335,9 +335,11 @@ const Dashboard = () => {
       {/* Sections Navigation - Mobile Optimized */}
       <Card className="mb-6">
         <CardContent className="p-6">
-          <h3 className="font-semibold mb-4">{text[language].sections}</h3>
-          <div className="section-tabs-container">
-            <div className="flex md:grid md:grid-cols-5 gap-2">
+          <h3 className="font-semibold mb-4 text-center">{text[language].sections}</h3>
+          
+          {/* Mobile: Horizontal Scrollable Tabs */}
+          <div className="section-tabs-container overflow-x-auto pb-2">
+            <div className="flex space-x-3 min-w-max md:grid md:grid-cols-5 md:gap-2 md:min-w-0">
               {sections.map((section) => {
                 const sectionProgress = calculateSectionProgress(section.id);
                 const isSelected = selectedSection === section.id;
@@ -347,7 +349,9 @@ const Dashboard = () => {
                   <Button
                     key={section.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`section-tab-button h-auto p-4 ${!hasProblems ? 'opacity-50' : ''} ${isSelected ? 'bg-blue-600 text-white' : ''}`}
+                    className={`section-tab-button flex-shrink-0 h-auto p-3 md:p-4 min-w-[140px] md:min-w-0 ${
+                      !hasProblems ? 'opacity-50' : ''
+                    } ${isSelected ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-50'}`}
                     onClick={() => {
                       console.log(`Switching to section: ${section.id}`);
                       setSelectedSection(section.id);
@@ -355,7 +359,7 @@ const Dashboard = () => {
                     disabled={!hasProblems}
                   >
                     <div className="text-center">
-                      <div className="text-sm font-medium mb-1">
+                      <div className="text-xs md:text-sm font-medium mb-1 leading-tight">
                         {language === 'en' ? section.title_en : section.title_ar}
                       </div>
                       <div className="text-xs opacity-75">
@@ -370,23 +374,21 @@ const Dashboard = () => {
               })}
             </div>
           </div>
+          
+          {/* Selected Section Info - Integrated without duplication */}
+          {selectedSectionData && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex justify-between items-center mb-2">
+                <h4 className="font-semibold text-gray-700">
+                  {language === 'en' ? 'Current Section Progress' : 'تقدم القسم الحالي'}
+                </h4>
+                <span className="text-sm font-medium text-blue-600">{Math.round(selectedSectionProgress)}%</span>
+              </div>
+              <Progress value={selectedSectionProgress} className="h-2" />
+            </div>
+          )}
         </CardContent>
       </Card>
-
-      {/* Selected Section Progress */}
-      {selectedSectionData && (
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="font-semibold">
-                {language === 'en' ? selectedSectionData.title_en : selectedSectionData.title_ar}
-              </h3>
-              <span className="text-sm text-gray-500">{Math.round(selectedSectionProgress)}%</span>
-            </div>
-            <Progress value={selectedSectionProgress} className="mb-4" />
-          </CardContent>
-        </Card>
-      )}
 
       {/* Problems Grid - Enhanced Section Isolation */}
       {selectedSectionData && selectedSectionData.problems && selectedSectionData.problems.length > 0 ? (
