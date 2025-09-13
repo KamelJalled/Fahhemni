@@ -1269,7 +1269,14 @@ const ProblemView = () => {
                                         newAnswers[index] = e.target.value;
                                         setExplanationAnswers(newAnswers);
                                       }}
-                                      onFocus={() => setActiveInputIndex(index)}
+                                      onFocus={(e) => {
+                                        setActiveInputIndex(index);
+                                        // Store reference to active input for keyboard scrolling
+                                        e.target.setAttribute('data-active-input', 'true');
+                                      }}
+                                      onBlur={(e) => {
+                                        e.target.removeAttribute('data-active-input');
+                                      }}
                                       placeholder=""
                                       className="mb-3 text-center text-lg font-mono border-2 border-green-300 bg-white p-3 min-h-[50px]"
                                     />
