@@ -132,10 +132,57 @@ const ProblemView = () => {
     fetchData();
   }, [user, problemId, navigate]);
 
-  // Reset state when problem changes
+  // Auto-scroll when virtual keyboard opens to keep input field visible
   useEffect(() => {
-    resetProblemState();
-  }, [problemId]);
+    if (showMathKeyboard) {
+      // Find the currently active input field
+      const activeInput = document.activeElement;
+      if (activeInput && activeInput.tagName === 'INPUT') {
+        // Calculate the keyboard height (approximately 300px for mobile)
+        const keyboardHeight = window.innerWidth <= 768 ? 300 : 0;
+        const viewportHeight = window.innerHeight;
+        const scrollOffset = keyboardHeight + 20; // Extra 20px padding
+        
+        // Scroll the active input into view above the keyboard
+        setTimeout(() => {
+          activeInput.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+          
+          // Additional scroll adjustment for mobile to account for keyboard
+          if (window.innerWidth <= 768) {
+            const currentScroll = window.pageYOffset;
+            const inputRect = activeInput.getBoundingClientRect();
+            const inputBottom = inputRect.bottom + currentScroll;
+            const visibleAreaTop = viewportHeight - keyboardHeight - 100; // 100px buffer
+            
+            if (inputRect.bottom > visibleAreaTop) {
+              window.scrollTo({
+                top: currentScroll + (inputRect.bottom - visibleAreaTop),
+                behavior: 'smooth'
+              });
+            }
+          }
+        }, 100); // Small delay to ensure keyboard is rendered
+      }
+    }
+  }, [showMathKeyboard]);
+
+  // Auto-scroll when voice input opens
+  useEffect(() => {
+    if (showVoiceInput) {
+      const activeInput = document.activeElement;
+      if (activeInput && activeInput.tagName === 'INPUT') {
+        setTimeout(() => {
+          activeInput.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }, 100);
+      }
+    }
+  }, [showVoiceInput]);
 
   const fetchData = async () => {
     try {
