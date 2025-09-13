@@ -135,6 +135,11 @@ const ProblemView = () => {
   // Auto-scroll when virtual keyboard opens to keep input field visible
   useEffect(() => {
     if (showMathKeyboard) {
+      // Add body class for mobile spacing
+      if (window.innerWidth <= 768) {
+        document.body.classList.add('keyboard-active');
+      }
+      
       // Find the currently active input field
       const activeInput = document.activeElement;
       if (activeInput && activeInput.tagName === 'INPUT') {
@@ -166,7 +171,15 @@ const ProblemView = () => {
           }
         }, 100); // Small delay to ensure keyboard is rendered
       }
+    } else {
+      // Remove body class when keyboard is closed
+      document.body.classList.remove('keyboard-active');
     }
+    
+    // Cleanup function
+    return () => {
+      document.body.classList.remove('keyboard-active');
+    };
   }, [showMathKeyboard]);
 
   // Auto-scroll when voice input opens
