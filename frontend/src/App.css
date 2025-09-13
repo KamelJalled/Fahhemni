@@ -111,6 +111,44 @@
   }
 }
 
+/* Explanation Tabs - Mobile Horizontal Scrolling */
+.explanation-tabs-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+.explanation-tabs-container::-webkit-scrollbar {
+  height: 3px;
+}
+
+.explanation-tabs-container::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 2px;
+}
+
+.explanation-tabs-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.explanation-tabs-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Mobile Explanation Tab Buttons */
+@media (max-width: 768px) {
+  .explanation-tab-button {
+    min-width: 120px !important;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  
+  .explanation-tabs-container {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #f9fafb;
+  }
+}
+
 /* Existing mobile optimizations */
     .section-tabs-container {
         overflow-x: auto !important;
