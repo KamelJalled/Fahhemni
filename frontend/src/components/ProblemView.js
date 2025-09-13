@@ -1189,8 +1189,8 @@ const ProblemView = () => {
                                       {language === 'en' ? 'Your Step 1: ' : 'خطوتك الأولى: '}{explanationAnswers[index]}
                                     </div>
                                     
-                                    {/* Simple Symbol Shortcut Buttons for Step 2 */}
-                                    <div className="flex justify-center gap-2 mb-3">
+                                    {/* Symbol Shortcut Buttons for Step 2 - Mobile: 2 rows x 3 buttons */}
+                                    <div className="symbol-buttons-container flex flex-wrap justify-center gap-2 md:flex-nowrap mb-3">
                                       {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
                                         <Button
                                           key={symbol}
@@ -1201,7 +1201,7 @@ const ProblemView = () => {
                                             newAnswers[index] = (newAnswers[index] || '') + symbol;
                                             setExplanationAnswers(newAnswers);
                                           }}
-                                          className="px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50"
+                                          className="symbol-button px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50 min-w-[45px] h-[45px] flex-shrink-0"
                                         >
                                           {symbol}
                                         </Button>
