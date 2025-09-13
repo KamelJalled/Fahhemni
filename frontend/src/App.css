@@ -180,6 +180,42 @@
   }
 }
 
+/* Virtual Keyboard Auto-scroll Support */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Active Input Field Highlighting for Keyboard Mode */
+input[data-active-input="true"] {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Mobile Virtual Keyboard Adjustments */
+@media (max-width: 768px) {
+  /* Prevent zoom on input focus on iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+  
+  /* Ensure adequate spacing when keyboard is open */
+  .math-keyboard-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Add padding to body when keyboard is active to prevent content cut-off */
+  body.keyboard-active {
+    padding-bottom: 320px;
+  }
+}
+
 /* Existing mobile optimizations */
     .section-tabs-container {
         overflow-x: auto !important;
