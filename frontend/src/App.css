@@ -75,6 +75,43 @@
     }
     
     /* Section Tabs - Horizontal Scrolling */
+.section-tabs-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+.section-tabs-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.section-tabs-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.section-tabs-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.section-tabs-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Mobile Section Tab Buttons */
+@media (max-width: 768px) {
+  .section-tab-button {
+    min-width: 140px !important;
+    flex-shrink: 0;
+  }
+  
+  .section-tabs-container {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+  }
+}
+
+/* Existing mobile optimizations */
     .section-tabs-container {
         overflow-x: auto !important;
         white-space: nowrap !important;
