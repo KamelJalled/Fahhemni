@@ -991,27 +991,29 @@ const ProblemView = () => {
                 </CardHeader>
                 
                 <CardContent className="p-8">
-                  {/* TABBED NAVIGATION - EXPANDED */}
+                  {/* TABBED NAVIGATION - MOBILE OPTIMIZED HORIZONTAL SCROLLING */}
                   <div className="border-b border-gray-200 mb-8">
-                    <nav className="-mb-px flex justify-center space-x-12" aria-label="Tabs">
-                      {problem.interactive_examples.map((example, index) => (
-                        <button
-                          key={index}
-                          onClick={() => {
-                            setCurrentExample(index);
-                            setShowExample(false); // Reset to show button state
-                            setPracticeAnswer(''); // Clear practice answer when switching tabs
-                          }}
-                          className={`whitespace-nowrap py-3 px-6 border-b-2 font-semibold text-lg ${
-                            currentExample === index
-                              ? 'border-blue-500 text-blue-600'
-                              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                          }`}
-                        >
-                          {language === 'en' ? example.title_en : example.title_ar}
-                        </button>
-                      ))}
-                    </nav>
+                    <div className="explanation-tabs-container overflow-x-auto pb-2">
+                      <nav className="-mb-px flex min-w-max md:justify-center space-x-6 md:space-x-12" aria-label="Tabs">
+                        {problem.interactive_examples.map((example, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setCurrentExample(index);
+                              setShowExample(false); // Reset to show button state
+                              setPracticeAnswer(''); // Clear practice answer when switching tabs
+                            }}
+                            className={`explanation-tab-button flex-shrink-0 whitespace-nowrap py-3 px-4 md:px-6 border-b-2 font-semibold text-sm md:text-lg min-w-[120px] md:min-w-0 ${
+                              currentExample === index
+                                ? 'border-blue-500 text-blue-600'
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            }`}
+                          >
+                            {language === 'en' ? example.title_en : example.title_ar}
+                          </button>
+                        ))}
+                      </nav>
+                    </div>
                   </div>
 
                   {/* SINGLE EXAMPLE CONTENT - FULL WIDTH */}
