@@ -1340,6 +1340,59 @@ class MathTutoringAPITester:
         
         return passed, total, self.test_results
 
+    def run_section1_preparation_tests(self):
+        """Run specific Section 1 preparation problem tests as requested in review"""
+        print("=" * 80)
+        print("SECTION 1 PREPARATION PROBLEM BACKEND TESTING")
+        print("=" * 80)
+        print(f"Testing backend at: {self.base_url}")
+        print("Focus: Section 1 preparation problem (prep1) verification")
+        print("Request: Test GET /api/problems/section/section1 and verify prep1 data")
+        print()
+        
+        # Specific tests for Section 1 preparation problem
+        section1_tests = [
+            # PRIORITY 1: Health check first
+            ("Health Check", self.test_health_check),
+            
+            # PRIORITY 2: Section 1 preparation problem specific test
+            ("🎯 Section 1 Preparation Problem Test", self.test_section1_preparation_problem_specific),
+            
+            # PRIORITY 3: Supporting backend tests
+            ("Database Initialization", self.test_database_initialization),
+            ("Student Login", self.test_student_login_with_class),
+        ]
+        
+        passed = 0
+        total = len(section1_tests)
+        
+        for test_name, test_func in section1_tests:
+            try:
+                result = test_func()
+                if result:
+                    passed += 1
+            except Exception as e:
+                self.log_test(test_name, False, f"Test execution error: {str(e)}")
+        
+        print("=" * 80)
+        print("SECTION 1 PREPARATION TESTS SUMMARY")
+        print("=" * 80)
+        print(f"Passed: {passed}/{total}")
+        print(f"Failed: {total - passed}/{total}")
+        
+        if passed == total:
+            print("\n🎉 ALL SECTION 1 PREPARATION TESTS PASSED!")
+            print("✅ Backend serving correct Section 1 preparation problem data")
+            print("✅ First problem has type 'preparation' and id 'prep1'")
+            print("✅ Problem data: id='prep1', type='preparation', question_en='x - 5 > 10', answer='x > 15'")
+            print("✅ Individual problem endpoint working")
+            print("✅ Answer submission functional")
+        else:
+            print(f"\n⚠️  {total - passed} Section 1 tests failed")
+            print("❌ Backend issues detected with Section 1 preparation problem")
+        
+        return passed, total, self.test_results
+
     def run_critical_mobile_tests(self):
         """Run critical mobile optimization tests as requested"""
         print("=" * 80)
