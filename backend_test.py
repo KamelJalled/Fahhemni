@@ -961,6 +961,148 @@ class MathTutoringAPITester:
             self.log_test("Admin Clear Data Endpoint", False, f"Request error: {str(e)}")
             return False
 
+    def test_section1_preparation_problem_specific(self):
+        """SPECIFIC TEST: Section 1 preparation problem as requested in review"""
+        try:
+            print("\n🎯 SPECIFIC SECTION 1 PREPARATION PROBLEM TEST")
+            print("Testing GET /api/problems/section/section1 and verifying prep1 problem data...")
+            
+            # Step 1: Test GET /api/problems/section/section1
+            response = self.session.get(f"{self.base_url}/problems/section/section1")
+            
+            if response.status_code != 200:
+                self.log_test("Section 1 Problems Endpoint", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            problems = response.json()
+            
+            if not isinstance(problems, list) or len(problems) == 0:
+                self.log_test("Section 1 Problems Endpoint", False, 
+                            f"Expected list of problems, got: {type(problems)} with {len(problems) if isinstance(problems, list) else 0} items")
+                return False
+            
+            self.log_test("Section 1 Problems Endpoint", True, 
+                        f"✅ Retrieved {len(problems)} problems from section1")
+            
+            # Step 2: Find and verify the first problem has type 'preparation' and id 'prep1'
+            first_problem = problems[0]
+            
+            if first_problem.get("id") != "prep1":
+                self.log_test("First Problem ID Check", False, 
+                            f"Expected first problem id 'prep1', got '{first_problem.get('id')}'")
+                return False
+            
+            if first_problem.get("type") != "preparation":
+                self.log_test("First Problem Type Check", False, 
+                            f"Expected first problem type 'preparation', got '{first_problem.get('type')}'")
+                return False
+            
+            self.log_test("First Problem Verification", True, 
+                        f"✅ First problem has id 'prep1' and type 'preparation'")
+            
+            # Step 3: Verify the preparation problem data
+            expected_data = {
+                "id": "prep1",
+                "type": "preparation",
+                "question_en": "x - 5 > 10",
+                "answer": "x > 15"
+            }
+            
+            verification_success = True
+            for key, expected_value in expected_data.items():
+                actual_value = first_problem.get(key)
+                if actual_value != expected_value:
+                    self.log_test(f"Prep1 Data Verification - {key}", False, 
+                                f"Expected '{expected_value}', got '{actual_value}'")
+                    verification_success = False
+                else:
+                    self.log_test(f"Prep1 Data Verification - {key}", True, 
+                                f"✅ {key}: '{actual_value}'")
+            
+            if not verification_success:
+                return False
+            
+            # Step 4: Test accessing specific problem GET /api/problems/prep1
+            response = self.session.get(f"{self.base_url}/problems/prep1")
+            
+            if response.status_code == 200:
+                problem = response.json()
+                
+                # Verify the individual problem endpoint returns same data
+                individual_verification_success = True
+                for key, expected_value in expected_data.items():
+                    actual_value = problem.get(key)
+                    if actual_value != expected_value:
+                        self.log_test(f"Individual Problem Verification - {key}", False, 
+                                    f"Expected '{expected_value}', got '{actual_value}'")
+                        individual_verification_success = False
+                
+                if individual_verification_success:
+                    self.log_test("Individual Problem Endpoint", True, 
+                                "✅ GET /api/problems/prep1 returns correct data")
+                else:
+                    self.log_test("Individual Problem Endpoint", False, 
+                                "❌ Individual problem data doesn't match expected values")
+                    return False
+            else:
+                self.log_test("Individual Problem Endpoint", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Step 5: Test answer submission for this specific problem
+            print("\n   Testing answer submission for prep1...")
+            
+            # Create test student for this specific test
+            test_student = {"username": "section1_prep_test", "class_name": "GR9-A"}
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Test Student Creation for Prep1", False, 
+                            f"Failed to create test student: HTTP {response.status_code}")
+                return False
+            
+            # Test correct answer submission
+            attempt_data = {
+                "problem_id": "prep1",
+                "answer": "x > 15",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/section1_prep_test/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("correct") == True and data.get("score", 0) > 0:
+                    self.log_test("Prep1 Answer Submission", True, 
+                                f"✅ Correct answer 'x > 15' scored {data.get('score')} points")
+                else:
+                    self.log_test("Prep1 Answer Submission", False, 
+                                f"Expected correct=True and score>0, got correct={data.get('correct')}, score={data.get('score')}")
+                    return False
+            else:
+                self.log_test("Prep1 Answer Submission", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Final success
+            self.log_test("SECTION 1 PREPARATION PROBLEM COMPREHENSIVE TEST", True, 
+                        "✅ All Section 1 prep1 tests PASSED - Backend serving correct data")
+            
+            return True
+            
+        except Exception as e:
+            self.log_test("Section 1 Preparation Problem Test", False, f"Test execution error: {str(e)}")
+            return False
+
     def test_admin_clear_all_data_endpoint(self):
         """Test new admin clear-all-data endpoint as requested in review"""
         try:
