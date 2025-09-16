@@ -32,55 +32,45 @@ async def init_database():
         if existing_section5:
             return  # All data already initialized
     
-    # Section 1 problems data
+    # Section 1 problems data - Updated with new curriculum content
     section1_problems = [
         {
             "id": "prep1",
             "section_id": "section1",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "x + 8 = 15",
-            "question_ar": "س + ٨ = ١٥",
-            "answer": "7",
-            "answer_ar": "٧",
-            "explanation_en": "This is a review problem. We'll solve it step by step.",
-            "explanation_ar": "هذه مسألة مراجعة. سنحلها خطوة بخطوة.",
-            "show_full_solution": False,
+            "question_en": "x - 5 > 10",
+            "question_ar": "س - ٥ > ١٠",
+            "answer": "x > 15",
+            "answer_ar": "س > ١٥",
+            "explanation_en": "This is a review problem for solving inequalities.",
+            "explanation_ar": "هذه مسألة مراجعة لحل المتباينات.",
+            "show_full_solution": True,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Subtract 8 from both sides",
-                    "step_ar": "اطرح ٨ من الطرفين", 
+                    "step_en": "Add 5 to both sides",
+                    "step_ar": "أضف ٥ إلى الطرفين", 
                     "possible_answers": [
-                        "x + 8 - 8 = 15 - 8",
-                        "x = 15 - 8",
-                        "x = 7"
+                        "x - 5 + 5 > 10 + 5",
+                        "x > 10 + 5",
+                        "x > 15"
                     ],
                     "possible_answers_ar": [
-                        "س + ٨ - ٨ = ١٥ - ٨",
-                        "س = ١٥ - ٨", 
-                        "س = ٧"
-                    ]
-                },
-                {
-                    "step_en": "Simplify both sides",
-                    "step_ar": "بسط الطرفين",
-                    "possible_answers": [
-                        "x = 7"
-                    ],
-                    "possible_answers_ar": [
-                        "س = ٧"
+                        "س - ٥ + ٥ > ١٠ + ٥",
+                        "س > ١٠ + ٥", 
+                        "س > ١٥"
                     ]
                 }
             ],
             "final_answer_required": True,
             "hints_en": [
-                "What operation cancels out addition?",
-                "Calculate 15 minus 8."
+                "What operation cancels out subtraction?",
+                "Add 5 to both sides to isolate x."
             ],
             "hints_ar": [
-                "ما العملية التي تلغي الجمع؟",
-                "احسب ١٥ ناقص ٨."
+                "ما العملية التي تلغي الطرح؟",
+                "أضف ٥ إلى الطرفين لعزل س."
             ]
         },
         {
