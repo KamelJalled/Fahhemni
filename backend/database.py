@@ -216,45 +216,45 @@ async def init_database():
             "section_id": "section1",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "x - 3 ≤ 8",
-            "question_ar": "س - ٣ ≤ ٨",
-            "answer": "x ≤ 11",
-            "answer_ar": "س ≤ ١١",
+            "question_en": "m + 19 > 56",
+            "question_ar": "م + ١٩ > ٥٦",
+            "answer": "m > 37",
+            "answer_ar": "م > ٣٧",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Add 3 to both sides", 
-                    "step_ar": "أضف ٣ للطرفين", 
+                    "step_en": "Subtract 19 from both sides", 
+                    "step_ar": "اطرح ١٩ من الطرفين", 
                     "possible_answers": [
-                        "x - 3 + 3 ≤ 8 + 3",
-                        "x ≤ 8 + 3", 
-                        "x ≤ 11"
+                        "m + 19 - 19 > 56 - 19",
+                        "m > 56 - 19", 
+                        "m > 37"
                     ],
                     "possible_answers_ar": [
-                        "س - ٣ + ٣ ≤ ٨ + ٣",
-                        "س ≤ ٨ + ٣",
-                        "س ≤ ١١"
+                        "م + ١٩ - ١٩ > ٥٦ - ١٩",
+                        "م > ٥٦ - ١٩",
+                        "م > ٣٧"
                     ]
                 },
                 {
-                    "step_en": "Simplify both sides", 
-                    "step_ar": "بسط الطرف الأيمن",
+                    "step_en": "Simplify the calculation", 
+                    "step_ar": "بسّط العملية الحسابية",
                     "possible_answers": [
-                        "x ≤ 11"
+                        "m > 37"
                     ],
                     "possible_answers_ar": [
-                        "س ≤ ١١"
+                        "م > ٣٧"
                     ]
                 }
             ],
             "hints_en": [
-                "What operation cancels out subtraction?",
-                "Combine the numbers on the right side."
+                "How can you isolate the variable 'm'?",
+                "Simplify the calculation."
             ],
             "hints_ar": [
-                "ما العملية التي تلغي الطرح؟",
-                "اجمع الأرقام في الطرف الأيمن."
+                "كيف يمكنك عزل المتغير 'م'؟",
+                "قم بتبسيط العملية الحسابية."
             ]
         },
         {
@@ -262,47 +262,43 @@ async def init_database():
             "section_id": "section1",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "4x < 20",
-            "question_ar": "٤س < ٢٠",
-            "answer": "x < 5",
-            "answer_ar": "س < ٥",
+            "question_en": "A school's goal is to collect at least SAR 500. They have SAR 210. How much more money (m) do they need?",
+            "question_ar": "هدف مدرسة هو جمع ٥٠٠ ريال على الأقل. لقد جمعوا ٢١٠ ريالات. ما هو المبلغ الإضافي (م) الذي يحتاجون لجمعه؟",
+            "answer": "m ≥ 290",
+            "answer_ar": "م ≥ ٢٩٠",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Divide both sides by 4", 
-                    "step_ar": "اقسم الطرفين على ٤",
+                    "step_en": "Set up the inequality: m + 210 ≥ 500", 
+                    "step_ar": "اكتب المتباينة: م + ٢١٠ ≥ ٥٠٠",
                     "possible_answers": [
-                        "4x ÷ 4 < 20 ÷ 4",
-                        "4x / 4 < 20 / 4",
-                        "x < 20 / 4",
-                        "x < 5"
+                        "m + 210 ≥ 500"
                     ],
                     "possible_answers_ar": [
-                        "٤س ÷ ٤ < ٢٠ ÷ ٤",
-                        "٤س / ٤ < ٢٠ / ٤",
-                        "س < ٢٠ / ٤",
-                        "س < ٥"
+                        "م + ٢١٠ ≥ ٥٠٠"
                     ]
                 },
                 {
-                    "step_en": "Simplify the division", 
-                    "step_ar": "بسط القسمة",
+                    "step_en": "Subtract 210 from both sides", 
+                    "step_ar": "اطرح ٢١٠ من الطرفين",
                     "possible_answers": [
-                        "x < 5"
+                        "m ≥ 500 - 210",
+                        "m ≥ 290"
                     ],
                     "possible_answers_ar": [
-                        "س < ٥"
+                        "م ≥ ٥٠٠ - ٢١٠",
+                        "م ≥ ٢٩٠"
                     ]
                 }
             ],
             "hints_en": [
-                "What operation cancels out multiplication?",
-                "Calculate 20 divided by 4."
+                "What inequality symbol does \"at least\" mean? (≥)",
+                "Use subtraction to isolate 'm'."
             ],
             "hints_ar": [
-                "ما العملية التي تلغي الضرب؟",
-                "احسب ٢٠ مقسوماً على ٤."
+                "كلمة \"على الأقل\" تعني أي رمز متباينة؟ (≥)",
+                "استخدم عملية الطرح لعزل 'م'."
             ]
         },
         {
