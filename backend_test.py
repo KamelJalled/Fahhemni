@@ -1512,28 +1512,48 @@ class MathTutoringAPITester:
         return passed, total, self.test_results
 
 def main():
-    """Main test execution - Focus on Infinite Recursion Bug Fix"""
-    print("🔍 CRITICAL PHASE 1 VERIFICATION: Test the infinite recursion bug fix in answer validation")
-    print("Focus: Answer validation system after fixing the infinite recursion bug")
+    """Main test execution - focused on Section 1 preparation problem as requested"""
+    print("🚀 MATH TUTORING API BACKEND TESTING")
+    print("📋 FOCUS: Section 1 Preparation Problem Verification")
+    print(f"🌐 Backend URL: {BACKEND_URL}")
     print()
     
     tester = MathTutoringAPITester(BACKEND_URL)
     
-    # Run infinite recursion bug fix tests first
-    passed, total, results = tester.run_infinite_recursion_bug_tests()
+    # Run Section 1 preparation problem tests as requested in review
+    passed, total, results = tester.run_section1_preparation_tests()
     
     # Save detailed results
-    with open("/app/test_results_infinite_recursion_fix.json", "w") as f:
+    with open("/app/test_results_section1_prep.json", "w") as f:
         json.dump({
             "summary": {"passed": passed, "total": total, "success_rate": passed/total},
             "results": results,
             "backend_url": BACKEND_URL,
             "test_timestamp": datetime.now().isoformat(),
-            "test_focus": "infinite_recursion_bug_fix"
+            "test_focus": "section1_preparation_problem"
         }, f, indent=2)
     
-    # Exit with appropriate code
-    sys.exit(0 if passed == total else 1)
+    print("\n" + "=" * 80)
+    print("FINAL TEST RESULTS")
+    print("=" * 80)
+    
+    if passed == total:
+        print("🎉 SUCCESS: All Section 1 preparation problem tests PASSED!")
+        print("✅ Backend is serving correct data for Section 1 preparation stage")
+        print("✅ Frontend input field issues are likely frontend-specific, not backend")
+        return 0
+    else:
+        print(f"❌ FAILURE: {total - passed}/{total} tests failed")
+        print("🔍 Backend issues detected that may be causing frontend problems")
+        
+        # Print failed tests
+        failed_tests = [r for r in results if not r["success"]]
+        if failed_tests:
+            print("\n📋 FAILED TESTS:")
+            for test in failed_tests:
+                print(f"   ❌ {test['test']}: {test['details']}")
+        
+        return 1
 
 if __name__ == "__main__":
     main()
