@@ -306,20 +306,20 @@ async def init_database():
             "section_id": "section1",
             "type": ProblemType.ASSESSMENT,
             "weight": 30,
-            "question_en": "6x ≥ 18",
-            "question_ar": "٦س ≥ ١٨",
-            "answer": "x ≥ 3",
-            "answer_ar": "س ≥ ٣",
+            "question_en": "k - 9 ≥ 2",
+            "question_ar": "ك - ٩ ≥ ٢",
+            "answer": "k ≥ 11",
+            "answer_ar": "ك ≥ ١١",
             "show_full_solution": False,
             "hide_answer": True,
             "hints_en": [
-                "Think about what operation will help you solve for x.",
-                "You need to isolate x by using division.",
+                "Think about what operation will help you solve for k.",
+                "You need to isolate k by using addition.",
                 "That's all the hints available."
             ],
             "hints_ar": [
-                "فكر في العملية التي ستساعدك في حل س.",
-                "تحتاج إلى عزل س باستخدام القسمة.",
+                "فكر في العملية التي ستساعدك في حل ك.",
+                "تحتاج إلى عزل ك باستخدام الجمع.",
                 "هذه كل الإرشادات المتاحة."
             ]
         },
@@ -328,20 +328,20 @@ async def init_database():
             "section_id": "section1",
             "type": ProblemType.EXAMPREP,
             "weight": 30,
-            "question_en": "-2x > 8",
-            "question_ar": "-٢س > ٨",
-            "answer": "x < -4",
-            "answer_ar": "س < -٤",
+            "question_en": "Sara has SAR 150 and wants to buy a gift that costs at least SAR 220. Write and solve an inequality to find the additional amount (m) she needs.",
+            "question_ar": "لدى سارة ١٥٠ ريالاً وتريد شراء هدية تكلف على الأقل ٢٢٠ ريالاً. اكتب وحل متباينة لإيجاد المبلغ الإضافي (م) الذي تحتاجه.",
+            "answer": "m ≥ 70",
+            "answer_ar": "م ≥ ٧٠",
             "show_full_solution": False,
             "hide_answer": True,
             "hints_en": [
-                "What happens to the inequality when you divide by a negative number?",
-                "The inequality sign flips when dividing by negative numbers.",
+                "The inequality is 150 + m ≥ 220",
+                "Subtract 150 from both sides to solve for m.",
                 "That's all the hints available."
             ],
             "hints_ar": [
-                "ماذا يحدث للمتباينة عندما تقسم على عدد سالب؟",
-                "تنقلب إشارة المتباينة عند القسمة على الأعداد السالبة.",
+                "المتباينة هي ١٥٠ + م ≥ ٢٢٠",
+                "اطرح ١٥٠ من الطرفين لحل م.",
                 "هذه كل الإرشادات المتاحة."
             ]
         }
