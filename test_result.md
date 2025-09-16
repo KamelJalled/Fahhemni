@@ -1010,10 +1010,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Section Names Update Verification"
+    - "Section 1 New Curriculum Content Verification"
+    - "Section 1 Functionality Testing"
+    - "Tabbed Explanation Interface Testing"
+    - "Arabic/English Language Switching"
+    - "Mobile Responsiveness Testing"
   stuck_tasks: []
   test_all: false
-  test_priority: "section_names_verification_complete"
+  test_priority: "section1_comprehensive_testing"
 
 agent_communication:
   - agent: "main"
