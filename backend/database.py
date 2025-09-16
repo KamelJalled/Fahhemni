@@ -78,276 +78,138 @@ async def init_database():
             "section_id": "section1", 
             "type": ProblemType.EXPLANATION,
             "weight": 0,
-            "question_en": "Learn Inequality Solving",
-            "question_ar": "تعلم حل المتباينات",
+            "question_en": "Learn Addition/Subtraction Inequalities",
+            "question_ar": "تعلم متباينات الجمع والطرح",
             "answer": "",
             "answer_ar": "",
             "show_full_solution": True,
             "hide_answer": False,
-            "explanation_en": """# Introduction: What is an Inequality?
-
-An inequality is like an equation, but instead of showing that two things are equal (=), it shows a relationship where one side is **greater than** (>), **less than** (<), **greater than or equal to** (≥), or **less than or equal to** (≤) the other side.
-
-Our goal when solving an inequality is to **isolate the variable** (get the letter by itself on one side) to find all the possible values that make the inequality true. This set of values is called the **solution set**.
-
-## Case 1: Inequalities Involving Addition or Subtraction
-
-This is the most straightforward case. The key idea is to use the **inverse operation** to "undo" what is being done to the variable.
-
-**Step-by-Step Process:**
-
-1. **Identify the Operation:** Look at the side of the inequality with the variable. Is a number being *added* to it or *subtracted* from it?
-2. **Apply the Inverse Operation:** To isolate the variable, perform the *opposite* operation to **both sides** of the inequality.
-   • To undo **addition**, **subtract** the same number from both sides.
-   • To undo **subtraction**, **add** the same number to both sides.
-3. **Simplify:** Perform the arithmetic on both sides. The variable is now isolated.
-4. **Check Your Solution (Optional but Recommended):** Pick a number from your solution set and plug it back into the original inequality to see if it makes a true statement.
-
-**Example 1: Solving x + 5 < 12**
-• **Step 1:** The operation is *addition* (+ 5).
-• **Step 2:** Apply the inverse operation: *subtract 5* from both sides.
-    x + 5 - 5 < 12 - 5
-• **Step 3:** Simplify.
-    x < 7
-• **Solution:** All numbers less than 7 are solutions.
-
-**Example 2: Solving a - 3 ≥ 4**
-• **Step 1:** The operation is *subtraction* (- 3).
-• **Step 2:** Apply the inverse operation: *add 3* to both sides.
-    a - 3 + 3 ≥ 4 + 3
-• **Step 3:** Simplify.
-    a ≥ 7
-• **Solution:** All numbers greater than or equal to 7 are solutions.
-
-**Important Note:** The inequality sign (<, >, ≤, ≥) **does not change** in this case. You only flip it under one specific condition, which we will cover in Case 3.
-
-## Case 2: Inequalities Involving Multiplication or Division (Positive Coefficient)
-
-When the variable is being multiplied or divided by a **positive** number, the process is also straightforward.
-
-**Step-by-Step Process:**
-
-1. **Identify the Operation:** Is the variable being *multiplied* by a number or *divided* by a number?
-2. **Apply the Inverse Operation:** To isolate the variable, perform the *opposite* operation to **both sides** of the inequality.
-   • To undo **multiplication**, **divide** both sides by the same *positive* number.
-   • To undo **division**, **multiply** both sides by the same *positive* number.
-3. **Simplify:** Perform the arithmetic on both sides.
-4. **Check Your Solution.**
-
-**Example 3: Solving 4y ≤ 20**
-• **Step 1:** The variable y is being *multiplied* by 4.
-• **Step 2:** Apply the inverse operation: *divide* both sides by 4.
-    4y / 4 ≤ 20 / 4
-• **Step 3:** Simplify.
-    y ≤ 5
-• **Solution:** All numbers less than or equal to 5 are solutions.
-
-**Example 4: Solving m/2 > 5**
-• **Step 1:** The variable m is being *divided* by 2.
-• **Step 2:** Apply the inverse operation: *multiply* both sides by 2.
-    (m/2) * 2 > 5 * 2
-• **Step 3:** Simplify.
-    m > 10
-• **Solution:** All numbers greater than 10 are solutions.
-
-**Again, the inequality sign does not change when you multiply or divide by a positive number.**
-
-## Case 3: Inequalities Involving Multiplication or Division (Negative Coefficient)
-
-**This is the most important rule to remember.** When you multiply or divide both sides of an inequality by a **negative** number, you **must flip the inequality sign**.
-
-**Why?** Let's prove it with logic:
-We know the true statement: 2 < 5
-Now, multiply both sides by -1:
-2 * (-1) < 5 * (-1) would give us -2 < -5, which is **NOT true**.
-To keep the statement true, we must *reverse the inequality*: -2 > -5. This is a true statement.
-
-**Step-by-Step Process:**
-
-1. **Identify the Operation and the Sign:** Is the variable being multiplied or divided by a *negative* number?
-2. **Apply the Inverse Operation:** Multiply or divide both sides by the same *negative* number.
-3. **FLIP THE INEQUALITY SIGN:** This is the crucial step. Change < to >, > to <, ≤ to ≥, or ≥ to ≤.
-4. **Simplify:** Perform the arithmetic on both sides.
-5. **Check Your Solution.** It's especially important here to check your work.
-
-**Example 5: Solving -3x < 12**
-• **Step 1:** The variable x is being *multiplied* by **-3** (a negative number).
-• **Step 2 & 3:** Apply the inverse operation (*divide* by -3) and **FLIP THE SIGN** from < to >.
-    -3x / -3 > 12 / -3
-• **Step 4:** Simplify.
-    x > -4
-• **Solution:** All numbers greater than -4 are solutions.
-
-**Example 6: Solving -k/2 ≥ 6**
-This is the same as (-1/2)k ≥ 6.
-• **Step 1:** The variable k is being *multiplied* by **-1/2** (a negative number).
-• **Step 2 & 3:** The inverse of multiplication is division. To isolate k, we can *multiply* both sides by the reciprocal, which is **-2**. Remember to **FLIP THE SIGN** from ≥ to ≤.
-    (-2) * (-k/2) ≤ 6 * (-2)
-• **Step 4:** Simplify. On the left, (-2) * (-1/2) = 1, so we get 1k or just k.
-    k ≤ -12
-• **Solution:** All numbers less than or equal to -12 are solutions.
-
-## Summary for the Student
-
-| If you need to... | And the number is... | Then you... | And you... |
-| :--- | :--- | :--- | :--- |
-| **Add or Subtract** | **Any Number** | Add or subtract that number from **both sides** | **DO NOT** change the sign |
-| **Multiply or Divide** | **Positive** | Multiply or divide both sides by that number | **DO NOT** change the sign |
-| **Multiply or Divide** | **Negative** | Multiply or divide both sides by that number | **FLIP** the inequality sign |
-
-**Final Advice:** Always perform the same operation to both sides. The inequality sign is like an arrow—it always points to the smaller value. When you multiply by a negative, you reverse the direction of the numbers on the number line, so you must also reverse the arrow (the sign) to keep pointing to the smaller value. Practice this rule until it becomes automatic.""",
-            "explanation_ar": """# مقدمة: ما هي المتباينة؟
-
-المتباينة مثل المعادلة، ولكن بدلاً من إظهار أن شيئين متساويان (=)، فإنها تُظهر علاقة حيث أحد الطرفين **أكبر من** (>)، **أصغر من** (<)، **أكبر من أو يساوي** (≥)، أو **أصغر من أو يساوي** (≤) الطرف الآخر.
-
-هدفنا عند حل المتباينة هو **عزل المتغير** (الحصول على الحرف بمفرده في طرف واحد) للعثور على جميع القيم الممكنة التي تجعل المتباينة صحيحة. هذه المجموعة من القيم تُسمى **مجموعة الحل**.
-
-## الحالة الأولى: المتباينات التي تتضمن الجمع أو الطرح
-
-هذه هي الحالة الأكثر وضوحاً. الفكرة الأساسية هي استخدام **العملية العكسية** لـ"إلغاء" ما يُفعل بالمتغير.
-
-**العملية خطوة بخطوة:**
-
-1. **تحديد العملية:** انظر إلى جانب المتباينة الذي يحتوي على المتغير. هل يتم *إضافة* رقم إليه أم *طرح* رقم منه؟
-2. **تطبيق العملية العكسية:** لعزل المتغير، قم بأداء العملية *المعاكسة* على **كلا الطرفين** من المتباينة.
-   • لإلغاء **الجمع**، **اطرح** نفس الرقم من كلا الطرفين.
-   • لإلغاء **الطرح**، **أضف** نفس الرقم إلى كلا الطرفين.
-3. **التبسيط:** قم بأداء العمليات الحسابية على كلا الطرفين. المتغير الآن معزول.
-4. **تحقق من حلك (اختياري ولكن موصى به):** اختر رقماً من مجموعة حلك وأعد استبداله في المتباينة الأصلية لترى إن كان يجعل العبارة صحيحة.
-
-**مثال 1: حل س + 5 < 12**
-• **الخطوة 1:** العملية هي *الجمع* (+ 5).
-• **الخطوة 2:** تطبيق العملية العكسية: *اطرح 5* من كلا الطرفين.
-    س + 5 - 5 < 12 - 5
-• **الخطوة 3:** بسّط.
-    س < 7
-• **الحل:** جميع الأرقام الأصغر من 7 هي حلول.
-
-**مثال 2: حل أ - 3 ≥ 4**
-• **الخطوة 1:** العملية هي *الطرح* (- 3).
-• **الخطوة 2:** تطبيق العملية العكسية: *أضف 3* إلى كلا الطرفين.
-    أ - 3 + 3 ≥ 4 + 3
-• **الخطوة 3:** بسّط.
-    أ ≥ 7
-• **الحل:** جميع الأرقام الأكبر من أو تساوي 7 هي حلول.
-
-**ملاحظة مهمة:** إشارة المتباينة (<, >, ≤, ≥) **لا تتغير** في هذه الحالة. تقلبها فقط في ظل شرط واحد محدد، والذي سنغطيه في الحالة 3.
-
-## الحالة الثانية: المتباينات التي تتضمن الضرب أو القسمة (المعامل الموجب)
-
-عندما يتم ضرب أو قسمة المتغير على رقم **موجب**، العملية أيضاً مباشرة.
-
-**العملية خطوة بخطوة:**
-
-1. **تحديد العملية:** هل يتم *ضرب* المتغير في رقم أم *قسمته* على رقم؟
-2. **تطبيق العملية العكسية:** لعزل المتغير، قم بأداء العملية *المعاكسة* على **كلا الطرفين** من المتباينة.
-   • لإلغاء **الضرب**، **اقسم** كلا الطرفين على نفس الرقم *الموجب*.
-   • لإلغاء **القسمة**، **اضرب** كلا الطرفين في نفس الرقم *الموجب*.
-3. **التبسيط:** قم بأداء العمليات الحسابية على كلا الطرفين.
-4. **تحقق من حلك.**
-
-**مثال 3: حل 4ص ≤ 20**
-• **الخطوة 1:** المتغير ص يتم *ضربه* في 4.
-• **الخطوة 2:** تطبيق العملية العكسية: *اقسم* كلا الطرفين على 4.
-    4ص / 4 ≤ 20 / 4
-• **الخطوة 3:** بسّط.
-    ص ≤ 5
-• **الحل:** جميع الأرقام الأصغر من أو تساوي 5 هي حلول.
-
-**مثال 4: حل م/2 > 5**
-• **الخطوة 1:** المتغير م يتم *قسمته* على 2.
-• **الخطوة 2:** تطبيق العملية العكسية: *اضرب* كلا الطرفين في 2.
-    (م/2) * 2 > 5 * 2
-• **الخطوة 3:** بسّط.
-    م > 10
-• **الحل:** جميع الأرقام الأكبر من 10 هي حلول.
-
-**مرة أخرى، إشارة المتباينة لا تتغير عندما تضرب أو تقسم على رقم موجب.**
-
-## الحالة الثالثة: المتباينات التي تتضمن الضرب أو القسمة (المعامل السالب)
-
-**هذه هي أهم قاعدة يجب تذكرها.** عندما تضرب أو تقسم كلا طرفي المتباينة على رقم **سالب**، يجب عليك **قلب إشارة المتباينة**.
-
-**لماذا؟** دعنا نثبت ذلك بالمنطق:
-نعرف العبارة الصحيحة: 2 < 5
-الآن، اضرب كلا الطرفين في -1:
-2 * (-1) < 5 * (-1) ستعطينا -2 < -5، وهي **ليست صحيحة**.
-للحفاظ على صحة العبارة، يجب أن *نعكس المتباينة*: -2 > -5. هذه عبارة صحيحة.
-
-**العملية خطوة بخطوة:**
-
-1. **تحديد العملية والإشارة:** هل يتم ضرب أو قسمة المتغير على رقم *سالب*؟
-2. **تطبيق العملية العكسية:** اضرب أو اقسم كلا الطرفين على نفس الرقم *السالب*.
-3. **اقلب إشارة المتباينة:** هذه هي الخطوة الحاسمة. غيّر < إلى >، > إلى <، ≤ إلى ≥، أو ≥ إلى ≤.
-4. **التبسيط:** قم بأداء العمليات الحسابية على كلا الطرفين.
-5. **تحقق من حلك.** من المهم بشكل خاص هنا أن تتحقق من عملك.
-
-**مثال 5: حل -3س < 12**
-• **الخطوة 1:** المتغير س يتم *ضربه* في **-3** (رقم سالب).
-• **الخطوة 2 و 3:** تطبيق العملية العكسية (*اقسم* على -3) و **اقلب الإشارة** من < إلى >.
-    -3س / -3 > 12 / -3
-• **الخطوة 4:** بسّط.
-    س > -4
-• **الحل:** جميع الأرقام الأكبر من -4 هي حلول.
-
-**مثال 6: حل -ك/2 ≥ 6**
-هذا نفس (-1/2)ك ≥ 6.
-• **الخطوة 1:** المتغير ك يتم *ضربه* في **-1/2** (رقم سالب).
-• **الخطوة 2 و 3:** عكس الضرب هو القسمة. لعزل ك، يمكننا *ضرب* كلا الطرفين في المقلوب، وهو **-2**. تذكر **قلب الإشارة** من ≥ إلى ≤.
-    (-2) * (-ك/2) ≤ 6 * (-2)
-• **الخطوة 4:** بسّط. في اليسار، (-2) * (-1/2) = 1، لذلك نحصل على 1ك أو فقط ك.
-    ك ≤ -12
-• **الحل:** جميع الأرقام الأصغر من أو تساوي -12 هي حلول.
-
-## خلاصة للطالب
-
-| إذا كنت تحتاج إلى... | والرقم هو... | إذن أنت... | وأنت... |
-| :--- | :--- | :--- | :--- |
-| **الجمع أو الطرح** | **أي رقم** | اجمع أو اطرح ذلك الرقم من **كلا الطرفين** | **لا تغير** الإشارة |
-| **الضرب أو القسمة** | **موجب** | اضرب أو اقسم كلا الطرفين على ذلك الرقم | **لا تغير** الإشارة |
-| **الضرب أو القسمة** | **سالب** | اضرب أو اقسم كلا الطرفين على ذلك الرقم | **اقلب** إشارة المتباينة |
-
-**نصيحة أخيرة:** قم دائماً بأداء نفس العملية على كلا الطرفين. إشارة المتباينة مثل السهم—تشير دائماً إلى القيمة الأصغر. عندما تضرب في رقم سالب، تعكس اتجاه الأرقام على خط الأعداد، لذلك يجب أيضاً عكس السهم (الإشارة) للاستمرار في الإشارة إلى القيمة الأصغر. مارس هذه القاعدة حتى تصبح تلقائية.""",
+            "explanation_en": "Learn to solve inequalities involving addition and subtraction",
+            "explanation_ar": "تعلم حل المتباينات التي تتضمن الجمع والطرح",
             "interactive_examples": [
                 {
-                    "title_en": "Practice Example 1: Addition Case",
-                    "title_ar": "تمرين 1: حالة الجمع",
-                    "problem_en": "x + 6 < 14",
-                    "problem_ar": "س + 6 < 14",
-                    "solution_en": "Step 1: Subtract 6 from both sides\nx + 6 - 6 < 14 - 6\nStep 2: Simplify\nx < 8\n\nSolution: All numbers less than 8",
-                    "solution_ar": "الخطوة 1: اطرح 6 من الطرفين\nس + 6 - 6 < 14 - 6\nالخطوة 2: بسّط\nس < 8\n\nالحل: جميع الأرقام أقل من 8",
-                    "practice_question_en": "Now try: x + 3 ≥ 11",
-                    "practice_question_ar": "الآن جرب: س + 3 ≥ 11",
-                    "practice_answer": "x ≥ 8",
-                    "practice_answer_ar": "س ≥ 8"
+                    "title_en": "Level 1: Simple (Example 1A - System Solved)",
+                    "title_ar": "المستوى ١: بسيط (المثال ١أ - حل النظام)",
+                    "problem_en": "x - 8 > 2",
+                    "problem_ar": "س - ٨ > ٢",
+                    "solution_en": "Solution: x - 8 + 8 > 2 + 8 → x > 10",
+                    "solution_ar": "الحل: س - ٨ + ٨ > ٢ + ٨ → س > ١٠",
+                    "practice_question_en": "Now solve: y - 5 > 10",
+                    "practice_question_ar": "الآن حل: ص - ٥ > ١٠",
+                    "practice_answer": "y > 15",
+                    "practice_answer_ar": "ص > ١٥"
                 },
                 {
-                    "title_en": "Practice Example 2: Multiplication (Positive)",
-                    "title_ar": "تمرين 2: الضرب (موجب)",
-                    "problem_en": "5x ≤ 25",
-                    "problem_ar": "5س ≤ 25",
-                    "solution_en": "Step 1: Divide both sides by 5\n5x ÷ 5 ≤ 25 ÷ 5\nStep 2: Simplify\nx ≤ 5\n\nSolution: All numbers less than or equal to 5",
-                    "solution_ar": "الخطوة 1: اقسم الطرفين على 5\n5س ÷ 5 ≤ 25 ÷ 5\nالخطوة 2: بسّط\nس ≤ 5\n\nالحل: جميع الأرقام أقل من أو تساوي 5",
-                    "practice_question_en": "Now try: 4x > 16",
-                    "practice_question_ar": "الآن جرب: 4س > 16",
-                    "practice_answer": "x > 4",
-                    "practice_answer_ar": "س > 4"
+                    "title_en": "Level 2: Medium (Example 2A - System Solved)",
+                    "title_ar": "المستوى ٢: متوسط (المثال ٢أ - حل النظام)",
+                    "problem_en": "12 ≤ k + 3",
+                    "problem_ar": "١٢ ≤ ك + ٣",
+                    "solution_en": "Solution: 12 - 3 ≤ k + 3 - 3 → 9 ≤ k",
+                    "solution_ar": "الحل: ١٢ - ٣ ≤ ك + ٣ - ٣ → ٩ ≤ ك",
+                    "practice_question_en": "Now solve: 20 ≤ m + 8",
+                    "practice_question_ar": "الآن حل: ٢٠ ≤ م + ٨",
+                    "practice_answer": "12 ≤ m",
+                    "practice_answer_ar": "١٢ ≤ م"
                 },
                 {
-                    "title_en": "Practice Example 3: Negative Coefficient (FLIP SIGN!)",
-                    "title_ar": "تمرين 3: المعامل السالب (اقلب الإشارة!)",
-                    "problem_en": "-2x < 10",
-                    "problem_ar": "-2س < 10",
-                    "solution_en": "Step 1: Divide both sides by -2 and FLIP the inequality sign!\n-2x ÷ (-2) > 10 ÷ (-2)\nStep 2: Simplify\nx > -5\n\nSolution: All numbers greater than -5\n\n⚠️ REMEMBER: When dividing by negative, flip the sign!",
-                    "solution_ar": "الخطوة 1: اقسم الطرفين على -2 واقلب إشارة المتباينة!\n-2س ÷ (-2) > 10 ÷ (-2)\nالخطوة 2: بسّط\nس > -5\n\nالحل: جميع الأرقام أكبر من -5\n\n⚠️ تذكر: عند القسمة على رقم سالب، اقلب الإشارة!",
-                    "practice_question_en": "Now try: -3x ≥ 15",
-                    "practice_question_ar": "الآن جرب: -3س ≥ 15",
-                    "practice_answer": "x ≤ -5",
-                    "practice_answer_ar": "س ≤ -5"
+                    "title_en": "Level 3: Advanced (Example 3A - System Solved)",
+                    "title_ar": "المستوى ٣: متقدم (المثال ٣أ - حل النظام)",
+                    "problem_en": "3n + 6 ≥ 2n + 9",
+                    "problem_ar": "٣ن + ٦ ≥ ٢ن + ٩",
+                    "solution_en": "Solution: n + 6 ≥ 9 → n ≥ 3",
+                    "solution_ar": "الحل: ن + ٦ ≥ ٩ → ن ≥ ٣",
+                    "practice_question_en": "Now solve: 5k - 4 < 4k + 1",
+                    "practice_question_ar": "الآن حل: ٥ك - ٤ < ٤ك + ١",
+                    "practice_answer": "k < 5",
+                    "practice_answer_ar": "ك < ٥"
                 }
             ],
-            "hints_en": [],
-            "hints_ar": []
+            "step_solutions": [
+                {
+                    "step_en": "Level 1B Step 1: Add 5 to both sides",
+                    "step_ar": "المستوى ١ب الخطوة ١: أضف ٥ إلى كلا الطرفين",
+                    "possible_answers": [
+                        "y - 5 + 5 > 10 + 5",
+                        "y > 15"
+                    ],
+                    "possible_answers_ar": [
+                        "ص - ٥ + ٥ > ١٠ + ٥",
+                        "ص > ١٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 1B Step 2: Simplify",
+                    "step_ar": "المستوى ١ب الخطوة ٢: بسّط",
+                    "possible_answers": [
+                        "y > 15"
+                    ],
+                    "possible_answers_ar": [
+                        "ص > ١٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 1: Subtract 8 from both sides",
+                    "step_ar": "المستوى ٢ب الخطوة ١: اطرح ٨ من كلا الطرفين",
+                    "possible_answers": [
+                        "20 - 8 ≤ m + 8 - 8",
+                        "12 ≤ m"
+                    ],
+                    "possible_answers_ar": [
+                        "٢٠ - ٨ ≤ م + ٨ - ٨",
+                        "١٢ ≤ م"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 2: Simplify",
+                    "step_ar": "المستوى ٢ب الخطوة ٢: بسّط",
+                    "possible_answers": [
+                        "12 ≤ m"
+                    ],
+                    "possible_answers_ar": [
+                        "١٢ ≤ م"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 1: Subtract 4k from both sides: k - 4 < 1",
+                    "step_ar": "المستوى ٣ب الخطوة ١: اطرح ٤ك من كلا الطرفين: ك - ٤ < ١",
+                    "possible_answers": [
+                        "5k - 4k - 4 < 4k - 4k + 1",
+                        "k - 4 < 1"
+                    ],
+                    "possible_answers_ar": [
+                        "٥ك - ٤ك - ٤ < ٤ك - ٤ك + ١",
+                        "ك - ٤ < ١"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 2: Add 4 to both sides: k < 5",
+                    "step_ar": "المستوى ٣ب الخطوة ٢: أضف ٤ إلى كلا الطرفين: ك < ٥",
+                    "possible_answers": [
+                        "k - 4 + 4 < 1 + 4",
+                        "k < 5"
+                    ],
+                    "possible_answers_ar": [
+                        "ك - ٤ + ٤ < ١ + ٤",
+                        "ك < ٥"
+                    ]
+                }
+            ],
+            "hints_en": [
+                "للتخلص من الطرح، ما هي العملية العكسية التي يجب أن تستخدمها؟",
+                "قم بتبسيط كلا طرفي المتباينة.",
+                "لعزل المتغير 'م'، ماذا يجب أن تفعل بالرقم ٨؟",
+                "ما هو ناتج ٢٠ - ٨؟",
+                "ابدأ بجمع حدود 'ك' المتشابهة في طرف واحد.",
+                "الآن، قم بعزل المتغير 'ك'."
+            ],
+            "hints_ar": [
+                "To undo subtraction, what is the inverse operation you should use?",
+                "Simplify both sides of the inequality.",
+                "To isolate the variable 'm', what should you do with the number 8?",
+                "What is the result of 20 - 8?",
+                "Start by collecting the 'k' terms on one side.",
+                "Now, isolate the variable 'k'."
+            ]
         },
         {
             "id": "practice1",
