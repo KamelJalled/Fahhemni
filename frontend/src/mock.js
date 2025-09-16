@@ -2,8 +2,8 @@
 export const mockProblems = {
   section1: {
     title: {
-      en: "Section 1: One-Step Inequalities",
-      ar: "القسم الأول: المتباينات أحادية الخطوة"
+      en: "Section 1: Solving Inequalities by Addition or Subtraction",
+      ar: "القسم الأول: حل المتباينات بالجمع أو بالطرح"
     },
     problems: [
       {
