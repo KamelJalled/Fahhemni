@@ -18,11 +18,11 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const sections_info = [
-    { id: 'section1', title_en: 'Section 1: One-Step Inequalities', title_ar: 'القسم الأول: المتباينات أحادية الخطوة' },
-    { id: 'section2', title_en: 'Section 2: Two-Step Inequalities', title_ar: 'القسم الثاني: المتباينات ذات الخطوتين' },
-    { id: 'section3', title_en: 'Section 3: Multi-Step Inequalities', title_ar: 'القسم الثالث: المتباينات متعددة الخطوات' },
-    { id: 'section4', title_en: 'Section 4: Variables on Both Sides', title_ar: 'القسم الرابع: المتغيرات في الطرفين' },
-    { id: 'section5', title_en: 'Section 5: Compound Inequalities', title_ar: 'القسم الخامس: المتباينات المركبة' }
+    { id: 'section1', title_en: 'Section 1: Solving Inequalities by Addition or Subtraction', title_ar: 'القسم الأول: حل المتباينات بالجمع أو بالطرح' },
+    { id: 'section2', title_en: 'Section 2: Solving Inequalities by Multiplication or Division', title_ar: 'القسم الثاني: حل المتباينات بالضرب أو بالقسمة' },
+    { id: 'section3', title_en: 'Section 3: Solving Multi-Step Inequalities', title_ar: 'القسم الثالث: حل المتباينات المتعددة الخطوات' },
+    { id: 'section4', title_en: 'Section 4: Solving Compound Inequalities', title_ar: 'القسم الرابع: حل المتباينات المركبة' },
+    { id: 'section5', title_en: 'Section 5: Solving Inequalities Involving Absolute Value', title_ar: 'القسم الخامس: حل المتباينات التي تتضمن القيمة المطلقة' }
   ];
 
   const badges = [
