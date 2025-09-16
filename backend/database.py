@@ -353,7 +353,7 @@ async def init_database():
     # Create section
     section1 = {
         "id": "section1",
-        "title_en": "Section 1: One-Step Inequalities",
+        "title_en": "Section 1: Solving Inequalities by Addition or Subtraction",
         "title_ar": "القسم الأول: المتباينات أحادية الخطوة"
     }
     
