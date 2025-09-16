@@ -972,6 +972,18 @@ frontend:
         agent: "testing"
         comment: "✅ VERIFIED: Language switching working throughout the entire app. Arabic/English toggle functional on all pages, Arabic stage labels display correctly (التحضير، الشرح، التدريب، التقييم، الإعداد للاختبار), RTL support working, all new features work in both languages."
 
+  - task: "Section Names Update Verification"
+    implemented: true
+    working: true
+    file: "frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: All section names have been updated correctly in the Math Tutoring App dashboard. Section 1: 'Solving Inequalities by Addition or Subtraction' (was 'One-Step Inequalities'), Section 2: 'Solving Inequalities by Multiplication or Division' (was 'Two-Step Inequalities'), Section 3: 'Solving Multi-Step Inequalities' (unchanged), Section 4: 'Solving Compound Inequalities' (was 'Variables on Both Sides'), Section 5: 'Solving Inequalities Involving Absolute Value' (was 'Compound Inequalities'). All sections are clickable and functional. Student login successful, dashboard displays properly with progress indicators. Fixed frontend/.env REACT_APP_BACKEND_URL configuration for proper testing."
+
   - task: "Socratic AI Tutoring Model: Dual Stage Interaction"
     implemented: true
     working: true
