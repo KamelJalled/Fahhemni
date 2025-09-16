@@ -1007,10 +1007,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin Clear All Data Endpoint"
+    - "Section Names Update Verification"
   stuck_tasks: []
   test_all: false
-  test_priority: "admin_clear_data_testing"
+  test_priority: "section_names_verification_complete"
 
 agent_communication:
   - agent: "main"
