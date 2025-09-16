@@ -610,8 +610,8 @@ async def init_database():
     
     section2 = {
         "id": "section2",
-        "title_en": "Section 2: Two-Step Inequalities",
-        "title_ar": "القسم الثاني: المتباينات ذات الخطوتين"
+        "title_en": "Section 2: Solving Inequalities by Multiplication or Division",
+        "title_ar": "القسم الثاني: حل المتباينات بالضرب أو بالقسمة"
     }
     await sections_collection.insert_one(section2)
     
