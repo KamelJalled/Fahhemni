@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 
 # Use backend URL from frontend/.env as specified in review request
-BACKEND_URL = "https://math-explainer-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://math-app-mobile.preview.emergentagent.com/api"
 
 # Expected sections and their problem counts
 EXPECTED_SECTIONS = {
