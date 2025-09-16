@@ -1386,8 +1386,8 @@ async def init_database():
     
     section5 = {
         "id": "section5",
-        "title_en": "Section 5: Compound Inequalities", 
-        "title_ar": "القسم الخامس: المتباينات المركبة"
+        "title_en": "Section 5: Solving Inequalities Involving Absolute Value", 
+        "title_ar": "القسم الخامس: حل المتباينات التي تتضمن القيمة المطلقة"
     }
     await sections_collection.insert_one(section5)
     
