@@ -1150,8 +1150,8 @@ async def init_database():
     
     section4 = {
         "id": "section4", 
-        "title_en": "Section 4: Variables on Both Sides",
-        "title_ar": "القسم الرابع: المتغيرات في الطرفين"
+        "title_en": "Section 4: Solving Compound Inequalities", 
+        "title_ar": "القسم الرابع: حل المتباينات المركبة"
     }
     await sections_collection.insert_one(section4)
     
