@@ -233,15 +233,19 @@ input[data-active-input="true"] {
         border-radius: 2px !important;
     }
     
-    /* Section Tab Buttons */
-    .section-tab-button {
+    /* Section Tab Buttons - More specific selector */
+    .section-tabs-container .section-tab-button {
         flex-shrink: 0 !important;
         margin-right: 8px !important;
         min-width: 200px !important;
+        max-width: 250px !important;
         white-space: normal !important;
         word-wrap: break-word !important;
         height: auto !important;
         min-height: 80px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
     }
     
     /* Text clamping for long section titles */
