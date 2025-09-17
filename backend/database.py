@@ -270,13 +270,15 @@ async def init_database():
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Set up the inequality: m + 210 ≥ 500", 
-                    "step_ar": "اكتب المتباينة: م + ٢١٠ ≥ ٥٠٠",
+                    "step_en": "Use the variable 'm' for the additional amount. Write an inequality showing that the amount collected (210) plus 'm' must be greater than or equal to the goal (500)", 
+                    "step_ar": "استخدم المتغير 'م' لتمثيل المبلغ الإضافي. اكتب متباينة توضح أن المبلغ الذي تم جمعه (٢١٠) مضافًا إليه 'م' يجب أن يكون أكبر من أو يساوي الهدف (٥٠٠)",
                     "possible_answers": [
-                        "m + 210 ≥ 500"
+                        "m + 210 ≥ 500",
+                        "210 + m ≥ 500"
                     ],
                     "possible_answers_ar": [
-                        "م + ٢١٠ ≥ ٥٠٠"
+                        "م + ٢١٠ ≥ ٥٠٠",
+                        "٢١٠ + م ≥ ٥٠٠"
                     ]
                 },
                 {
