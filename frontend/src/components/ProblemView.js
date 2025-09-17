@@ -1893,6 +1893,8 @@ const ProblemView = () => {
                           const stageType = getStageType(problem.type, problem.id);
                           if (stageType === 'preparation') {
                             return language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←';
+                          } else if (problem.id === 'examprep1') {
+                            return language === 'en' ? 'Start the Next Section →' : 'ابدأ القسم التالي ←';
                           } else {
                             return language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←';
                           }
