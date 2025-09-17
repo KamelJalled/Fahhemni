@@ -1872,7 +1872,9 @@ const ProblemView = () => {
                         className="w-full h-12 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
                       >
                         <BookOpen className="w-4 h-4 mr-2" />
-                        {language === 'en' ? '📚 Go to Explanation Stage' : '📚 انتقل لمرحلة الشرح'}
+                        {problem.id === 'examprep1' 
+                          ? (language === 'en' ? '📚 Go Back to the Explanation Stage' : '📚 ارجع إلى مرحلة الشرح')
+                          : (language === 'en' ? '📚 Go to Explanation Stage' : '📚 انتقل لمرحلة الشرح')}
                       </Button>
                     </div>
                   )}
