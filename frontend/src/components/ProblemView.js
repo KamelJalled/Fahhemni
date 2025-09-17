@@ -1138,246 +1138,154 @@ const ProblemView = () => {
                               
                               {/* RESTORED: Step-by-Step Practice with Simplified Input Management */}
                               <div className="space-y-6">
-                                {/* Step 1 - Restored with simplified input management */}
-                                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                  <h5 className="font-semibold text-blue-800 mb-3">
-                                    {/* Use actual step instructions from backend data */}
-                                    {(() => {
-                                      const stepSolutionIndex = index * 2; // Each level has 2 steps
-                                      const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
-                                      if (currentStepSolution) {
-                                        return language === 'ar' 
-                                          ? currentStepSolution.step_ar 
-                                          : currentStepSolution.step_en;
-                                      }
-                                      return language === 'en' ? 'Step 1:' : 'الخطوة 1:';
-                                    })()}
-                                  </h5>
+                                {/* Dynamic Multi-Step System */}
+                                {(() => {
+                                  // Determine how many steps this level has
+                                  const levelSteps = problem.step_solutions?.filter(step => 
+                                    step.step_en.includes(`Level ${index + 1}B Step`)
+                                  ) || [];
                                   
-                                  {/* Symbol Shortcut Buttons - Mobile: 2 rows x 3 buttons */}
-                                  <div className="symbol-buttons-container flex flex-wrap justify-center gap-2 md:flex-nowrap mb-3">
-                                    {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
-                                      <Button
-                                        key={symbol}
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => {
+                                  const currentStepIndex = explanationStep;
+                                  const currentStep = levelSteps[currentStepIndex];
+                                  
+                                  if (!currentStep) return null;
+                                  
+                                  return (
+                                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                      <h5 className="font-semibold text-blue-800 mb-3">
+                                        {language === 'ar' ? currentStep.step_ar : currentStep.step_en}
+                                      </h5>
+                                      
+                                      {/* Show previous steps */}
+                                      {explanationStep > 0 && (
+                                        <div className="mb-3">
+                                          <p className="text-sm text-gray-600 mb-2">
+                                            {language === 'en' ? 'Your previous steps:' : 'خطواتك السابقة:'}
+                                          </p>
+                                          {explanationAnswers.slice(0, explanationStep).map((answer, stepIdx) => (
+                                            answer && (
+                                              <div key={stepIdx} className="mb-2 p-2 bg-blue-100 rounded text-center text-sm text-blue-800">
+                                                {language === 'en' ? `Step ${stepIdx + 1}: ` : `الخطوة ${stepIdx + 1}: `}{answer}
+                                              </div>
+                                            )
+                                          ))}
+                                        </div>
+                                      )}
+                                      
+                                      {/* Symbol Shortcut Buttons */}
+                                      <div className="symbol-buttons-container flex flex-wrap justify-center gap-2 md:flex-nowrap mb-3">
+                                        {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
+                                          <Button
+                                            key={symbol}
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                              const newAnswers = [...explanationAnswers];
+                                              newAnswers[index] = (newAnswers[index] || '') + symbol;
+                                              setExplanationAnswers(newAnswers);
+                                            }}
+                                            className="symbol-button px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50 min-w-[45px] h-[45px] flex-shrink-0"
+                                          >
+                                            {symbol}
+                                          </Button>
+                                        ))}
+                                      </div>
+                                      
+                                      <Input
+                                        value={explanationAnswers[index] || ''}
+                                        onChange={(e) => {
                                           const newAnswers = [...explanationAnswers];
-                                          newAnswers[index] = (newAnswers[index] || '') + symbol;
+                                          newAnswers[index] = e.target.value;
                                           setExplanationAnswers(newAnswers);
                                         }}
-                                        className="symbol-button px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50 min-w-[45px] h-[45px] flex-shrink-0"
-                                      >
-                                        {symbol}
-                                      </Button>
-                                    ))}
-                                  </div>
-                                  
-                                  <Input
-                                    value={explanationAnswers[index] || ''}
-                                    onChange={(e) => {
-                                      const newAnswers = [...explanationAnswers];
-                                      newAnswers[index] = e.target.value;
-                                      setExplanationAnswers(newAnswers);
-                                    }}
-                                    onFocus={(e) => {
-                                      setActiveInputIndex(index);
-                                      // Store reference to active input for keyboard scrolling
-                                      e.target.setAttribute('data-active-input', 'true');
-                                    }}
-                                    onBlur={(e) => {
-                                      e.target.removeAttribute('data-active-input');
-                                    }}
-                                    placeholder=""
-                                    className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
-                                  />
-                                  
-                                  {/* Instruction to use physical keyboard */}
-                                  <p className="text-center text-sm text-gray-600 mb-3">
-                                    {language === 'en' ? 'Type letters/numbers, click buttons for symbols' : 'اكتب الحروف/الأرقام، انقر على الأزرار للرموز'}
-                                  </p>
+                                        onFocus={(e) => {
+                                          setActiveInputIndex(index);
+                                          e.target.setAttribute('data-active-input', 'true');
+                                        }}
+                                        onBlur={(e) => {
+                                          e.target.removeAttribute('data-active-input');
+                                        }}
+                                        placeholder=""
+                                        className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
+                                      />
 
-                                  <Button 
-                                    onClick={() => {
-                                      console.log('🔍 Explanation stage - checking step 1, index:', index);
-                                      console.log('🔍 User answer:', explanationAnswers[index]);
-                                      
-                                      // Use the actual step solutions from backend data
-                                      const normalized = normalizeAnswer(explanationAnswers[index]);
-                                      let step1Correct = false;
-                                      
-                                      // Map each level to its corresponding step solution index
-                                      const stepSolutionIndex = index * 2; // Each level has 2 steps (step 1 and step 2)
-                                      const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
-                                      
-                                      if (currentStepSolution) {
-                                        // Check against all possible answers for this step
-                                        const possibleAnswers = language === 'ar' 
-                                          ? currentStepSolution.possible_answers_ar 
-                                          : currentStepSolution.possible_answers;
-                                        
-                                        step1Correct = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
-                                      }
-                                      
-                                      console.log('🔍 Step 1 correct:', step1Correct);
-                                      console.log('🔍 Expected answers:', currentStepSolution?.possible_answers);
-                                      
-                                      if (step1Correct) {
-                                        setExplanationStep(1);
-                                        setShowEncouragement(language === 'en' ? "Excellent! That's correct!" : "ممتاز! هذا صحيح!");
-                                        setTimeout(() => setShowEncouragement(''), 3000);
-                                      } else {
-                                        // Use the correct hint for this specific example and step
-                                        const hintIndex = stepSolutionIndex; // Each step solution maps to a hint
-                                        const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar; // Fixed: Arabic UI shows English hints
-                                        const stepHint = correctHints?.[hintIndex] || '';
-                                        
-                                        const feedback = stepHint || (language === 'en' 
-                                          ? `Not quite. Please try again.`
-                                          : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
-                                        
-                                        setShowEncouragement(feedback);
-                                        setTimeout(() => setShowEncouragement(''), 6000);
-                                      }
-                                    }}
-                                    className="w-full bg-blue-500 hover:bg-blue-600"
-                                    disabled={!explanationAnswers[index]?.trim()}
-                                  >
-                                    {language === 'en' ? 'Check Step 1' : 'تحقق من الخطوة 1'}
-                                  </Button>
-                                </div>
-
-                                {/* Step 2 - Only show if Step 1 is complete, also with simplified input management */}
-                                {explanationStep >= 1 && (
-                                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                                    <h5 className="font-semibold text-green-800 mb-3">
-                                      {language === 'en' ? 'Step 2: Write the simplified answer' : 'الخطوة 2: اكتب الإجابة المبسطة'}
-                                    </h5>
-                                    
-                                    {/* Show Step 1 answer above Step 2 input */}
-                                    <div className="mb-3 p-2 bg-blue-100 rounded text-center text-sm text-blue-800">
-                                      {language === 'en' ? 'Your Step 1: ' : 'خطوتك الأولى: '}{explanationAnswers[index]}
-                                    </div>
-                                    
-                                    {/* Symbol Shortcut Buttons for Step 2 - Mobile: 2 rows x 3 buttons */}
-                                    <div className="symbol-buttons-container flex flex-wrap justify-center gap-2 md:flex-nowrap mb-3">
-                                      {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
-                                        <Button
-                                          key={symbol}
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() => {
-                                            const newAnswers = [...explanationAnswers];
-                                            newAnswers[index] = (newAnswers[index] || '') + symbol;
-                                            setExplanationAnswers(newAnswers);
-                                          }}
-                                          className="symbol-button px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50 min-w-[45px] h-[45px] flex-shrink-0"
-                                        >
-                                          {symbol}
-                                        </Button>
-                                      ))}
-                                    </div>
-                                    
-                                    <Input
-                                      value={explanationAnswers[index] || ''}
-                                      onChange={(e) => {
-                                        const newAnswers = [...explanationAnswers];
-                                        newAnswers[index] = e.target.value;
-                                        setExplanationAnswers(newAnswers);
-                                      }}
-                                      onFocus={(e) => {
-                                        setActiveInputIndex(index);
-                                        // Store reference to active input for keyboard scrolling
-                                        e.target.setAttribute('data-active-input', 'true');
-                                      }}
-                                      onBlur={(e) => {
-                                        e.target.removeAttribute('data-active-input');
-                                      }}
-                                      placeholder=""
-                                      className="mb-3 text-center text-lg font-mono border-2 border-green-300 bg-white p-3 min-h-[50px]"
-                                    />
-
-                                    {/* Instruction to use physical keyboard */}
-                                    <p className="text-center text-sm text-gray-600 mb-3">
-                                      {language === 'en' ? 'Type letters/numbers, click buttons for symbols' : 'اكتب الحروف/الأرقام، انقر على الأزرار للرموز'}
-                                    </p>
-
-                                    <Button 
-                                      onClick={() => {
-                                        console.log('🔍 Explanation stage - checking step 2, index:', index);
-                                        console.log('🔍 User Step 2 answer:', explanationAnswers[index]);
-                                        console.log('🔍 Expected answer:', example.practice_answer);
-                                        
-                                        // Use the actual step solutions from backend data for step 2
-                                        const normalized = normalizeAnswer(explanationAnswers[index]);
-                                        const stepSolutionIndex = index * 2 + 1; // Step 2 for each level
-                                        const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
-                                        
-                                        let step2Correct = false;
-                                        if (currentStepSolution) {
-                                          // Check against all possible answers for step 2
-                                          const possibleAnswers = language === 'ar' 
-                                            ? currentStepSolution.possible_answers_ar 
-                                            : currentStepSolution.possible_answers;
+                                      <Button 
+                                        onClick={() => {
+                                          console.log(`🔍 Explanation stage - checking step ${explanationStep + 1}, index:`, index);
+                                          console.log('🔍 User answer:', explanationAnswers[index]);
                                           
-                                          step2Correct = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
-                                        }
-                                        
-                                        console.log('🔍 Step 2 correct:', step2Correct);
-                                        
-                                        if (step2Correct) {
-                                          const newPracticeComplete = [...practiceComplete];
-                                          newPracticeComplete[index] = true;
-                                          setPracticeComplete(newPracticeComplete);
+                                          const normalized = normalizeAnswer(explanationAnswers[index]);
+                                          const stepSolutionIndex = index * 3 + explanationStep; // Now supports 3 steps per level
+                                          const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
                                           
-                                          // Reset answer for this example
-                                          const newAnswers = [...explanationAnswers];
-                                          newAnswers[index] = '';
-                                          setExplanationAnswers(newAnswers);
-                                          
-                                          // Reset explanation step
-                                          setExplanationStep(0);
-                                          
-                                          setShowEncouragement(language === 'en' ? "Perfect! Well done!" : "ممتاز! أحسنت!");
-                                          
-                                          // Auto-move to next example after 3 seconds
-                                          if (index < problem.interactive_examples.length - 1) {
-                                            setTimeout(() => {
-                                              setCurrentExample(index + 1);
-                                              setShowExample(false);
-                                              setShowEncouragement('');
-                                            }, 3000);
-                                          } else {
-                                            // All examples completed - mark as complete and submit to backend
-                                            setAllStepsComplete(true);
-                                            setIsCorrect(true);
-                                            setTimeout(async () => {
-                                              setShowEncouragement('');
-                                              // Submit completion to backend like Practice stage does
-                                              await submitToBackend();
-                                            }, 3000);
+                                          let stepCorrect = false;
+                                          if (currentStepSolution) {
+                                            const possibleAnswers = language === 'ar' 
+                                              ? currentStepSolution.possible_answers_ar 
+                                              : currentStepSolution.possible_answers;
+                                            
+                                            stepCorrect = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
                                           }
-                                        } else {
-                                          // Use the correct hint for step 2
-                                          const hintIndex = stepSolutionIndex; // Each step solution maps to a hint
-                                          const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar; // Fixed: Arabic UI shows English hints
-                                          const stepHint = correctHints?.[hintIndex] || '';
                                           
-                                          const feedback = stepHint || (language === 'en' 
-                                            ? `Not quite. Please try again.`
-                                            : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
+                                          console.log(`🔍 Step ${explanationStep + 1} correct:`, stepCorrect);
                                           
-                                          setShowEncouragement(feedback);
-                                          setTimeout(() => setShowEncouragement(''), 6000);
-                                        }
-                                      }}
-                                      className="w-full bg-green-500 hover:bg-green-600"
-                                      disabled={!explanationAnswers[index]?.trim()}
-                                    >
-                                      {language === 'en' ? 'Check Final Answer' : 'تحقق من الإجابة النهائية'}
-                                    </Button>
-                                  </div>
-                                )}
+                                          if (stepCorrect) {
+                                            if (explanationStep < levelSteps.length - 1) {
+                                              // Move to next step
+                                              setExplanationStep(explanationStep + 1);
+                                              const newAnswers = [...explanationAnswers];
+                                              newAnswers[index] = ''; // Clear for next step
+                                              setExplanationAnswers(newAnswers);
+                                              setShowEncouragement(language === 'en' ? "Excellent! Continue to the next step." : "ممتاز! انتقل للخطوة التالية.");
+                                            } else {
+                                              // Completed all steps for this level
+                                              const newPracticeComplete = [...practiceComplete];
+                                              newPracticeComplete[index] = true;
+                                              setPracticeComplete(newPracticeComplete);
+                                              setExplanationStep(0);
+                                              const newAnswers = [...explanationAnswers];
+                                              newAnswers[index] = '';
+                                              setExplanationAnswers(newAnswers);
+                                              setShowEncouragement(language === 'en' ? "Perfect! Level completed!" : "ممتاز! تم إكمال المستوى!");
+                                              
+                                              // Auto-move to next level or complete
+                                              if (index < problem.interactive_examples.length - 1) {
+                                                setTimeout(() => {
+                                                  setCurrentExample(index + 1);
+                                                  setShowExample(false);
+                                                  setShowEncouragement('');
+                                                }, 3000);
+                                              } else {
+                                                setAllStepsComplete(true);
+                                                setIsCorrect(true);
+                                                setTimeout(async () => {
+                                                  setShowEncouragement('');
+                                                  await submitToBackend();
+                                                }, 3000);
+                                              }
+                                            }
+                                            setTimeout(() => setShowEncouragement(''), 3000);
+                                          } else {
+                                            const hintIndex = stepSolutionIndex;
+                                            const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar;
+                                            const stepHint = correctHints?.[hintIndex] || '';
+                                            
+                                            const feedback = stepHint || (language === 'en' 
+                                              ? `Not quite. Please try again.`
+                                              : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
+                                            
+                                            setShowEncouragement(feedback);
+                                            setTimeout(() => setShowEncouragement(''), 6000);
+                                          }
+                                        }}
+                                        className="w-full bg-blue-500 hover:bg-blue-600"
+                                        disabled={!explanationAnswers[index]?.trim()}
+                                      >
+                                        {language === 'en' ? `Check Step ${explanationStep + 1}` : `تحقق من الخطوة ${explanationStep + 1}`}
+                                      </Button>
+                                    </div>
+                                  );
+                                })()}
 
                                 {/* Success Message */}
                                 {practiceComplete[index] && (
