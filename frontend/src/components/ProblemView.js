@@ -1188,50 +1188,39 @@ const ProblemView = () => {
                                       console.log('🔍 Explanation stage - checking step 1, index:', index);
                                       console.log('🔍 User answer:', explanationAnswers[index]);
                                       
-                                      // Use the same validation system as before
+                                      // Use the actual step solutions from backend data
                                       const normalized = normalizeAnswer(explanationAnswers[index]);
                                       let step1Correct = false;
                                       
-                                      if (index === 0) {
-                                        // Example 1: x + 4 ≤ 9 -> subtract 4 -> x ≤ 5
-                                        const step1Answers = ['x≤5', 'x≤9-4', 'x+4-4≤9-4'];
-                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
-                                      } else if (index === 1) {
-                                        // Example 2: 2x > 8 -> divide by 2 -> x > 4
-                                        const step1Answers = ['x>4', 'x>8/2', '2x/2>8/2', '2x÷2>8÷2'];
-                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
-                                      } else if (index === 2) {
-                                        // Example 3: -3x ≤ 12 -> divide by -3 and flip -> x ≥ -4
-                                        const step1Answers = ['x≥-4', 'x≥12/-3', '-3x/-3≥12/-3', '-3x÷-3≥12÷-3'];
-                                        step1Correct = step1Answers.some(ans => normalizeAnswer(ans) === normalized);
+                                      // Map each level to its corresponding step solution index
+                                      const stepSolutionIndex = index * 2; // Each level has 2 steps (step 1 and step 2)
+                                      const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
+                                      
+                                      if (currentStepSolution) {
+                                        // Check against all possible answers for this step
+                                        const possibleAnswers = language === 'ar' 
+                                          ? currentStepSolution.possible_answers_ar 
+                                          : currentStepSolution.possible_answers;
+                                        
+                                        step1Correct = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
                                       }
                                       
                                       console.log('🔍 Step 1 correct:', step1Correct);
+                                      console.log('🔍 Expected answers:', currentStepSolution?.possible_answers);
                                       
                                       if (step1Correct) {
                                         setExplanationStep(1);
                                         setShowEncouragement(language === 'en' ? "Excellent! That's correct!" : "ممتاز! هذا صحيح!");
                                         setTimeout(() => setShowEncouragement(''), 3000);
                                       } else {
-                                        // ❌ WRONG STEP - Copy Practice stage error handling exactly
-                                        let stepInstruction = '';
-                                        if (index === 0) {
-                                          stepInstruction = language === 'en' 
-                                            ? 'subtract 4 from both sides' 
-                                            : 'اطرح 4 من الطرفين';
-                                        } else if (index === 1) {
-                                          stepInstruction = language === 'en' 
-                                            ? 'divide both sides by 2' 
-                                            : 'اقسم الطرفين على 2';
-                                        } else if (index === 2) {
-                                          stepInstruction = language === 'en' 
-                                            ? 'divide both sides by -3 and flip the inequality sign' 
-                                            : 'اقسم الطرفين على -3 واقلب إشارة المتباينة';
-                                        }
+                                        // Use the correct hint for this specific example and step
+                                        const hintIndex = stepSolutionIndex; // Each step solution maps to a hint
+                                        const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar; // Fixed: Arabic UI shows English hints
+                                        const stepHint = correctHints?.[hintIndex] || '';
                                         
-                                        const feedback = language === 'en' 
-                                          ? `Not quite. You need to ${stepInstruction}`
-                                          : `ليس تماماً. تحتاج إلى ${stepInstruction}`;
+                                        const feedback = stepHint || (language === 'en' 
+                                          ? `Not quite. Please try again.`
+                                          : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
                                         
                                         setShowEncouragement(feedback);
                                         setTimeout(() => setShowEncouragement(''), 6000);
