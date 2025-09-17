@@ -1251,11 +1251,12 @@ const ProblemView = () => {
                                                   setShowEncouragement('');
                                                 }, 3000);
                                               } else {
+                                                // All examples completed - mark as complete but DON'T submit to backend yet
                                                 setAllStepsComplete(true);
                                                 setIsCorrect(true);
-                                                setTimeout(async () => {
+                                                setTimeout(() => {
                                                   setShowEncouragement('');
-                                                  await submitToBackend();
+                                                  // Don't submit to backend until user clicks Continue button
                                                 }, 3000);
                                               }
                                             }
