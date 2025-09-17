@@ -387,61 +387,45 @@ async def init_database():
     
     await sections_collection.insert_one(section1)
     
-    # Section 2: Two-Step Inequalities
+    # Section 2: Solving Inequalities by Multiplication or Division
     section2_problems = [
         {
             "id": "prep2",
             "section_id": "section2",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "3x + 2 < 11",
-            "question_ar": "٣س + ٢ < ١١",
-            "answer": "x < 3",
-            "answer_ar": "س < ٣",
-            "explanation_en": "This is a two-step inequality. We need to undo addition first, then division.",
-            "explanation_ar": "هذه متباينة ذات خطوتين. نحتاج إلى إلغاء الجمع أولاً، ثم القسمة.",
-            "show_full_solution": False,
+            "question_en": "4x < 20",
+            "question_ar": "٤س < ٢٠",
+            "answer": "x < 5",
+            "answer_ar": "س < ٥",
+            "explanation_en": "This is a review problem for solving inequalities by multiplication or division.",
+            "explanation_ar": "هذه مسألة مراجعة لحل المتباينات بالضرب أو بالقسمة.",
+            "show_full_solution": True,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Subtract 2 from both sides",
-                    "step_ar": "اطرح ٢ من الطرفين",
+                    "step_en": "Divide both sides by 4",
+                    "step_ar": "اقسم كلا الطرفين على ٤",
                     "possible_answers": [
-                        "3x + 2 - 2 < 11 - 2",
-                        "3x < 11 - 2",
-                        "3x < 9"
+                        "4x / 4 < 20 / 4",
+                        "x < 20 / 4",
+                        "x < 5"
                     ],
                     "possible_answers_ar": [
-                        "٣س + ٢ - ٢ < ١١ - ٢",
-                        "٣س < ١١ - ٢",
-                        "٣س < ٩"
-                    ]
-                },
-                {
-                    "step_en": "Divide both sides by 3",
-                    "step_ar": "اقسم الطرفين على ٣",
-                    "possible_answers": [
-                        "3x / 3 < 9 / 3",
-                        "x < 9 / 3",
-                        "x < 3"
-                    ],
-                    "possible_answers_ar": [
-                        "٣س / ٣ < ٩ / ٣",
-                        "س < ٩ / ٣",
-                        "س < ٣"
+                        "٤س / ٤ < ٢٠ / ٤",
+                        "س < ٢٠ / ٤",
+                        "س < ٥"
                     ]
                 }
             ],
             "final_answer_required": True,
             "hints_en": [
-                "Start by isolating the term with x",
-                "What operation cancels out +2?",
-                "Then isolate x by dividing"
+                "What operation cancels out multiplication by 4?",
+                "Divide both sides by 4 to isolate x."
             ],
             "hints_ar": [
-                "ابدأ بعزل الحد الذي يحتوي على س",
-                "ما العملية التي تلغي +٢؟", 
-                "ثم اعزل س بالقسمة"
+                "ما العملية التي تلغي الضرب في ٤؟",
+                "اقسم كلا الطرفين على ٤ لعزل س."
             ]
         },
         {
