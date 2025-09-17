@@ -1141,10 +1141,17 @@ const ProblemView = () => {
                                 {/* Step 1 - Restored with simplified input management */}
                                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                                   <h5 className="font-semibold text-blue-800 mb-3">
-                                    {/* Step instructions for each example */}
-                                    {index === 0 && (language === 'en' ? 'Step 1: Subtract 4 from both sides' : 'الخطوة 1: اطرح 4 من الطرفين')}
-                                    {index === 1 && (language === 'en' ? 'Step 1: Divide both sides by 2' : 'الخطوة 1: اقسم الطرفين على 2')}
-                                    {index === 2 && (language === 'en' ? 'Step 1: Divide both sides by -3 (flip the inequality sign!)' : 'الخطوة 1: اقسم الطرفين على -3 (اقلب إشارة المتباينة!)')}
+                                    {/* Use actual step instructions from backend data */}
+                                    {(() => {
+                                      const stepSolutionIndex = index * 2; // Each level has 2 steps
+                                      const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
+                                      if (currentStepSolution) {
+                                        return language === 'ar' 
+                                          ? currentStepSolution.step_ar 
+                                          : currentStepSolution.step_en;
+                                      }
+                                      return language === 'en' ? 'Step 1:' : 'الخطوة 1:';
+                                    })()}
                                   </h5>
                                   
                                   {/* Symbol Shortcut Buttons - Mobile: 2 rows x 3 buttons */}
