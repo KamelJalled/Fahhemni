@@ -744,8 +744,8 @@ const ProblemView = () => {
       
       // Show completion message and redirect to dashboard
       const completionMessage = language === 'en' 
-        ? 'Great job! You can now start the next section.'
-        : 'أحسنت! يمكنك الآن البدء في القسم التالي.';
+        ? 'Congratulations! You have completed Section 1. You can now start the next section.'
+        : 'تهانينا! لقد أكملت القسم الأول. يمكنك الآن البدء في القسم التالي.';
       
       // Redirect to dashboard to select next section
       navigate('/dashboard', { 
@@ -755,6 +755,13 @@ const ProblemView = () => {
         }
       });
     }
+  };
+
+  const handleGoToExplanation = () => {
+    // Navigate back to explanation stage for review
+    console.log('🔄 Navigating back to explanation stage for review');
+    resetProblemState();
+    navigate('/problem/explanation1');
   };
 
   const handleTryAgain = () => {
