@@ -349,7 +349,7 @@ const Dashboard = () => {
                   <Button
                     key={section.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`section-tab-button flex-shrink-0 h-auto p-3 md:p-4 min-w-[200px] md:min-w-[180px] ${
+                    className={`section-tab-button flex-shrink-0 p-2 md:p-3 w-48 md:w-44 h-20 md:h-16 ${
                       !hasProblems ? 'opacity-50' : ''
                     } ${isSelected ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-50'}`}
                     onClick={() => {
@@ -357,9 +357,33 @@ const Dashboard = () => {
                       setSelectedSection(section.id);
                     }}
                     disabled={!hasProblems}
+                    style={{
+                      minWidth: '192px',
+                      maxWidth: '200px',
+                      height: '80px',
+                      whiteSpace: 'normal',
+                      wordWrap: 'break-word',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
                   >
-                    <div className="text-center">
-                      <div className="text-xs md:text-sm font-medium mb-1 leading-tight line-clamp-3 break-words">
+                    <div className="text-center w-full">
+                      <div 
+                        className="text-xs md:text-sm font-medium mb-1 leading-tight"
+                        style={{
+                          wordBreak: 'break-word',
+                          overflowWrap: 'break-word',
+                          hyphens: 'auto',
+                          lineHeight: '1.2',
+                          maxHeight: '3.6em',
+                          overflow: 'hidden',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical'
+                        }}
+                      >
                         {language === 'en' ? section.title_en : section.title_ar}
                       </div>
                       <div className="text-xs opacity-75">
