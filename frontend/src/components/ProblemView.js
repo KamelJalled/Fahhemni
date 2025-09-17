@@ -1215,8 +1215,13 @@ const ProblemView = () => {
                                           console.log('🔍 User answer:', explanationAnswers[index]);
                                           
                                           const normalized = normalizeAnswer(explanationAnswers[index]);
-                                          const stepSolutionIndex = index * 3 + explanationStep; // Now supports 3 steps per level
-                                          const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
+                                          
+                                          // Find the current step solution for this level
+                                          const levelStepSolutions = problem.step_solutions?.filter(step => 
+                                            step.step_en.includes(`Level ${index + 1}B Step`)
+                                          ) || [];
+                                          
+                                          const currentStepSolution = levelStepSolutions[explanationStep];
                                           
                                           let stepCorrect = false;
                                           if (currentStepSolution) {
