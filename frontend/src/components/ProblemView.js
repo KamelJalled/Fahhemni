@@ -738,22 +738,12 @@ const ProblemView = () => {
       resetProblemState();
       navigate(`/problem/${nextProblemId}`);
     } else {
-      // FIXED: Completed examprep1 - navigate to dashboard with message to start next section
-      console.log('🎯 Completed examprep1 - redirecting to dashboard');
+      // FIXED: Completed examprep1 - navigate directly to Section 2
+      console.log('🎯 Completed examprep1 - redirecting to Section 2');
       resetProblemState();
       
-      // Show completion message and redirect to dashboard
-      const completionMessage = language === 'en' 
-        ? 'Congratulations! You have completed Section 1. You can now start the next section.'
-        : 'تهانينا! لقد أكملت القسم الأول. يمكنك الآن البدء في القسم التالي.';
-      
-      // Redirect to dashboard to select next section
-      navigate('/dashboard', { 
-        state: { 
-          message: completionMessage,
-          completedSection: 'section1' 
-        }
-      });
+      // Navigate directly to Section 2
+      navigate('/section/section2');
     }
   };
 
