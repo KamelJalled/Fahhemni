@@ -170,26 +170,38 @@ async def init_database():
                     ]
                 },
                 {
-                    "step_en": "Level 3B Step 1: Subtract 4k from both sides: k - 4 < 1",
-                    "step_ar": "المستوى ٣ب الخطوة ١: اطرح ٤ك من كلا الطرفين: ك - ٤ < ١",
+                    "step_en": "Level 3B Step 1: Subtract 4k from both sides",
+                    "step_ar": "المستوى ٣ب الخطوة ١: اطرح ٤ك من كلا الطرفين",
                     "possible_answers": [
                         "5k - 4k - 4 < 4k - 4k + 1",
+                        "5k - 4 - 4k < 4k + 1 - 4k",
                         "k - 4 < 1"
                     ],
                     "possible_answers_ar": [
                         "٥ك - ٤ك - ٤ < ٤ك - ٤ك + ١",
+                        "٥ك - ٤ - ٤ك < ٤ك + ١ - ٤ك",
                         "ك - ٤ < ١"
                     ]
                 },
                 {
-                    "step_en": "Level 3B Step 2: Add 4 to both sides: k < 5",
-                    "step_ar": "المستوى ٣ب الخطوة ٢: أضف ٤ إلى كلا الطرفين: ك < ٥",
+                    "step_en": "Level 3B Step 2: Add 4 to both sides",
+                    "step_ar": "المستوى ٣ب الخطوة ٢: أضف ٤ إلى كلا الطرفين",
                     "possible_answers": [
                         "k - 4 + 4 < 1 + 4",
-                        "k < 5"
+                        "k < 1 + 4"
                     ],
                     "possible_answers_ar": [
                         "ك - ٤ + ٤ < ١ + ٤",
+                        "ك < ١ + ٤"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 3: Simplify to get final answer",
+                    "step_ar": "المستوى ٣ب الخطوة ٣: بسّط للحصول على الإجابة النهائية",
+                    "possible_answers": [
+                        "k < 5"
+                    ],
+                    "possible_answers_ar": [
                         "ك < ٥"
                     ]
                 }
