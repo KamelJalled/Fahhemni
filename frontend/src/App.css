@@ -237,7 +237,11 @@ input[data-active-input="true"] {
     .section-tab-button {
         flex-shrink: 0 !important;
         margin-right: 8px !important;
-        min-width: 120px !important;
+        min-width: 200px !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        height: auto !important;
+        min-height: 80px !important;
     }
     
     /* Continue Button Always Visible */
