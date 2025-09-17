@@ -244,6 +244,15 @@ input[data-active-input="true"] {
         min-height: 80px !important;
     }
     
+    /* Text clamping for long section titles */
+    .line-clamp-3 {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
     /* Continue Button Always Visible */
     .continue-button-container {
         position: sticky !important;
