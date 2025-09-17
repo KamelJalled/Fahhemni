@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Use backend URL from frontend/.env
-BACKEND_URL = "https://math-app-mobile.preview.emergentagent.com/api"
+BACKEND_URL = "https://bilingual-algebra.preview.emergentagent.com/api"
 
 def test_clear_all_data_endpoint():
     """Test the new DELETE /api/admin/clear-all-data endpoint"""

@@ -1,64 +1,57 @@
 <analysis>
-The AI engineer's work primarily revolved around refining a Grade 9 math tutoring app, specifically focusing on the Explanation stage and addressing several critical bugs. Initially, the AI engineer addressed a hardcoded navigation flow, placeholder retention, incorrect step instructions, and broken validation logic within . This involved adding new state variables, refactoring input and validation handlers, and integrating voice/math keyboard for explanation steps. A significant challenge was an authentication redirect preventing access to the , which was resolved by a proper login flow. Later, the work focused on correcting mathematical validation discrepancies in  and , ensuring inequality sign flips were correctly handled. The most recent efforts targeted persistent issues with the virtual keyboard, error handling, and completion navigation in the Explanation stage, along with quick fixes for a Practice stage instruction, logout error screen, and clearing student data via a new backend endpoint.
+The AI engineer's work primarily focused on a comprehensive content update for the Linear Inequalities module, following user-provided detailed content. This involved extensive modifications to the backend database to incorporate new problems, examples, hints, and step-by-step solutions for five sections across multiple stages (Preparation, Explanation, Practice, Assessment, Exam Prep), in both Arabic and English. Concurrently, several critical UI/UX bugs were addressed, including fixing mobile responsiveness for dashboard section names, resolving a login connectivity issue (container networking vs. preview environment), and iteratively rectifying complex frontend logic for the Explanation and Practice stages (validation, hint display, step-by-step formatting, navigation). The engineer faced challenges with persistent bugs and overconfident claims, leading to repeated user corrections. The last major work involved refining the display of section names on the dashboard, specifically for Arabic text, to prevent cutoff and ensure mobile readability.
 </analysis>
 <product_requirements>
-The Math Tutoring App, designed for Grade 9 Saudi students, teaches inequalities with bilingual (Arabic/English) support and student/teacher roles. Key features include mobile optimization (responsive design, voice input, math keyboard) and class management. Pedagogical requirements are:
-1.  **Preparation Stage:** Final answer only, three attempts with progressive auto-hints, Continue to Explanation after correct answer or three failures. No hint boxes.
-2.  **Explanation Stage:** Tabbed interface with structured content. Each example has a solution (Part A) and step-by-step student practice (Part B) with explicit instructions, no hints, empty input fields, and correct validation.
-3.  **Practice Stages:** Step-by-step guided solving, explicit instructions, no hints, with previous step answers visible.
-4.  **Assessment & Exam Prep:** Final answer only, three attempts with auto-hints and score penalties. Mandatory redirection to Explanation after three failures. No hint boxes.
+The Math Tutoring App targets Grade 9 Saudi students with bilingual (Arabic/English) content, optimized for mobile with responsive design, voice input, and a math keyboard. It supports student and teacher roles, including class management. Its pedagogical structure involves Preparation, Explanation (tabbed, step-by-step, explicit validation), Practice (guided, previous answers visible), and Assessment & Exam Prep (final answers, score penalties). Initial development included Section 1 Explanation. Recent work involved fixing mobile UI/UX issues. The current major task is a comprehensive content update for the Linear Inequalities module across all five sections and six stages, replacing all problems, examples, explanations, and answers, and implementing specific bilingual hints. Functionality and UI structure must remain unchanged, only content updated. This also includes refining step-by-step explanations, specific real-life problem interaction, and correct end-of-section navigation.
 </product_requirements>
 <key_technical_concepts>
--   **Full-stack Development:** React.js (Frontend), FastAPI (Backend), MongoDB (Database).
--   **Frontend UI/Styling:** Shadcn UI, Tailwind CSS, React Router DOM, , , .
--   **Backend Data Handling:** Pydantic models, Motor (async MongoDB driver).
--   **Internationalization:** Arabic/English, RTL support.
--   **Speech Recognition:** Web Speech API.
--   **Deployment:** Kubernetes container environment.
+- **Full-stack Development**: React.js (Frontend), FastAPI (Backend), MongoDB (Database).
+- **Frontend UI/Styling**: Tailwind CSS, CSS Customization, , .
+- **Backend Data Handling**: Pydantic models, JSON serialization (UUIDs).
+- **Internationalization (i18n)**: Arabic/English, RTL support.
+- **Deployment**: Kubernetes container environment, Supervisorctl, .env management.
+- **Problem Solving**: Dynamic multi-step form validation, conditional rendering.
 </key_technical_concepts>
 <code_architecture>
 
-
 -   ****
-    -   **Summary**: Central to student interaction, displaying problems, handling input, hints, validation, and stage progression.
-    -   **Changes**: Extensive modifications to support the Socratic model, including refactoring  (pre-trajectory), generalizing input, implementing dual interaction models (, ). Crucially, the trajectory shows:
-        -   Addition of ,  states to fix placeholder retention.
-        -   Refined  for accurate stage navigation.
-        -   Updated step instructions and validation logic for Explanation stage examples (e.g., x + 4 ≤ 9 -> x ≤ 5, then -3x ≤ 12 -> x ≥ -4).
-        -   Integrated voice and math keyboard input handlers for new explanation stage state variables.
-        -   Added debugging styling (blue border) to input fields.
-        -   Attempted to fix virtual keyboard insertion logic by using .
-        -   Added backend submission and status update logic for explanation stage completion.
+    -   **Summary**: Controls the display and navigation of math sections on the student dashboard.
+    -   **Changes**: Updated section names (English/Arabic). Implemented styling fixes (inline styles and CSS classes) to handle longer section names, preventing overlap and cutoff, specifically adjusting , , , , , and  for both desktop and mobile views, with language-specific adjustments for Arabic text vertical spacing.
 -   ****
-    -   **Summary**: Stores problem definitions and solution steps.
-    -   **Changes**: Updated with specific explanation content and step-by-step data for practice problems. The trajectory included:
-        -   Correction of Example 1 and Example 2 step instructions and expected answers ().
-        -   Correction of Example 3's problem and expected answer to ensure correct inequality flipping.
-        -   Fix for practice stage's Step 2 instruction from Simplify the right side to Simplify both sides.
+    -   **Summary**: Manages student interaction with math problems, including input, validation, hints, and stage progression.
+    -   **Changes**:
+        -   **Explanation Stage**: Refactored validation to use dynamic  and  from the backend, implemented dynamic multi-step handling, replaced hardcoded step instructions. Removed automatic  on explanation completion, making it explicit on button click.
+        -   **Real-Life Problem**: Adjusted prompt to be guiding instructions without revealing the answer, and enabled acceptance of intermediate solution steps.
+        -   **Navigation**: Updated Exam Prep success button text to Start Section 2: Multiplication/Division and navigates to . Fixed  logic ( to ) to correctly classify problem types for navigation.
 -   ****
-    -   **Summary**: FastAPI backend for API endpoints.
-    -   **Changes**: A new admin endpoint  was added to clear all student and progress data, for testing purposes.
+    -   **Summary**: Contains global CSS styles for the frontend application, including custom rules.
+    -   **Changes**: Modified to support responsive display of dashboard section tabs, complementing  changes. Added specific , , , ,  definitions, and responsive font sizing for different screen widths.
 -   ****
-    -   **Summary**: Main application component handling routing and global authentication context.
-    -   **Changes**: Modified the logout handling to prevent a momentary error screen from appearing before redirecting to the login page.
+    -   **Summary**: Houses the backend logic for initializing and structuring math problems and curriculum content.
+    -   **Changes**:
+        -   Comprehensive content update for Section 1 (Solving Inequalities by Addition or Subtraction), including new problems, examples, bilingual hints, and detailed step-by-step solutions for Preparation, Explanation (3 levels), Practice, Assessment, and Exam Prep stages.
+        -   System-solved examples now display each step on a new line with descriptive text.
+        -   Real-life problem (Practice Stage) instruction updated to be a guiding question.
+        -   Added intermediate answer  for Level 2B Step 2.
 -   ****
-    -   **Summary**: Documents testing outcomes and progress.
-    -   **Changes**: Continuously updated to reflect the status of bug fixes, including validation, instruction corrections, and keyboard issues, indicating the test agent's findings and subsequent manual verification.
+    -   **Summary**: Stores environment variables for frontend configuration.
+    -   **Changes**:  was temporarily changed to  for container-to-container communication, but then reverted to  to resolve connectivity issues in the preview environment.
 </code_architecture>
 <pending_tasks>
--   **Virtual Keyboard Broken in Explanation Stage:**The virtual keyboard opens and shows symbols, but text insertion into the answer fields is still not functional. This requires a thorough fix to ensure the keyboard handling logic correctly targets the active input field for each of the three examples.
--   **Error Handling Not Working (Explanation Examples 1, 2 & 3):** When incorrect answers are entered, there is no corrective message or error notification (e.g., Not quite. Try again) being displayed. This critical feedback loop is currently missing and needs to be implemented.
--   **Navigation After Completing All 3 Examples:** the explanation stage's completion status is not updated.
+-   **Comprehensive Content Update (Sections 2-5)**: Update all remaining sections with the provided curriculum content, ensuring all stages and bilingual aspects are correctly implemented.
+-   **UI Verification for Dashboard Section Names**: Final user verification of the Arabic text display on the dashboard (no cutoff) and ensuring mobile font sizes are appropriate.
 </pending_tasks>
 <current_work>
-Immediately before this summary request, the AI engineer addressed a series of quick fixes requested by the user. These included:
-1.  **Correcting a Practice Stage Instruction:** The Step 2 instruction in  was changed from Simplify the right side to Simplify both sides.
-2.  **Fixing Logout Error Screen:** The  file was modified to prevent a momentary error screen flash upon logout, ensuring a direct transition to the login screen.
-3.  **Deleting All Student Records:** A new admin API endpoint, , was implemented in  and subsequently invoked to clear all student and progress data from the MongoDB database.
-4.  **Clearing Teacher Dashboard History:** This was implicitly addressed by clearing student records, as the dashboard relies on this data, and verified by restarting services.
+Immediately before this summary, the AI engineer was focused on resolving a UI issue reported by the user: The Arabic names are a little bit cut from down. The English names are fitted well. Make sure the changes does not affect the mobile version: the text there should not look very small.
 
-These quick fixes were confirmed as working through manual screenshots, ensuring a smoother user experience and clean data for further testing. However, prior to these quick fixes, the AI engineer was still grappling with persistent critical bugs in the Explanation stage, specifically the virtual keyboard's inability to insert text into input fields and verifying error handling. 
+The AI engineer has applied a series of fixes in  and  to address this:
+1.  **Increased button height**: From 90px to 100px to provide more vertical space.
+2.  **Language-specific line height**:  for Arabic and  for English to optimize vertical spacing.
+3.  **Language-specific max height**:  for Arabic and  for English.
+4.  **Responsive font sizes**: Implemented via CSS classes to ensure 11px on desktop and 13px on mobile (under 768px) for readability.
+
+The frontend service was restarted to apply these changes. The Arabic text is verified now and it is no longer cut off. The text readability is not yet verified on mobile devices
 </current_work>
 <optional_next_step>
-The next step is to address the remaining critical bugs in the Explanation stage, starting with fixing the virtual keyboard, then fixing the error handling in the 3 examples of the explanation stage.
+Proceed with updating the content for Sections 2-5.
 </optional_next_step>
