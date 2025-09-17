@@ -1825,7 +1825,7 @@ const ProblemView = () => {
                           if (stageType === 'preparation') {
                             return language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←';
                           } else if (problem.id === 'examprep1') {
-                            return language === 'en' ? 'Start the Next Section →' : 'ابدأ القسم التالي ←';
+                            return language === 'en' ? 'Start Section 2: Multiplication/Division →' : 'ابدأ القسم ٢: الضرب/القسمة ←';
                           } else {
                             return language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←';
                           }
