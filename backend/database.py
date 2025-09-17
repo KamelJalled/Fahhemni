@@ -713,28 +713,6 @@ async def init_database():
                 "اقسم كلا الطرفين على ١٥ لحل ح.",
                 "هذه كل الإرشادات المتاحة."
             ]
-        },
-        {
-            "id": "examprep2",
-            "section_id": "section2",
-            "type": ProblemType.EXAMPREP,
-            "weight": 30,
-            "question_en": "6x - 4 < 20",
-            "question_ar": "٦س - ٤ < ٢٠",
-            "answer": "x < 4",
-            "answer_ar": "س < ٤",
-            "show_full_solution": False,
-            "hide_answer": True,
-            "hints_en": [
-                "Follow the two-step process: first deal with the constant term.",
-                "Add 4 to both sides, then divide by 6.",
-                "Check your final answer by substituting back."
-            ],
-            "hints_ar": [
-                "اتبع العملية ذات الخطوتين: تعامل مع الحد الثابت أولاً.",
-                "أضف ٤ للطرفين، ثم اقسم على ٦.",
-                "تحقق من إجابتك النهائية بالتعويض مرة أخرى."
-            ]
         }
     ]
     
