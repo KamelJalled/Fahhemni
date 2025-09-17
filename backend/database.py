@@ -282,14 +282,18 @@ async def init_database():
                     ]
                 },
                 {
-                    "step_en": "Subtract 210 from both sides", 
-                    "step_ar": "اطرح ٢١٠ من الطرفين",
+                    "step_en": "Subtract 210 from both sides to isolate 'm'", 
+                    "step_ar": "اطرح ٢١٠ من الطرفين لعزل 'م'",
                     "possible_answers": [
+                        "m + 210 - 210 ≥ 500 - 210",
                         "m ≥ 500 - 210",
+                        "210 + m - 210 ≥ 500 - 210",
                         "m ≥ 290"
                     ],
                     "possible_answers_ar": [
+                        "م + ٢١٠ - ٢١٠ ≥ ٥٠٠ - ٢١٠",
                         "م ≥ ٥٠٠ - ٢١٠",
+                        "٢١٠ + م - ٢١٠ ≥ ٥٠٠ - ٢١٠",
                         "م ≥ ٢٩٠"
                     ]
                 }
