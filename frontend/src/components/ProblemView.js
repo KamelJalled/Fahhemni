@@ -738,12 +738,12 @@ const ProblemView = () => {
       resetProblemState();
       navigate(`/problem/${nextProblemId}`);
     } else {
-      // FIXED: Completed examprep1 - navigate directly to Section 2
-      console.log('🎯 Completed examprep1 - redirecting to Section 2');
+      // FIXED: Completed examprep1 - navigate directly to Section 2 Preparation (prep2)
+      console.log('🎯 Completed examprep1 - redirecting to Section 2 prep2');
       resetProblemState();
       
-      // Navigate directly to Section 2
-      navigate('/section/section2');
+      // Navigate directly to Section 2 first problem
+      navigate('/problem/prep2');
     }
   };
 
