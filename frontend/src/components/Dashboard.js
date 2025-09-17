@@ -349,7 +349,7 @@ const Dashboard = () => {
                   <Button
                     key={section.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`section-tab-button flex-shrink-0 h-auto p-3 md:p-4 min-w-[200px] md:min-w-0 ${
+                    className={`section-tab-button flex-shrink-0 h-auto p-3 md:p-4 min-w-[200px] md:min-w-[180px] ${
                       !hasProblems ? 'opacity-50' : ''
                     } ${isSelected ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-50'}`}
                     onClick={() => {
