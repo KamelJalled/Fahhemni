@@ -675,21 +675,43 @@ async def init_database():
             "section_id": "section2",
             "type": ProblemType.ASSESSMENT,
             "weight": 30,
-            "question_en": "3x + 7 ≥ 22",
-            "question_ar": "٣س + ٧ ≥ ٢٢",
-            "answer": "x ≥ 5",
-            "answer_ar": "س ≥ ٥",
+            "question_en": "y / (-2) > 6",
+            "question_ar": "ص / (-٢) > ٦",
+            "answer": "y < -12",
+            "answer_ar": "ص < -١٢",
             "show_full_solution": False,
             "hide_answer": True,
             "hints_en": [
-                "This is a two-step inequality. Start by isolating the x term.",
-                "First subtract, then divide.",
-                "Remember to keep the inequality sign in the same direction."
+                "Multiply both sides by -2.",
+                "Remember to flip the inequality sign when multiplying by a negative.",
+                "That's all the hints available."
             ],
             "hints_ar": [
-                "هذه متباينة ذات خطوتين. ابدأ بعزل حد س.",
-                "اطرح أولاً، ثم اقسم.",
-                "تذكر أن تحافظ على اتجاه إشارة المتباينة."
+                "اضرب كلا الطرفين في -٢.",
+                "تذكر أن تقلب إشارة المتباينة عند الضرب في عدد سالب.",
+                "هذه كل الإرشادات المتاحة."
+            ]
+        },
+        {
+            "id": "examprep2",
+            "section_id": "section2",
+            "type": ProblemType.EXAMPREP,
+            "weight": 30,
+            "question_en": "You want to distribute at least 60 pieces of candy equally among 15 children. Write and solve an inequality to find the minimum number of pieces (p) each child can get.",
+            "question_ar": "تريد توزيع ٦٠ قطعة حلوى على الأقل بالتساوي على ١٥ طفلاً. اكتب وحل متباينة لإيجاد أقل عدد من قطع الحلوى (ح) يمكن أن يحصل عليه كل طفل.",
+            "answer": "p ≥ 4",
+            "answer_ar": "ح ≥ ٤",
+            "show_full_solution": False,
+            "hide_answer": True,
+            "hints_en": [
+                "The inequality is 15p ≥ 60",
+                "Divide both sides by 15 to solve for p.",
+                "That's all the hints available."
+            ],
+            "hints_ar": [
+                "المتباينة هي ١٥ح ≥ ٦٠",
+                "اقسم كلا الطرفين على ١٥ لحل ح.",
+                "هذه كل الإرشادات المتاحة."
             ]
         },
         {
