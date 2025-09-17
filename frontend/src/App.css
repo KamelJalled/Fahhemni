@@ -249,12 +249,17 @@ input[data-active-input="true"] {
     }
     
     /* Text clamping for long section titles */
+    .section-tab-button .line-clamp-3,
     .line-clamp-3 {
         display: -webkit-box !important;
         -webkit-line-clamp: 3 !important;
         -webkit-box-orient: vertical !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
+        line-height: 1.2 !important;
+        max-height: 3.6em !important;
+        word-break: break-word !important;
+        hyphens: auto !important;
     }
     
     /* Continue Button Always Visible */
