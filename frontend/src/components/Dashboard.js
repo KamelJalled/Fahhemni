@@ -349,7 +349,7 @@ const Dashboard = () => {
                   <Button
                     key={section.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`section-tab-button flex-shrink-0 p-2 md:p-3 w-48 md:w-44 h-20 md:h-16 ${
+                    className={`section-tab-button flex-shrink-0 ${
                       !hasProblems ? 'opacity-50' : ''
                     } ${isSelected ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-50'}`}
                     onClick={() => {
@@ -358,30 +358,35 @@ const Dashboard = () => {
                     }}
                     disabled={!hasProblems}
                     style={{
-                      minWidth: '192px',
-                      maxWidth: '200px',
-                      height: '80px',
+                      minWidth: '240px',
+                      width: '240px',
+                      height: '90px',
+                      padding: '8px',
                       whiteSpace: 'normal',
                       wordWrap: 'break-word',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      textAlign: 'center'
                     }}
                   >
-                    <div className="text-center w-full">
+                    <div style={{ width: '100%', textAlign: 'center' }}>
                       <div 
-                        className="text-xs md:text-sm font-medium mb-1 leading-tight"
                         style={{
+                          fontSize: '11px',
+                          fontWeight: '500',
+                          marginBottom: '4px',
+                          lineHeight: '1.2',
+                          maxHeight: '52px',
+                          overflow: 'hidden',
                           wordBreak: 'break-word',
                           overflowWrap: 'break-word',
                           hyphens: 'auto',
-                          lineHeight: '1.2',
-                          maxHeight: '3.6em',
-                          overflow: 'hidden',
                           display: '-webkit-box',
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: 'vertical'
+                          WebkitLineClamp: 4,
+                          WebkitBoxOrient: 'vertical',
+                          textOverflow: 'ellipsis'
                         }}
                       >
                         {language === 'en' ? section.title_en : section.title_ar}
