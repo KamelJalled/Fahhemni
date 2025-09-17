@@ -160,13 +160,15 @@ async def init_database():
                     ]
                 },
                 {
-                    "step_en": "Level 2B Step 2: Simplify",
-                    "step_ar": "المستوى ٢ب الخطوة ٢: بسّط",
+                    "step_en": "Level 2B Step 2: Write in standard form",
+                    "step_ar": "المستوى ٢ب الخطوة ٢: اكتب بالشكل القياسي",
                     "possible_answers": [
-                        "12 ≤ m"
+                        "12 ≤ m",
+                        "m ≥ 12"
                     ],
                     "possible_answers_ar": [
-                        "١٢ ≤ م"
+                        "١٢ ≤ م",
+                        "م ≥ ١٢"
                     ]
                 },
                 {
