@@ -569,51 +569,57 @@ async def init_database():
             "section_id": "section2",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "4x + 3 ≤ 15",
-            "question_ar": "٤س + ٣ ≤ ١٥",
-            "answer": "x ≤ 3",
-            "answer_ar": "س ≤ ٣",
+            "question_en": "-2/3 k > 8",
+            "question_ar": "-٢/٣ ك > ٨",
+            "answer": "k < -12",
+            "answer_ar": "ك < -١٢",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Subtract 3 from both sides",
-                    "step_ar": "اطرح ٣ من الطرفين",
+                    "step_en": "Multiply both sides by -3/2",
+                    "step_ar": "اضرب كلا الطرفين في -٣/٢",
                     "possible_answers": [
-                        "4x + 3 - 3 ≤ 15 - 3",
-                        "4x ≤ 15 - 3",
-                        "4x ≤ 12"
+                        "(-2/3) k * (-3/2) > 8 * (-3/2)",
+                        "k < 8 * (-3/2)",
+                        "k < -12"
                     ],
                     "possible_answers_ar": [
-                        "٤س + ٣ - ٣ ≤ ١٥ - ٣",
-                        "٤س ≤ ١٥ - ٣",
-                        "٤س ≤ ١٢"
+                        "(-٢/٣) ك * (-٣/٢) > ٨ * (-٣/٢)",
+                        "ك < ٨ * (-٣/٢)",
+                        "ك < -١٢"
                     ]
                 },
                 {
-                    "step_en": "Divide both sides by 4",
-                    "step_ar": "اقسم الطرفين على ٤",
+                    "step_en": "Flip the inequality sign",
+                    "step_ar": "اقلب إشارة المتباينة",
                     "possible_answers": [
-                        "4x / 4 ≤ 12 / 4",
-                        "x ≤ 12 / 4",
-                        "x ≤ 3"
+                        "k < -12"
                     ],
                     "possible_answers_ar": [
-                        "٤س / ٤ ≤ ١٢ / ٤",
-                        "س ≤ ١٢ / ٤",
-                        "س ≤ ٣"
+                        "ك < -١٢"
+                    ]
+                },
+                {
+                    "step_en": "Simplify 8 * (-3/2)",
+                    "step_ar": "بسّط ٨ * (-٣/٢)",
+                    "possible_answers": [
+                        "k < -12"
+                    ],
+                    "possible_answers_ar": [
+                        "ك < -١٢"
                     ]
                 }
             ],
             "hints_en": [
-                "Start by removing the constant term",
-                "What do you add or subtract to cancel +3?",
-                "Then isolate x by dividing by the coefficient"
+                "Multiply by the reciprocal of the coefficient to isolate 'k'.",
+                "Don't forget the rule when multiplying by a negative number.",
+                "Simplify 8 * (-3/2)."
             ],
             "hints_ar": [
-                "ابدأ بإزالة الحد الثابت",
-                "ماذا تجمع أو تطرح لتلغي +٣؟",
-                "ثم اعزل س بالقسمة على المعامل"
+                "اضرب في مقلوب المعامل لعزل 'ك'.",
+                "لا تنس القاعدة عند الضرب في عدد سالب.",
+                "قم بتبسيط ٨ * (-٣/٢)."
             ]
         },
         {
@@ -621,51 +627,47 @@ async def init_database():
             "section_id": "section2",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "5x - 2 > 18",
-            "question_ar": "٥س - ٢ > ١٨",
-            "answer": "x > 4",
-            "answer_ar": "س > ٤",
+            "question_en": "Tickets must be sold at SAR 10 each to collect at least SAR 500. What is the minimum number of tickets (t) that must be sold?",
+            "question_ar": "يجب بيع تذاكر بسعر ١٠ ريالات للتذكرة الواحدة لجمع ٥٠٠ ريال على الأقل. ما هو أقل عدد من التذاكر (ت) يجب بيعه؟",
+            "answer": "t ≥ 50",
+            "answer_ar": "ت ≥ ٥٠",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Add 2 to both sides",
-                    "step_ar": "أضف ٢ للطرفين",
+                    "step_en": "Write the inequality: 10t ≥ 500",
+                    "step_ar": "اكتب المتباينة: ١٠ت ≥ ٥٠٠",
                     "possible_answers": [
-                        "5x - 2 + 2 > 18 + 2",
-                        "5x > 18 + 2",
-                        "5x > 20"
+                        "10t ≥ 500",
+                        "10 * t ≥ 500"
                     ],
                     "possible_answers_ar": [
-                        "٥س - ٢ + ٢ > ١٨ + ٢",
-                        "٥س > ١٨ + ٢",
-                        "٥س > ٢٠"
+                        "١٠ت ≥ ٥٠٠",
+                        "١٠ * ت ≥ ٥٠٠"
                     ]
                 },
                 {
-                    "step_en": "Divide both sides by 5",
-                    "step_ar": "اقسم الطرفين على ٥",
+                    "step_en": "Divide both sides by 10",
+                    "step_ar": "اقسم كلا الطرفين على ١٠",
                     "possible_answers": [
-                        "5x / 5 > 20 / 5",
-                        "x > 20 / 5",
-                        "x > 4"
+                        "10t / 10 ≥ 500 / 10",
+                        "t ≥ 500 / 10",
+                        "t ≥ 50"
                     ],
                     "possible_answers_ar": [
-                        "٥س / ٥ > ٢٠ / ٥",
-                        "س > ٢٠ / ٥",
-                        "س > ٤"
+                        "١٠ت / ١٠ ≥ ٥٠٠ / ١٠",
+                        "ت ≥ ٥٠٠ / ١٠",
+                        "ت ≥ ٥٠"
                     ]
                 }
             ],
             "hints_en": [
-                "What operation cancels out -2?",
-                "Calculate 18 + 2",
-                "Then divide both sides by 5"
+                "The total amount is the price per ticket times the number of tickets.",
+                "Use division to isolate 't'."
             ],
             "hints_ar": [
-                "ما العملية التي تلغي -٢؟",
-                "احسب ١٨ + ٢",
-                "ثم اقسم الطرفين على ٥"
+                "المبلغ الإجمالي هو سعر التذكرة مضروبًا في عددها.",
+                "استخدم القسمة لعزل 'ت'."
             ]
         },
         {
