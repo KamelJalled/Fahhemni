@@ -284,8 +284,8 @@ async def init_database():
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Use variable 'm' for additional amount. Write inequality showing 210 + m ≥ 500", 
-                    "step_ar": "استخدم المتغير 'م' لتمثيل المبلغ الإضافي. اكتب متباينة توضح أن المبلغ الذي تم جمعه (٢١٠) مضافًا إليه 'م' يجب أن يكون أكبر من أو يساوي الهدف (٥٠٠)",
+                    "step_en": "Write an inequality showing the additional amount 'm', added to the available amount '210' must be greater than or equal to '500'", 
+                    "step_ar": "اكتب متباينة توضح أن المبلغ الإضافي 'م'، مضافًا إلى المبلغ المتاح '٢١٠' يجب أن يكون أكبر من أو يساوي '٥٠٠'",
                     "possible_answers": [
                         "m + 210 ≥ 500",
                         "210 + m ≥ 500"
