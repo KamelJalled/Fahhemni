@@ -248,6 +248,26 @@ input[data-active-input="true"] {
         justify-content: center !important;
     }
     
+    /* Responsive section title fonts */
+    .english-section-title {
+        font-size: 11px !important;
+    }
+    
+    .arabic-section-title {
+        font-size: 11px !important;
+    }
+    
+    /* Mobile responsive font sizes */
+    @media (max-width: 767px) {
+        .english-section-title {
+            font-size: 13px !important;
+        }
+        
+        .arabic-section-title {
+            font-size: 13px !important;
+        }
+    }
+    
     /* Text clamping for long section titles */
     .section-tab-button .line-clamp-3,
     .line-clamp-3 {
