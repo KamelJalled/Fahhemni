@@ -78,7 +78,7 @@ const ProblemView = () => {
   // UPDATED: Redesigned stage structure for proper Socratic tutoring
   const getStageType = (problemType, problemId) => {
     // PREPARATION STAGE: Final answer only with auto-hints
-    if (problemType === 'preparation' || problemId?.includes('prep')) {
+    if (problemType === 'preparation' || problemId?.startsWith('prep')) {
       return 'preparation';
     }
     
