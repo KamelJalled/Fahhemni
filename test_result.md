@@ -102,9 +102,20 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "MOBILE OPTIMIZATION REQUIREMENTS (CRITICAL BUGS TO FIX): 1. Voice input converts 'x plus eight' to text instead of 'x + 8' - implement post-processing layer 2. Section 1 content remains visible when clicking other sections - fix section navigation 3. Students registering with classes B, C, D are all saved as GR9-A - fix class assignment bug 4. Microphone turns off immediately without capturing speech - fix microphone permissions 5. Math keyboard Eastern/Western numeral toggle not working - fix toggle functionality. MOBILE RESPONSIVE DESIGN: Ensure 44x44px touch targets, math keyboard doesn't cover input, section tabs scrollable horizontally, auto-scroll when keyboard opens, test on 375px (iPhone) and 360px (Android) viewports, verify RTL Arabic layout on mobile."
+user_problem_statement: "Update Section 2 content with new curriculum: 'Solving Inequalities by Multiplication or Division'. Replace all problems, examples, hints, and step-by-step solutions with the provided curriculum content covering positive coefficients, negative coefficients, and division by negative numbers. Maintain bilingual support and existing functionality."
 
 backend:
+  - task: "Section 2 Content Update - New Curriculum Implementation"
+    implemented: true
+    working: "NA"
+    file: "backend/database.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Successfully implemented Section 2 new curriculum content: 'Solving Inequalities by Multiplication or Division'. Updated all 6 stages: Preparation (4x < 20), Explanation (3 levels covering positive coefficient, negative coefficient, division by negative), Practice (classic -2/3 k > 8 and real-life ticket problem), Assessment (y/(-2) > 6), and Exam Prep (candy distribution problem). All content includes proper step-by-step solutions, bilingual hints, and maintains existing database structure."
   - task: "Remove Vercel-specific configurations"
     implemented: true
     working: true
