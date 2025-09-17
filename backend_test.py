@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Expanded Version
-Tests all core API endpoints for production readiness with all 5 sections
+Backend API Test Suite for Math Tutoring App - Section 2 New Curriculum Testing
+Tests Section 2 new curriculum implementation comprehensively
 """
 
 import requests
