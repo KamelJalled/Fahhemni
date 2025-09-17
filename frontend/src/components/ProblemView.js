@@ -1294,10 +1294,24 @@ const ProblemView = () => {
                                         console.log('🔍 User Step 2 answer:', explanationAnswers[index]);
                                         console.log('🔍 Expected answer:', example.practice_answer);
                                         
-                                        const correct = normalizeAnswer(explanationAnswers[index]) === normalizeAnswer(example.practice_answer);
-                                        console.log('🔍 Step 2 correct:', correct);
+                                        // Use the actual step solutions from backend data for step 2
+                                        const normalized = normalizeAnswer(explanationAnswers[index]);
+                                        const stepSolutionIndex = index * 2 + 1; // Step 2 for each level
+                                        const currentStepSolution = problem.step_solutions?.[stepSolutionIndex];
                                         
-                                        if (correct) {
+                                        let step2Correct = false;
+                                        if (currentStepSolution) {
+                                          // Check against all possible answers for step 2
+                                          const possibleAnswers = language === 'ar' 
+                                            ? currentStepSolution.possible_answers_ar 
+                                            : currentStepSolution.possible_answers;
+                                          
+                                          step2Correct = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
+                                        }
+                                        
+                                        console.log('🔍 Step 2 correct:', step2Correct);
+                                        
+                                        if (step2Correct) {
                                           const newPracticeComplete = [...practiceComplete];
                                           newPracticeComplete[index] = true;
                                           setPracticeComplete(newPracticeComplete);
@@ -1330,14 +1344,14 @@ const ProblemView = () => {
                                             }, 3000);
                                           }
                                         } else {
-                                          // ❌ WRONG FINAL ANSWER - Copy Practice stage error handling exactly
-                                          const stepInstruction = language === 'en' 
-                                            ? 'Simplify your Step 1 result to get the final answer' 
-                                            : 'بسط نتيجة الخطوة 1 للحصول على الإجابة النهائية';
+                                          // Use the correct hint for step 2
+                                          const hintIndex = stepSolutionIndex; // Each step solution maps to a hint
+                                          const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar; // Fixed: Arabic UI shows English hints
+                                          const stepHint = correctHints?.[hintIndex] || '';
                                           
-                                          const feedback = language === 'en' 
-                                            ? `Not quite. You need to ${stepInstruction}`
-                                            : `ليس تماماً. تحتاج إلى ${stepInstruction}`;
+                                          const feedback = stepHint || (language === 'en' 
+                                            ? `Not quite. Please try again.`
+                                            : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
                                           
                                           setShowEncouragement(feedback);
                                           setTimeout(() => setShowEncouragement(''), 6000);
