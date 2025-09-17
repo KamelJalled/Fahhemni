@@ -373,8 +373,8 @@ const Dashboard = () => {
                   >
                     <div style={{ width: '100%', textAlign: 'center' }}>
                       <div 
+                        className={`${language === 'ar' ? 'arabic-section-title' : 'english-section-title'}`}
                         style={{
-                          fontSize: window.innerWidth < 768 ? '13px' : '11px', // Responsive font size
                           fontWeight: '500',
                           marginBottom: '4px',
                           lineHeight: language === 'ar' ? '1.4' : '1.2', // More line height for Arabic
