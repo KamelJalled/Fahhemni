@@ -433,40 +433,136 @@ async def init_database():
             "section_id": "section2",
             "type": ProblemType.EXPLANATION,
             "weight": 0,
-            "question_en": "Learn Two-Step Inequalities",
-            "question_ar": "تعلم المتباينات ذات الخطوتين",
+            "question_en": "Learn Multiplication/Division Inequalities",
+            "question_ar": "تعلم متباينات الضرب والقسمة",
             "answer": "",
             "answer_ar": "",
-            "show_full_solution": False,
+            "show_full_solution": True,
             "hide_answer": False,
+            "explanation_en": "Learn to solve inequalities involving multiplication and division",
+            "explanation_ar": "تعلم حل المتباينات التي تتضمن الضرب والقسمة",
             "interactive_examples": [
                 {
-                    "title_en": "Example 1: Addition then Division",
-                    "title_ar": "المثال الأول: الجمع ثم القسمة",
-                    "problem_en": "2x - 5 ≥ 7",
-                    "problem_ar": "٢س - ٥ ≥ ٧",
-                    "solution_en": "Step 1: Add 5 to both sides\n2x - 5 + 5 ≥ 7 + 5\n2x ≥ 12\nStep 2: Divide both sides by 2\n2x ÷ 2 ≥ 12 ÷ 2\nx ≥ 6",
-                    "solution_ar": "الخطوة ١: أضف ٥ للطرفين\n٢س - ٥ + ٥ ≥ ٧ + ٥\n٢س ≥ ١٢\nالخطوة ٢: اقسم الطرفين على ٢\n٢س ÷ ٢ ≥ ١٢ ÷ ٢\nس ≥ ٦",
-                    "practice_question_en": "Now try: 3x + 1 > 10",
-                    "practice_question_ar": "الآن جرب: ٣س + ١ > ١٠",
-                    "practice_answer": "x > 3",
-                    "practice_answer_ar": "س > ٣"
+                    "title_en": "Level 1: Simple (Positive Coefficient) - Example 1A (System Solved)",
+                    "title_ar": "المستوى ١: بسيط (معامل موجب) - المثال ١أ (حل النظام)", 
+                    "problem_en": "5x ≥ 30",
+                    "problem_ar": "٥س ≥ ٣٠",
+                    "solution_en": "Original inequality: 5x ≥ 30\n\nStep 1: x ≥ 30 / 5\nStep 2: x ≥ 6",
+                    "solution_ar": "المتباينة الأصلية: ٥س ≥ ٣٠\n\nالخطوة ١: س ≥ ٣٠ / ٥\nالخطوة ٢: س ≥ ٦",
+                    "practice_question_en": "Now solve: 4y < 24",
+                    "practice_question_ar": "الآن حل: ٤ص < ٢٤",
+                    "practice_answer": "y < 6",
+                    "practice_answer_ar": "ص < ٦"
                 },
                 {
-                    "title_en": "Example 2: Subtraction then Division",
-                    "title_ar": "المثال الثاني: الطرح ثم القسمة",
-                    "problem_en": "4x + 8 ≤ 20",
-                    "problem_ar": "٤س + ٨ ≤ ٢٠",
-                    "solution_en": "Step 1: Subtract 8 from both sides\n4x + 8 - 8 ≤ 20 - 8\n4x ≤ 12\nStep 2: Divide both sides by 4\n4x ÷ 4 ≤ 12 ÷ 4\nx ≤ 3",
-                    "solution_ar": "الخطوة ١: اطرح ٨ من الطرفين\n٤س + ٨ - ٨ ≤ ٢٠ - ٨\n٤س ≤ ١٢\nالخطوة ٢: اقسم الطرفين على ٤\n٤س ÷ ٤ ≤ ١٢ ÷ ٤\nس ≤ ٣",
-                    "practice_question_en": "Now try: 5x - 3 < 17",
-                    "practice_question_ar": "الآن جرب: ٥س - ٣ < ١٧",
-                    "practice_answer": "x < 4",
-                    "practice_answer_ar": "س < ٤"
+                    "title_en": "Level 2: Medium (Negative Coefficient) - Example 2A (System Solved)",
+                    "title_ar": "المستوى ٢: متوسط (معامل سالب) - المثال ٢أ (حل النظام)",
+                    "problem_en": "-3m > 15",
+                    "problem_ar": "-٣م > ١٥",
+                    "solution_en": "Original inequality: -3m > 15\n\nStep 1: m < 15 / (-3)\nStep 2: m < -5 (Sign flipped)",
+                    "solution_ar": "المتباينة الأصلية: -٣م > ١٥\n\nالخطوة ١: م < ١٥ / (-٣)\nالخطوة ٢: م < -٥ (الإشارة انقلبت)",
+                    "practice_question_en": "Now solve: -6k ≤ 30", 
+                    "practice_question_ar": "الآن حل: -٦ك ≤ ٣٠",
+                    "practice_answer": "k ≥ -5",
+                    "practice_answer_ar": "ك ≥ -٥"
+                },
+                {
+                    "title_en": "Level 3: Advanced (Division by Negative) - Example 3A (System Solved)",
+                    "title_ar": "المستوى ٣: متقدم (القسمة على عدد سالب) - المثال ٣أ (حل النظام)",
+                    "problem_en": "k / (-4) ≤ 2",
+                    "problem_ar": "ك / (-٤) ≤ ٢",
+                    "solution_en": "Original inequality: k / (-4) ≤ 2\n\nStep 1: k ≥ 2 * (-4)\nStep 2: k ≥ -8 (Sign flipped)",
+                    "solution_ar": "المتباينة الأصلية: ك / (-٤) ≤ ٢\n\nالخطوة ١: ك ≥ ٢ * (-٤)\nالخطوة ٢: ك ≥ -٨ (الإشارة انقلبت)",
+                    "practice_question_en": "Now solve: n / (-3) > 5",
+                    "practice_question_ar": "الآن حل: ن / (-٣) > ٥", 
+                    "practice_answer": "n < -15",
+                    "practice_answer_ar": "ن < -١٥"
                 }
             ],
-            "hints_en": [],
-            "hints_ar": []
+            "step_solutions": [
+                {
+                    "step_en": "Level 1B Step 1: Divide both sides by 4",
+                    "step_ar": "المستوى ١ب الخطوة ١: اقسم كلا الطرفين على ٤",
+                    "possible_answers": [
+                        "4y / 4 < 24 / 4",
+                        "y < 24 / 4",
+                        "y < 6"
+                    ],
+                    "possible_answers_ar": [
+                        "٤ص / ٤ < ٢٤ / ٤",
+                        "ص < ٢٤ / ٤",
+                        "ص < ٦"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 1: Divide both sides by -6",
+                    "step_ar": "المستوى ٢ب الخطوة ١: اقسم كلا الطرفين على -٦",
+                    "possible_answers": [
+                        "-6k / -6 ≤ 30 / -6",
+                        "k ≥ 30 / -6",
+                        "k ≥ -5"
+                    ],
+                    "possible_answers_ar": [
+                        "-٦ك / -٦ ≤ ٣٠ / -٦",
+                        "ك ≥ ٣٠ / -٦",
+                        "ك ≥ -٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 2: Flip the inequality sign",
+                    "step_ar": "المستوى ٢ب الخطوة ٢: اقلب إشارة المتباينة",
+                    "possible_answers": [
+                        "k ≥ -5"
+                    ],
+                    "possible_answers_ar": [
+                        "ك ≥ -٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 1: Multiply both sides by -3",
+                    "step_ar": "المستوى ٣ب الخطوة ١: اضرب كلا الطرفين في -٣",
+                    "possible_answers": [
+                        "n / (-3) * (-3) > 5 * (-3)",
+                        "n < 5 * (-3)",
+                        "n < -15"
+                    ],
+                    "possible_answers_ar": [
+                        "ن / (-٣) * (-٣) > ٥ * (-٣)",
+                        "ن < ٥ * (-٣)",
+                        "ن < -١٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 2: Flip the inequality sign",
+                    "step_ar": "المستوى ٣ب الخطوة ٢: اقلب إشارة المتباينة",
+                    "possible_answers": [
+                        "n < -15"
+                    ],
+                    "possible_answers_ar": [
+                        "ن < -١٥"
+                    ]
+                }
+            ],
+            "hints_en": [
+                "لعزل 'ص'، على أي رقم يجب أن تقسم؟",
+                "هل تتغير إشارة المتباينة عند القسمة على عدد موجب؟",
+                "ما هي العملية اللازمة لعزل 'ك'؟",
+                "تذكر القاعدة! ماذا يحدث لإشارة المتباينة عند القسمة على عدد سالب؟",
+                "قم بتبسيط العملية الحسابية.",
+                "للتخلص من القسمة، استخدم الضرب.",
+                "لقد ضربت في عدد سالب. ماذا يعني ذلك للإشارة؟",
+                "ما هو ناتج ٥ × (-٣)؟"
+            ],
+            "hints_ar": [
+                "To isolate 'y', what number should you divide by?",
+                "Does the inequality sign change when dividing by a positive number?",
+                "What operation is needed to isolate 'k'?",
+                "Remember the rule! What happens to the inequality sign when you divide by a negative number?",
+                "Simplify the calculation.",
+                "To undo division, use multiplication.",
+                "You multiplied by a negative number. What does that mean for the sign?",
+                "What is the result of 5 * (-3)?"
+            ]
         },
         {
             "id": "practice2_1",
