@@ -1198,11 +1198,9 @@ metadata:
 test_plan:
   current_focus:
     - "Section 2 Content Update - New Curriculum Implementation"
-    - "Section 2 Backend API Testing"
-    - "Section 2 Frontend Integration Verification"
   stuck_tasks: []
   test_all: false
-  test_priority: "section2_content_testing"
+  test_priority: "section2_testing_complete"
 
 agent_communication:
   - agent: "main"
