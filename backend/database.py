@@ -284,8 +284,8 @@ async def init_database():
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Use the variable 'm' for the additional amount. Write an inequality showing that the amount collected (210) plus 'm' must be greater than or equal to the goal (500)", 
-                    "step_ar": "استخدم المتغير 'م' لتمثيل المبلغ الإضافي. اكتب متباينة توضح أن المبلغ الذي تم جمعه (٢١٠) مضافًا إليه 'م' يجب أن يكون أكبر من أو يساوي الهدف (٥٠٠)",
+                    "step_en": "Define m as the additional amount needed. Write an inequality showing that 210 + m must be at least 500", 
+                    "step_ar": "عرّف م كالمبلغ الإضافي المطلوب. اكتب متباينة توضح أن ٢١٠ + م يجب أن يكون على الأقل ٥٠٠",
                     "possible_answers": [
                         "m + 210 ≥ 500",
                         "210 + m ≥ 500"
@@ -296,18 +296,26 @@ async def init_database():
                     ]
                 },
                 {
-                    "step_en": "Subtract 210 from both sides to isolate 'm'", 
-                    "step_ar": "اطرح ٢١٠ من الطرفين لعزل 'م'",
+                    "step_en": "Subtract 210 from both sides", 
+                    "step_ar": "اطرح ٢١٠ من الطرفين",
                     "possible_answers": [
                         "m + 210 - 210 ≥ 500 - 210",
                         "m ≥ 500 - 210",
-                        "210 + m - 210 ≥ 500 - 210",
-                        "m ≥ 290"
+                        "210 + m - 210 ≥ 500 - 210"
                     ],
                     "possible_answers_ar": [
                         "م + ٢١٠ - ٢١٠ ≥ ٥٠٠ - ٢١٠",
                         "م ≥ ٥٠٠ - ٢١٠",
-                        "٢١٠ + م - ٢١٠ ≥ ٥٠٠ - ٢١٠",
+                        "٢١٠ + م - ٢١٠ ≥ ٥٠٠ - ٢١٠"
+                    ]
+                },
+                {
+                    "step_en": "Simplify to get final answer", 
+                    "step_ar": "بسّط للحصول على الإجابة النهائية",
+                    "possible_answers": [
+                        "m ≥ 290"
+                    ],
+                    "possible_answers_ar": [
                         "م ≥ ٢٩٠"
                     ]
                 }
