@@ -1271,13 +1271,32 @@ const ProblemView = () => {
                                             }
                                             setTimeout(() => setShowEncouragement(''), 3000);
                                           } else {
-                                            const hintIndex = stepSolutionIndex;
-                                            const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar;
-                                            const stepHint = correctHints?.[hintIndex] || '';
+                                            // Find the hint index for this specific level and step
+                                            const levelStepSolutions = problem.step_solutions?.filter(step => 
+                                              step.step_en.includes(`Level ${index + 1}B Step`)
+                                            ) || [];
+                                            const currentStepSolution = levelStepSolutions[explanationStep];
                                             
-                                            const feedback = stepHint || (language === 'en' 
-                                              ? `Not quite. Please try again.`
-                                              : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
+                                            // Use improved hints - find the specific hint for this step
+                                            let feedback;
+                                            if (index === 1 && explanationStep === 1 && normalized.includes('12') && normalized.includes('≤') && normalized.includes('m')) {
+                                              // Special case for Level 2B Step 2 when student enters "12 ≤ m"
+                                              feedback = language === 'en' 
+                                                ? "Good! Now write this in standard form: m ≥ 12"
+                                                : "جيد! الآن اكتب هذا بالشكل القياسي: م ≥ ١٢";
+                                            } else {
+                                              // Use the general hint from backend or default
+                                              const allSteps = problem.step_solutions || [];
+                                              const globalStepIndex = allSteps.findIndex(step => 
+                                                step.step_en === currentStepSolution?.step_en
+                                              );
+                                              const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar;
+                                              const stepHint = correctHints?.[globalStepIndex] || '';
+                                              
+                                              feedback = stepHint || (language === 'en' 
+                                                ? `Not quite. Please try again.`
+                                                : `ليس تماماً. يرجى المحاولة مرة أخرى.`);
+                                            }
                                             
                                             setShowEncouragement(feedback);
                                             setTimeout(() => setShowEncouragement(''), 6000);
