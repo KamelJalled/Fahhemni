@@ -214,7 +214,7 @@ async def init_database():
                 "لعزل المتغير 'م'، ماذا يجب أن تفعل بالرقم ٨؟",
                 "ما هو ناتج ٢٠ - ٨؟",
                 "ابدأ بجمع حدود 'ك' المتشابهة في طرف واحد.",
-                "الآن، قم بعزل المتغير 'ك'."
+                "الآن اعزل ك بإضافة ٤ إلى كلا الطرفين."
             ],
             "hints_ar": [
                 "To undo subtraction, what is the inverse operation you should use?",
@@ -222,7 +222,7 @@ async def init_database():
                 "To isolate the variable 'm', what should you do with the number 8?",
                 "What is the result of 20 - 8?",
                 "Start by collecting the 'k' terms on one side.",
-                "Now, isolate the variable 'k'."
+                "Now isolate k by adding 4 to both sides."
             ]
         },
         {
