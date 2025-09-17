@@ -360,7 +360,7 @@ const Dashboard = () => {
                     style={{
                       minWidth: '240px',
                       width: '240px',
-                      height: '90px',
+                      height: '100px', // Increased height for Arabic text
                       padding: '8px',
                       whiteSpace: 'normal',
                       wordWrap: 'break-word',
@@ -374,11 +374,11 @@ const Dashboard = () => {
                     <div style={{ width: '100%', textAlign: 'center' }}>
                       <div 
                         style={{
-                          fontSize: '11px',
+                          fontSize: window.innerWidth < 768 ? '13px' : '11px', // Responsive font size
                           fontWeight: '500',
                           marginBottom: '4px',
-                          lineHeight: '1.2',
-                          maxHeight: '52px',
+                          lineHeight: language === 'ar' ? '1.4' : '1.2', // More line height for Arabic
+                          maxHeight: language === 'ar' ? '65px' : '55px', // More height for Arabic
                           overflow: 'hidden',
                           wordBreak: 'break-word',
                           overflowWrap: 'break-word',
