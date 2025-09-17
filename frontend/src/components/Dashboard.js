@@ -359,7 +359,7 @@ const Dashboard = () => {
                     disabled={!hasProblems}
                   >
                     <div className="text-center">
-                      <div className="text-xs md:text-sm font-medium mb-1 leading-tight">
+                      <div className="text-xs md:text-sm font-medium mb-1 leading-tight line-clamp-3 break-words">
                         {language === 'en' ? section.title_en : section.title_ar}
                       </div>
                       <div className="text-xs opacity-75">
