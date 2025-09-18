@@ -156,36 +156,74 @@ async def clear_all_data():
 # Student progress endpoints
 @api_router.get("/students/{username}/progress")
 async def get_progress(username: str):
-    """Get student progress for all problems"""
+    """Get student progress for all problems across all sections"""
     try:
         progress_list = await get_student_progress(username)
         
-        # Convert to dictionary format expected by frontend
-        progress_dict = {"section1": {}}
+        # Convert to dictionary format expected by frontend - support all sections
+        progress_dict = {}
         
-        # Initialize all problems with default values
-        default_problems = ["prep1", "explanation1", "practice1", "practice2", "assessment1", "examprep1"]
-        for problem_id in default_problems:
-            progress_dict["section1"][problem_id] = {
-                "completed": False,
-                "score": 0,
-                "attempts": 0
-            }
+        # Initialize sections 1-5 with default values
+        for section_num in range(1, 6):
+            section_key = f"section{section_num}"
+            progress_dict[section_key] = {}
+            
+            # Default problems for each section
+            default_problems = [
+                f"prep{section_num}", 
+                f"explanation{section_num}", 
+                f"practice{section_num}_1", 
+                f"practice{section_num}_2", 
+                f"assessment{section_num}", 
+                f"examprep{section_num}"
+            ]
+            
+            # Handle legacy naming for section 1
+            if section_num == 1:
+                default_problems = ["prep1", "explanation1", "practice1", "practice2", "assessment1", "examprep1"]
+            
+            # Handle section 2 naming
+            if section_num == 2:
+                default_problems = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
+            
+            for problem_id in default_problems:
+                progress_dict[section_key][problem_id] = {
+                    "completed": False,
+                    "score": 0,
+                    "attempts": 0
+                }
         
         # Update with actual progress
         for progress in progress_list:
-            progress_dict["section1"][progress.problem_id] = {
-                "completed": progress.completed,
-                "score": progress.score,
-                "attempts": progress.attempts
-            }
+            # Determine which section this problem belongs to
+            problem_id = progress.problem_id
+            section_num = 1  # default
+            
+            # Extract section number from problem ID
+            import re
+            match = re.search(r'(\d+)', problem_id)
+            if match:
+                section_num = int(match.group(1))
+            
+            section_key = f"section{section_num}"
+            
+            if section_key in progress_dict:
+                progress_dict[section_key][problem_id] = {
+                    "completed": progress.completed,
+                    "score": progress.score,
+                    "attempts": progress.attempts
+                }
         
-        # Calculate total points and badges
-        problems = await get_section_problems("section1")
-        problems_dict = {p.id: {"weight": p.weight} for p in problems}
-        
-        total_points = calculate_total_points(progress_dict["section1"], problems_dict)
-        badges = calculate_badges(progress_dict["section1"])
+        # Calculate total points and badges (for section 1 compatibility)
+        try:
+            problems = await get_section_problems("section1")
+            problems_dict = {p.id: {"weight": p.weight} for p in problems}
+            
+            total_points = calculate_total_points(progress_dict["section1"], problems_dict)
+            badges = calculate_badges(progress_dict["section1"])
+        except:
+            total_points = 0
+            badges = []
         
         return {
             "progress": progress_dict,
