@@ -75,7 +75,73 @@ const ProblemView = () => {
     return normalized;
   };
 
-  // ENHANCED: Mathematical validation with proper sign flipping for inequalities
+  // CRITICAL: Step validation logic with enforced business rules
+  const getRequiredSteps = (problemType, problemId, problemQuestion) => {
+    // Business Rule 1: Simple inequalities ALWAYS require 2 steps
+    if (problemType === 'explanation' || problemType === 'preparation') {
+      return 2; // Step 1: Show operation, Step 2: Simplified answer
+    }
+    
+    // Business Rule 2: Word problems ALWAYS require 3 steps  
+    if (problemType === 'practice' && problemQuestion) {
+      const questionText = (language === 'en' ? problemQuestion.question_en : problemQuestion.question_ar) || '';
+      const isWordProblem = questionText.length > 50 || 
+                           questionText.toLowerCase().includes('word') ||
+                           questionText.includes('ريال') ||
+                           questionText.includes('tickets') ||
+                           questionText.includes('candy') ||
+                           questionText.includes('children');
+      
+      if (isWordProblem) {
+        return 3; // Step 1: Write inequality, Step 2: Show operation, Step 3: Simplified answer
+      } else {
+        return 2; // Simple practice problems: Step 1: Show operation, Step 2: Simplified answer  
+      }
+    }
+    
+    // Business Rule 3: Assessment and Exam Prep typically require 2 steps
+    if (problemType === 'assessment' || problemType === 'examprep') {
+      return 2; // Step 1: Show operation, Step 2: Simplified answer
+    }
+    
+    return 2; // Default: 2 steps for most problems
+  };
+
+  const validateStepProgression = (problemType, problemId, currentStep, problem) => {
+    const requiredSteps = getRequiredSteps(problemType, problemId, problem);
+    
+    console.log(`🔍 Step Validation: Problem ${problemId}, Current Step: ${currentStep + 1}, Required Steps: ${requiredSteps}`);
+    
+    if (currentStep + 1 < requiredSteps) {
+      // More steps required
+      return {
+        valid: true,
+        nextStep: currentStep + 1,
+        complete: false,
+        message: language === 'en' 
+          ? `Good! Move to step ${currentStep + 2} of ${requiredSteps}`
+          : `جيد! انتقل إلى الخطوة ${currentStep + 2} من ${requiredSteps}`
+      };
+    } else if (currentStep + 1 === requiredSteps) {
+      // This is the final required step
+      return {
+        valid: true,
+        complete: true,
+        message: language === 'en' 
+          ? `Excellent! You completed all ${requiredSteps} required steps`
+          : `ممتاز! لقد أكملت جميع الخطوات المطلوبة ${requiredSteps}`
+      };
+    } else {
+      // Should not happen - too many steps
+      return {
+        valid: false,
+        error: true,
+        message: language === 'en' 
+          ? `Error: This problem requires exactly ${requiredSteps} steps`
+          : `خطأ: هذه المسألة تتطلب بالضبط ${requiredSteps} خطوات`
+      };
+    }
+  };
   const validateInequalityStep = (userAnswer, expectedAnswers, stepInstruction) => {
     const normalizedUserAnswer = normalizeAnswer(userAnswer);
     
