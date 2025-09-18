@@ -395,6 +395,18 @@ const ProblemView = () => {
         const progressData = await progressResponse.json();
         setUserProgress(progressData.progress);
         
+        // CRITICAL: Check stage access security before allowing problem access
+        if (problemData) {
+          const securityCheck = checkStageAccessSecurity(problemData, progressData.progress);
+          
+          if (!securityCheck.access) {
+            // SECURITY: Block access and redirect to dashboard with alert
+            alert(`🔒 ${securityCheck.message}`);
+            navigate(securityCheck.redirectTo || '/dashboard');
+            return;
+          }
+        }
+        
         // FIXED: Dynamic section-aware progress tracking
         const getSectionNumber = (id) => {
           const match = id.match(/(\d+)$/);
