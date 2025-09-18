@@ -810,20 +810,25 @@ const ProblemView = () => {
     const isStepCorrect = validateInequalityStep(currentAnswer, possibleAnswers, stepInstruction);
     
     if (isStepCorrect) {
-      // ✅ CORRECT STEP
+      // ✅ CORRECT STEP - FIXED: Use business rule validation
       const newStepResults = [...stepResults];
       newStepResults[currentStep] = true;
       setStepResults(newStepResults);
       
-      if (currentStep < expectedStepAnswers.length - 1) {
-        setCurrentStep(currentStep + 1);
+      // CRITICAL: Enforce correct number of steps using business rules
+      const stepValidation = validateStepProgression(problem.type, problem.id, currentStep, problem);
+      
+      if (!stepValidation.complete) {
+        // Move to next step
+        setCurrentStep(stepValidation.nextStep);
         setAttempts(0);
-        setShowEncouragement(language === 'en' ? "Good! Now for the next step..." : "جيد! الآن للخطوة التالية...");
+        setShowEncouragement(`✅ ${stepValidation.message}`);
       } else {
+        // All required steps complete
         setAllStepsComplete(true);
         setIsCorrect(true);
-        setShowEncouragement(language === 'en' ? "🎉 Perfect! You've mastered this problem!" : "🎉 ممتاز! لقد أتقنت هذه المسألة!");
-        await submitToBackend();
+        setShowEncouragement(`✅ ${stepValidation.message}`);
+        setTimeout(() => submitToBackend(), 1000);
       }
       
       setTimeout(() => setShowEncouragement(''), 4000);
