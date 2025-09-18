@@ -1183,8 +1183,8 @@ const ProblemView = () => {
 
   return (
     <div className="min-h-screen p-4">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6 max-w-7xl mx-auto">
+      {/* Header - FIXED: Reduced margin */}
+      <div className="flex justify-between items-center mb-4 max-w-7xl mx-auto problem-view-header">
         <Button onClick={() => navigate('/dashboard')} variant="outline">
           <ArrowLeft className="w-4 h-4 mr-2" />
           {text[language].back}
