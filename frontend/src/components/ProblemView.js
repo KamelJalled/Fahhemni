@@ -1228,14 +1228,14 @@ const ProblemView = () => {
         </Card>
 
         <div className="grid grid-cols-1 gap-6">
-          {/* Problem Card */}
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle className="text-center">
+          {/* Problem Card - FIXED: Compact layout */}
+          <Card className="w-full problem-display">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-center problem-title">
                 {language === 'en' ? 'Solve the inequality:' : 'حل المتباينة:'}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0 problem-math-display">
               {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
             {/* COMPREHENSIVE EXPLANATION STAGE CONTENT - FULL WIDTH */}
