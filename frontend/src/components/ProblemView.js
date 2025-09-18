@@ -1258,9 +1258,9 @@ const ProblemView = () => {
               </Card>
             )}
 
-            {/* INTERACTIVE PRACTICE EXAMPLES - TABBED INTERFACE - FULL WIDTH */}
+            {/* INTERACTIVE PRACTICE EXAMPLES - FIXED: Reduced spacing */}
             {problem.interactive_examples && (
-              <Card className="mb-6 w-full">
+              <Card className="mb-4 w-full">
                 <CardHeader className="pb-4">
                   <CardTitle className="text-center text-2xl font-bold text-gray-800">
                     {language === 'en' ? '🎯 Practice Examples' : '🎯 أمثلة تطبيقية'}
