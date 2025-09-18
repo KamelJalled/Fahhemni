@@ -997,7 +997,15 @@ const ProblemView = () => {
     );
   }
 
-  const problemProgress = userProgress?.section1[problemId] || { completed: false, score: 0, attempts: 0 };
+  // FIXED: Dynamic section-aware progress display
+  const getSectionNumber = (id) => {
+    const match = id.match(/(\d+)$/);
+    return match ? parseInt(match[1]) : 1;
+  };
+
+  const currentSectionNum = problemId ? getSectionNumber(problemId) : 1;
+  const sectionKey = `section${currentSectionNum}`;
+  const problemProgress = userProgress?.[sectionKey]?.[problemId] || { completed: false, score: 0, attempts: 0 };
   const isCompleted = problemProgress.completed;
   const earnedScore = problemProgress.score;
 
