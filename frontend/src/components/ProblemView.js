@@ -1841,24 +1841,32 @@ const ProblemView = () => {
                               {language === 'en' ? `Step ${currentStep + 1}: Guided Practice` : `الخطوة ${currentStep + 1}: تدريب موجه`}
                             </h4>
                             
-                            {/* Step Progress Indicator - FIXED: Compact spacing */}
+                            {/* Step Progress Indicator - FIXED: Dynamic based on required steps */}
                             <div className="mb-3 stage-progress">
                               <div className="flex items-center justify-center space-x-2 mb-2">
-                                {[0, 1, 2].map((step) => (
-                                  <div
-                                    key={step}
-                                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                                      step < currentStep
-                                        ? 'bg-green-500 text-white'
-                                        : step === currentStep
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-200 text-gray-500'
-                                    }`}
-                                  >
-                                    {step + 1}
-                                  </div>
-                                ))}
+                                {(() => {
+                                  const requiredSteps = getRequiredSteps(problem.type, problem.id, problem);
+                                  return Array.from({ length: requiredSteps }, (_, step) => (
+                                    <div
+                                      key={step}
+                                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                                        step < currentStep
+                                          ? 'bg-green-500 text-white'
+                                          : step === currentStep
+                                          ? 'bg-blue-500 text-white'
+                                          : 'bg-gray-200 text-gray-500'
+                                      }`}
+                                    >
+                                      {step + 1}
+                                    </div>
+                                  ))
+                                })()}
                               </div>
+                              <p className="text-center text-sm text-gray-600">
+                                {language === 'en' 
+                                  ? `Step ${currentStep + 1} of ${getRequiredSteps(problem.type, problem.id, problem)}`
+                                  : `الخطوة ${currentStep + 1} من ${getRequiredSteps(problem.type, problem.id, problem)}`}
+                              </p>
                             </div>
 
                             {/* Show completed steps above current step */}
