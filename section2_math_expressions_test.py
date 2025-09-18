@@ -202,48 +202,42 @@ class Section2MathExpressionTester:
         """Verify Example 2A (-3m > 15) shows complete operations with sign flip"""
         try:
             # Check if this is the correct example (-3m > 15)
-            problem = example_2a.get("problem", "")
-            if "-3m" not in problem and "15" not in problem:
+            problem_en = example_2a.get("problem_en", "")
+            if "-3m" not in problem_en and "15" not in problem_en:
                 self.log_test("Example 2A Problem Identification", False, 
-                            f"Expected problem with '-3m' and '15', got: {problem}")
+                            f"Expected problem with '-3m' and '15', got: {problem_en}")
                 return False
             
-            # Check step solutions for complete operations with sign flip
-            step_solutions = example_2a.get("step_solutions", [])
-            if not step_solutions or len(step_solutions) < 2:
-                self.log_test("Example 2A Step Solutions", False, 
-                            f"Expected at least 2 step solutions, got {len(step_solutions)}")
+            self.log_test("Example 2A Problem Identification", True, 
+                        f"✅ Found Example 2A: {problem_en}")
+            
+            # Check solution for complete operations with sign flip
+            solution_en = example_2a.get("solution_en", "")
+            if not solution_en:
+                self.log_test("Example 2A Solution Content", False, 
+                            "Missing solution_en field")
                 return False
             
-            # Step 1 should show: "-3m / (-3) < 15 / (-3)" (both sides with sign flip)
-            step1 = step_solutions[0] if len(step_solutions) > 0 else {}
-            step1_solution = step1.get("solution", "")
-            
-            # Check for complete operation on both sides with sign flip indication
-            has_complete_operation = (
-                ("-3m" in step1_solution and "15" in step1_solution and "/" in step1_solution) or
-                ("÷" in step1_solution and "-3" in step1_solution) or
-                ("<" in step1_solution and "(-3)" in step1_solution)
-            )
-            
-            if has_complete_operation:
-                self.log_test("Example 2A Step 1 Complete Operations with Sign Flip", True, 
-                            f"✅ Step 1 shows complete operations with sign flip: {step1_solution}")
+            # The solution should show the complete mathematical progression with sign flip
+            # Looking for patterns like "-3m > 15" → "m < 15 / (-3)" → "m < -5"
+            if ("15 / (-3)" in solution_en or "15/-3" in solution_en) and "Sign flipped" in solution_en:
+                self.log_test("Example 2A Complete Operations with Sign Flip", True, 
+                            f"✅ Solution shows complete operations with sign flip: {solution_en}")
+            elif "-3m" in solution_en and "15" in solution_en and "m <" in solution_en:
+                self.log_test("Example 2A Complete Operations with Sign Flip", True, 
+                            f"✅ Solution shows division with sign flip: {solution_en}")
             else:
-                self.log_test("Example 2A Step 1 Complete Operations with Sign Flip", False, 
-                            f"❌ Step 1 should show complete operations with sign flip, got: {step1_solution}")
+                self.log_test("Example 2A Complete Operations with Sign Flip", False, 
+                            f"❌ Solution should show complete operations with sign flip, got: {solution_en}")
                 return False
             
-            # Step 2 should show: "m < -5" (simplified)
-            step2 = step_solutions[1] if len(step_solutions) > 1 else {}
-            step2_solution = step2.get("solution", "")
-            
-            if "m" in step2_solution and ("-5" in step2_solution or "<" in step2_solution):
-                self.log_test("Example 2A Step 2 Simplified Result", True, 
-                            f"✅ Step 2 shows simplified result: {step2_solution}")
+            # Check that the final result shows sign flip
+            if "m < -5" in solution_en:
+                self.log_test("Example 2A Final Result with Sign Flip", True, 
+                            f"✅ Solution shows correct final result with sign flip")
             else:
-                self.log_test("Example 2A Step 2 Simplified Result", False, 
-                            f"❌ Step 2 should show simplified result, got: {step2_solution}")
+                self.log_test("Example 2A Final Result with Sign Flip", False, 
+                            f"❌ Solution should show 'm < -5', got: {solution_en}")
                 return False
             
             return True
