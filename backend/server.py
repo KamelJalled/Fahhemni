@@ -52,6 +52,8 @@ async def check_stage_access_security(username: str, problem_id: str) -> dict:
         problem_type = get_problem_type(problem_id)
         section_id = get_section_from_problem_id(problem_id)
         
+        print(f"DEBUG: Security check for user={username}, problem={problem_id}, type={problem_type}, section={section_id}")
+        
         # Get student's current progress
         progress_list = await get_student_progress(username)
         
@@ -64,27 +66,37 @@ async def check_stage_access_security(username: str, problem_id: str) -> dict:
                 "attempts": progress.attempts
             }
         
+        print(f"DEBUG: Student progress: {list(progress_dict.keys())}")
+        
         # SECURITY RULE 1: Lock Assessment and Exam Prep until ALL practice stages are completed
         if problem_type in ['assessment', 'examprep']:
-            # Find all practice problems for this section
-            practice_problems = [pid for pid in progress_dict.keys() if 'practice' in pid and section_id.replace('section', '') in pid]
+            section_num = section_id.replace('section', '')
             
-            # If no practice problems exist, allow access (for backward compatibility)
-            if practice_problems:
-                all_practice_complete = all(
-                    progress_dict.get(practice_id, {}).get("completed", False) 
-                    for practice_id in practice_problems
-                )
-                
-                if not all_practice_complete:
-                    incomplete_practice = [pid for pid in practice_problems 
-                                         if not progress_dict.get(pid, {}).get("completed", False)]
-                    return {
-                        "access": False,
-                        "error": "practice_incomplete",
-                        "message": f"You must complete all practice stages first. Incomplete: {', '.join(incomplete_practice)}",
-                        "status_code": 403
-                    }
+            # Define expected practice problems for each section
+            if section_num == '1':
+                expected_practice = ['practice1', 'practice2']
+            elif section_num == '2':
+                expected_practice = ['practice2_1', 'practice2_2']
+            else:
+                expected_practice = [f'practice{section_num}_1', f'practice{section_num}_2']
+            
+            print(f"DEBUG: Expected practice problems for section {section_num}: {expected_practice}")
+            
+            # Check if all expected practice problems are completed
+            incomplete_practice = []
+            for practice_id in expected_practice:
+                if not progress_dict.get(practice_id, {}).get("completed", False):
+                    incomplete_practice.append(practice_id)
+            
+            print(f"DEBUG: Incomplete practice problems: {incomplete_practice}")
+            
+            if incomplete_practice:
+                return {
+                    "access": False,
+                    "error": "practice_incomplete",
+                    "message": f"You must complete all practice stages first. Incomplete: {', '.join(incomplete_practice)}",
+                    "status_code": 403
+                }
         
         # SECURITY RULE 2: Lock Exam Prep until Assessment is completed
         if problem_type == 'examprep':
@@ -92,6 +104,8 @@ async def check_stage_access_security(username: str, problem_id: str) -> dict:
             assessment_id = f"assessment{section_num}"
             
             assessment_complete = progress_dict.get(assessment_id, {}).get("completed", False)
+            print(f"DEBUG: Assessment {assessment_id} completed: {assessment_complete}")
+            
             if not assessment_complete:
                 return {
                     "access": False,
@@ -101,6 +115,7 @@ async def check_stage_access_security(username: str, problem_id: str) -> dict:
                 }
         
         # Access granted
+        print(f"DEBUG: Access granted for {problem_id}")
         return {"access": True}
         
     except Exception as e:
