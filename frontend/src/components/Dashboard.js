@@ -503,36 +503,44 @@ const Dashboard = () => {
           {selectedSectionData.problems
             .filter(problem => problem && problem.id) // Ensure valid problems
             .map((problem) => {
+            // CRITICAL: Check access control for each problem
+            const accessControl = checkStageAccess(selectedSection, problem.id, userProgress);
             const status = getProblemStatus(problem.id, selectedSection, userProgress);
             const problemProgress = userProgress[selectedSection]?.[problem.id] || { completed: false, score: 0, attempts: 0 };
             
-            console.log(`Rendering problem ${problem.id} from section ${selectedSection}`);
+            // Override status if access is denied
+            const effectiveStatus = !accessControl.access ? 'locked' : status;
+            const isAccessDenied = !accessControl.access;
+            
+            console.log(`Rendering problem ${problem.id} from section ${selectedSection}, access: ${accessControl.access}`);
             
             return (
               <Card 
                 key={`${selectedSection}-${problem.id}-${problem.type || 'problem'}`} 
                 className={`cursor-pointer transition-all hover:shadow-lg ${
-                  status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
-                }`}
+                  effectiveStatus === 'locked' || isAccessDenied ? 'opacity-50 cursor-not-allowed bg-gray-100' : 'hover:scale-105'
+                } ${isAccessDenied ? 'border-2 border-red-200' : ''}`}
                 onClick={() => handleProblemClick(problem.id, selectedSection)}
               >
                 <CardContent className="p-6 problem-text">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
-                      {status === 'completed' && <CheckCircle className="w-5 h-5 text-green-500 mr-2" />}
-                      {status === 'in-progress' && <Play className="w-5 h-5 text-orange-500 mr-2" />}
-                      {status === 'locked' && <Lock className="w-5 h-5 text-gray-400 mr-2" />}
-                      {status === 'available' && <Play className="w-5 h-5 text-emerald-500 mr-2" />}
+                      {effectiveStatus === 'completed' && <CheckCircle className="w-5 h-5 text-green-500 mr-2" />}
+                      {effectiveStatus === 'in-progress' && <Play className="w-5 h-5 text-orange-500 mr-2" />}
+                      {(effectiveStatus === 'locked' || isAccessDenied) && <Lock className="w-5 h-5 text-red-500 mr-2" />}
+                      {effectiveStatus === 'available' && !isAccessDenied && <Play className="w-5 h-5 text-emerald-500 mr-2" />}
                       <Badge variant={
                         problem.type === 'preparation' ? 'secondary' :
                         problem.type === 'explanation' ? 'outline' :
                         problem.type === 'practice' ? 'default' :
-                        problem.type === 'assessment' ? 'destructive' : 'secondary'
+                        problem.type === 'assessment' ? (isAccessDenied ? 'destructive' : 'destructive') : 
+                        problem.type === 'examprep' ? (isAccessDenied ? 'destructive' : 'secondary') : 'secondary'
                       }>
                         {text[language][problem.type] || problem.type}
+                        {isAccessDenied && ' 🔒'}
                       </Badge>
                     </div>
-                    {problemProgress.score > 0 && (
+                    {problemProgress.score > 0 && !isAccessDenied && (
                       <span className="text-sm font-medium text-emerald-600">
                         {problemProgress.score}%
                       </span>
@@ -540,19 +548,28 @@ const Dashboard = () => {
                   </div>
                   
                   <div className="text-center mb-4">
-                    <div className="text-2xl font-mono bg-gray-50 p-3 rounded-lg border">
-                      {language === 'en' ? problem.question_en : problem.question_ar}
+                    <div className={`text-2xl font-mono p-3 rounded-lg border ${
+                      isAccessDenied ? 'bg-gray-200 text-gray-500' : 'bg-gray-50'
+                    }`}>
+                      {isAccessDenied ? '🔒 Locked' : (language === 'en' ? problem.question_en : problem.question_ar)}
                     </div>
                   </div>
                   
+                  {/* SECURITY: Show access denied reason */}
+                  {isAccessDenied && (
+                    <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700 text-center">
+                      {accessControl.message}
+                    </div>
+                  )}
+                  
                   <div className="flex justify-between items-center text-sm text-gray-500">
                     <span>
-                      {status === 'completed' ? text[language].completed :
-                       status === 'in-progress' ? text[language].continue :
-                       status === 'locked' ? text[language].locked :
+                      {effectiveStatus === 'completed' ? text[language].completed :
+                       effectiveStatus === 'in-progress' ? text[language].continue :
+                       effectiveStatus === 'locked' || isAccessDenied ? text[language].locked :
                        text[language].start}
                     </span>
-                    {problemProgress.attempts > 0 && (
+                    {problemProgress.attempts > 0 && !isAccessDenied && (
                       <span>{problemProgress.attempts} {text[language].attempts}</span>
                     )}
                   </div>
