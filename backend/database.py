@@ -670,12 +670,14 @@ async def init_database():
                 }
             ],
             "hints_en": [
-                "The total amount is the price per ticket times the number of tickets.",
-                "Use division to isolate 't'."
+                "Start by identifying what variable represents in this word problem.",
+                "Look for key phrases that indicate mathematical operations and relationships.",
+                "Think about what equation or inequality represents the constraint described."
             ],
             "hints_ar": [
-                "المبلغ الإجمالي هو سعر التذكرة مضروبًا في عددها.",
-                "استخدم القسمة لعزل 'ت'."
+                "ابدأ بتحديد ما يمثله المتغير في هذه المسألة الكلامية.",
+                "ابحث عن العبارات الأساسية التي تشير إلى العمليات والعلاقات الرياضية.",
+                "فكر في أي معادلة أو متباينة تمثل القيد الموصوف."
             ]
         },
         {
