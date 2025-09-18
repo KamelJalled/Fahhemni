@@ -989,7 +989,9 @@ const ProblemView = () => {
   const handleNextProblem = () => {
     // FIXED: Dynamic section-aware navigation for all sections
     const getSectionNumber = (id) => {
-      const match = id.match(/(\d+)$/);
+      // CRITICAL FIX: Match first digit after letters, not last digit in string
+      // This fixes practice2_1 returning 2 instead of 1
+      const match = id.match(/[a-zA-Z]+(\d+)/);
       return match ? parseInt(match[1]) : 1;
     };
     
