@@ -248,6 +248,11 @@ class StageAccessControlTester:
             print("Testing that assessment2 remains LOCKED after completing only practice2_1")
             print("Testing that ALL practice stages (practice2_1 AND practice2_2) are required")
             
+            # Create fresh test student for partial completion testing
+            partial_test_student = "security_partial_test_student"
+            if not self.create_fresh_test_student(partial_test_student, "GR9-C"):
+                return False
+            
             # Step 1: Complete practice2_1 only
             attempt_data = {
                 "problem_id": "practice2_1",
@@ -256,7 +261,7 @@ class StageAccessControlTester:
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                f"{self.base_url}/students/{partial_test_student}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
@@ -276,7 +281,7 @@ class StageAccessControlTester:
                         f"✅ practice2_1 completed successfully, score: {data.get('score')}")
             
             # Step 2: Verify assessment2 is STILL LOCKED after partial completion
-            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
+            response = self.session.get(f"{self.base_url}/problems/assessment2?username={partial_test_student}")
             
             if response.status_code == 403:
                 self.log_test("Assessment2 Still Locked After Partial", True, 
@@ -303,7 +308,7 @@ class StageAccessControlTester:
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                f"{self.base_url}/students/{partial_test_student}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
