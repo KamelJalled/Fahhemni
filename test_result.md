@@ -1102,8 +1102,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Section 2 Mathematical Expression Display Fix - COMPLETED"
-  stuck_tasks: []
+    - "Section 2 Mathematical Expression Display Fix - FAILED VERIFICATION"
+  stuck_tasks: 
+    - "Section 2 Content Update - New Curriculum Implementation"
   test_all: false
   test_priority: "high_first"
 
