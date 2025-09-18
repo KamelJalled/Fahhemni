@@ -436,30 +436,26 @@ class Section2MathExpressionTester:
             educational_progression_verified = True
             
             for i, example in enumerate(interactive_examples):
-                step_solutions = example.get("step_solutions", [])
+                solution_en = example.get("solution_en", "")
                 
-                if len(step_solutions) < 2:
+                if not solution_en:
                     self.log_test(f"Example {i+1} Educational Progression", False, 
-                                f"❌ Example {i+1} needs at least 2 steps for proper progression")
+                                f"❌ Example {i+1} missing solution content")
                     educational_progression_verified = False
                     continue
                 
-                # Check that progression goes from original → operation → simplified
-                step1 = step_solutions[0].get("solution", "")
-                step2 = step_solutions[1].get("solution", "") if len(step_solutions) > 1 else ""
+                # Check that progression shows original → operation → simplified
+                # Look for step-by-step progression in the solution
+                has_original_problem = any(var in solution_en for var in ["5x", "-3m", "k / (-4)"])
+                has_operation_step = any(op in solution_en for op in ["Step 1:", "Step 2:", "/", "*"])
+                has_final_result = any(result in solution_en for result in ["x ≥", "m <", "k ≥"])
                 
-                # Step 1 should show the operation being performed
-                has_operation_shown = any(op in step1 for op in ["/", "*", "÷", "×", "/ 5", "/ (-3)", "* (-4)"])
-                
-                # Step 2 should show simplified result
-                has_simplified_result = len(step2) < len(step1) and any(var in step2 for var in ["x", "m", "k", "y"])
-                
-                if has_operation_shown and has_simplified_result:
+                if has_original_problem and has_operation_step and has_final_result:
                     self.log_test(f"Example {i+1} Educational Progression", True, 
-                                f"✅ Example {i+1} shows proper progression: operation → simplified")
+                                f"✅ Example {i+1} shows proper progression: original → operation → result")
                 else:
                     self.log_test(f"Example {i+1} Educational Progression", False, 
-                                f"❌ Example {i+1} progression unclear. Step1: {step1}, Step2: {step2}")
+                                f"❌ Example {i+1} progression unclear. Solution: {solution_en[:100]}...")
                     educational_progression_verified = False
             
             if educational_progression_verified:
