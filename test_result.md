@@ -1257,10 +1257,12 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Critical Navigation Flow Bug - Section 2"
     - "Section 2 Content Update - New Curriculum Implementation"
-  stuck_tasks: []
+  stuck_tasks:
+    - "Critical Navigation Flow Bug - Section 2"
   test_all: false
-  test_priority: "section2_testing_complete"
+  test_priority: "critical_first"
 
 agent_communication:
   - agent: "main"
