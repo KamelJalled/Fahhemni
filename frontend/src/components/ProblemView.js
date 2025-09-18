@@ -1236,7 +1236,9 @@ const ProblemView = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0 problem-math-display">
-              {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
+              <div className="math-expression-container">
+                {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
+              </div>
                 
             {/* COMPREHENSIVE EXPLANATION STAGE CONTENT - FIXED: Section title positioning */}
             {problem.show_full_solution && problem.explanation_en && (
