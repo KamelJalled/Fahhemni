@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 2 Bug Fixes Testing
-Tests Section 2 critical bug fixes comprehensively as requested in review
+Backend API Test Suite for Math Tutoring App - CRITICAL SECURITY FIX TESTING
+Tests stage access control security to prevent cheating by skipping learning stages
 """
 
 import requests
@@ -13,12 +13,12 @@ from datetime import datetime
 # Use backend URL from frontend/.env as specified in review request
 BACKEND_URL = "https://bilingual-algebra.preview.emergentagent.com/api"
 
-class Section2BugFixTester:
+class StageAccessControlTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "section2_bug_test_student"
+        self.test_student_username = "security_test_student_section2"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -61,10 +61,10 @@ class Section2BugFixTester:
             self.log_test("Health Check", False, f"Connection error: {str(e)}")
             return False
 
-    def create_test_student(self):
-        """Create test student for Section 2 testing"""
+    def create_test_student_section2(self):
+        """Create test student specifically for Section 2 access control testing"""
         try:
-            test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
+            test_student = {"username": self.test_student_username, "class_name": "GR9-B"}
             
             response = self.session.post(
                 f"{self.base_url}/auth/student-login",
@@ -74,91 +74,154 @@ class Section2BugFixTester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("class_name") == "GR9-A":
-                    self.log_test("Test Student Creation", True, 
-                                f"✅ Created test student '{self.test_student_username}' in class GR9-A")
+                if data.get("class_name") == "GR9-B":
+                    self.log_test("Test Student Creation (Section 2)", True, 
+                                f"✅ Created test student '{self.test_student_username}' in class GR9-B for Section 2 testing")
                     return True
                 else:
-                    self.log_test("Test Student Creation", False, 
-                                f"Expected class GR9-A, got {data.get('class_name')}")
+                    self.log_test("Test Student Creation (Section 2)", False, 
+                                f"Expected class GR9-B, got {data.get('class_name')}")
                     return False
             else:
-                self.log_test("Test Student Creation", False, 
+                self.log_test("Test Student Creation (Section 2)", False, 
                             f"Failed to create test student: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
+            self.log_test("Test Student Creation (Section 2)", False, f"Request error: {str(e)}")
             return False
 
-    def test_section2_navigation_flow(self):
-        """Test navigation flow: prep2 → explanation2 → practice2_1 → examprep2 → prep3"""
+    def test_initial_stage_access_locked(self):
+        """Test that assessment2 and examprep2 are initially LOCKED when no practice stages are completed"""
         try:
-            print("\n🔍 NAVIGATION FLOW TESTING")
-            print("Testing that prep2 completion navigates to explanation2 (not explanation1)")
-            print("Testing that explanation2 completion navigates to practice2_1")
-            print("Testing that examprep2 completion navigates to prep3 (Section 3 first problem)")
-            print("Testing 'Back to Dashboard' shows correct section content")
+            print("\n🔒 INITIAL STAGE ACCESS CONTROL TESTING")
+            print("Testing that assessment2 and examprep2 are LOCKED initially")
+            print("Testing that direct API calls to locked stages are blocked")
             
-            # Create test student
-            if not self.create_test_student():
+            # Create fresh test student
+            if not self.create_test_student_section2():
                 return False
             
-            # Step 1: Test Section 2 problems exist and are in correct order
-            response = self.session.get(f"{self.base_url}/problems/section/section2")
+            # Test 1: Direct API call to assessment2 should be blocked
+            response = self.session.get(f"{self.base_url}/problems/assessment2")
             
-            if response.status_code != 200:
-                self.log_test("Section 2 Problems Retrieval", False, 
-                            f"HTTP {response.status_code}: {response.text}")
+            if response.status_code == 200:
+                # If we can access the problem data, check if there's access control in the response
+                data = response.json()
+                if "locked" in data and data["locked"] == True:
+                    self.log_test("Assessment2 Initial Lock Status", True, 
+                                "✅ assessment2 correctly marked as LOCKED in response")
+                else:
+                    self.log_test("Assessment2 Initial Lock Status", False, 
+                                "❌ SECURITY ISSUE: assessment2 accessible without completing prerequisites")
+                    return False
+            elif response.status_code == 403:
+                self.log_test("Assessment2 Initial Lock Status", True, 
+                            "✅ assessment2 correctly blocked with 403 Forbidden")
+            else:
+                self.log_test("Assessment2 Initial Lock Status", False, 
+                            f"❌ SECURITY ISSUE: assessment2 should be blocked but got HTTP {response.status_code}")
                 return False
             
-            problems = response.json()
+            # Test 2: Direct API call to examprep2 should be blocked
+            response = self.session.get(f"{self.base_url}/problems/examprep2")
             
-            if not isinstance(problems, list) or len(problems) < 6:
-                self.log_test("Section 2 Problems Retrieval", False, 
-                            f"Expected at least 6 problems, got {len(problems) if isinstance(problems, list) else 0}")
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == True:
+                    self.log_test("Examprep2 Initial Lock Status", True, 
+                                "✅ examprep2 correctly marked as LOCKED in response")
+                else:
+                    self.log_test("Examprep2 Initial Lock Status", False, 
+                                "❌ SECURITY ISSUE: examprep2 accessible without completing prerequisites")
+                    return False
+            elif response.status_code == 403:
+                self.log_test("Examprep2 Initial Lock Status", True, 
+                            "✅ examprep2 correctly blocked with 403 Forbidden")
+            else:
+                self.log_test("Examprep2 Initial Lock Status", False, 
+                            f"❌ SECURITY ISSUE: examprep2 should be blocked but got HTTP {response.status_code}")
                 return False
             
-            # Verify problem order and IDs
-            expected_order = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
-            actual_order = [p.get("id") for p in problems]
-            
-            if actual_order != expected_order:
-                self.log_test("Section 2 Problem Order", False, 
-                            f"Expected order {expected_order}, got {actual_order}")
-                return False
-            
-            self.log_test("Section 2 Problem Order", True, 
-                        f"✅ Problems in correct order: {actual_order}")
-            
-            # Step 2: Test prep2 problem details
-            prep2_problem = problems[0]  # First problem should be prep2
-            
-            if prep2_problem.get("id") != "prep2" or prep2_problem.get("type") != "preparation":
-                self.log_test("Prep2 Problem Verification", False, 
-                            f"Expected prep2/preparation, got {prep2_problem.get('id')}/{prep2_problem.get('type')}")
-                return False
-            
-            # Verify prep2 content matches new curriculum
-            expected_prep2 = {
-                "question_en": "4x < 20",
-                "answer": "x < 5"
+            # Test 3: Attempt to submit answer to locked assessment2 should be blocked
+            attempt_data = {
+                "problem_id": "assessment2",
+                "answer": "y < -12",
+                "hints_used": 0
             }
             
-            for key, expected_value in expected_prep2.items():
-                actual_value = prep2_problem.get(key)
-                if actual_value != expected_value:
-                    self.log_test("Prep2 Content Verification", False, 
-                                f"Expected {key}: '{expected_value}', got '{actual_value}'")
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 403:
+                self.log_test("Assessment2 Submission Block", True, 
+                            "✅ Direct submission to locked assessment2 correctly blocked with 403")
+            elif response.status_code == 400:
+                data = response.json()
+                if "locked" in data.get("detail", "").lower() or "access" in data.get("detail", "").lower():
+                    self.log_test("Assessment2 Submission Block", True, 
+                                "✅ Direct submission to locked assessment2 correctly blocked with access control message")
+                else:
+                    self.log_test("Assessment2 Submission Block", False, 
+                                f"❌ SECURITY ISSUE: assessment2 submission should be blocked but got: {data}")
                     return False
+            else:
+                self.log_test("Assessment2 Submission Block", False, 
+                            f"❌ CRITICAL SECURITY ISSUE: Direct submission to locked assessment2 allowed! HTTP {response.status_code}")
+                return False
             
-            self.log_test("Prep2 Content Verification", True, 
-                        f"✅ Prep2 content correct: '{prep2_problem.get('question_en')}' → '{prep2_problem.get('answer')}'")
-            
-            # Step 3: Test prep2 answer submission and completion
+            # Test 4: Attempt to submit answer to locked examprep2 should be blocked
             attempt_data = {
-                "problem_id": "prep2",
-                "answer": "x < 5",
+                "problem_id": "examprep2",
+                "answer": "p ≥ 4",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 403:
+                self.log_test("Examprep2 Submission Block", True, 
+                            "✅ Direct submission to locked examprep2 correctly blocked with 403")
+            elif response.status_code == 400:
+                data = response.json()
+                if "locked" in data.get("detail", "").lower() or "access" in data.get("detail", "").lower():
+                    self.log_test("Examprep2 Submission Block", True, 
+                                "✅ Direct submission to locked examprep2 correctly blocked with access control message")
+                else:
+                    self.log_test("Examprep2 Submission Block", False, 
+                                f"❌ SECURITY ISSUE: examprep2 submission should be blocked but got: {data}")
+                    return False
+            else:
+                self.log_test("Examprep2 Submission Block", False, 
+                            f"❌ CRITICAL SECURITY ISSUE: Direct submission to locked examprep2 allowed! HTTP {response.status_code}")
+                return False
+            
+            self.log_test("INITIAL STAGE ACCESS CONTROL", True, 
+                        "✅ All initial lock tests PASSED - assessment2 and examprep2 properly secured")
+            return True
+            
+        except Exception as e:
+            self.log_test("Initial Stage Access Control Testing", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_partial_practice_completion_security(self):
+        """Test that completing only practice2_1 keeps assessment2 LOCKED (needs ALL practice stages)"""
+        try:
+            print("\n🔒 PARTIAL PRACTICE COMPLETION SECURITY TESTING")
+            print("Testing that assessment2 remains LOCKED after completing only practice2_1")
+            print("Testing that ALL practice stages (practice2_1 AND practice2_2) are required")
+            
+            # Step 1: Complete practice2_1 only
+            attempt_data = {
+                "problem_id": "practice2_1",
+                "answer": "k < -12",
                 "hints_used": 0
             }
             
@@ -169,656 +232,76 @@ class Section2BugFixTester:
             )
             
             if response.status_code != 200:
-                self.log_test("Prep2 Answer Submission", False, 
-                            f"HTTP {response.status_code}: {response.text}")
+                self.log_test("Practice2_1 Completion", False, 
+                            f"Failed to complete practice2_1: HTTP {response.status_code}")
                 return False
             
             data = response.json()
-            
-            if not data.get("correct") or data.get("score", 0) <= 0:
-                self.log_test("Prep2 Answer Submission", False, 
-                            f"Expected correct=True and score>0, got correct={data.get('correct')}, score={data.get('score')}")
+            if not data.get("correct"):
+                self.log_test("Practice2_1 Completion", False, 
+                            f"practice2_1 answer should be correct: {data}")
                 return False
             
-            self.log_test("Prep2 Answer Submission", True, 
-                        f"✅ Prep2 completed successfully, score: {data.get('score')}")
+            self.log_test("Practice2_1 Completion", True, 
+                        f"✅ practice2_1 completed successfully, score: {data.get('score')}")
             
-            # Step 4: Verify progress tracking shows prep2 as completed
-            response = self.session.get(f"{self.base_url}/students/{self.test_student_username}/progress")
-            
-            if response.status_code == 200:
-                progress_data = response.json()
-                # Note: Backend currently only tracks section1, but we're testing the logic
-                self.log_test("Progress Tracking After Prep2", True, 
-                            "✅ Progress tracking endpoint accessible")
-            else:
-                self.log_test("Progress Tracking After Prep2", False, 
-                            f"HTTP {response.status_code}: {response.text}")
-                return False
-            
-            # Step 5: Test Section 3 prep3 exists (for navigation flow)
-            response = self.session.get(f"{self.base_url}/problems/section/section3")
+            # Step 2: Verify assessment2 is STILL LOCKED after partial completion
+            response = self.session.get(f"{self.base_url}/problems/assessment2")
             
             if response.status_code == 200:
-                section3_problems = response.json()
-                if isinstance(section3_problems, list) and len(section3_problems) > 0:
-                    first_section3_problem = section3_problems[0]
-                    if first_section3_problem.get("id") == "prep3":
-                        self.log_test("Section 3 Prep3 Verification", True, 
-                                    "✅ Section 3 prep3 exists for navigation flow")
-                    else:
-                        self.log_test("Section 3 Prep3 Verification", False, 
-                                    f"Expected first problem to be prep3, got {first_section3_problem.get('id')}")
-                        return False
+                data = response.json()
+                if "locked" in data and data["locked"] == True:
+                    self.log_test("Assessment2 Still Locked After Partial", True, 
+                                "✅ assessment2 correctly remains LOCKED after completing only practice2_1")
                 else:
-                    self.log_test("Section 3 Prep3 Verification", False, 
-                                "Section 3 has no problems")
+                    self.log_test("Assessment2 Still Locked After Partial", False, 
+                                "❌ SECURITY BREACH: assessment2 unlocked after partial practice completion")
                     return False
+            elif response.status_code == 403:
+                self.log_test("Assessment2 Still Locked After Partial", True, 
+                            "✅ assessment2 correctly remains blocked after partial practice completion")
             else:
-                self.log_test("Section 3 Prep3 Verification", False, 
-                            f"HTTP {response.status_code}: {response.text}")
+                self.log_test("Assessment2 Still Locked After Partial", False, 
+                            f"❌ SECURITY ISSUE: Unexpected response for locked assessment2: HTTP {response.status_code}")
                 return False
             
-            self.log_test("NAVIGATION FLOW TESTING", True, 
-                        "✅ All navigation flow tests PASSED - Problems exist in correct order for proper navigation")
-            
-            return True
-            
-        except Exception as e:
-            self.log_test("Navigation Flow Testing", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_section2_progress_tracking(self):
-        """Test progress tracking: prep2 status updates from 'start' to 'complete'"""
-        try:
-            print("\n🔍 PROGRESS TRACKING VERIFICATION")
-            print("Testing that prep2 status updates from 'start' to 'complete'")
-            print("Testing progress tracking works for all Section 2 problems")
-            print("Testing progress displays correctly on dashboard")
-            
-            # Create fresh test student for progress tracking
-            progress_test_student = "progress_tracking_student"
-            test_student = {"username": progress_test_student, "class_name": "GR9-B"}
-            
-            response = self.session.post(
-                f"{self.base_url}/auth/student-login",
-                json=test_student,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code != 200:
-                self.log_test("Progress Test Student Creation", False, 
-                            f"Failed to create progress test student: HTTP {response.status_code}")
-                return False
-            
-            self.log_test("Progress Test Student Creation", True, 
-                        f"✅ Created progress test student '{progress_test_student}'")
-            
-            # Step 1: Check initial progress state (should be empty/default)
-            response = self.session.get(f"{self.base_url}/students/{progress_test_student}/progress")
-            
-            if response.status_code != 200:
-                self.log_test("Initial Progress Check", False, 
-                            f"HTTP {response.status_code}: {response.text}")
-                return False
-            
-            initial_progress = response.json()
-            self.log_test("Initial Progress Check", True, 
-                        "✅ Initial progress retrieved successfully")
-            
-            # Step 2: Submit correct answer for prep2 to trigger completion
+            # Step 3: Attempt to submit to assessment2 should still be blocked
             attempt_data = {
-                "problem_id": "prep2",
-                "answer": "x < 5",
+                "problem_id": "assessment2",
+                "answer": "y < -12",
                 "hints_used": 0
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{progress_test_student}/attempt",
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
             
-            if response.status_code != 200:
-                self.log_test("Prep2 Progress Update Submission", False, 
-                            f"HTTP {response.status_code}: {response.text}")
-                return False
-            
-            submission_data = response.json()
-            
-            if not submission_data.get("correct"):
-                self.log_test("Prep2 Progress Update Submission", False, 
-                            f"Answer should be correct, got: {submission_data}")
-                return False
-            
-            self.log_test("Prep2 Progress Update Submission", True, 
-                        f"✅ Prep2 answer submitted correctly, score: {submission_data.get('score')}")
-            
-            # Step 3: Verify progress was updated after submission
-            response = self.session.get(f"{self.base_url}/students/{progress_test_student}/progress")
-            
-            if response.status_code != 200:
-                self.log_test("Updated Progress Check", False, 
-                            f"HTTP {response.status_code}: {response.text}")
-                return False
-            
-            updated_progress = response.json()
-            
-            # Check if progress structure contains expected fields
-            required_fields = ["progress", "total_points", "badges"]
-            missing_fields = [f for f in required_fields if f not in updated_progress]
-            
-            if missing_fields:
-                self.log_test("Progress Structure Verification", False, 
-                            f"Missing required fields: {missing_fields}")
-                return False
-            
-            self.log_test("Progress Structure Verification", True, 
-                        "✅ Progress response has correct structure")
-            
-            # Step 4: Test multiple Section 2 problems for comprehensive progress tracking
-            section2_problems = [
-                {"id": "practice2_1", "answer": "k < -12"},
-                {"id": "assessment2", "answer": "y < -12"}
-            ]
-            
-            all_progress_success = True
-            
-            for problem in section2_problems:
-                attempt_data = {
-                    "problem_id": problem["id"],
-                    "answer": problem["answer"],
-                    "hints_used": 0
-                }
-                
-                response = self.session.post(
-                    f"{self.base_url}/students/{progress_test_student}/attempt",
-                    json=attempt_data,
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    if data.get("correct"):
-                        self.log_test(f"Progress Tracking - {problem['id']}", True, 
-                                    f"✅ {problem['id']} completed successfully")
-                    else:
-                        self.log_test(f"Progress Tracking - {problem['id']}", False, 
-                                    f"Expected correct answer for {problem['id']}")
-                        all_progress_success = False
-                else:
-                    self.log_test(f"Progress Tracking - {problem['id']}", False, 
-                                f"HTTP {response.status_code}")
-                    all_progress_success = False
-            
-            if all_progress_success:
-                self.log_test("PROGRESS TRACKING VERIFICATION", True, 
-                            "✅ All progress tracking tests PASSED - Status updates working correctly")
+            if response.status_code in [403, 400]:
+                self.log_test("Assessment2 Submission Still Blocked", True, 
+                            "✅ assessment2 submission correctly blocked after partial practice completion")
             else:
-                self.log_test("PROGRESS TRACKING VERIFICATION", False, 
-                            "❌ Some progress tracking tests failed")
+                self.log_test("Assessment2 Submission Still Blocked", False, 
+                            f"❌ CRITICAL SECURITY BREACH: assessment2 submission allowed after partial completion! HTTP {response.status_code}")
+                return False
             
-            return all_progress_success
+            self.log_test("PARTIAL PRACTICE COMPLETION SECURITY", True, 
+                        "✅ All partial completion security tests PASSED - assessment2 remains locked")
+            return True
             
         except Exception as e:
-            self.log_test("Progress Tracking Verification", False, f"Test execution error: {str(e)}")
+            self.log_test("Partial Practice Completion Security Testing", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_section2_mathematical_validation(self):
-        """Test mathematical validation with sign flipping rules"""
+    def test_full_practice_completion_unlock(self):
+        """Test that completing both practice2_1 and practice2_2 unlocks assessment2"""
         try:
-            print("\n🔍 MATHEMATICAL VALIDATION TESTING")
-            print("Testing division by positive numbers (sign stays same): 4x < 20 → x < 5")
-            print("Testing division by negative numbers (sign flips): -6k ≤ 30 → k ≥ -5")
-            print("Testing multiplication by negative (sign flips): -2/3 k > 8 → k < -12")
-            print("Testing multiple answer formats accepted: x ≥ 6, 6 ≤ x, x >= 6")
-            
-            # Create test student for mathematical validation
-            math_test_student = "math_validation_student"
-            test_student = {"username": math_test_student, "class_name": "GR9-C"}
-            
-            response = self.session.post(
-                f"{self.base_url}/auth/student-login",
-                json=test_student,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code != 200:
-                self.log_test("Math Test Student Creation", False, 
-                            f"Failed to create math test student: HTTP {response.status_code}")
-                return False
-            
-            self.log_test("Math Test Student Creation", True, 
-                        f"✅ Created math test student '{math_test_student}'")
-            
-            # Test cases for mathematical validation
-            test_cases = [
-                {
-                    "problem_id": "prep2",
-                    "description": "Division by positive (4x < 20 → x < 5)",
-                    "correct_answers": ["x < 5", "x<5"],
-                    "incorrect_answers": ["x > 5", "x ≤ 5", "x ≥ 5"]
-                },
-                {
-                    "problem_id": "practice2_1", 
-                    "description": "Multiplication by negative (-2/3 k > 8 → k < -12)",
-                    "correct_answers": ["k < -12", "k<-12"],
-                    "incorrect_answers": ["k > -12", "k ≤ -12", "k ≥ -12"]
-                },
-                {
-                    "problem_id": "assessment2",
-                    "description": "Division by negative (y/(-2) > 6 → y < -12)",
-                    "correct_answers": ["y < -12", "y<-12"],
-                    "incorrect_answers": ["y > -12", "y ≤ -12", "y ≥ -12"]
-                }
-            ]
-            
-            all_math_success = True
-            
-            for test_case in test_cases:
-                print(f"\n   Testing: {test_case['description']}")
-                
-                # Test correct answers
-                for correct_answer in test_case["correct_answers"]:
-                    attempt_data = {
-                        "problem_id": test_case["problem_id"],
-                        "answer": correct_answer,
-                        "hints_used": 0
-                    }
-                    
-                    response = self.session.post(
-                        f"{self.base_url}/students/{math_test_student}/attempt",
-                        json=attempt_data,
-                        headers={"Content-Type": "application/json"}
-                    )
-                    
-                    if response.status_code == 200:
-                        data = response.json()
-                        if data.get("correct"):
-                            self.log_test(f"Math Validation - {test_case['problem_id']} Correct", True, 
-                                        f"✅ Answer '{correct_answer}' correctly accepted")
-                        else:
-                            self.log_test(f"Math Validation - {test_case['problem_id']} Correct", False, 
-                                        f"❌ Answer '{correct_answer}' should be correct but was rejected")
-                            all_math_success = False
-                    else:
-                        self.log_test(f"Math Validation - {test_case['problem_id']} Correct", False, 
-                                    f"HTTP {response.status_code}")
-                        all_math_success = False
-                
-                # Test incorrect answers (should be rejected)
-                for incorrect_answer in test_case["incorrect_answers"]:
-                    attempt_data = {
-                        "problem_id": test_case["problem_id"],
-                        "answer": incorrect_answer,
-                        "hints_used": 0
-                    }
-                    
-                    response = self.session.post(
-                        f"{self.base_url}/students/{math_test_student}/attempt",
-                        json=attempt_data,
-                        headers={"Content-Type": "application/json"}
-                    )
-                    
-                    if response.status_code == 200:
-                        data = response.json()
-                        if not data.get("correct"):
-                            self.log_test(f"Math Validation - {test_case['problem_id']} Incorrect", True, 
-                                        f"✅ Answer '{incorrect_answer}' correctly rejected")
-                        else:
-                            self.log_test(f"Math Validation - {test_case['problem_id']} Incorrect", False, 
-                                        f"❌ Answer '{incorrect_answer}' should be incorrect but was accepted")
-                            all_math_success = False
-                    else:
-                        self.log_test(f"Math Validation - {test_case['problem_id']} Incorrect", False, 
-                                    f"HTTP {response.status_code}")
-                        all_math_success = False
-            
-            # Test multiple answer formats for the same problem
-            print(f"\n   Testing Multiple Answer Formats")
-            
-            format_test_cases = [
-                {"answer": "x < 5", "description": "Standard format"},
-                {"answer": "x<5", "description": "No spaces"},
-                {"answer": "5 > x", "description": "Reversed format"}
-            ]
-            
-            for format_case in format_test_cases:
-                attempt_data = {
-                    "problem_id": "prep2",
-                    "answer": format_case["answer"],
-                    "hints_used": 0
-                }
-                
-                response = self.session.post(
-                    f"{self.base_url}/students/{math_test_student}/attempt",
-                    json=attempt_data,
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    if data.get("correct"):
-                        self.log_test(f"Format Acceptance - {format_case['description']}", True, 
-                                    f"✅ Format '{format_case['answer']}' accepted")
-                    else:
-                        self.log_test(f"Format Acceptance - {format_case['description']}", False, 
-                                    f"❌ Format '{format_case['answer']}' should be accepted")
-                        all_math_success = False
-                else:
-                    self.log_test(f"Format Acceptance - {format_case['description']}", False, 
-                                f"HTTP {response.status_code}")
-                    all_math_success = False
-            
-            if all_math_success:
-                self.log_test("MATHEMATICAL VALIDATION TESTING", True, 
-                            "✅ All mathematical validation tests PASSED - Sign flipping and format acceptance working correctly")
-            else:
-                self.log_test("MATHEMATICAL VALIDATION TESTING", False, 
-                            "❌ Some mathematical validation tests failed")
-            
-            return all_math_success
-            
-        except Exception as e:
-            self.log_test("Mathematical Validation Testing", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_section2_step_progression(self):
-        """Test step progression: 3 steps required before final answer acceptance"""
-        try:
-            print("\n🔍 STEP PROGRESSION TESTING")
-            print("Testing that all 3 steps are required before final answer acceptance")
-            print("Testing step-by-step validation with proper sign flipping")
-            print("Testing that premature final answers are rejected in intermediate steps")
-            
-            # Get explanation2 problem to test step progression
-            response = self.session.get(f"{self.base_url}/problems/explanation2")
-            
-            if response.status_code != 200:
-                self.log_test("Explanation2 Problem Retrieval", False, 
-                            f"HTTP {response.status_code}: {response.text}")
-                return False
-            
-            explanation2_problem = response.json()
-            
-            # Verify explanation2 has step solutions
-            if "step_solutions" not in explanation2_problem:
-                self.log_test("Step Solutions Verification", False, 
-                            "explanation2 problem missing step_solutions")
-                return False
-            
-            step_solutions = explanation2_problem["step_solutions"]
-            
-            if len(step_solutions) < 3:
-                self.log_test("Step Solutions Count", False, 
-                            f"Expected at least 3 step solutions, got {len(step_solutions)}")
-                return False
-            
-            self.log_test("Step Solutions Verification", True, 
-                        f"✅ explanation2 has {len(step_solutions)} step solutions")
-            
-            # Verify interactive examples exist for step-by-step learning
-            if "interactive_examples" not in explanation2_problem:
-                self.log_test("Interactive Examples Verification", False, 
-                            "explanation2 problem missing interactive_examples")
-                return False
-            
-            interactive_examples = explanation2_problem["interactive_examples"]
-            
-            if len(interactive_examples) < 3:
-                self.log_test("Interactive Examples Count", False, 
-                            f"Expected at least 3 interactive examples, got {len(interactive_examples)}")
-                return False
-            
-            # Verify each example has the required structure for step progression
-            all_examples_valid = True
-            
-            for i, example in enumerate(interactive_examples, 1):
-                required_fields = ["title_en", "problem_en", "solution_en", "practice_question_en", "practice_answer"]
-                missing_fields = [f for f in required_fields if f not in example]
-                
-                if missing_fields:
-                    self.log_test(f"Example {i} Structure", False, 
-                                f"Missing fields: {missing_fields}")
-                    all_examples_valid = False
-                else:
-                    self.log_test(f"Example {i} Structure", True, 
-                                f"✅ Example {i} has complete structure")
-            
-            if not all_examples_valid:
-                return False
-            
-            # Test specific step progression content
-            level_tests = [
-                {
-                    "level": 1,
-                    "title_contains": "Positive Coefficient",
-                    "problem": "5x ≥ 30",
-                    "expected_answer": "x ≥ 6"
-                },
-                {
-                    "level": 2, 
-                    "title_contains": "Negative Coefficient",
-                    "problem": "-3m > 15",
-                    "expected_answer": "m < -5"
-                },
-                {
-                    "level": 3,
-                    "title_contains": "Division by Negative",
-                    "problem": "k / (-4) ≤ 2", 
-                    "expected_answer": "k ≥ -8"
-                }
-            ]
-            
-            step_progression_success = True
-            
-            for level_test in level_tests:
-                level_num = level_test["level"]
-                if level_num <= len(interactive_examples):
-                    example = interactive_examples[level_num - 1]
-                    
-                    # Check title contains expected content
-                    title = example.get("title_en", "")
-                    if level_test["title_contains"].lower() not in title.lower():
-                        self.log_test(f"Level {level_num} Title Check", False, 
-                                    f"Expected title to contain '{level_test['title_contains']}', got '{title}'")
-                        step_progression_success = False
-                    else:
-                        self.log_test(f"Level {level_num} Title Check", True, 
-                                    f"✅ Level {level_num} title correct: '{title}'")
-                    
-                    # Check problem content
-                    problem = example.get("problem_en", "")
-                    if level_test["problem"] not in problem:
-                        self.log_test(f"Level {level_num} Problem Check", False, 
-                                    f"Expected problem to contain '{level_test['problem']}', got '{problem}'")
-                        step_progression_success = False
-                    else:
-                        self.log_test(f"Level {level_num} Problem Check", True, 
-                                    f"✅ Level {level_num} problem correct")
-                    
-                    # Check practice answer (demonstrates sign flipping)
-                    practice_answer = example.get("practice_answer", "")
-                    if level_test["expected_answer"] not in practice_answer:
-                        self.log_test(f"Level {level_num} Answer Check", False, 
-                                    f"Expected answer to contain '{level_test['expected_answer']}', got '{practice_answer}'")
-                        step_progression_success = False
-                    else:
-                        self.log_test(f"Level {level_num} Answer Check", True, 
-                                    f"✅ Level {level_num} answer demonstrates proper sign flipping: '{practice_answer}'")
-            
-            # Test step solutions for proper progression
-            step_solution_success = True
-            
-            for i, step_solution in enumerate(step_solutions, 1):
-                required_step_fields = ["step_en", "possible_answers"]
-                missing_step_fields = [f for f in required_step_fields if f not in step_solution]
-                
-                if missing_step_fields:
-                    self.log_test(f"Step {i} Solution Structure", False, 
-                                f"Missing fields: {missing_step_fields}")
-                    step_solution_success = False
-                else:
-                    self.log_test(f"Step {i} Solution Structure", True, 
-                                f"✅ Step {i} solution has complete structure")
-                    
-                    # Check if step involves sign flipping (for negative operations)
-                    step_text = step_solution.get("step_en", "").lower()
-                    possible_answers = step_solution.get("possible_answers", [])
-                    
-                    if "divide" in step_text and "-" in step_text:
-                        self.log_test(f"Step {i} Sign Flipping", True, 
-                                    f"✅ Step {i} involves division by negative (sign flipping required)")
-                    elif "multiply" in step_text and "-" in step_text:
-                        self.log_test(f"Step {i} Sign Flipping", True, 
-                                    f"✅ Step {i} involves multiplication by negative (sign flipping required)")
-            
-            if step_progression_success and step_solution_success:
-                self.log_test("STEP PROGRESSION TESTING", True, 
-                            "✅ All step progression tests PASSED - 3-level structure with proper sign flipping validation")
-            else:
-                self.log_test("STEP PROGRESSION TESTING", False, 
-                            "❌ Some step progression tests failed")
-            
-            return step_progression_success and step_solution_success
-            
-        except Exception as e:
-            self.log_test("Step Progression Testing", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_section2_practice_display(self):
-        """Test practice stage display: practice2_2 shows ticket sales word problem correctly"""
-        try:
-            print("\n🔍 PRACTICE STAGE DISPLAY TESTING")
-            print("Testing that practice2_2 shows the ticket sales word problem correctly")
-            print("Testing that real-life problems guide students to write inequalities")
-            
-            # Get practice2_2 problem
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code != 200:
-                self.log_test("Practice2_2 Problem Retrieval", False, 
-                            f"HTTP {response.status_code}: {response.text}")
-                return False
-            
-            practice2_2_problem = response.json()
-            
-            # Verify problem ID and type
-            if practice2_2_problem.get("id") != "practice2_2":
-                self.log_test("Practice2_2 ID Verification", False, 
-                            f"Expected id 'practice2_2', got '{practice2_2_problem.get('id')}'")
-                return False
-            
-            if practice2_2_problem.get("type") != "practice":
-                self.log_test("Practice2_2 Type Verification", False, 
-                            f"Expected type 'practice', got '{practice2_2_problem.get('type')}'")
-                return False
-            
-            self.log_test("Practice2_2 Basic Verification", True, 
-                        "✅ practice2_2 has correct ID and type")
-            
-            # Verify ticket sales word problem content
-            question_en = practice2_2_problem.get("question_en", "")
-            
-            # Check for key elements of ticket sales problem
-            ticket_keywords = ["ticket", "SAR 10", "at least SAR 500", "minimum number"]
-            missing_keywords = []
-            
-            for keyword in ticket_keywords:
-                if keyword.lower() not in question_en.lower():
-                    missing_keywords.append(keyword)
-            
-            if missing_keywords:
-                self.log_test("Ticket Sales Content Verification", False, 
-                            f"Missing keywords in question: {missing_keywords}")
-                self.log_test("Ticket Sales Content Verification", False, 
-                            f"Actual question: {question_en}")
-                return False
-            
-            self.log_test("Ticket Sales Content Verification", True, 
-                        f"✅ practice2_2 contains all required ticket sales elements")
-            
-            # Verify expected answer
-            expected_answer = practice2_2_problem.get("answer", "")
-            
-            if "t ≥ 50" not in expected_answer and "t >= 50" not in expected_answer:
-                self.log_test("Ticket Sales Answer Verification", False, 
-                            f"Expected answer to contain 't ≥ 50' or 't >= 50', got '{expected_answer}'")
-                return False
-            
-            self.log_test("Ticket Sales Answer Verification", True, 
-                        f"✅ practice2_2 has correct answer: '{expected_answer}'")
-            
-            # Verify step solutions guide students to write inequalities
-            if "step_solutions" not in practice2_2_problem:
-                self.log_test("Step Solutions Existence", False, 
-                            "practice2_2 missing step_solutions")
-                return False
-            
-            step_solutions = practice2_2_problem["step_solutions"]
-            
-            if len(step_solutions) < 2:
-                self.log_test("Step Solutions Count", False, 
-                            f"Expected at least 2 step solutions, got {len(step_solutions)}")
-                return False
-            
-            # Check first step guides to write inequality
-            first_step = step_solutions[0]
-            first_step_text = first_step.get("step_en", "").lower()
-            
-            if "inequality" not in first_step_text and "10t" not in first_step_text:
-                self.log_test("First Step Inequality Guidance", False, 
-                            f"First step should guide to write inequality, got: {first_step.get('step_en')}")
-                return False
-            
-            self.log_test("First Step Inequality Guidance", True, 
-                        "✅ First step guides students to write inequality")
-            
-            # Check possible answers include the inequality setup
-            first_step_answers = first_step.get("possible_answers", [])
-            
-            inequality_found = False
-            for answer in first_step_answers:
-                if "10t" in answer and "≥" in answer and "500" in answer:
-                    inequality_found = True
-                    break
-            
-            if not inequality_found:
-                self.log_test("Inequality Setup Verification", False, 
-                            f"Expected to find '10t ≥ 500' in possible answers: {first_step_answers}")
-                return False
-            
-            self.log_test("Inequality Setup Verification", True, 
-                        "✅ Step solutions include proper inequality setup")
-            
-            # Test Arabic version has same structure
-            question_ar = practice2_2_problem.get("question_ar", "")
-            answer_ar = practice2_2_problem.get("answer_ar", "")
-            
-            if not question_ar or not answer_ar:
-                self.log_test("Arabic Version Verification", False, 
-                            "Missing Arabic translations")
-                return False
-            
-            self.log_test("Arabic Version Verification", True, 
-                        "✅ practice2_2 has complete Arabic translations")
-            
-            # Test answer submission for practice2_2
-            practice_test_student = "practice_display_student"
-            test_student = {"username": practice_test_student, "class_name": "GR9-D"}
-            
-            response = self.session.post(
-                f"{self.base_url}/auth/student-login",
-                json=test_student,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code != 200:
-                self.log_test("Practice Test Student Creation", False, 
-                            f"Failed to create practice test student: HTTP {response.status_code}")
-                return False
-            
-            # Submit correct answer
+            print("\n🔓 FULL PRACTICE COMPLETION UNLOCK TESTING")
+            print("Testing that assessment2 becomes ACCESSIBLE after completing ALL practice stages")
+            print("Testing that examprep2 remains LOCKED until assessment2 is completed")
+            
+            # Step 1: Complete practice2_2 (practice2_1 already completed in previous test)
             attempt_data = {
                 "problem_id": "practice2_2",
                 "answer": "t ≥ 50",
@@ -826,7 +309,55 @@ class Section2BugFixTester:
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{practice_test_student}/attempt",
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Practice2_2 Completion", False, 
+                            f"Failed to complete practice2_2: HTTP {response.status_code}")
+                return False
+            
+            data = response.json()
+            if not data.get("correct"):
+                self.log_test("Practice2_2 Completion", False, 
+                            f"practice2_2 answer should be correct: {data}")
+                return False
+            
+            self.log_test("Practice2_2 Completion", True, 
+                        f"✅ practice2_2 completed successfully, score: {data.get('score')}")
+            
+            # Step 2: Verify assessment2 is now UNLOCKED
+            response = self.session.get(f"{self.base_url}/problems/assessment2")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == False:
+                    self.log_test("Assessment2 Unlocked After Full Practice", True, 
+                                "✅ assessment2 correctly UNLOCKED after completing all practice stages")
+                elif "locked" not in data:
+                    # If no locked field, assume it's accessible (old implementation)
+                    self.log_test("Assessment2 Unlocked After Full Practice", True, 
+                                "✅ assessment2 accessible after completing all practice stages")
+                else:
+                    self.log_test("Assessment2 Unlocked After Full Practice", False, 
+                                "❌ SECURITY ISSUE: assessment2 still locked after completing all practice stages")
+                    return False
+            else:
+                self.log_test("Assessment2 Unlocked After Full Practice", False, 
+                            f"❌ SECURITY ISSUE: assessment2 should be accessible but got HTTP {response.status_code}")
+                return False
+            
+            # Step 3: Verify assessment2 submission is now allowed
+            attempt_data = {
+                "problem_id": "assessment2",
+                "answer": "y < -12",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
@@ -834,89 +365,408 @@ class Section2BugFixTester:
             if response.status_code == 200:
                 data = response.json()
                 if data.get("correct"):
-                    self.log_test("Practice2_2 Answer Submission", True, 
-                                f"✅ Correct answer 't ≥ 50' accepted, score: {data.get('score')}")
+                    self.log_test("Assessment2 Submission Allowed", True, 
+                                f"✅ assessment2 submission correctly allowed and scored: {data.get('score')}")
                 else:
-                    self.log_test("Practice2_2 Answer Submission", False, 
-                                f"Answer 't ≥ 50' should be correct but was rejected")
-                    return False
+                    self.log_test("Assessment2 Submission Allowed", True, 
+                                "✅ assessment2 submission allowed (answer validation working)")
             else:
-                self.log_test("Practice2_2 Answer Submission", False, 
-                            f"HTTP {response.status_code}: {response.text}")
+                self.log_test("Assessment2 Submission Allowed", False, 
+                            f"❌ SECURITY ISSUE: assessment2 submission should be allowed but got HTTP {response.status_code}")
                 return False
             
-            self.log_test("PRACTICE STAGE DISPLAY TESTING", True, 
-                        "✅ All practice stage display tests PASSED - Ticket sales problem displays correctly with proper guidance")
+            # Step 4: Verify examprep2 is STILL LOCKED (needs assessment2 completion)
+            response = self.session.get(f"{self.base_url}/problems/examprep2")
             
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == True:
+                    self.log_test("Examprep2 Still Locked After Assessment Access", True, 
+                                "✅ examprep2 correctly remains LOCKED until assessment2 is completed")
+                else:
+                    self.log_test("Examprep2 Still Locked After Assessment Access", False, 
+                                "❌ SECURITY ISSUE: examprep2 should remain locked until assessment2 completion")
+                    return False
+            elif response.status_code == 403:
+                self.log_test("Examprep2 Still Locked After Assessment Access", True, 
+                            "✅ examprep2 correctly remains blocked until assessment2 completion")
+            else:
+                self.log_test("Examprep2 Still Locked After Assessment Access", False, 
+                            f"❌ SECURITY ISSUE: examprep2 access control unclear: HTTP {response.status_code}")
+                return False
+            
+            self.log_test("FULL PRACTICE COMPLETION UNLOCK", True, 
+                        "✅ All full practice completion tests PASSED - assessment2 unlocked, examprep2 still locked")
             return True
             
         except Exception as e:
-            self.log_test("Practice Stage Display Testing", False, f"Test execution error: {str(e)}")
+            self.log_test("Full Practice Completion Unlock Testing", False, f"Test execution error: {str(e)}")
             return False
 
-    def generate_section2_summary(self, results, critical_failures):
-        """Generate comprehensive summary of Section 2 bug fix testing"""
+    def test_assessment_completion_unlock_examprep(self):
+        """Test that completing assessment2 unlocks examprep2"""
+        try:
+            print("\n🔓 ASSESSMENT COMPLETION UNLOCK TESTING")
+            print("Testing that examprep2 becomes ACCESSIBLE after completing assessment2")
+            
+            # Note: assessment2 should already be completed from previous test
+            # Let's verify examprep2 is now unlocked
+            
+            # Step 1: Verify examprep2 is now UNLOCKED
+            response = self.session.get(f"{self.base_url}/problems/examprep2")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == False:
+                    self.log_test("Examprep2 Unlocked After Assessment", True, 
+                                "✅ examprep2 correctly UNLOCKED after completing assessment2")
+                elif "locked" not in data:
+                    # If no locked field, assume it's accessible
+                    self.log_test("Examprep2 Unlocked After Assessment", True, 
+                                "✅ examprep2 accessible after completing assessment2")
+                else:
+                    self.log_test("Examprep2 Unlocked After Assessment", False, 
+                                "❌ SECURITY ISSUE: examprep2 still locked after completing assessment2")
+                    return False
+            else:
+                self.log_test("Examprep2 Unlocked After Assessment", False, 
+                            f"❌ SECURITY ISSUE: examprep2 should be accessible but got HTTP {response.status_code}")
+                return False
+            
+            # Step 2: Verify examprep2 submission is now allowed
+            attempt_data = {
+                "problem_id": "examprep2",
+                "answer": "p ≥ 4",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("correct"):
+                    self.log_test("Examprep2 Submission Allowed", True, 
+                                f"✅ examprep2 submission correctly allowed and scored: {data.get('score')}")
+                else:
+                    self.log_test("Examprep2 Submission Allowed", True, 
+                                "✅ examprep2 submission allowed (answer validation working)")
+            else:
+                self.log_test("Examprep2 Submission Allowed", False, 
+                            f"❌ SECURITY ISSUE: examprep2 submission should be allowed but got HTTP {response.status_code}")
+                return False
+            
+            self.log_test("ASSESSMENT COMPLETION UNLOCK", True, 
+                        "✅ All assessment completion tests PASSED - examprep2 unlocked after assessment2")
+            return True
+            
+        except Exception as e:
+            self.log_test("Assessment Completion Unlock Testing", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_cross_section_access_control(self):
+        """Test that the same access control works for Section 1 and dynamically for any section"""
+        try:
+            print("\n🔒 CROSS-SECTION ACCESS CONTROL TESTING")
+            print("Testing that access control works for Section 1")
+            print("Testing that the logic works dynamically for any section")
+            
+            # Create a new test student for Section 1 testing
+            section1_student = "security_test_student_section1"
+            test_student = {"username": section1_student, "class_name": "GR9-C"}
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Section 1 Test Student Creation", False, 
+                            f"Failed to create Section 1 test student: HTTP {response.status_code}")
+                return False
+            
+            self.log_test("Section 1 Test Student Creation", True, 
+                        f"✅ Created Section 1 test student '{section1_student}'")
+            
+            # Test 1: Section 1 assessment1 should be locked initially
+            response = self.session.get(f"{self.base_url}/problems/assessment1")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == True:
+                    self.log_test("Section 1 Assessment1 Initial Lock", True, 
+                                "✅ Section 1 assessment1 correctly locked initially")
+                else:
+                    self.log_test("Section 1 Assessment1 Initial Lock", False, 
+                                "❌ SECURITY ISSUE: Section 1 assessment1 should be locked initially")
+                    return False
+            elif response.status_code == 403:
+                self.log_test("Section 1 Assessment1 Initial Lock", True, 
+                            "✅ Section 1 assessment1 correctly blocked initially")
+            else:
+                self.log_test("Section 1 Assessment1 Initial Lock", False, 
+                            f"❌ SECURITY ISSUE: Section 1 assessment1 access control unclear: HTTP {response.status_code}")
+                return False
+            
+            # Test 2: Section 1 examprep1 should be locked initially
+            response = self.session.get(f"{self.base_url}/problems/examprep1")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == True:
+                    self.log_test("Section 1 Examprep1 Initial Lock", True, 
+                                "✅ Section 1 examprep1 correctly locked initially")
+                else:
+                    self.log_test("Section 1 Examprep1 Initial Lock", False, 
+                                "❌ SECURITY ISSUE: Section 1 examprep1 should be locked initially")
+                    return False
+            elif response.status_code == 403:
+                self.log_test("Section 1 Examprep1 Initial Lock", True, 
+                            "✅ Section 1 examprep1 correctly blocked initially")
+            else:
+                self.log_test("Section 1 Examprep1 Initial Lock", False, 
+                            f"❌ SECURITY ISSUE: Section 1 examprep1 access control unclear: HTTP {response.status_code}")
+                return False
+            
+            # Test 3: Complete Section 1 practice stages to test unlock logic
+            section1_practice_problems = [
+                {"id": "practice1", "answer": "m > 37"},
+                {"id": "practice2", "answer": "m ≥ 290"}
+            ]
+            
+            for problem in section1_practice_problems:
+                attempt_data = {
+                    "problem_id": problem["id"],
+                    "answer": problem["answer"],
+                    "hints_used": 0
+                }
+                
+                response = self.session.post(
+                    f"{self.base_url}/students/{section1_student}/attempt",
+                    json=attempt_data,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get("correct"):
+                        self.log_test(f"Section 1 {problem['id']} Completion", True, 
+                                    f"✅ {problem['id']} completed successfully")
+                    else:
+                        self.log_test(f"Section 1 {problem['id']} Completion", False, 
+                                    f"Expected correct answer for {problem['id']}")
+                        return False
+                else:
+                    self.log_test(f"Section 1 {problem['id']} Completion", False, 
+                                f"HTTP {response.status_code}")
+                    return False
+            
+            # Test 4: Verify Section 1 assessment1 is now unlocked
+            response = self.session.get(f"{self.base_url}/problems/assessment1")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "locked" in data and data["locked"] == False:
+                    self.log_test("Section 1 Assessment1 Unlocked", True, 
+                                "✅ Section 1 assessment1 correctly unlocked after practice completion")
+                elif "locked" not in data:
+                    self.log_test("Section 1 Assessment1 Unlocked", True, 
+                                "✅ Section 1 assessment1 accessible after practice completion")
+                else:
+                    self.log_test("Section 1 Assessment1 Unlocked", False, 
+                                "❌ SECURITY ISSUE: Section 1 assessment1 should be unlocked")
+                    return False
+            else:
+                self.log_test("Section 1 Assessment1 Unlocked", False, 
+                            f"❌ SECURITY ISSUE: Section 1 assessment1 should be accessible: HTTP {response.status_code}")
+                return False
+            
+            self.log_test("CROSS-SECTION ACCESS CONTROL", True, 
+                        "✅ All cross-section tests PASSED - Access control works dynamically across sections")
+            return True
+            
+        except Exception as e:
+            self.log_test("Cross-Section Access Control Testing", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_security_validation_error_messages(self):
+        """Test that proper error messages are returned for security violations"""
+        try:
+            print("\n🔒 SECURITY VALIDATION ERROR MESSAGES TESTING")
+            print("Testing that proper error messages are returned for blocked access")
+            
+            # Create a fresh student for error message testing
+            error_test_student = "security_error_test_student"
+            test_student = {"username": error_test_student, "class_name": "GR9-D"}
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Error Test Student Creation", False, 
+                            f"Failed to create error test student: HTTP {response.status_code}")
+                return False
+            
+            # Test 1: Attempt to access locked assessment2 and check error message
+            attempt_data = {
+                "problem_id": "assessment2",
+                "answer": "y < -12",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{error_test_student}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code in [400, 403]:
+                try:
+                    data = response.json()
+                    error_message = data.get("detail", "").lower()
+                    
+                    # Check for security-related keywords in error message
+                    security_keywords = ["locked", "access", "prerequisite", "complete", "practice", "blocked"]
+                    has_security_message = any(keyword in error_message for keyword in security_keywords)
+                    
+                    if has_security_message:
+                        self.log_test("Security Error Message Quality", True, 
+                                    f"✅ Proper security error message: {data.get('detail')}")
+                    else:
+                        self.log_test("Security Error Message Quality", False, 
+                                    f"❌ Error message should indicate access control: {data.get('detail')}")
+                        return False
+                        
+                except json.JSONDecodeError:
+                    self.log_test("Security Error Message Quality", False, 
+                                "❌ Error response should be valid JSON")
+                    return False
+            else:
+                self.log_test("Security Error Message Quality", False, 
+                            f"❌ Should return 400/403 for locked stage access: HTTP {response.status_code}")
+                return False
+            
+            # Test 2: Attempt to access locked examprep2 and check error message
+            attempt_data = {
+                "problem_id": "examprep2",
+                "answer": "p ≥ 4",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{error_test_student}/attempt",
+                json=attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code in [400, 403]:
+                try:
+                    data = response.json()
+                    error_message = data.get("detail", "").lower()
+                    
+                    # Check for specific examprep access control message
+                    if "assessment" in error_message or "locked" in error_message:
+                        self.log_test("Examprep Security Error Message", True, 
+                                    f"✅ Proper examprep security error: {data.get('detail')}")
+                    else:
+                        self.log_test("Examprep Security Error Message", False, 
+                                    f"❌ Examprep error should mention assessment requirement: {data.get('detail')}")
+                        return False
+                        
+                except json.JSONDecodeError:
+                    self.log_test("Examprep Security Error Message", False, 
+                                "❌ Examprep error response should be valid JSON")
+                    return False
+            else:
+                self.log_test("Examprep Security Error Message", False, 
+                            f"❌ Should return 400/403 for locked examprep access: HTTP {response.status_code}")
+                return False
+            
+            self.log_test("SECURITY VALIDATION ERROR MESSAGES", True, 
+                        "✅ All error message tests PASSED - Proper security messages returned")
+            return True
+            
+        except Exception as e:
+            self.log_test("Security Validation Error Messages Testing", False, f"Test execution error: {str(e)}")
+            return False
+
+    def generate_security_summary(self, results, critical_failures):
+        """Generate comprehensive summary of stage access control security testing"""
         print("\n" + "=" * 80)
-        print("📊 SECTION 2 BUG FIXES TESTING SUMMARY")
+        print("🔒 STAGE ACCESS CONTROL SECURITY TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL RESULTS:")
-        print(f"   Total Test Categories: {total_tests}")
+        print(f"\n📈 OVERALL SECURITY TEST RESULTS:")
+        print(f"   Total Security Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
-        print(f"   Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+        print(f"   Security Success Rate: {(passed_tests/total_tests)*100:.1f}%")
         
-        print(f"\n🔍 DETAILED RESULTS:")
+        print(f"\n🔍 DETAILED SECURITY RESULTS:")
         for category, success in results.items():
-            status = "✅ PASS" if success else "❌ FAIL"
+            status = "✅ SECURE" if success else "❌ VULNERABLE"
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL FAILURES REQUIRING IMMEDIATE ATTENTION:")
+            print(f"\n🚨 CRITICAL SECURITY VULNERABILITIES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
+            print(f"\n⚠️  SECURITY RISK: Students can cheat by skipping learning stages!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Implement stage access control")
         else:
-            print(f"\n🎉 NO CRITICAL FAILURES DETECTED")
+            print(f"\n🎉 NO CRITICAL SECURITY VULNERABILITIES DETECTED")
         
-        print(f"\n📋 SECTION 2 BUG FIX STATUS:")
+        print(f"\n📋 STAGE ACCESS CONTROL STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL SECTION 2 BUG FIXES VERIFIED WORKING")
-            print("   ✅ Navigation flow working correctly")
-            print("   ✅ Progress tracking functional") 
-            print("   ✅ Mathematical validation with sign flipping working")
-            print("   ✅ Step progression implemented properly")
-            print("   ✅ Practice stage displays correctly")
+            print("   🎯 ALL SECURITY TESTS PASSED")
+            print("   ✅ assessment2 and examprep2 properly locked initially")
+            print("   ✅ Partial practice completion security working") 
+            print("   ✅ Full practice completion unlocks assessment2")
+            print("   ✅ Assessment completion unlocks examprep2")
+            print("   ✅ Cross-section access control functional")
+            print("   ✅ Proper security error messages")
+            print("   🛡️  ANTI-CHEATING PROTECTION: ACTIVE")
         else:
-            print("   ⚠️  SOME SECTION 2 BUG FIXES NEED ATTENTION")
-            print("   🔧 Review failed test categories above")
+            print("   ⚠️  SECURITY VULNERABILITIES DETECTED")
+            print("   🔧 Stage access control needs implementation/fixes")
+            print("   🚨 ANTI-CHEATING PROTECTION: COMPROMISED")
         
         print("\n" + "=" * 80)
 
-    def run_section2_bug_fix_tests(self):
-        """Run comprehensive Section 2 bug fix tests as requested"""
+    def run_stage_access_control_tests(self):
+        """Run comprehensive stage access control security tests"""
         print("=" * 80)
-        print("🧪 SECTION 2 CRITICAL BUG FIXES TESTING")
+        print("🔒 CRITICAL SECURITY FIX - STAGE ACCESS CONTROL TESTING")
         print("=" * 80)
+        print("Testing anti-cheating protection to prevent students from skipping learning stages")
         
-        # Test categories based on review request
+        # Test categories for stage access control security
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
-            ("Navigation Flow Testing", self.test_section2_navigation_flow, "critical"),
-            ("Progress Tracking Verification", self.test_section2_progress_tracking, "critical"),
-            ("Mathematical Validation Testing", self.test_section2_mathematical_validation, "critical"),
-            ("Step Progression Testing", self.test_section2_step_progression, "critical"),
-            ("Practice Stage Display Testing", self.test_section2_practice_display, "critical")
+            ("Initial Stage Access Locked", self.test_initial_stage_access_locked, "critical"),
+            ("Partial Practice Completion Security", self.test_partial_practice_completion_security, "critical"),
+            ("Full Practice Completion Unlock", self.test_full_practice_completion_unlock, "critical"),
+            ("Assessment Completion Unlock Examprep", self.test_assessment_completion_unlock_examprep, "critical"),
+            ("Cross-Section Access Control", self.test_cross_section_access_control, "critical"),
+            ("Security Validation Error Messages", self.test_security_validation_error_messages, "high")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 TESTING CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 SECURITY TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -931,20 +781,29 @@ class Section2BugFixTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive summary
-        self.generate_section2_summary(results, critical_failures)
+        # Generate comprehensive security summary
+        self.generate_security_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run Section 2 bug fix tests"""
-    print("🚀 Starting Section 2 Bug Fix Testing...")
+    """Main function to run stage access control security tests"""
+    print("🚀 Starting CRITICAL SECURITY FIX Testing - Stage Access Control...")
+    print("🎯 Goal: Prevent cheating by ensuring proper learning progression")
     
-    tester = Section2BugFixTester(BACKEND_URL)
-    results = tester.run_section2_bug_fix_tests()
+    tester = StageAccessControlTester(BACKEND_URL)
+    results = tester.run_stage_access_control_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
+    
+    if failed_tests > 0:
+        print(f"\n🚨 SECURITY ALERT: {failed_tests} security test(s) failed!")
+        print("🔧 Stage access control implementation required to prevent cheating")
+    else:
+        print(f"\n🛡️  SECURITY CONFIRMED: All stage access control tests passed!")
+        print("✅ Anti-cheating protection is working correctly")
+    
     sys.exit(failed_tests)
 
 if __name__ == "__main__":
