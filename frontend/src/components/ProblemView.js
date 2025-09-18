@@ -773,10 +773,18 @@ const ProblemView = () => {
   };
 
   const handleGoToExplanation = () => {
-    // Navigate back to explanation stage for review
-    console.log('🔄 Navigating back to explanation stage for review');
+    // FIXED: Navigate to explanation stage of CURRENT section, not always explanation1
+    const getSectionNumber = (id) => {
+      const match = id.match(/(\d+)$/);
+      return match ? parseInt(match[1]) : 1;
+    };
+    
+    const currentSectionNum = getSectionNumber(problemId);
+    const explanationId = `explanation${currentSectionNum}`;
+    
+    console.log(`🔄 Navigating to explanation stage for section ${currentSectionNum}: ${explanationId}`);
     resetProblemState();
-    navigate('/problem/explanation1');
+    navigate(`/problem/${explanationId}`);
   };
 
   const handleTryAgain = () => {
