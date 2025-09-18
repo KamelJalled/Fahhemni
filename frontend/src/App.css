@@ -47,7 +47,7 @@
     margin-top: 0 !important;  /* Remove gap between problem and input */
 }
 
-/* Problem View Layout Improvements */
+/* Problem View Layout Improvements - More Specific Targeting */
 .problem-view-header {
     margin-bottom: 15px !important; /* Reduced spacing after header */
 }
@@ -61,12 +61,17 @@
 }
 
 .problem-math-display {
-    margin-bottom: 10px !important; /* Close to answer input */
+    margin-bottom: 8px !important; /* Very close to answer input */
+    padding-bottom: 0 !important;
 }
 
 .answer-input-section {
     margin-top: 0 !important; /* No gap above answer input */
     padding-top: 0 !important;
+}
+
+.answer-input-section input {
+    margin-top: 0 !important; /* Direct targeting of input field */
 }
 
 /* Stage Progress Indicators - Compact spacing */
@@ -101,6 +106,34 @@
 .assessment-layout .answer-input-container,
 .examprep-layout .answer-input-container {
     margin-top: 0 !important;
+}
+
+/* Global Card Content Padding Reduction for Compact Layout */
+.problem-display .card-content,
+.problem-display CardContent {
+    padding-bottom: 8px !important;
+}
+
+/* Math Expression Container - Remove Extra Spacing */
+.math-expression-container {
+    margin: 0 !important;
+    padding: 8px 0 !important;
+}
+
+/* Direct targeting for common spacing issues */
+.w-full.problem-display {
+    margin-bottom: 8px !important;
+}
+
+.w-full.problem-display + div {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* CardContent within problem display */
+.problem-math-display > div {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 /* Mobile Optimization Styles */
