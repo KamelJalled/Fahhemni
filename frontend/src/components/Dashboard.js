@@ -153,7 +153,73 @@ const Dashboard = () => {
     }
   };
 
-  const getProblemStatus = (problemId, sectionId, progress) => {
+  // CRITICAL: Stage access control to prevent cheating
+  const checkStageAccess = (sectionId, problemId, userProgress) => {
+    if (!problemId || !sectionId || !userProgress || !userProgress[sectionId]) {
+      return { access: true }; // Allow if no progress data
+    }
+    
+    const sectionProgress = userProgress[sectionId];
+    const problemType = getProblemType(problemId);
+    
+    // SECURITY: Lock Assessment and Exam Prep stages until ALL practice stages are completed
+    if (problemType === 'assessment' || problemType === 'examprep') {
+      // Get all practice problems for this section
+      const practiceProblems = Object.keys(sectionProgress).filter(id => 
+        id.includes('practice')
+      );
+      
+      if (practiceProblems.length > 0) {
+        const allPracticeComplete = practiceProblems.every(practiceId => 
+          sectionProgress[practiceId]?.completed === true
+        );
+        
+        if (!allPracticeComplete) {
+          const incompletePractice = practiceProblems.filter(practiceId => 
+            !sectionProgress[practiceId]?.completed
+          );
+          
+          return {
+            access: false,
+            message: language === 'en' 
+              ? `You must complete all practice stages first. Incomplete: ${incompletePractice.join(', ')}`
+              : `يجب إكمال جميع مراحل التدريب أولاً. غير مكتمل: ${incompletePractice.join(', ')}`,
+            showLockedIcon: true,
+            lockedReason: 'practice_incomplete'
+          };
+        }
+      }
+    }
+    
+    // SECURITY: Lock Exam Prep until Assessment is completed
+    if (problemType === 'examprep') {
+      const assessmentId = `assessment${sectionId.slice(-1)}`;
+      const assessmentComplete = sectionProgress[assessmentId]?.completed === true;
+      
+      if (!assessmentComplete) {
+        return {
+          access: false,
+          message: language === 'en' 
+            ? 'You must complete the Assessment stage first'
+            : 'يجب إكمال مرحلة التقييم أولاً',
+          showLockedIcon: true,
+          lockedReason: 'assessment_incomplete'
+        };
+      }
+    }
+    
+    return { access: true };
+  };
+
+  // Helper function to determine problem type from ID
+  const getProblemType = (problemId) => {
+    if (problemId.includes('prep') && !problemId.includes('examprep')) return 'preparation';
+    if (problemId.includes('explanation')) return 'explanation';
+    if (problemId.includes('practice')) return 'practice';
+    if (problemId.includes('assessment')) return 'assessment';
+    if (problemId.includes('examprep')) return 'examprep';
+    return 'unknown';
+  };
     if (!progress || !progress[sectionId] || !progress[sectionId][problemId]) {
       return 'available';
     }
