@@ -842,14 +842,13 @@ const ProblemView = () => {
         setTimeout(() => setShowEncouragement(''), 8000);
         
       } else if (currentAttempts === 2) {
-        // Second wrong attempt - auto-show Hint 2
-        let errorMessage = language === 'en' ? 'Try again.' : 'حاول مرة أخرى.';
+        // Second wrong attempt - CRITICAL: Use error-specific guidance (never show direct answers)
+        let errorMessage = language === 'en' ? 'Still not quite right.' : 'ما زال ليس صحيحاً تماماً.';
         
-        if (problem.hints_en?.length > 1 || problem.hints_ar?.length > 1) {
-          const hint2 = language === 'en' ? problem.hints_en[1] : problem.hints_ar[1];
-          errorMessage += ` 💡 ${hint2}`;
-          setHintsUsed(2);
-        }
+        const errorSpecificHint = generateErrorSpecificHint(userAnswer, [problem.answer], problem.type);
+        const pedagogicalHint = language === 'en' ? errorSpecificHint.en : errorSpecificHint.ar;
+        errorMessage += ` 💡 ${pedagogicalHint}`;
+        setHintsUsed(2);
         
         setShowEncouragement(errorMessage);
         setTimeout(() => setShowEncouragement(''), 8000);
