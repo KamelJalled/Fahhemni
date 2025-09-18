@@ -120,38 +120,79 @@ const ProblemView = () => {
         }
       }
       
-      // Accept multiple formats for the same mathematical answer
+      // FIXED: Accept multiple formats for the same mathematical answer
       if (!isCorrect) {
-        // Generate alternative formats (x ≥ 6, 6 ≤ x, etc.)
-        const alternativeFormats = [];
+        // Generate alternative formats for all expected answers
+        const allAlternativeFormats = [];
         expectedAnswers.forEach(expected => {
           const normalized = normalizeAnswer(expected);
           
-          // Handle x ≥ 6 ↔ 6 ≤ x conversions
-          if (normalized.includes('x≥')) {
-            const number = normalized.replace('x≥', '');
-            alternativeFormats.push(`${number}≤x`);
-          } else if (normalized.includes('x≤')) {
-            const number = normalized.replace('x≤', '');
-            alternativeFormats.push(`${number}≥x`);
-          } else if (normalized.includes('x>')) {
-            const number = normalized.replace('x>', '');
-            alternativeFormats.push(`${number}<x`);
-          } else if (normalized.includes('x<')) {
-            const number = normalized.replace('x<', '');
-            alternativeFormats.push(`${number}>x`);
+          // Parse the inequality to get variable, operator, and value
+          const inequalityRegex = /([a-z]+)\s*([<>≤≥]+)\s*([-]?\d+\.?\d*)|(\d+\.?\d*)\s*([<>≤≥]+)\s*([a-z]+)/i;
+          const match = normalized.match(inequalityRegex);
+          
+          if (match) {
+            let variable, operator, value;
+            
+            if (match[1]) {
+              // Format: x < 5
+              variable = match[1];
+              operator = match[2];
+              value = match[3];
+            } else if (match[6]) {
+              // Format: 5 > x
+              value = match[4];
+              operator = match[5];
+              variable = match[6];
+            }
+            
+            if (variable && operator && value) {
+              // Create all equivalent formats
+              const alternatives = [];
+              
+              // Original format
+              alternatives.push(`${variable}${operator}${value}`);
+              
+              // Reversed format (x < 5 ↔ 5 > x)
+              const reverseOperatorMap = {
+                '<': '>',
+                '>': '<',
+                '≤': '≥',
+                '≥': '≤',
+                '<=': '>=',
+                '>=': '<='
+              };
+              
+              const reversedOp = reverseOperatorMap[operator];
+              if (reversedOp) {
+                alternatives.push(`${value}${reversedOp}${variable}`);
+              }
+              
+              // Handle text versions
+              alternatives.push(`${variable}>=${value}`);
+              alternatives.push(`${variable}<=${value}`);
+              alternatives.push(`${value}>=${variable}`);
+              alternatives.push(`${value}<=${variable}`);
+              
+              allAlternativeFormats.push(...alternatives);
+            }
           }
           
-          // Handle >= and <= text versions
-          if (normalized.includes('>=')) {
-            alternativeFormats.push(normalized.replace('>=', '≥'));
-          }
-          if (normalized.includes('<=')) {
-            alternativeFormats.push(normalized.replace('<=', '≤'));
-          }
+          // Also add common variations
+          allAlternativeFormats.push(normalized);
+          allAlternativeFormats.push(normalized.replace('>=', '≥'));
+          allAlternativeFormats.push(normalized.replace('<=', '≤'));
+          allAlternativeFormats.push(normalized.replace('≥', '>='));
+          allAlternativeFormats.push(normalized.replace('≤', '<='));
         });
         
-        isCorrect = alternativeFormats.some(alt => alt === normalizedUserAnswer);
+        // Remove duplicates and check for matches
+        const uniqueFormats = [...new Set(allAlternativeFormats)];
+        isCorrect = uniqueFormats.some(alt => alt === normalizedUserAnswer);
+        
+        if (isCorrect) {
+          console.log(`✅ Accepted alternative format: ${userAnswer} → ${normalizedUserAnswer}`);
+        }
       }
     }
     
