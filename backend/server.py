@@ -198,12 +198,27 @@ async def get_progress(username: str):
 
 @api_router.post("/students/{username}/attempt")
 async def submit_attempt(username: str, attempt: ProblemAttempt):
-    """Submit a problem attempt"""
+    """Submit a problem attempt with stage access control"""
     try:
+        # CRITICAL SECURITY: Check stage access before allowing attempt
+        access_check = await check_stage_access_security(username, attempt.problem_id)
+        if not access_check["access"]:
+            raise HTTPException(
+                status_code=access_check["status_code"], 
+                detail={
+                    "error": access_check["error"],
+                    "message": access_check["message"],
+                    "locked": True
+                }
+            )
+        
         # Get the problem to check answer
         problem = await get_problem(attempt.problem_id)
         if not problem:
             raise HTTPException(status_code=404, detail="Problem not found")
+        
+        # Get section from problem ID for dynamic section support
+        section_id = get_section_from_problem_id(attempt.problem_id)
         
         # Get current progress
         current_progress = await get_student_progress(username)
@@ -230,7 +245,7 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
         
         progress_data = {
             "student_username": username,
-            "section_id": "section1",
+            "section_id": section_id,  # Dynamic section support
             "problem_id": attempt.problem_id,
             "completed": is_now_completed,
             "score": score if is_correct else (current_problem_progress.score if current_problem_progress else 0),
