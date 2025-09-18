@@ -336,35 +336,46 @@ class StageAccessControlTester:
             print("Testing that assessment2 becomes ACCESSIBLE after completing ALL practice stages")
             print("Testing that examprep2 remains LOCKED until assessment2 is completed")
             
-            # Step 1: Complete practice2_2 (practice2_1 already completed in previous test)
-            attempt_data = {
-                "problem_id": "practice2_2",
-                "answer": "t ≥ 50",
-                "hints_used": 0
-            }
-            
-            response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
-                json=attempt_data,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code != 200:
-                self.log_test("Practice2_2 Completion", False, 
-                            f"Failed to complete practice2_2: HTTP {response.status_code}")
+            # Create fresh test student for full completion testing
+            full_test_student = "security_full_test_student"
+            if not self.create_fresh_test_student(full_test_student, "GR9-D"):
                 return False
             
-            data = response.json()
-            if not data.get("correct"):
-                self.log_test("Practice2_2 Completion", False, 
-                            f"practice2_2 answer should be correct: {data}")
-                return False
+            # Step 1: Complete both practice2_1 and practice2_2
+            practice_problems = [
+                {"id": "practice2_1", "answer": "k < -12"},
+                {"id": "practice2_2", "answer": "t ≥ 50"}
+            ]
             
-            self.log_test("Practice2_2 Completion", True, 
-                        f"✅ practice2_2 completed successfully, score: {data.get('score')}")
+            for problem in practice_problems:
+                attempt_data = {
+                    "problem_id": problem["id"],
+                    "answer": problem["answer"],
+                    "hints_used": 0
+                }
+                
+                response = self.session.post(
+                    f"{self.base_url}/students/{full_test_student}/attempt",
+                    json=attempt_data,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if response.status_code != 200:
+                    self.log_test(f"{problem['id']} Completion", False, 
+                                f"Failed to complete {problem['id']}: HTTP {response.status_code}")
+                    return False
+                
+                data = response.json()
+                if not data.get("correct"):
+                    self.log_test(f"{problem['id']} Completion", False, 
+                                f"{problem['id']} answer should be correct: {data}")
+                    return False
+                
+                self.log_test(f"{problem['id']} Completion", True, 
+                            f"✅ {problem['id']} completed successfully, score: {data.get('score')}")
             
             # Step 2: Verify assessment2 is now UNLOCKED
-            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
+            response = self.session.get(f"{self.base_url}/problems/assessment2?username={full_test_student}")
             
             if response.status_code == 200:
                 self.log_test("Assessment2 Unlocked After Full Practice", True, 
@@ -382,7 +393,7 @@ class StageAccessControlTester:
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                f"{self.base_url}/students/{full_test_student}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
@@ -401,7 +412,7 @@ class StageAccessControlTester:
                 return False
             
             # Step 4: Verify examprep2 is STILL LOCKED (needs assessment2 completion)
-            response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={full_test_student}")
             
             if response.status_code == 403:
                 self.log_test("Examprep2 Still Locked After Assessment Access", True, 
