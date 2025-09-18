@@ -370,7 +370,7 @@ class Section2MathExpressionTester:
             data = response.json()
             
             # Check for Arabic content fields
-            arabic_fields = ["question_ar", "title_ar", "hint1_ar", "hint2_ar"]
+            arabic_fields = ["question_ar", "explanation_ar"]
             arabic_content_found = False
             
             for field in arabic_fields:
@@ -390,19 +390,23 @@ class Section2MathExpressionTester:
             
             for i, example in enumerate(interactive_examples):
                 # Check if mathematical symbols are preserved in both languages
-                problem = example.get("problem", "")
-                step_solutions = example.get("step_solutions", [])
+                problem_en = example.get("problem_en", "")
+                problem_ar = example.get("problem_ar", "")
                 
                 # Mathematical symbols should be universal (≥, ≤, >, <, =, /, *, +, -)
                 math_symbols = ["≥", "≤", ">", "<", "=", "/", "*", "+", "-"]
-                has_math_symbols = any(symbol in problem for symbol in math_symbols)
+                has_math_symbols_en = any(symbol in problem_en for symbol in math_symbols)
+                has_math_symbols_ar = any(symbol in problem_ar for symbol in math_symbols)
                 
-                if has_math_symbols:
-                    self.log_test(f"Example {i+1} Mathematical Symbols", True, 
-                                f"✅ Example {i+1} contains mathematical symbols: {problem}")
+                if has_math_symbols_en and has_math_symbols_ar:
+                    self.log_test(f"Example {i+1} Bilingual Mathematical Symbols", True, 
+                                f"✅ Example {i+1} has mathematical symbols in both languages")
+                elif has_math_symbols_en:
+                    self.log_test(f"Example {i+1} English Mathematical Symbols", True, 
+                                f"✅ Example {i+1} has mathematical symbols in English: {problem_en}")
                 else:
                     self.log_test(f"Example {i+1} Mathematical Symbols", False, 
-                                f"❌ Example {i+1} missing mathematical symbols: {problem}")
+                                f"❌ Example {i+1} missing mathematical symbols")
             
             self.log_test("Bilingual Mathematical Expressions", True, 
                         "✅ Bilingual content maintains mathematical notation correctly")
