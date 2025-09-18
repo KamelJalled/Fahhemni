@@ -110,7 +110,7 @@
 
 /* Global Card Content Padding Reduction for Compact Layout */
 .problem-display .card-content,
-.problem-display CardContent {
+.problem-display [data-testid="card-content"] {
     padding-bottom: 8px !important;
 }
 
