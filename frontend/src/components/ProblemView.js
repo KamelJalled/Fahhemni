@@ -1238,12 +1238,12 @@ const ProblemView = () => {
             <CardContent className="pt-0 problem-math-display">
               {renderMathExpression(language === 'en' ? problem.question_en : problem.question_ar)}
                 
-            {/* COMPREHENSIVE EXPLANATION STAGE CONTENT - FULL WIDTH */}
+            {/* COMPREHENSIVE EXPLANATION STAGE CONTENT - FIXED: Section title positioning */}
             {problem.show_full_solution && problem.explanation_en && (
-              <Card className="mb-6 w-full">
+              <Card className="mb-4 w-full">
                 <CardContent className="p-8">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border-l-4 border-blue-500 mb-6">
-                    <h3 className="font-bold text-2xl mb-6 text-blue-800 flex items-center justify-center">
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border-l-4 border-blue-500 mb-4 section-title-container">
+                    <h3 className="font-bold text-2xl mb-4 text-blue-800 flex items-center justify-center explanation-section-title">
                       <BookOpen className="w-8 h-8 mr-3" />
                       {language === 'en' ? 'Complete Guide to Solving Inequalities' : 'دليل شامل لحل المتباينات'}
                     </h3>
