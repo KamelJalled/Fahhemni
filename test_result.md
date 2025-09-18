@@ -1073,6 +1073,18 @@ frontend:
         agent: "testing"
         comment: "✅ MOBILE RESPONSIVENESS VERIFIED: Tested on 375x844px viewport (iPhone size). Section tabs container found and functional in mobile view. Touch targets meet accessibility requirements - all tested buttons exceed 44x44px minimum size. Horizontal scrolling for section tabs working correctly. Mobile layout adapts properly to smaller screens."
 
+  - task: "Critical Navigation Flow Bug - Section 2"
+    implemented: true
+    working: false
+    file: "frontend/src/components/ProblemView.js, frontend/src/App.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL NAVIGATION FLOW BUG CONFIRMED: Frontend routing is broken - problem URLs redirect to backend instead of rendering React components. Navigation logic in ProblemView.js appears correct: sectionSequences array properly defines Section 2 as ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'], so practice2_1 should navigate to practice2_2. Backend API serving Section 2 data correctly. Issue is frontend routing preventing proper navigation testing. Root cause: React Router configuration or build issues preventing proper URL handling."
+
   - task: "Tabbed Explanation Interface Issues"
     implemented: true
     working: false
