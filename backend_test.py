@@ -245,23 +245,23 @@ class StageAccessControlTester:
                         f"✅ practice2_1 completed successfully, score: {data.get('score')}")
             
             # Step 2: Verify assessment2 is STILL LOCKED after partial completion
-            response = self.session.get(f"{self.base_url}/problems/assessment2")
+            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
             
-            if response.status_code == 200:
+            if response.status_code == 403:
+                self.log_test("Assessment2 Still Locked After Partial", True, 
+                            "✅ assessment2 correctly remains blocked after partial practice completion")
+            elif response.status_code == 400:
                 data = response.json()
-                if "locked" in data and data["locked"] == True:
+                if "locked" in data.get("detail", {}).get("message", "").lower():
                     self.log_test("Assessment2 Still Locked After Partial", True, 
                                 "✅ assessment2 correctly remains LOCKED after completing only practice2_1")
                 else:
                     self.log_test("Assessment2 Still Locked After Partial", False, 
-                                "❌ SECURITY BREACH: assessment2 unlocked after partial practice completion")
+                                f"❌ SECURITY BREACH: assessment2 should be locked but got: {data}")
                     return False
-            elif response.status_code == 403:
-                self.log_test("Assessment2 Still Locked After Partial", True, 
-                            "✅ assessment2 correctly remains blocked after partial practice completion")
             else:
                 self.log_test("Assessment2 Still Locked After Partial", False, 
-                            f"❌ SECURITY ISSUE: Unexpected response for locked assessment2: HTTP {response.status_code}")
+                            f"❌ SECURITY ISSUE: assessment2 should be blocked after partial completion: HTTP {response.status_code}")
                 return False
             
             # Step 3: Attempt to submit to assessment2 should still be blocked
