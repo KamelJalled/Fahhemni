@@ -103,41 +103,40 @@ class StageAccessControlTester:
                 return False
             
             # Test 1: Direct API call to assessment2 should be blocked
-            response = self.session.get(f"{self.base_url}/problems/assessment2")
+            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
             
-            if response.status_code == 200:
-                # If we can access the problem data, check if there's access control in the response
-                data = response.json()
-                if "locked" in data and data["locked"] == True:
-                    self.log_test("Assessment2 Initial Lock Status", True, 
-                                "✅ assessment2 correctly marked as LOCKED in response")
-                else:
-                    self.log_test("Assessment2 Initial Lock Status", False, 
-                                "❌ SECURITY ISSUE: assessment2 accessible without completing prerequisites")
-                    return False
-            elif response.status_code == 403:
+            if response.status_code == 403:
                 self.log_test("Assessment2 Initial Lock Status", True, 
                             "✅ assessment2 correctly blocked with 403 Forbidden")
+            elif response.status_code == 400:
+                data = response.json()
+                if "locked" in data.get("detail", {}).get("message", "").lower():
+                    self.log_test("Assessment2 Initial Lock Status", True, 
+                                "✅ assessment2 correctly blocked with access control message")
+                else:
+                    self.log_test("Assessment2 Initial Lock Status", False, 
+                                f"❌ SECURITY ISSUE: assessment2 should be blocked but got: {data}")
+                    return False
             else:
                 self.log_test("Assessment2 Initial Lock Status", False, 
                             f"❌ SECURITY ISSUE: assessment2 should be blocked but got HTTP {response.status_code}")
                 return False
             
             # Test 2: Direct API call to examprep2 should be blocked
-            response = self.session.get(f"{self.base_url}/problems/examprep2")
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
-            if response.status_code == 200:
-                data = response.json()
-                if "locked" in data and data["locked"] == True:
-                    self.log_test("Examprep2 Initial Lock Status", True, 
-                                "✅ examprep2 correctly marked as LOCKED in response")
-                else:
-                    self.log_test("Examprep2 Initial Lock Status", False, 
-                                "❌ SECURITY ISSUE: examprep2 accessible without completing prerequisites")
-                    return False
-            elif response.status_code == 403:
+            if response.status_code == 403:
                 self.log_test("Examprep2 Initial Lock Status", True, 
                             "✅ examprep2 correctly blocked with 403 Forbidden")
+            elif response.status_code == 400:
+                data = response.json()
+                if "locked" in data.get("detail", {}).get("message", "").lower():
+                    self.log_test("Examprep2 Initial Lock Status", True, 
+                                "✅ examprep2 correctly blocked with access control message")
+                else:
+                    self.log_test("Examprep2 Initial Lock Status", False, 
+                                f"❌ SECURITY ISSUE: examprep2 should be blocked but got: {data}")
+                    return False
             else:
                 self.log_test("Examprep2 Initial Lock Status", False, 
                             f"❌ SECURITY ISSUE: examprep2 should be blocked but got HTTP {response.status_code}")
