@@ -1099,15 +1099,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Section 2 Bug Fixes Testing"
-    - "Mathematical Validation Enhancement"
-    - "Step Progression Content Verification"
-    - "Answer Format Normalization"
-    - "Interactive Example Content Alignment"
+    - "UI Layout Improvements Testing"
+    - "Section Title Positioning Verification"
+    - "Problem-to-Answer Spacing Optimization"
+    - "Mobile Responsiveness Validation"
+    - "Assessment Stage Layout Testing"
   stuck_tasks:
     - "Section 2 Content Update - New Curriculum Implementation"
   test_all: false
-  test_priority: "section2_bug_fixes_critical"
+  test_priority: "ui_layout_improvements"
 
   - task: "CRITICAL SECURITY FIX - Stage Access Control Implementation"
     implemented: true
