@@ -317,6 +317,18 @@ async def get_section_problems_endpoint(section_id: str):
 async def get_problem_endpoint(problem_id: str, username: str = None):
     """Get specific problem details with stage access control"""
     try:
+        # CRITICAL SECURITY: Require username for protected stages (assessment, examprep)
+        problem_type = get_problem_type(problem_id)
+        if problem_type in ['assessment', 'examprep'] and not username:
+            raise HTTPException(
+                status_code=403, 
+                detail={
+                    "error": "authentication_required",
+                    "message": "Username required to access assessment and exam prep stages",
+                    "locked": True
+                }
+            )
+        
         # CRITICAL SECURITY: Check stage access if username is provided
         if username:
             access_check = await check_stage_access_security(username, problem_id)
