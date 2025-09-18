@@ -1825,8 +1825,8 @@ const ProblemView = () => {
                         
                       case 'assessment':
                         return (
-                          // 4. ASSESSMENT STAGE: Final answer with score penalties
-                          <div>
+                          // 4. ASSESSMENT STAGE: Final answer with score penalties - FIXED: Layout classes
+                          <div className="assessment-layout">
                             <h4 className="font-semibold mb-4 text-purple-800 flex items-center">
                               <Trophy className="w-5 h-5 mr-2" />
                               {language === 'en' ? 'Assessment - Final Answer:' : 'التقييم - الإجابة النهائية:'}
