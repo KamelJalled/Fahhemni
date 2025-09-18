@@ -472,40 +472,40 @@ class StageAccessControlTester:
                         f"✅ Created Section 1 test student '{section1_student}'")
             
             # Test 1: Section 1 assessment1 should be locked initially
-            response = self.session.get(f"{self.base_url}/problems/assessment1")
+            response = self.session.get(f"{self.base_url}/problems/assessment1?username={section1_student}")
             
-            if response.status_code == 200:
+            if response.status_code == 403:
+                self.log_test("Section 1 Assessment1 Initial Lock", True, 
+                            "✅ Section 1 assessment1 correctly blocked initially")
+            elif response.status_code == 400:
                 data = response.json()
-                if "locked" in data and data["locked"] == True:
+                if "locked" in data.get("detail", {}).get("message", "").lower():
                     self.log_test("Section 1 Assessment1 Initial Lock", True, 
                                 "✅ Section 1 assessment1 correctly locked initially")
                 else:
                     self.log_test("Section 1 Assessment1 Initial Lock", False, 
-                                "❌ SECURITY ISSUE: Section 1 assessment1 should be locked initially")
+                                f"❌ SECURITY ISSUE: Section 1 assessment1 should be locked initially: {data}")
                     return False
-            elif response.status_code == 403:
-                self.log_test("Section 1 Assessment1 Initial Lock", True, 
-                            "✅ Section 1 assessment1 correctly blocked initially")
             else:
                 self.log_test("Section 1 Assessment1 Initial Lock", False, 
                             f"❌ SECURITY ISSUE: Section 1 assessment1 access control unclear: HTTP {response.status_code}")
                 return False
             
             # Test 2: Section 1 examprep1 should be locked initially
-            response = self.session.get(f"{self.base_url}/problems/examprep1")
+            response = self.session.get(f"{self.base_url}/problems/examprep1?username={section1_student}")
             
-            if response.status_code == 200:
+            if response.status_code == 403:
+                self.log_test("Section 1 Examprep1 Initial Lock", True, 
+                            "✅ Section 1 examprep1 correctly blocked initially")
+            elif response.status_code == 400:
                 data = response.json()
-                if "locked" in data and data["locked"] == True:
+                if "locked" in data.get("detail", {}).get("message", "").lower():
                     self.log_test("Section 1 Examprep1 Initial Lock", True, 
                                 "✅ Section 1 examprep1 correctly locked initially")
                 else:
                     self.log_test("Section 1 Examprep1 Initial Lock", False, 
-                                "❌ SECURITY ISSUE: Section 1 examprep1 should be locked initially")
+                                f"❌ SECURITY ISSUE: Section 1 examprep1 should be locked initially: {data}")
                     return False
-            elif response.status_code == 403:
-                self.log_test("Section 1 Examprep1 Initial Lock", True, 
-                            "✅ Section 1 examprep1 correctly blocked initially")
             else:
                 self.log_test("Section 1 Examprep1 Initial Lock", False, 
                             f"❌ SECURITY ISSUE: Section 1 examprep1 access control unclear: HTTP {response.status_code}")
