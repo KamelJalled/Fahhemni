@@ -75,6 +75,102 @@ const ProblemView = () => {
     return normalized;
   };
 
+  // CRITICAL: Pedagogical hint system - NEVER show direct answers
+  const generateGuidanceHint = (problem, attemptNumber) => {
+    const isWordProblem = problem.question_en?.length > 50 || 
+                         problem.question_ar?.length > 50 ||
+                         problem.question_en?.toLowerCase().includes('word') ||
+                         problem.question_en?.includes('tickets') ||
+                         problem.question_en?.includes('candy') ||
+                         problem.question_ar?.includes('ريال');
+    
+    // Attempt 1: General guidance (process-focused)
+    if (attemptNumber === 1) {
+      if (isWordProblem) {
+        return {
+          en: "Start by identifying the variable. What are we trying to find? Look for key phrases that indicate mathematical operations.",
+          ar: "ابدأ بتحديد المتغير. ما الذي نحاول إيجاده؟ ابحث عن العبارات المفتاحية التي تشير إلى العمليات الرياضية."
+        };
+      } else {
+        return {
+          en: "Remember: we want to isolate the variable on one side. What operation would help you do that?",
+          ar: "تذكر: نريد عزل المتغير في جانب واحد. ما العملية التي ستساعدك في ذلك؟"
+        };
+      }
+    }
+    
+    // Attempt 2: More specific guidance (method-focused)
+    if (attemptNumber === 2) {
+      if (isWordProblem) {
+        return {
+          en: "Think about the relationship described. What mathematical symbol represents 'at least', 'more than', or 'less than'?",
+          ar: "فكر في العلاقة الموصوفة. ما الرمز الرياضي الذي يمثل 'على الأقل' أو 'أكثر من' أو 'أقل من'؟"
+        };
+      } else {
+        return {
+          en: "Look at the coefficient of the variable. Is it positive or negative? This affects what operation you need.",
+          ar: "انظر إلى معامل المتغير. هل هو موجب أم سالب؟ هذا يؤثر على العملية التي تحتاجها."
+        };
+      }
+    }
+    
+    // Attempt 3: Process hint (still no direct answer)
+    if (attemptNumber >= 3) {
+      if (isWordProblem) {
+        return {
+          en: "Break it down: identify the variable, write the mathematical relationship, then solve step by step.",
+          ar: "قسّم المسألة: حدد المتغير، اكتب العلاقة الرياضية، ثم حل خطوة بخطوة."
+        };
+      } else {
+        return {
+          en: "Focus on the process: what operation undoes the current one? Remember the rules for inequalities.",
+          ar: "ركز على العملية: ما العملية التي تلغي العملية الحالية؟ تذكر قواعد المتباينات."
+        };
+      }
+    }
+    
+    // Default fallback
+    return {
+      en: "Think about the mathematical concept step by step. What is the next logical operation?",
+      ar: "فكر في المفهوم الرياضي خطوة بخطوة. ما العملية المنطقية التالية؟"
+    };
+  };
+
+  // ENHANCED: Error-specific guidance (never shows direct answers)
+  const generateErrorSpecificHint = (userAnswer, expectedAnswers, problemType) => {
+    // Analyze the error type without revealing the correct answer
+    const userNormalized = normalizeAnswer(userAnswer);
+    
+    // Check for common error patterns
+    if (userNormalized.includes('>') && expectedAnswers?.some(ans => normalizeAnswer(ans).includes('<'))) {
+      return {
+        en: "Check the direction of your inequality sign. When you multiply or divide by a negative number, what happens?",
+        ar: "تحقق من اتجاه إشارة المتباينة. عندما تضرب أو تقسم على عدد سالب، ماذا يحدث؟"
+      };
+    }
+    
+    if (userNormalized.includes('<') && expectedAnswers?.some(ans => normalizeAnswer(ans).includes('>'))) {
+      return {
+        en: "Look at your inequality sign again. Did you remember to flip it when needed?",
+        ar: "انظر إلى إشارة المتباينة مرة أخرى. هل تذكرت قلبها عند الحاجة؟"
+      };
+    }
+    
+    // Check for calculation errors (without showing correct calculation)
+    if (userAnswer && !userAnswer.includes('x') && !userAnswer.includes('س')) {
+      return {
+        en: "Your answer should include the variable. Are you solving for the variable or just calculating numbers?",
+        ar: "يجب أن تتضمن إجابتك المتغير. هل تحل للمتغير أم تحسب الأرقام فقط؟"
+      };
+    }
+    
+    // Default error guidance
+    return {
+      en: "Review your calculation step by step. What operation did you perform, and did you apply it correctly?",
+      ar: "راجع حسابك خطوة بخطوة. ما العملية التي نفذتها، وهل طبقتها بشكل صحيح؟"
+    };
+  };
+
   // CRITICAL: Step validation logic with enforced business rules
   const getRequiredSteps = (problemType, problemId, problemQuestion) => {
     // Business Rule 1: Simple inequalities ALWAYS require 2 steps
