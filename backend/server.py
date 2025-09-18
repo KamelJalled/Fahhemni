@@ -19,6 +19,95 @@ from database import (
 )
 from utils import normalize_answer, calculate_score, calculate_badges, calculate_total_points
 
+# CRITICAL: Stage access control security functions
+def get_problem_type(problem_id: str) -> str:
+    """Extract problem type from problem ID"""
+    if 'prep' in problem_id and 'examprep' not in problem_id:
+        return 'preparation'
+    elif 'explanation' in problem_id:
+        return 'explanation'
+    elif 'practice' in problem_id:
+        return 'practice'
+    elif 'assessment' in problem_id:
+        return 'assessment'
+    elif 'examprep' in problem_id:
+        return 'examprep'
+    return 'unknown'
+
+def get_section_from_problem_id(problem_id: str) -> str:
+    """Extract section ID from problem ID"""
+    import re
+    match = re.search(r'(\d+)', problem_id)
+    if match:
+        section_num = match.group(1)
+        return f"section{section_num}"
+    return "section1"  # default
+
+async def check_stage_access_security(username: str, problem_id: str) -> dict:
+    """
+    CRITICAL SECURITY: Check if student has access to requested stage
+    Prevents cheating by enforcing proper learning progression
+    """
+    try:
+        problem_type = get_problem_type(problem_id)
+        section_id = get_section_from_problem_id(problem_id)
+        
+        # Get student's current progress
+        progress_list = await get_student_progress(username)
+        
+        # Convert to dictionary for easier access
+        progress_dict = {}
+        for progress in progress_list:
+            progress_dict[progress.problem_id] = {
+                "completed": progress.completed,
+                "score": progress.score,
+                "attempts": progress.attempts
+            }
+        
+        # SECURITY RULE 1: Lock Assessment and Exam Prep until ALL practice stages are completed
+        if problem_type in ['assessment', 'examprep']:
+            # Find all practice problems for this section
+            practice_problems = [pid for pid in progress_dict.keys() if 'practice' in pid and section_id.replace('section', '') in pid]
+            
+            # If no practice problems exist, allow access (for backward compatibility)
+            if practice_problems:
+                all_practice_complete = all(
+                    progress_dict.get(practice_id, {}).get("completed", False) 
+                    for practice_id in practice_problems
+                )
+                
+                if not all_practice_complete:
+                    incomplete_practice = [pid for pid in practice_problems 
+                                         if not progress_dict.get(pid, {}).get("completed", False)]
+                    return {
+                        "access": False,
+                        "error": "practice_incomplete",
+                        "message": f"You must complete all practice stages first. Incomplete: {', '.join(incomplete_practice)}",
+                        "status_code": 403
+                    }
+        
+        # SECURITY RULE 2: Lock Exam Prep until Assessment is completed
+        if problem_type == 'examprep':
+            section_num = section_id.replace('section', '')
+            assessment_id = f"assessment{section_num}"
+            
+            assessment_complete = progress_dict.get(assessment_id, {}).get("completed", False)
+            if not assessment_complete:
+                return {
+                    "access": False,
+                    "error": "assessment_incomplete", 
+                    "message": f"You must complete the Assessment stage first (assessment{section_num})",
+                    "status_code": 403
+                }
+        
+        # Access granted
+        return {"access": True}
+        
+    except Exception as e:
+        # Log error but don't block access in case of system errors
+        print(f"Stage access check error: {e}")
+        return {"access": True}
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
