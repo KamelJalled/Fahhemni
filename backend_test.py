@@ -385,7 +385,27 @@ class StageAccessControlTester:
                             f"❌ SECURITY ISSUE: assessment2 should be accessible but got HTTP {response.status_code}")
                 return False
             
-            # Step 3: Verify assessment2 submission is now allowed
+            # Step 3: Verify examprep2 is STILL LOCKED (needs assessment2 completion) - CHECK BEFORE COMPLETING ASSESSMENT2
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={full_test_student}")
+            
+            if response.status_code == 403:
+                self.log_test("Examprep2 Still Locked Before Assessment", True, 
+                            "✅ examprep2 correctly remains blocked until assessment2 completion")
+            elif response.status_code == 400:
+                data = response.json()
+                if "assessment" in data.get("detail", {}).get("message", "").lower():
+                    self.log_test("Examprep2 Still Locked Before Assessment", True, 
+                                "✅ examprep2 correctly remains LOCKED until assessment2 is completed")
+                else:
+                    self.log_test("Examprep2 Still Locked Before Assessment", False, 
+                                f"❌ SECURITY ISSUE: examprep2 should remain locked until assessment2 completion: {data}")
+                    return False
+            else:
+                self.log_test("Examprep2 Still Locked Before Assessment", False, 
+                            f"❌ SECURITY ISSUE: examprep2 should be locked before assessment2 completion: HTTP {response.status_code}")
+                return False
+            
+            # Step 4: Complete assessment2 to unlock examprep2
             attempt_data = {
                 "problem_id": "assessment2",
                 "answer": "y < -12",
@@ -409,26 +429,6 @@ class StageAccessControlTester:
             else:
                 self.log_test("Assessment2 Submission Allowed", False, 
                             f"❌ SECURITY ISSUE: assessment2 submission should be allowed but got HTTP {response.status_code}")
-                return False
-            
-            # Step 4: Verify examprep2 is STILL LOCKED (needs assessment2 completion)
-            response = self.session.get(f"{self.base_url}/problems/examprep2?username={full_test_student}")
-            
-            if response.status_code == 403:
-                self.log_test("Examprep2 Still Locked After Assessment Access", True, 
-                            "✅ examprep2 correctly remains blocked until assessment2 completion")
-            elif response.status_code == 400:
-                data = response.json()
-                if "assessment" in data.get("detail", {}).get("message", "").lower():
-                    self.log_test("Examprep2 Still Locked After Assessment Access", True, 
-                                "✅ examprep2 correctly remains LOCKED until assessment2 is completed")
-                else:
-                    self.log_test("Examprep2 Still Locked After Assessment Access", False, 
-                                f"❌ SECURITY ISSUE: examprep2 should remain locked until assessment2 completion: {data}")
-                    return False
-            else:
-                self.log_test("Examprep2 Still Locked After Assessment Access", False, 
-                            f"❌ SECURITY ISSUE: examprep2 access control unclear: HTTP {response.status_code}")
                 return False
             
             self.log_test("FULL PRACTICE COMPLETION UNLOCK", True, 
