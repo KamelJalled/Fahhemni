@@ -620,14 +620,14 @@ async def init_database():
                 }
             ],
             "hints_en": [
-                "Multiply by the reciprocal of the coefficient to isolate 'k'.",
-                "Don't forget the rule when multiplying by a negative number.",
-                "Simplify 8 * (-3/2)."
+                "To solve a fraction coefficient, what is the inverse operation you should use?",
+                "When multiplying both sides by a negative number, what happens to the inequality sign?",
+                "Focus on the process: multiply by the reciprocal and check the sign direction."
             ],
             "hints_ar": [
-                "اضرب في مقلوب المعامل لعزل 'ك'.",
-                "لا تنس القاعدة عند الضرب في عدد سالب.",
-                "قم بتبسيط ٨ * (-٣/٢)."
+                "لحل معامل كسري، ما هي العملية العكسية التي يجب أن تستخدمها؟",
+                "عند ضرب كلا الطرفين في عدد سالب، ماذا يحدث لإشارة المتباينة؟",
+                "ركز على العملية: اضرب في المقلوب وتحقق من اتجاه الإشارة."
             ]
         },
         {
