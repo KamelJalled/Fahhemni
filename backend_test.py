@@ -501,7 +501,7 @@ class StageAccessControlTester:
             print("Testing that the logic works dynamically for any section")
             
             # Create a new test student for Section 1 testing
-            section1_student = "security_test_student_section1"
+            section1_student = f"security_section1_test_student_{int(datetime.now().timestamp())}"
             test_student = {"username": section1_student, "class_name": "GR9-C"}
             
             response = self.session.post(
