@@ -33,6 +33,76 @@
     }
 }
 
+/* UI Layout Fix: Improved spacing for better usability */
+.section-header {
+    margin-top: 10px !important;  /* Reduce from default */
+    margin-bottom: 15px !important;
+}
+
+.problem-display {
+    margin-bottom: 10px !important;  /* Place immediately above answer field */
+}
+
+.answer-input-container {
+    margin-top: 0 !important;  /* Remove gap between problem and input */
+}
+
+/* Problem View Layout Improvements */
+.problem-view-header {
+    margin-bottom: 15px !important; /* Reduced spacing after header */
+}
+
+.problem-card {
+    margin-bottom: 10px !important; /* Reduced spacing after problem card */
+}
+
+.problem-title {
+    margin-bottom: 8px !important; /* Tight coupling between title and problem */
+}
+
+.problem-math-display {
+    margin-bottom: 10px !important; /* Close to answer input */
+}
+
+.answer-input-section {
+    margin-top: 0 !important; /* No gap above answer input */
+    padding-top: 0 !important;
+}
+
+/* Stage Progress Indicators - Compact spacing */
+.stage-progress {
+    margin-bottom: 12px !important;
+}
+
+/* Section Title Positioning - All Stages */
+.section-title-container {
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+/* Explanation Stage Layout Fix */
+.explanation-section-title {
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+/* Assessment and Exam Prep Layout Fix */
+.assessment-layout .section-header,
+.examprep-layout .section-header {
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+.assessment-layout .problem-display,
+.examprep-layout .problem-display {
+    margin-bottom: 10px !important;
+}
+
+.assessment-layout .answer-input-container,
+.examprep-layout .answer-input-container {
+    margin-top: 0 !important;
+}
+
 /* Mobile Optimization Styles */
 @media (max-width: 768px) {
     /* Touch Target Optimization - Minimum 44x44px */
