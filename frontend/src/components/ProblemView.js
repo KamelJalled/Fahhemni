@@ -51,8 +51,88 @@ const ProblemView = () => {
   const [explanationStep, setExplanationStep] = useState(0); // For explanation stage step tracking
   const [explanationAnswers, setExplanationAnswers] = useState(['', '', '']); // Single input per example (simplified management)
 
-  // Helper function for basic normalization without recursion
-  const basicNormalizeAnswer = (answer) => {
+  // ENHANCED: Mathematical validation with proper sign flipping for inequalities
+  const validateInequalityStep = (userAnswer, expectedAnswers, stepInstruction) => {
+    const normalizedUserAnswer = normalizeAnswer(userAnswer);
+    
+    // Enhanced validation for different answer formats
+    let isCorrect = false;
+    
+    if (expectedAnswers) {
+      // Check direct matches first
+      isCorrect = expectedAnswers.some(expectedAnswer => 
+        normalizeAnswer(expectedAnswer) === normalizedUserAnswer
+      );
+      
+      // ENHANCED: Special handling for inequality operations
+      if (!isCorrect && stepInstruction) {
+        const instruction = stepInstruction.toLowerCase();
+        
+        // Check for division/multiplication by negative numbers
+        if (instruction.includes('divide') && instruction.includes('-')) {
+          // When dividing by negative, sign should flip
+          const flippedAnswers = expectedAnswers.map(ans => {
+            let flipped = ans.replace('>', '<').replace('<', '>');
+            flipped = flipped.replace('≥', '≤').replace('≤', '≥');
+            return flipped;
+          });
+          
+          isCorrect = flippedAnswers.some(flippedAnswer => 
+            normalizeAnswer(flippedAnswer) === normalizedUserAnswer
+          );
+        }
+        
+        if (instruction.includes('multiply') && instruction.includes('-')) {
+          // When multiplying by negative, sign should flip
+          const flippedAnswers = expectedAnswers.map(ans => {
+            let flipped = ans.replace('>', '<').replace('<', '>');
+            flipped = flipped.replace('≥', '≤').replace('≤', '≥');
+            return flipped;
+          });
+          
+          isCorrect = flippedAnswers.some(flippedAnswer => 
+            normalizeAnswer(flippedAnswer) === normalizedUserAnswer
+          );
+        }
+      }
+      
+      // Accept multiple formats for the same mathematical answer
+      if (!isCorrect) {
+        // Generate alternative formats (x ≥ 6, 6 ≤ x, etc.)
+        const alternativeFormats = [];
+        expectedAnswers.forEach(expected => {
+          const normalized = normalizeAnswer(expected);
+          
+          // Handle x ≥ 6 ↔ 6 ≤ x conversions
+          if (normalized.includes('x≥')) {
+            const number = normalized.replace('x≥', '');
+            alternativeFormats.push(`${number}≤x`);
+          } else if (normalized.includes('x≤')) {
+            const number = normalized.replace('x≤', '');
+            alternativeFormats.push(`${number}≥x`);
+          } else if (normalized.includes('x>')) {
+            const number = normalized.replace('x>', '');
+            alternativeFormats.push(`${number}<x`);
+          } else if (normalized.includes('x<')) {
+            const number = normalized.replace('x<', '');
+            alternativeFormats.push(`${number}>x`);
+          }
+          
+          // Handle >= and <= text versions
+          if (normalized.includes('>=')) {
+            alternativeFormats.push(normalized.replace('>=', '≥'));
+          }
+          if (normalized.includes('<=')) {
+            alternativeFormats.push(normalized.replace('<=', '≤'));
+          }
+        });
+        
+        isCorrect = alternativeFormats.some(alt => alt === normalizedUserAnswer);
+      }
+    }
+    
+    return isCorrect;
+  };
     if (!answer) return '';
     
     // Convert Arabic numerals to Western and س to x
