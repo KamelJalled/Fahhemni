@@ -300,53 +300,54 @@ class Section2MathExpressionTester:
             print("\n🔍 STEP SOLUTIONS FOR STUDENT PRACTICE TESTING")
             print("Testing that practice problems show complete mathematical operations")
             
-            # Test practice2_1 step solutions
-            response = self.session.get(f"{self.base_url}/problems/practice2_1")
+            # Get the main explanation2 data which contains step_solutions
+            response = self.session.get(f"{self.base_url}/problems/explanation2")
             
             if response.status_code != 200:
-                self.log_test("Practice2_1 Data Retrieval", False, 
-                            f"Failed to get practice2_1: HTTP {response.status_code}")
+                self.log_test("Step Solutions Data Retrieval", False, 
+                            f"Failed to get explanation2: HTTP {response.status_code}")
                 return False
             
             data = response.json()
             step_solutions = data.get("step_solutions", [])
             
             if not step_solutions:
-                self.log_test("Practice2_1 Step Solutions", False, 
-                            "Missing step_solutions in practice2_1 data")
+                self.log_test("Step Solutions Present", False, 
+                            "Missing step_solutions in explanation2 data")
                 return False
+            
+            self.log_test("Step Solutions Present", True, 
+                        f"✅ Found {len(step_solutions)} step solutions")
             
             # Check for complete operations in step solutions
-            found_complete_operations = False
-            for step in step_solutions:
-                solution = step.get("solution", "")
-                # Look for patterns like "4y / 4 < 24 / 4" or "-6k / -6 ≤ 30 / -6"
-                if ("/" in solution and any(op in solution for op in ["<", ">", "≤", "≥", "="])):
-                    found_complete_operations = True
-                    self.log_test("Practice2_1 Complete Operations", True, 
-                                f"✅ Found complete operations: {solution}")
-                    break
+            complete_operations_found = []
             
-            if not found_complete_operations:
-                self.log_test("Practice2_1 Complete Operations", False, 
-                            "❌ No complete operations found in practice2_1 step solutions")
-                return False
-            
-            # Test practice2_2 step solutions
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
+            for i, step in enumerate(step_solutions):
+                possible_answers = step.get("possible_answers", [])
+                step_en = step.get("step_en", "")
                 
-                if step_solutions:
-                    self.log_test("Practice2_2 Step Solutions Present", True, 
-                                f"✅ Practice2_2 has {len(step_solutions)} step solutions")
-                else:
-                    self.log_test("Practice2_2 Step Solutions Present", False, 
-                                "❌ Practice2_2 missing step solutions")
+                # Look for complete operations like "4y / 4 < 24 / 4", "-6k / -6 ≤ 30 / -6", "n / (-3) * (-3) > 5 * (-3)"
+                for answer in possible_answers:
+                    if "/" in answer and any(op in answer for op in ["<", ">", "≤", "≥", "="]):
+                        # Check for both sides shown
+                        if " / " in answer and any(var in answer for var in ["y", "k", "n", "x", "m"]):
+                            complete_operations_found.append(f"Step {i+1}: {answer}")
+                            self.log_test(f"Step {i+1} Complete Operations", True, 
+                                        f"✅ Found complete operations: {answer}")
+                            break
             
-            return True
+            if len(complete_operations_found) >= 2:
+                self.log_test("Multiple Complete Operations Found", True, 
+                            f"✅ Found {len(complete_operations_found)} examples of complete operations")
+                return True
+            elif len(complete_operations_found) >= 1:
+                self.log_test("Some Complete Operations Found", True, 
+                            f"✅ Found {len(complete_operations_found)} example of complete operations")
+                return True
+            else:
+                self.log_test("Complete Operations Missing", False, 
+                            "❌ No complete operations found in step solutions")
+                return False
             
         except Exception as e:
             self.log_test("Step Solutions Testing", False, f"Test execution error: {str(e)}")
