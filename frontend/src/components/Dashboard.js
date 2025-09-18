@@ -220,6 +220,8 @@ const Dashboard = () => {
     if (problemId.includes('examprep')) return 'examprep';
     return 'unknown';
   };
+
+  const getProblemStatus = (problemId, sectionId, progress) => {
     if (!progress || !progress[sectionId] || !progress[sectionId][problemId]) {
       return 'available';
     }
