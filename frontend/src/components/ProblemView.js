@@ -51,6 +51,30 @@ const ProblemView = () => {
   const [explanationStep, setExplanationStep] = useState(0); // For explanation stage step tracking
   const [explanationAnswers, setExplanationAnswers] = useState(['', '', '']); // Single input per example (simplified management)
 
+  // Helper function for basic normalization without recursion
+  const basicNormalizeAnswer = (answer) => {
+    if (!answer) return '';
+    
+    // Convert Arabic numerals to Western and س to x
+    const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
+    let normalized = answer.toLowerCase()
+      .replace(/س/g, 'x')
+      .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
+      .trim();
+    
+    // Normalize operators and spaces more carefully
+    normalized = normalized
+      .replace(/÷/g, '/') // Convert ÷ to /
+      .replace(/×/g, '*') // Convert × to *
+      .replace(/\s+/g, ' ') // Normalize multiple spaces to single
+      .replace(/\s*([+\-*/=])\s*/g, '$1') // Remove spaces around basic operators
+      .replace(/\s*([<>])\s*/g, '$1') // Remove spaces around inequality signs
+      .replace(/\s*([≤≥])\s*/g, '$1') // Remove spaces around unicode inequalities
+      .replace(/\s*([<>]=?)\s*/g, '$1'); // Handle <= >= combinations
+    
+    return normalized;
+  };
+
   // ENHANCED: Mathematical validation with proper sign flipping for inequalities
   const validateInequalityStep = (userAnswer, expectedAnswers, stepInstruction) => {
     const normalizedUserAnswer = normalizeAnswer(userAnswer);
@@ -132,27 +156,6 @@ const ProblemView = () => {
     }
     
     return isCorrect;
-  };
-    if (!answer) return '';
-    
-    // Convert Arabic numerals to Western and س to x
-    const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
-    let normalized = answer.toLowerCase()
-      .replace(/س/g, 'x')
-      .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
-      .trim();
-    
-    // Normalize operators and spaces more carefully
-    normalized = normalized
-      .replace(/÷/g, '/') // Convert ÷ to /
-      .replace(/×/g, '*') // Convert × to *
-      .replace(/\s+/g, ' ') // Normalize multiple spaces to single
-      .replace(/\s*([+\-*/=])\s*/g, '$1') // Remove spaces around basic operators
-      .replace(/\s*([<>])\s*/g, '$1') // Remove spaces around inequality signs
-      .replace(/\s*([≤≥])\s*/g, '$1') // Remove spaces around unicode inequalities
-      .replace(/\s*([<>]=?)\s*/g, '$1'); // Handle <= >= combinations
-    
-    return normalized;
   };
 
   // UPDATED: Redesigned stage structure for proper Socratic tutoring
