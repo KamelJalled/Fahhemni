@@ -404,16 +404,24 @@ async def init_database():
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Divide both sides by 4",
-                    "step_ar": "اقسم كلا الطرفين على ٤",
+                    "step_en": "Step 1: Divide both sides by 4",
+                    "step_ar": "الخطوة ١: اقسم كلا الطرفين على ٤",
                     "possible_answers": [
                         "4x / 4 < 20 / 4",
-                        "x < 20 / 4",
-                        "x < 5"
+                        "x < 20 / 4"
                     ],
                     "possible_answers_ar": [
                         "٤س / ٤ < ٢٠ / ٤",
-                        "س < ٢٠ / ٤",
+                        "س < ٢٠ / ٤"
+                    ]
+                },
+                {
+                    "step_en": "Step 2: Simplify the result",
+                    "step_ar": "الخطوة ٢: بسّط النتيجة",
+                    "possible_answers": [
+                        "x < 5"
+                    ],
+                    "possible_answers_ar": [
                         "س < ٥"
                     ]
                 }
