@@ -1075,11 +1075,11 @@ frontend:
 
   - task: "Critical Navigation Flow Bug - Section 2"
     implemented: true
-    working: false
+    working: true
     file: "frontend/src/components/ProblemView.js, frontend/src/App.js"
     stuck_count: 0
     priority: "critical"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
@@ -1087,6 +1087,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "❌ CRITICAL NAVIGATION BUG ROOT CAUSE IDENTIFIED: The getSectionNumber function in ProblemView.js line 992 uses regex /(\d+)$/ which matches digits at the END of the string. For 'practice2_1', this returns 1 instead of 2, causing navigation to look in section 1's sequence instead of section 2's sequence. Backend testing confirms: ✅ All Section 2 problem IDs verified (prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2), ✅ Navigation logic working (practice2_1 → practice2_2), ✅ Backend serves correct next problems. The issue is purely in frontend getSectionNumber function extracting wrong section number from problem IDs with underscores like 'practice2_1' and 'practice2_2'. Fix required: Change regex to match the first digit after letters, not the last digit in the string."
+      - working: true
+        agent: "testing"
+        comment: "✅ CRITICAL NAVIGATION BUG COMPLETELY FIXED: Applied the fix to getSectionNumber function in ProblemView.js line 992. Changed regex from /(\d+)$/ to /[a-zA-Z]+(\d+)/ to match first digit after letters instead of last digit in string. Verification testing confirms: practice2_1 now correctly returns section 2 (was returning 1), finds itself at index 2 in Section 2 sequence, and next problem is correctly identified as practice2_2. Navigation flow now works: practice2_1 → practice2_2 → assessment2 → examprep2. The critical navigation bug where students were redirected to prep stage instead of continuing to practice2_2 has been completely resolved."
 
   - task: "Tabbed Explanation Interface Issues"
     implemented: true
