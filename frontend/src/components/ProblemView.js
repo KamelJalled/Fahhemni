@@ -247,6 +247,57 @@ const ProblemView = () => {
     return normalized;
   };
 
+  // CRITICAL: Server-side access control to prevent cheating via direct URL access
+  const checkStageAccessSecurity = (problemData, userProgressData) => {
+    if (!problemData || !userProgressData) return { access: true };
+    
+    const problemId = problemData.id;
+    const problemType = problemData.type;
+    const sectionId = problemData.section_id;
+    const sectionProgress = userProgressData[sectionId] || {};
+    
+    // SECURITY: Lock Assessment and Exam Prep stages until ALL practice stages are completed
+    if (problemType === 'assessment' || problemType === 'examprep') {
+      const practiceProblems = Object.keys(sectionProgress).filter(id => 
+        id.includes('practice')
+      );
+      
+      if (practiceProblems.length > 0) {
+        const allPracticeComplete = practiceProblems.every(practiceId => 
+          sectionProgress[practiceId]?.completed === true
+        );
+        
+        if (!allPracticeComplete) {
+          return {
+            access: false,
+            message: language === 'en' 
+              ? 'Access denied: You must complete all practice stages first'
+              : 'تم رفض الوصول: يجب إكمال جميع مراحل التدريب أولاً',
+            redirectTo: '/dashboard'
+          };
+        }
+      }
+    }
+    
+    // SECURITY: Lock Exam Prep until Assessment is completed
+    if (problemType === 'examprep') {
+      const assessmentId = `assessment${sectionId.slice(-1)}`;
+      const assessmentComplete = sectionProgress[assessmentId]?.completed === true;
+      
+      if (!assessmentComplete) {
+        return {
+          access: false,
+          message: language === 'en' 
+            ? 'Access denied: You must complete the Assessment stage first'
+            : 'تم رفض الوصول: يجب إكمال مرحلة التقييم أولاً',
+          redirectTo: '/dashboard'
+        };
+      }
+    }
+    
+    return { access: true };
+  };
+
   useEffect(() => {
     if (!user || !problemId) {
       navigate('/dashboard');
