@@ -714,14 +714,14 @@ async def init_database():
             "show_full_solution": False,
             "hide_answer": True,
             "hints_en": [
-                "The inequality is 15p ≥ 60",
-                "Divide both sides by 15 to solve for p.",
-                "That's all the hints available."
+                "Start by identifying the variable and what it represents in this problem.",
+                "Look for keywords that indicate mathematical relationships - what does 'at least' suggest?",
+                "Once you write the inequality, what operation will help isolate the variable?"
             ],
             "hints_ar": [
-                "المتباينة هي ١٥ح ≥ ٦٠",
-                "اقسم كلا الطرفين على ١٥ لحل ح.",
-                "هذه كل الإرشادات المتاحة."
+                "ابدأ بتحديد المتغير وما يمثله في هذه المسألة.",
+                "ابحث عن الكلمات المفتاحية التي تشير إلى العلاقات الرياضية - ماذا تعني 'على الأقل'؟",
+                "بمجرد كتابة المتباينة، ما العملية التي ستساعد في عزل المتغير؟"
             ]
         }
     ]
