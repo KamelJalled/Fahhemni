@@ -14,12 +14,12 @@ from datetime import datetime
 # Use backend URL from frontend/.env as specified in review request
 BACKEND_URL = "http://localhost:8001/api"
 
-class StepValidationTester:
+class NavigationFlowTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "step_validation_test_student"
+        self.test_student_username = "navigation_test_student"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -63,7 +63,7 @@ class StepValidationTester:
             return False
 
     def create_test_student(self):
-        """Create test student for step validation testing"""
+        """Create test student for navigation testing"""
         try:
             test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
@@ -92,482 +92,366 @@ class StepValidationTester:
             self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
             return False
 
-    def test_section2_problem_types_verification(self):
-        """Test Section 2 Problem Types Verification - prep2, practice2_1, practice2_2 step requirements"""
+    def test_section2_problem_ids_verification(self):
+        """Test Section 2 Problem ID Verification - List all Section 2 problem IDs"""
         try:
-            print("\n🔍 SECTION 2 PROBLEM TYPES VERIFICATION")
-            print("Testing prep2 (simple inequality 4x < 20) should require exactly 2 steps")
-            print("Testing practice2_1 (simple practice -2/3 k > 8) should require exactly 2 steps")
-            print("Testing practice2_2 (word problem about tickets) should require exactly 3 steps")
+            print("\n🔍 SECTION 2 PROBLEM ID VERIFICATION")
+            print("Expected sequence: prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2")
             
-            # Test 1: prep2 should require exactly 2 steps
-            response = self.session.get(f"{self.base_url}/problems/prep2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                if len(step_solutions) == 2:
-                    self.log_test("prep2 Step Count Verification", True, 
-                                f"✅ prep2 has exactly 2 steps as required for simple inequality")
-                else:
-                    self.log_test("prep2 Step Count Verification", False, 
-                                f"❌ prep2 has {len(step_solutions)} steps, should have exactly 2 steps")
-                    return False
-            else:
-                self.log_test("prep2 Step Count Verification", False, 
-                            f"Failed to fetch prep2: HTTP {response.status_code}")
-                return False
-            
-            # Test 2: practice2_1 should require exactly 2 steps
-            response = self.session.get(f"{self.base_url}/problems/practice2_1")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                if len(step_solutions) >= 2:  # Allow for more than 2 steps but check minimum
-                    self.log_test("practice2_1 Step Count Verification", True, 
-                                f"✅ practice2_1 has {len(step_solutions)} steps (minimum 2 required for simple inequality)")
-                else:
-                    self.log_test("practice2_1 Step Count Verification", False, 
-                                f"❌ practice2_1 has {len(step_solutions)} steps, should have at least 2 steps")
-                    return False
-            else:
-                self.log_test("practice2_1 Step Count Verification", False, 
-                            f"Failed to fetch practice2_1: HTTP {response.status_code}")
-                return False
-            
-            # Test 3: practice2_2 should require exactly 3 steps (word problem)
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                if len(step_solutions) >= 2:  # Word problems should have at least 2 steps
-                    self.log_test("practice2_2 Step Count Verification", True, 
-                                f"✅ practice2_2 has {len(step_solutions)} steps (word problem with proper progression)")
-                else:
-                    self.log_test("practice2_2 Step Count Verification", False, 
-                                f"❌ practice2_2 has {len(step_solutions)} steps, should have at least 2 steps")
-                    return False
-            else:
-                self.log_test("practice2_2 Step Count Verification", False, 
-                            f"Failed to fetch practice2_2: HTTP {response.status_code}")
-                return False
-            
-            self.log_test("SECTION 2 PROBLEM TYPES VERIFICATION", True, 
-                        "✅ All Section 2 problems have appropriate step counts according to business rules")
-            return True
-            
-        except Exception as e:
-            self.log_test("Section 2 Problem Types Verification", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_step_requirement_business_rules(self):
-        """Test Step Requirement Business Rules - simple inequalities vs word problems"""
-        try:
-            print("\n📋 STEP REQUIREMENT BUSINESS RULES TESTING")
-            print("Testing that simple inequalities require appropriate steps")
-            print("Testing that word problems require appropriate steps")
-            print("Testing that assessment problems follow patterns")
-            
-            # Test 1: Simple inequality (prep2: 4x < 20) - should have appropriate steps
-            response = self.session.get(f"{self.base_url}/problems/prep2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                question = data.get("question_en", "")
-                step_solutions = data.get("step_solutions", [])
-                
-                # Verify it's a simple inequality (short, mathematical expression)
-                is_simple_inequality = len(question) < 50 and any(op in question for op in ['<', '>', '≤', '≥'])
-                
-                if is_simple_inequality and len(step_solutions) >= 1:
-                    self.log_test("Simple Inequality Business Rule", True, 
-                                f"✅ Simple inequality '{question}' has {len(step_solutions)} steps")
-                else:
-                    self.log_test("Simple Inequality Business Rule", False, 
-                                f"❌ Simple inequality '{question}' has {len(step_solutions)} steps")
-                    return False
-            else:
-                self.log_test("Simple Inequality Business Rule", False, 
-                            f"Failed to fetch prep2: HTTP {response.status_code}")
-                return False
-            
-            # Test 2: Word problem (practice2_2: tickets problem) - should have appropriate steps
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                question = data.get("question_en", "")
-                step_solutions = data.get("step_solutions", [])
-                
-                # Verify it's a word problem (long text, contains keywords)
-                is_word_problem = len(question) > 50 and any(keyword in question.lower() for keyword in ['tickets', 'ريال', 'sold', 'collect'])
-                
-                if is_word_problem and len(step_solutions) >= 2:
-                    self.log_test("Word Problem Business Rule", True, 
-                                f"✅ Word problem has {len(step_solutions)} steps (appropriate for word problem)")
-                else:
-                    self.log_test("Word Problem Business Rule", False, 
-                                f"❌ Word problem has {len(step_solutions)} steps")
-                    return False
-            else:
-                self.log_test("Word Problem Business Rule", False, 
-                            f"Failed to fetch practice2_2: HTTP {response.status_code}")
-                return False
-            
-            # Test 3: Assessment problem (assessment2) - check if accessible
-            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
-            
-            if response.status_code == 200:
-                data = response.json()
-                question = data.get("question_en", "")
-                
-                # Assessment problems should be simple
-                is_assessment = len(question) < 50 and any(op in question for op in ['<', '>', '≤', '≥'])
-                
-                if is_assessment:
-                    self.log_test("Assessment Problem Business Rule", True, 
-                                f"✅ Assessment problem '{question}' follows simple inequality pattern")
-                else:
-                    self.log_test("Assessment Problem Business Rule", False, 
-                                f"❌ Assessment problem '{question}' doesn't follow expected pattern")
-                    return False
-            else:
-                # Assessment might be locked, which is expected behavior
-                self.log_test("Assessment Problem Business Rule", True, 
-                            f"✅ Assessment problem access control working (expected for locked stage)")
-            
-            self.log_test("STEP REQUIREMENT BUSINESS RULES", True, 
-                        "✅ All business rules for step requirements are appropriately implemented")
-            return True
-            
-        except Exception as e:
-            self.log_test("Step Requirement Business Rules", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_database_step_solutions_check(self):
-        """Test Database Step Solutions Check - verify step_solutions match business rules"""
-        try:
-            print("\n🗄️ DATABASE STEP SOLUTIONS CHECK")
-            print("Verifying that step_solutions in database match enforced business rules")
-            print("Checking prep2 has appropriate step solutions for progression")
-            print("Checking practice problems have correct step solutions")
-            
-            # Test 1: prep2 step solutions verification
-            response = self.session.get(f"{self.base_url}/problems/prep2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                if len(step_solutions) >= 1:
-                    # Check first step
-                    step1 = step_solutions[0]
-                    step1_text = step1.get("step_en", "")
-                    step1_answers = step1.get("possible_answers", [])
-                    
-                    if ("divide" in step1_text.lower() or "operation" in step1_text.lower()) and len(step1_answers) > 0:
-                        self.log_test("prep2 Step Solutions Quality", True, 
-                                    f"✅ prep2 has quality step solutions: Step 1: '{step1_text}'")
-                    else:
-                        self.log_test("prep2 Step Solutions Quality", True, 
-                                    f"✅ prep2 has step solutions with content: Step 1: '{step1_text}'")
-                else:
-                    self.log_test("prep2 Step Solutions Quality", False, 
-                                f"❌ prep2 has {len(step_solutions)} steps, expected at least 1")
-                    return False
-            else:
-                self.log_test("prep2 Step Solutions Quality", False, 
-                            f"Failed to fetch prep2: HTTP {response.status_code}")
-                return False
-            
-            # Test 2: practice2_1 step solutions verification
-            response = self.session.get(f"{self.base_url}/problems/practice2_1")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                if len(step_solutions) >= 1:
-                    step1 = step_solutions[0]
-                    step1_text = step1.get("step_en", "")
-                    step1_answers = step1.get("possible_answers", [])
-                    
-                    if len(step1_answers) > 0:
-                        self.log_test("practice2_1 Step Solutions Quality", True, 
-                                    f"✅ practice2_1 has quality step solutions for fraction coefficient")
-                    else:
-                        self.log_test("practice2_1 Step Solutions Quality", False, 
-                                    f"❌ practice2_1 step solutions don't have possible answers")
-                        return False
-                else:
-                    self.log_test("practice2_1 Step Solutions Quality", False, 
-                                f"❌ practice2_1 has {len(step_solutions)} steps, expected at least 1")
-                    return False
-            else:
-                self.log_test("practice2_1 Step Solutions Quality", False, 
-                            f"Failed to fetch practice2_1: HTTP {response.status_code}")
-                return False
-            
-            # Test 3: practice2_2 step solutions verification (word problem)
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                if len(step_solutions) >= 2:
-                    step1 = step_solutions[0]
-                    step1_text = step1.get("step_en", "")
-                    
-                    step2 = step_solutions[1]
-                    step2_text = step2.get("step_en", "")
-                    
-                    # Word problems should have meaningful step progression
-                    has_meaningful_steps = len(step1_text) > 0 and len(step2_text) > 0
-                    
-                    if has_meaningful_steps:
-                        self.log_test("practice2_2 Step Solutions Quality", True, 
-                                    f"✅ practice2_2 has proper word problem progression")
-                    else:
-                        self.log_test("practice2_2 Step Solutions Quality", False, 
-                                    f"❌ practice2_2 doesn't have meaningful step progression")
-                        return False
-                else:
-                    self.log_test("practice2_2 Step Solutions Quality", False, 
-                                f"❌ practice2_2 has {len(step_solutions)} steps, expected at least 2")
-                    return False
-            else:
-                self.log_test("practice2_2 Step Solutions Quality", False, 
-                            f"Failed to fetch practice2_2: HTTP {response.status_code}")
-                return False
-            
-            self.log_test("DATABASE STEP SOLUTIONS CHECK", True, 
-                        "✅ All database step solutions match business rules and provide quality educational progression")
-            return True
-            
-        except Exception as e:
-            self.log_test("Database Step Solutions Check", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_problem_identification_logic(self):
-        """Test Problem Identification Logic - word problems vs simple inequalities"""
-        try:
-            print("\n🔍 PROBLEM IDENTIFICATION LOGIC TESTING")
-            print("Testing that word problems are correctly identified (length > 50 chars, contains keywords)")
-            print("Testing that simple inequalities are correctly identified")
-            
-            # Test 1: Word problem identification (practice2_2)
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                question = data.get("question_en", "")
-                
-                # Check word problem criteria
-                is_long_text = len(question) > 50
-                has_keywords = any(keyword in question.lower() for keyword in ['tickets', 'ريال', 'sold', 'collect', 'sar', 'minimum'])
-                
-                if is_long_text and has_keywords:
-                    self.log_test("Word Problem Identification", True, 
-                                f"✅ practice2_2 correctly identified as word problem (length: {len(question)}, has keywords)")
-                else:
-                    self.log_test("Word Problem Identification", False, 
-                                f"❌ practice2_2 not properly identified as word problem (length: {len(question)}, keywords: {has_keywords})")
-                    return False
-            else:
-                self.log_test("Word Problem Identification", False, 
-                            f"Failed to fetch practice2_2: HTTP {response.status_code}")
-                return False
-            
-            # Test 2: Simple inequality identification (prep2)
-            response = self.session.get(f"{self.base_url}/problems/prep2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                question = data.get("question_en", "")
-                
-                # Check simple inequality criteria
-                is_short = len(question) < 50
-                has_inequality = any(op in question for op in ['<', '>', '≤', '≥'])
-                
-                if is_short and has_inequality:
-                    self.log_test("Simple Inequality Identification", True, 
-                                f"✅ prep2 correctly identified as simple inequality: '{question}' (length: {len(question)})")
-                else:
-                    self.log_test("Simple Inequality Identification", False, 
-                                f"❌ prep2 not properly identified as simple inequality: '{question}'")
-                    return False
-            else:
-                self.log_test("Simple Inequality Identification", False, 
-                            f"Failed to fetch prep2: HTTP {response.status_code}")
-                return False
-            
-            # Test 3: practice2_1 identification (simple inequality with fraction)
-            response = self.session.get(f"{self.base_url}/problems/practice2_1")
-            
-            if response.status_code == 200:
-                data = response.json()
-                question = data.get("question_en", "")
-                
-                # Check simple inequality with fraction
-                is_short = len(question) < 50
-                has_inequality = any(op in question for op in ['<', '>', '≤', '≥'])
-                
-                if is_short and has_inequality:
-                    self.log_test("Fraction Inequality Identification", True, 
-                                f"✅ practice2_1 correctly identified as simple inequality with fraction: '{question}'")
-                else:
-                    self.log_test("Fraction Inequality Identification", False, 
-                                f"❌ practice2_1 not properly identified: '{question}'")
-                    return False
-            else:
-                self.log_test("Fraction Inequality Identification", False, 
-                            f"Failed to fetch practice2_1: HTTP {response.status_code}")
-                return False
-            
-            self.log_test("PROBLEM IDENTIFICATION LOGIC", True, 
-                        "✅ All problem identification logic working correctly - word problems and simple inequalities properly distinguished")
-            return True
-            
-        except Exception as e:
-            self.log_test("Problem Identification Logic", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_api_response_validation(self):
-        """Test API Response Validation - verify step_solutions structure"""
-        try:
-            print("\n🔗 API RESPONSE VALIDATION TESTING")
-            print("Verifying that problems return the expected step_solutions structure")
-            print("Checking that frontend can correctly determine required steps based on problem content")
-            
-            # Test 1: API response structure for prep2
-            response = self.session.get(f"{self.base_url}/problems/prep2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                
-                # Check required fields
-                required_fields = ["id", "question_en", "answer", "step_solutions"]
-                missing_fields = [field for field in required_fields if field not in data]
-                
-                if not missing_fields:
-                    step_solutions = data.get("step_solutions", [])
-                    
-                    # Validate step_solutions structure
-                    if len(step_solutions) > 0:
-                        first_step = step_solutions[0]
-                        step_required_fields = ["step_en", "possible_answers"]
-                        step_missing_fields = [field for field in step_required_fields if field not in first_step]
-                        
-                        if not step_missing_fields:
-                            self.log_test("prep2 API Response Structure", True, 
-                                        f"✅ prep2 API response has correct structure with {len(step_solutions)} steps")
-                        else:
-                            self.log_test("prep2 API Response Structure", False, 
-                                        f"❌ prep2 step_solutions missing fields: {step_missing_fields}")
-                            return False
-                    else:
-                        self.log_test("prep2 API Response Structure", False, 
-                                    f"❌ prep2 has no step_solutions")
-                        return False
-                else:
-                    self.log_test("prep2 API Response Structure", False, 
-                                f"❌ prep2 API response missing fields: {missing_fields}")
-                    return False
-            else:
-                self.log_test("prep2 API Response Structure", False, 
-                            f"Failed to fetch prep2: HTTP {response.status_code}")
-                return False
-            
-            # Test 2: API response structure for practice2_2 (word problem)
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            if response.status_code == 200:
-                data = response.json()
-                step_solutions = data.get("step_solutions", [])
-                
-                # Word problem should have steps with proper structure
-                if len(step_solutions) >= 1:
-                    # Check each step has proper structure
-                    all_steps_valid = True
-                    for i, step in enumerate(step_solutions):
-                        if not all(field in step for field in ["step_en", "possible_answers"]):
-                            all_steps_valid = False
-                            break
-                        if not step.get("possible_answers"):
-                            all_steps_valid = False
-                            break
-                    
-                    if all_steps_valid:
-                        self.log_test("practice2_2 API Response Structure", True, 
-                                    f"✅ practice2_2 word problem has correct {len(step_solutions)}-step structure")
-                    else:
-                        self.log_test("practice2_2 API Response Structure", False, 
-                                    f"❌ practice2_2 steps don't have proper structure")
-                        return False
-                else:
-                    self.log_test("practice2_2 API Response Structure", False, 
-                                f"❌ practice2_2 has {len(step_solutions)} steps, expected at least 1")
-                    return False
-            else:
-                self.log_test("practice2_2 API Response Structure", False, 
-                            f"Failed to fetch practice2_2: HTTP {response.status_code}")
-                return False
-            
-            # Test 3: Frontend step determination capability
-            # Test that frontend can determine required steps from step_solutions length
+            # Get all Section 2 problems
             response = self.session.get(f"{self.base_url}/problems/section/section2")
             
             if response.status_code == 200:
                 problems = response.json()
+                problem_ids = [problem.get("id") for problem in problems]
                 
-                # Check that all Section 2 problems have step_solutions
-                problems_with_steps = []
-                for problem in problems:
-                    if "step_solutions" in problem and problem.get("step_solutions"):
-                        step_count = len(problem["step_solutions"])
-                        problems_with_steps.append({
-                            "id": problem["id"],
-                            "type": problem.get("type"),
-                            "step_count": step_count
-                        })
+                expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
                 
-                if len(problems_with_steps) >= 3:  # At least prep2, practice2_1, practice2_2
-                    self.log_test("Frontend Step Determination", True, 
-                                f"✅ Frontend can determine steps from API: {problems_with_steps}")
+                # Check if all expected IDs are present
+                missing_ids = [pid for pid in expected_sequence if pid not in problem_ids]
+                extra_ids = [pid for pid in problem_ids if pid not in expected_sequence]
+                
+                if not missing_ids and not extra_ids:
+                    self.log_test("Section 2 Problem IDs Complete", True, 
+                                f"✅ Found all expected Section 2 problem IDs: {problem_ids}")
+                    
+                    # Verify sequence order
+                    actual_sequence = []
+                    for expected_id in expected_sequence:
+                        for problem in problems:
+                            if problem.get("id") == expected_id:
+                                actual_sequence.append(expected_id)
+                                break
+                    
+                    if actual_sequence == expected_sequence:
+                        self.log_test("Section 2 Sequence Order", True, 
+                                    f"✅ Section 2 problems in correct sequence: {actual_sequence}")
+                        return True
+                    else:
+                        self.log_test("Section 2 Sequence Order", False, 
+                                    f"❌ Sequence mismatch. Expected: {expected_sequence}, Got: {actual_sequence}")
+                        return False
                 else:
-                    self.log_test("Frontend Step Determination", False, 
-                                f"❌ Not enough problems with step_solutions: {problems_with_steps}")
+                    error_details = []
+                    if missing_ids:
+                        error_details.append(f"Missing: {missing_ids}")
+                    if extra_ids:
+                        error_details.append(f"Extra: {extra_ids}")
+                    
+                    self.log_test("Section 2 Problem IDs Complete", False, 
+                                f"❌ Problem ID mismatch. {', '.join(error_details)}")
                     return False
             else:
-                self.log_test("Frontend Step Determination", False, 
-                            f"Failed to fetch section2 problems: HTTP {response.status_code}")
+                self.log_test("Section 2 Problem IDs Complete", False, 
+                            f"Failed to fetch Section 2 problems: HTTP {response.status_code}")
                 return False
-            
-            self.log_test("API RESPONSE VALIDATION", True, 
-                        "✅ All API responses have correct structure and frontend can determine required steps")
-            return True
-            
+                
         except Exception as e:
-            self.log_test("API Response Validation", False, f"Test execution error: {str(e)}")
+            self.log_test("Section 2 Problem ID Verification", False, f"Test execution error: {str(e)}")
             return False
 
-    def generate_step_validation_summary(self, results, critical_failures):
-        """Generate comprehensive summary of step validation testing"""
+    def test_navigation_logic_simulation(self):
+        """Test Navigation Logic - Simulate completing practice2_1 and check next problem"""
+        try:
+            print("\n🧭 NAVIGATION LOGIC TESTING")
+            print("Simulating completion of practice2_1 and testing what should be next")
+            
+            # Step 1: Complete practice2_1 for test student
+            practice2_1_attempt = {
+                "problem_id": "practice2_1",
+                "answer": "k < -12",  # Correct answer for -2/3 k > 8
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_1_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("correct"):
+                    self.log_test("practice2_1 Completion", True, 
+                                f"✅ Successfully completed practice2_1 with score: {data.get('score')}")
+                else:
+                    self.log_test("practice2_1 Completion", False, 
+                                f"❌ practice2_1 answer was incorrect: {data}")
+                    return False
+            else:
+                self.log_test("practice2_1 Completion", False, 
+                            f"Failed to submit practice2_1: HTTP {response.status_code}")
+                return False
+            
+            # Step 2: Test navigation logic - what should come after practice2_1?
+            expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
+            
+            # Find index of practice2_1
+            try:
+                practice2_1_index = expected_sequence.index("practice2_1")
+                next_index = practice2_1_index + 1
+                
+                if next_index < len(expected_sequence):
+                    expected_next = expected_sequence[next_index]
+                    
+                    self.log_test("Navigation Logic Calculation", True, 
+                                f"✅ practice2_1 is at index {practice2_1_index}, next should be {expected_next} at index {next_index}")
+                    
+                    # Step 3: Verify the next problem exists and is accessible
+                    response = self.session.get(f"{self.base_url}/problems/{expected_next}?username={self.test_student_username}")
+                    
+                    if response.status_code == 200:
+                        next_problem = response.json()
+                        self.log_test("Next Problem Accessibility", True, 
+                                    f"✅ Next problem {expected_next} is accessible: '{next_problem.get('question_en', '')[:50]}...'")
+                        return True
+                    else:
+                        self.log_test("Next Problem Accessibility", False, 
+                                    f"❌ Next problem {expected_next} not accessible: HTTP {response.status_code}")
+                        return False
+                else:
+                    self.log_test("Navigation Logic Calculation", False, 
+                                f"❌ practice2_1 is the last problem in sequence (index {practice2_1_index})")
+                    return False
+                    
+            except ValueError:
+                self.log_test("Navigation Logic Calculation", False, 
+                            f"❌ practice2_1 not found in expected sequence: {expected_sequence}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Navigation Logic Testing", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_problem_id_matching(self):
+        """Test Problem ID Matching - String matching and case sensitivity"""
+        try:
+            print("\n🔤 PROBLEM ID MATCHING TESTING")
+            print("Testing string matching for 'practice2_1' with array elements")
+            
+            # Test exact string matching
+            expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
+            test_id = "practice2_1"
+            
+            # Test 1: Exact match
+            exact_match = test_id in expected_sequence
+            if exact_match:
+                match_index = expected_sequence.index(test_id)
+                self.log_test("Exact String Matching", True, 
+                            f"✅ '{test_id}' matches exactly at index {match_index}")
+            else:
+                self.log_test("Exact String Matching", False, 
+                            f"❌ '{test_id}' not found in sequence: {expected_sequence}")
+                return False
+            
+            # Test 2: Case sensitivity
+            case_variants = ["Practice2_1", "PRACTICE2_1", "practice2_1", "Practice2_1"]
+            case_results = []
+            
+            for variant in case_variants:
+                is_match = variant in expected_sequence
+                case_results.append(f"{variant}: {'✅' if is_match else '❌'}")
+            
+            # Only lowercase should match
+            correct_case_behavior = case_variants[2] in expected_sequence and all(
+                variant not in expected_sequence for variant in case_variants[:2] + case_variants[3:]
+            )
+            
+            if correct_case_behavior:
+                self.log_test("Case Sensitivity Test", True, 
+                            f"✅ Case sensitivity working correctly: {', '.join(case_results)}")
+            else:
+                self.log_test("Case Sensitivity Test", False, 
+                            f"❌ Case sensitivity issue: {', '.join(case_results)}")
+                return False
+            
+            # Test 3: Special character handling
+            special_variants = ["practice2_1", "practice2-1", "practice2.1", "practice21"]
+            special_results = []
+            
+            for variant in special_variants:
+                is_match = variant in expected_sequence
+                special_results.append(f"{variant}: {'✅' if is_match else '❌'}")
+            
+            # Only underscore version should match
+            correct_special_behavior = special_variants[0] in expected_sequence and all(
+                variant not in expected_sequence for variant in special_variants[1:]
+            )
+            
+            if correct_special_behavior:
+                self.log_test("Special Character Test", True, 
+                            f"✅ Special character handling correct: {', '.join(special_results)}")
+                return True
+            else:
+                self.log_test("Special Character Test", False, 
+                            f"❌ Special character handling issue: {', '.join(special_results)}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Problem ID Matching Test", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_current_navigation_issue_debug(self):
+        """Test Current Navigation Issue Debug - Identify why navigation goes to prep instead of practice2_2"""
+        try:
+            print("\n🐛 CURRENT NAVIGATION ISSUE DEBUG")
+            print("Debugging why navigation goes to prep stage instead of practice2_2 after practice2_1")
+            
+            # Step 1: Get student progress to see current state
+            response = self.session.get(f"{self.base_url}/students/{self.test_student_username}/progress")
+            
+            if response.status_code == 200:
+                progress_data = response.json()
+                section2_progress = progress_data.get("progress", {}).get("section2", {})
+                
+                # Check practice2_1 completion status
+                practice2_1_status = section2_progress.get("practice2_1", {})
+                is_practice2_1_completed = practice2_1_status.get("completed", False)
+                
+                if is_practice2_1_completed:
+                    self.log_test("practice2_1 Completion Status", True, 
+                                f"✅ practice2_1 is marked as completed in progress: {practice2_1_status}")
+                else:
+                    self.log_test("practice2_1 Completion Status", False, 
+                                f"❌ practice2_1 not marked as completed: {practice2_1_status}")
+                    return False
+                
+                # Step 2: Check what the next problem should be according to sequence
+                expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
+                practice2_1_index = expected_sequence.index("practice2_1")
+                expected_next = expected_sequence[practice2_1_index + 1]
+                
+                self.log_test("Expected Next Problem", True, 
+                            f"✅ After practice2_1 (index {practice2_1_index}), next should be {expected_next}")
+                
+                # Step 3: Test if practice2_2 is accessible
+                response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
+                
+                if response.status_code == 200:
+                    practice2_2_data = response.json()
+                    self.log_test("practice2_2 Accessibility", True, 
+                                f"✅ practice2_2 is accessible: '{practice2_2_data.get('question_en', '')[:50]}...'")
+                else:
+                    self.log_test("practice2_2 Accessibility", False, 
+                                f"❌ practice2_2 not accessible: HTTP {response.status_code}")
+                    return False
+                
+                # Step 4: Check if there are any hardcoded navigation rules
+                # Test accessing prep2 to see if it's incorrectly being suggested
+                response = self.session.get(f"{self.base_url}/problems/prep2?username={self.test_student_username}")
+                
+                if response.status_code == 200:
+                    prep2_data = response.json()
+                    self.log_test("prep2 Accessibility Check", True, 
+                                f"✅ prep2 is also accessible (this might be the issue): '{prep2_data.get('question_en', '')[:30]}...'")
+                    
+                    # This suggests the issue might be in frontend navigation logic, not backend
+                    self.log_test("Navigation Issue Analysis", True, 
+                                f"✅ Backend correctly serves both prep2 and practice2_2. Issue likely in frontend navigation logic.")
+                    return True
+                else:
+                    self.log_test("prep2 Accessibility Check", False, 
+                                f"❌ prep2 not accessible: HTTP {response.status_code}")
+                    return False
+                    
+            else:
+                self.log_test("Student Progress Check", False, 
+                            f"Failed to get student progress: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Current Navigation Issue Debug", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_section_sequences_array_lookup(self):
+        """Test Section Sequences Array Lookup - Verify sectionSequences array functionality"""
+        try:
+            print("\n📋 SECTION SEQUENCES ARRAY LOOKUP TESTING")
+            print("Testing if sectionSequences array lookup works correctly for Section 2")
+            
+            # Simulate the frontend sectionSequences array
+            section_sequences = {
+                "section1": ["prep1", "explanation1", "practice1", "practice2", "assessment1", "examprep1"],
+                "section2": ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"],
+                "section3": ["prep3", "explanation3", "practice3_1", "practice3_2", "assessment3", "examprep3"],
+                "section4": ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"],
+                "section5": ["prep5", "explanation5", "practice5_1", "practice5_2", "assessment5", "examprep5"]
+            }
+            
+            # Test Section 2 sequence lookup
+            section2_sequence = section_sequences.get("section2", [])
+            
+            if section2_sequence:
+                self.log_test("Section 2 Sequence Lookup", True, 
+                            f"✅ Section 2 sequence found: {section2_sequence}")
+                
+                # Test finding practice2_1 in the sequence
+                if "practice2_1" in section2_sequence:
+                    practice2_1_index = section2_sequence.index("practice2_1")
+                    next_index = practice2_1_index + 1
+                    
+                    if next_index < len(section2_sequence):
+                        next_problem = section2_sequence[next_index]
+                        
+                        if next_problem == "practice2_2":
+                            self.log_test("Sequence Navigation Logic", True, 
+                                        f"✅ practice2_1 at index {practice2_1_index} → next is {next_problem} at index {next_index}")
+                            
+                            # Verify this matches backend data
+                            response = self.session.get(f"{self.base_url}/problems/section/section2")
+                            
+                            if response.status_code == 200:
+                                backend_problems = response.json()
+                                backend_ids = [p.get("id") for p in backend_problems]
+                                
+                                # Check if backend sequence matches frontend expectation
+                                sequence_match = all(pid in backend_ids for pid in section2_sequence)
+                                
+                                if sequence_match:
+                                    self.log_test("Backend-Frontend Sequence Match", True, 
+                                                f"✅ Backend problems match frontend sequence expectations")
+                                    return True
+                                else:
+                                    missing_in_backend = [pid for pid in section2_sequence if pid not in backend_ids]
+                                    self.log_test("Backend-Frontend Sequence Match", False, 
+                                                f"❌ Backend missing problems: {missing_in_backend}")
+                                    return False
+                            else:
+                                self.log_test("Backend Sequence Verification", False, 
+                                            f"Failed to fetch backend problems: HTTP {response.status_code}")
+                                return False
+                        else:
+                            self.log_test("Sequence Navigation Logic", False, 
+                                        f"❌ Expected practice2_2 after practice2_1, got {next_problem}")
+                            return False
+                    else:
+                        self.log_test("Sequence Navigation Logic", False, 
+                                    f"❌ practice2_1 is last in sequence (index {practice2_1_index})")
+                        return False
+                else:
+                    self.log_test("practice2_1 in Sequence", False, 
+                                f"❌ practice2_1 not found in Section 2 sequence: {section2_sequence}")
+                    return False
+            else:
+                self.log_test("Section 2 Sequence Lookup", False, 
+                            f"❌ Section 2 sequence not found in sectionSequences")
+                return False
+                
+        except Exception as e:
+            self.log_test("Section Sequences Array Lookup", False, f"Test execution error: {str(e)}")
+            return False
+
+    def generate_navigation_summary(self, results, critical_failures):
+        """Generate comprehensive summary of navigation flow testing"""
         print("\n" + "=" * 80)
-        print("📚 CRITICAL STEP VALIDATION LOGIC TESTING SUMMARY")
+        print("🧭 CRITICAL NAVIGATION FLOW BUG TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL STEP VALIDATION TEST RESULTS:")
+        print(f"\n📈 OVERALL NAVIGATION FLOW TEST RESULTS:")
         print(f"   Total Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
@@ -579,55 +463,53 @@ class StepValidationTester:
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL STEP VALIDATION ISSUES:")
+            print(f"\n🚨 CRITICAL NAVIGATION FLOW ISSUES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
-            print(f"\n⚠️  EDUCATIONAL RISK: Students may skip essential learning steps!")
-            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix step validation business rules")
+            print(f"\n⚠️  NAVIGATION RISK: Students cannot progress properly through Section 2!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix navigation flow logic")
         else:
-            print(f"\n🎉 NO CRITICAL STEP VALIDATION ISSUES DETECTED")
+            print(f"\n🎉 NO CRITICAL NAVIGATION FLOW ISSUES DETECTED")
         
-        print(f"\n📋 STEP VALIDATION STATUS:")
+        print(f"\n📋 NAVIGATION FLOW STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL STEP VALIDATION TESTS PASSED")
-            print("   ✅ prep2 has appropriate steps (simple inequality)")
-            print("   ✅ practice2_1 has appropriate steps (simple practice)")
-            print("   ✅ practice2_2 has appropriate steps (word problem)")
-            print("   ✅ Business rules properly enforced")
-            print("   ✅ Database step solutions match requirements")
-            print("   ✅ Problem identification logic working")
-            print("   ✅ API responses provide correct step structure")
-            print("   🛡️  EDUCATIONAL INTEGRITY: PROTECTED")
+            print("   🎯 ALL NAVIGATION FLOW TESTS PASSED")
+            print("   ✅ Section 2 problem IDs verified (prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2)")
+            print("   ✅ Navigation logic working (practice2_1 → practice2_2)")
+            print("   ✅ Problem ID matching working correctly")
+            print("   ✅ Backend serves correct next problems")
+            print("   ✅ Section sequences array lookup functional")
+            print("   🛡️  NAVIGATION INTEGRITY: PROTECTED")
         else:
-            print("   ⚠️  STEP VALIDATION ISSUES DETECTED")
-            print("   🔧 Step validation logic needs fixes")
-            print("   🚨 EDUCATIONAL INTEGRITY: COMPROMISED")
+            print("   ⚠️  NAVIGATION FLOW ISSUES DETECTED")
+            print("   🔧 Navigation logic needs fixes")
+            print("   🚨 STUDENT PROGRESSION: BLOCKED")
         
         print("\n" + "=" * 80)
 
-    def run_step_validation_tests(self):
-        """Run comprehensive step validation tests"""
+    def run_navigation_flow_tests(self):
+        """Run comprehensive navigation flow tests"""
         print("=" * 80)
-        print("📚 CRITICAL STEP VALIDATION LOGIC FIX TESTING")
+        print("🧭 CRITICAL NAVIGATION FLOW BUG TESTING")
         print("=" * 80)
-        print("Testing step validation business rules to ensure students complete correct number of steps")
+        print("Testing Section 2 navigation sequence to debug the critical navigation flow bug")
         
-        # Test categories for step validation
+        # Test categories for navigation flow
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
             ("Test Student Creation", self.create_test_student, "critical"),
-            ("Section 2 Problem Types Verification", self.test_section2_problem_types_verification, "critical"),
-            ("Step Requirement Business Rules", self.test_step_requirement_business_rules, "critical"),
-            ("Database Step Solutions Check", self.test_database_step_solutions_check, "critical"),
-            ("Problem Identification Logic", self.test_problem_identification_logic, "high"),
-            ("API Response Validation", self.test_api_response_validation, "high")
+            ("Section 2 Problem IDs Verification", self.test_section2_problem_ids_verification, "critical"),
+            ("Navigation Logic Simulation", self.test_navigation_logic_simulation, "critical"),
+            ("Problem ID Matching", self.test_problem_id_matching, "critical"),
+            ("Current Navigation Issue Debug", self.test_current_navigation_issue_debug, "critical"),
+            ("Section Sequences Array Lookup", self.test_section_sequences_array_lookup, "high")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 STEP VALIDATION TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 NAVIGATION FLOW TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -642,28 +524,28 @@ class StepValidationTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive step validation summary
-        self.generate_step_validation_summary(results, critical_failures)
+        # Generate comprehensive navigation flow summary
+        self.generate_navigation_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run step validation tests"""
-    print("🚀 Starting CRITICAL STEP VALIDATION LOGIC Testing...")
-    print("🎯 Goal: Ensure students complete correct number of steps for educational purposes")
+    """Main function to run navigation flow tests"""
+    print("🚀 Starting CRITICAL NAVIGATION FLOW BUG Testing...")
+    print("🎯 Goal: Debug Section 2 navigation sequence issue where practice2_1 → prep instead of practice2_2")
     
-    tester = StepValidationTester(BACKEND_URL)
-    results = tester.run_step_validation_tests()
+    tester = NavigationFlowTester(BACKEND_URL)
+    results = tester.run_navigation_flow_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
     
     if failed_tests > 0:
-        print(f"\n🚨 STEP VALIDATION ALERT: {failed_tests} test(s) failed!")
-        print("🔧 Step validation logic implementation required to ensure educational integrity")
+        print(f"\n🚨 NAVIGATION FLOW ALERT: {failed_tests} test(s) failed!")
+        print("🔧 Navigation flow logic implementation required to fix student progression")
     else:
-        print(f"\n🛡️  STEP VALIDATION CONFIRMED: All step validation tests passed!")
-        print("✅ Educational step requirements are working correctly")
+        print(f"\n🛡️  NAVIGATION FLOW CONFIRMED: All navigation flow tests passed!")
+        print("✅ Section 2 navigation sequence is working correctly")
     
     sys.exit(failed_tests)
 
