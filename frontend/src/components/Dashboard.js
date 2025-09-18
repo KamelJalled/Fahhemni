@@ -260,9 +260,18 @@ const Dashboard = () => {
   };
 
   const handleProblemClick = (problemId, sectionId) => {
+    // CRITICAL: Check stage access control first (prevent cheating)
+    const accessControl = checkStageAccess(sectionId, problemId, userProgress);
+    
+    if (!accessControl.access) {
+      // Show access denied message
+      alert(`🔒 ${accessControl.message}`);
+      return; // Block navigation
+    }
+    
     const status = getProblemStatus(problemId, sectionId, userProgress);
     
-    // Show warning for assessment if not all practice completed
+    // Show warning for assessment if not all practice completed (redundant check for safety)
     const assessmentId = `assessment${sectionId.slice(-1)}`;
     if (problemId === assessmentId && status === 'available') {
       const practiceProblems = Object.keys(userProgress[sectionId] || {}).filter(id => id.includes('practice'));
@@ -278,6 +287,7 @@ const Dashboard = () => {
       }
     }
     
+    // Only navigate if access is allowed
     if (status !== 'locked') {
       navigate(`/problem/${problemId}`);
     }
