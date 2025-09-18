@@ -692,14 +692,14 @@ async def init_database():
             "show_full_solution": False,
             "hide_answer": True,
             "hints_en": [
-                "Multiply both sides by -2.",
-                "Remember to flip the inequality sign when multiplying by a negative.",
-                "That's all the hints available."
+                "When a variable is divided by a negative number, what operation isolates it?",
+                "Pay attention to what happens to the inequality sign when you multiply by a negative.",
+                "Focus on the process, not the specific numbers."
             ],
             "hints_ar": [
-                "اضرب كلا الطرفين في -٢.",
-                "تذكر أن تقلب إشارة المتباينة عند الضرب في عدد سالب.",
-                "هذه كل الإرشادات المتاحة."
+                "عندما يكون المتغير مقسوماً على عدد سالب، ما العملية التي تعزله؟",
+                "انتبه لما يحدث لإشارة المتباينة عند الضرب في عدد سالب.",
+                "ركز على العملية، وليس على الأرقام المحددة."
             ]
         },
         {
