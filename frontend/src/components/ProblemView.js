@@ -728,22 +728,47 @@ const ProblemView = () => {
   };
 
   const handleNextProblem = () => {
-    // Get next problem in sequence
-    const problemOrder = ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'];
-    const currentIndex = problemOrder.indexOf(problemId);
+    // FIXED: Dynamic section-aware navigation for all sections
+    const getSectionNumber = (id) => {
+      const match = id.match(/(\d+)$/);
+      return match ? parseInt(match[1]) : 1;
+    };
     
-    if (currentIndex < problemOrder.length - 1) {
-      const nextProblemId = problemOrder[currentIndex + 1];
-      // Reset state before navigating
+    const currentSectionNum = getSectionNumber(problemId);
+    
+    // Define problem sequences for each section
+    const sectionSequences = {
+      1: ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'],
+      2: ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'],
+      3: ['prep3', 'explanation3', 'practice3_1', 'practice3_2', 'assessment3', 'examprep3'],
+      4: ['prep4', 'explanation4', 'practice4_1', 'practice4_2', 'assessment4', 'examprep4'],
+      5: ['prep5', 'explanation5', 'practice5_1', 'practice5_2', 'assessment5', 'examprep5']
+    };
+    
+    const currentSequence = sectionSequences[currentSectionNum] || sectionSequences[1];
+    const currentIndex = currentSequence.indexOf(problemId);
+    
+    console.log(`🎯 Navigation: ${problemId} (section ${currentSectionNum}, index ${currentIndex})`);
+    
+    if (currentIndex < currentSequence.length - 1) {
+      // Move to next problem in same section
+      const nextProblemId = currentSequence[currentIndex + 1];
+      console.log(`🎯 Next problem in section ${currentSectionNum}: ${nextProblemId}`);
       resetProblemState();
       navigate(`/problem/${nextProblemId}`);
     } else {
-      // FIXED: Completed examprep1 - navigate directly to Section 2 Preparation (prep2)
-      console.log('🎯 Completed examprep1 - redirecting to Section 2 prep2');
-      resetProblemState();
-      
-      // Navigate directly to Section 2 first problem
-      navigate('/problem/prep2');
+      // Completed current section - move to next section
+      const nextSectionNum = currentSectionNum + 1;
+      if (nextSectionNum <= 5 && sectionSequences[nextSectionNum]) {
+        const nextSectionFirstProblem = sectionSequences[nextSectionNum][0];
+        console.log(`🎯 Completed section ${currentSectionNum} - moving to section ${nextSectionNum}: ${nextSectionFirstProblem}`);
+        resetProblemState();
+        navigate(`/problem/${nextSectionFirstProblem}`);
+      } else {
+        // All sections completed
+        console.log('🎯 All sections completed - returning to dashboard');
+        navigate('/dashboard');
+      }
     }
   };
 
