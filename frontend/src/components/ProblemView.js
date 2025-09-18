@@ -429,30 +429,17 @@ const ProblemView = () => {
       const currentStepSolution = problem.step_solutions[stepIndex];
       const normalizedAnswer = normalizeAnswer(currentAnswer);
       
-      // Enhanced step validation - prevent skipping steps with final answers
+      // Enhanced step validation using the new validation function
       const possibleAnswers = language === 'en' ? 
         currentStepSolution.possible_answers : 
         currentStepSolution.possible_answers_ar;
       
-      // Check if user entered a final answer instead of step work
-      const userEnteredFinalAnswer = normalizedAnswer.includes('<') || normalizedAnswer.includes('>') || 
-                                   normalizedAnswer.includes('≤') || normalizedAnswer.includes('≥');
-      const stepRequiresWork = currentStepSolution.step_type !== 'final_answer';
+      const stepInstruction = language === 'en' ? 
+        currentStepSolution.step_en : 
+        currentStepSolution.step_ar;
       
-      if (userEnteredFinalAnswer && stepRequiresWork && stepIndex < problem.step_solutions.length - 1) {
-        // User entered final answer in intermediate step - reject it
-        const stepHint = language === 'en' 
-          ? `This step requires showing your work step by step. Don't skip to the final answer. Show: ${currentStepSolution.hint_en || 'your work for this step'}`
-          : `هذه الخطوة تتطلب إظهار عملك خطوة بخطوة. لا تقفز إلى الإجابة النهائية. أظهر: ${currentStepSolution.hint_ar || 'عملك لهذه الخطوة'}`;
-        
-        setShowEncouragement(stepHint);
-        setTimeout(() => setShowEncouragement(''), 7000);
-        return;
-      }
-      
-      const isStepCorrect = possibleAnswers.some(possibleAnswer => 
-        normalizeAnswer(possibleAnswer) === normalizedAnswer
-      );
+      // FIXED: Use enhanced validation with sign flipping support
+      const isStepCorrect = validateInequalityStep(currentAnswer, possibleAnswers, stepInstruction);
       
       if (isStepCorrect) {
         // Step is correct
