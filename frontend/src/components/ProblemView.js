@@ -629,13 +629,10 @@ const ProblemView = () => {
     
     const normalizedUserAnswer = normalizeAnswer(currentAnswer);
     const possibleAnswers = language === 'en' ? currentStepData.possible_answers : currentStepData.possible_answers_ar;
+    const stepInstruction = language === 'en' ? currentStepData.step_en : currentStepData.step_ar;
     
-    let isStepCorrect = false;
-    if (possibleAnswers) {
-      isStepCorrect = possibleAnswers.some(possibleAnswer => 
-        normalizeAnswer(possibleAnswer) === normalizedUserAnswer
-      );
-    }
+    // FIXED: Use enhanced validation with sign flipping support
+    const isStepCorrect = validateInequalityStep(currentAnswer, possibleAnswers, stepInstruction);
     
     if (isStepCorrect) {
       // ✅ CORRECT STEP
