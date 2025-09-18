@@ -1743,13 +1743,15 @@ const ProblemView = () => {
                               </div>
                             )}
                             
-                            {/* Final Answer Input */}
-                            <Input
-                              value={userAnswer}
-                              onChange={(e) => setUserAnswer(e.target.value)}
-                              placeholder={language === 'en' ? 'Enter your final answer (e.g., x < 4)...' : 'أدخل إجابتك النهائية (مثال: س < 4)...'}
-                              className="mb-4 text-lg h-12"
-                            />
+                            {/* Final Answer Input - FIXED: No gap above */}
+                            <div className="answer-input-section">
+                              <Input
+                                value={userAnswer}
+                                onChange={(e) => setUserAnswer(e.target.value)}
+                                placeholder={language === 'en' ? 'Enter your final answer (e.g., x < 4)...' : 'أدخل إجابتك النهائية (مثال: س < 4)...'}
+                                className="mb-4 text-lg h-12"
+                              />
+                            </div>
                           </div>
                         );
                         
