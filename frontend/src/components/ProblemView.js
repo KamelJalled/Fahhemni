@@ -1764,8 +1764,8 @@ const ProblemView = () => {
                               {language === 'en' ? `Step ${currentStep + 1}: Guided Practice` : `الخطوة ${currentStep + 1}: تدريب موجه`}
                             </h4>
                             
-                            {/* Step Progress Indicator */}
-                            <div className="mb-4">
+                            {/* Step Progress Indicator - FIXED: Compact spacing */}
+                            <div className="mb-3 stage-progress">
                               <div className="flex items-center justify-center space-x-2 mb-2">
                                 {[0, 1, 2].map((step) => (
                                   <div
