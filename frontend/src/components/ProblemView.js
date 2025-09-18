@@ -219,7 +219,19 @@ const ProblemView = () => {
       if (progressResponse.ok) {
         const progressData = await progressResponse.json();
         setUserProgress(progressData.progress);
-        setAttempts(progressData.progress.section1[problemId]?.attempts || 0);
+        
+        // FIXED: Dynamic section-aware progress tracking
+        const getSectionNumber = (id) => {
+          const match = id.match(/(\d+)$/);
+          return match ? parseInt(match[1]) : 1;
+        };
+        
+        const currentSectionNum = getSectionNumber(problemId);
+        const sectionKey = `section${currentSectionNum}`;
+        const sectionProgress = progressData.progress[sectionKey] || {};
+        
+        setAttempts(sectionProgress[problemId]?.attempts || 0);
+        console.log(`📊 Progress loaded for ${problemId} in ${sectionKey}: ${sectionProgress[problemId]?.attempts || 0} attempts`);
       }
 
     } catch (error) {
