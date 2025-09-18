@@ -261,13 +261,28 @@ async def get_section_problems_endpoint(section_id: str):
         raise HTTPException(status_code=400, detail=str(e))
 
 @api_router.get("/problems/{problem_id}", response_model=Problem)
-async def get_problem_endpoint(problem_id: str):
-    """Get specific problem details"""
+async def get_problem_endpoint(problem_id: str, username: str = None):
+    """Get specific problem details with stage access control"""
     try:
+        # CRITICAL SECURITY: Check stage access if username is provided
+        if username:
+            access_check = await check_stage_access_security(username, problem_id)
+            if not access_check["access"]:
+                raise HTTPException(
+                    status_code=access_check["status_code"], 
+                    detail={
+                        "error": access_check["error"],
+                        "message": access_check["message"],
+                        "locked": True
+                    }
+                )
+        
         problem = await get_problem(problem_id)
         if not problem:
             raise HTTPException(status_code=404, detail="Problem not found")
         return problem
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
