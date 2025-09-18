@@ -990,11 +990,18 @@ const ProblemView = () => {
         setHintsUsed(currentAttempts);
         
         const hintIndex = currentAttempts - 1;
-        let errorMessage = language === 'en' ? 'Try again.' : 'حاول مرة أخرى.';
+        let errorMessage = language === 'en' ? 'Incorrect.' : 'غير صحيح.';
         
-        if (problem.hints_en?.length > hintIndex && problem.hints_ar?.length > hintIndex) {
-          const hint = language === 'en' ? problem.hints_en[hintIndex] : problem.hints_ar[hintIndex];
-          errorMessage += ` 💡 ${hint}`;
+        // CRITICAL: Use pedagogical hint system based on attempt number (never show direct answers)
+        if (currentAttempts <= 3) {
+          const guidanceHint = generateGuidanceHint(problem, currentAttempts);
+          const pedagogicalHint = language === 'en' ? guidanceHint.en : guidanceHint.ar;
+          errorMessage += ` 💡 ${pedagogicalHint}`;
+        } else {
+          // After 3 attempts, suggest going to explanation stage
+          errorMessage += language === 'en' 
+            ? ' 💡 Consider reviewing the Explanation stage for more guidance.'
+            : ' 💡 فكر في مراجعة مرحلة الشرح للحصول على مزيد من التوجيه.';
         }
         
         const scoreDisplay = `Score: ${Math.max(newScore, 10)}% - ${currentAttempts} hint${currentAttempts > 1 ? 's' : ''} used`;
