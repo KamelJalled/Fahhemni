@@ -365,20 +365,20 @@ class StageAccessControlTester:
                 return False
             
             # Step 4: Verify examprep2 is STILL LOCKED (needs assessment2 completion)
-            response = self.session.get(f"{self.base_url}/problems/examprep2")
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
-            if response.status_code == 200:
+            if response.status_code == 403:
+                self.log_test("Examprep2 Still Locked After Assessment Access", True, 
+                            "✅ examprep2 correctly remains blocked until assessment2 completion")
+            elif response.status_code == 400:
                 data = response.json()
-                if "locked" in data and data["locked"] == True:
+                if "assessment" in data.get("detail", {}).get("message", "").lower():
                     self.log_test("Examprep2 Still Locked After Assessment Access", True, 
                                 "✅ examprep2 correctly remains LOCKED until assessment2 is completed")
                 else:
                     self.log_test("Examprep2 Still Locked After Assessment Access", False, 
-                                "❌ SECURITY ISSUE: examprep2 should remain locked until assessment2 completion")
+                                f"❌ SECURITY ISSUE: examprep2 should remain locked until assessment2 completion: {data}")
                     return False
-            elif response.status_code == 403:
-                self.log_test("Examprep2 Still Locked After Assessment Access", True, 
-                            "✅ examprep2 correctly remains blocked until assessment2 completion")
             else:
                 self.log_test("Examprep2 Still Locked After Assessment Access", False, 
                             f"❌ SECURITY ISSUE: examprep2 access control unclear: HTTP {response.status_code}")
