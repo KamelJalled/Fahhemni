@@ -613,27 +613,31 @@ const ProblemView = () => {
       const isStepCorrect = validateInequalityStep(currentAnswer, possibleAnswers, stepInstruction);
       
       if (isStepCorrect) {
-        // Step is correct
+        // Step is correct - FIXED: Use business rule validation
         const newStepResults = [...stepResults];
         newStepResults[stepIndex] = true;
         setStepResults(newStepResults);
         
-        if (stepIndex < problem.step_solutions.length - 1) {
+        // CRITICAL: Enforce correct number of steps using business rules
+        const stepValidation = validateStepProgression(problem.type, problem.id, stepIndex, problem);
+        
+        if (!stepValidation.complete) {
           // Move to next step
-          setCurrentStep(stepIndex + 1);
-          setShowEncouragement(`✅ ${language === 'en' ? 'Great! Now continue with the next step.' : 'رائع! الآن تابع مع الخطوة التالية.'}`);
-          setTimeout(() => setShowEncouragement(''), 2000);
+          setCurrentStep(stepValidation.nextStep);
+          setShowEncouragement(`✅ ${stepValidation.message}`);
+          setTimeout(() => setShowEncouragement(''), 3000);
         } else {
-          // All steps complete - now require final answer if needed
+          // All required steps complete - now require final answer if needed
           if (problem.final_answer_required) {
             setAllStepsComplete(true);
-            setShowEncouragement(`✅ ${language === 'en' ? 'Excellent! Now enter your final answer below.' : 'ممتاز! الآن أدخل إجابتك النهائية أدناه.'}`);
+            setShowEncouragement(`✅ ${stepValidation.message}`);
             setTimeout(() => setShowEncouragement(''), 3000);
           } else {
             // Complete the problem and submit to backend
             setAllStepsComplete(true);
             setIsCorrect(true);
-            await submitToBackend();
+            setShowEncouragement(`✅ ${stepValidation.message}`);
+            setTimeout(() => submitToBackend(), 1000);
           }
         }
       } else {
