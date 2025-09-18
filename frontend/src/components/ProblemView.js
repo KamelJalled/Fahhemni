@@ -1197,8 +1197,8 @@ const ProblemView = () => {
 
       {/* Main Content Container - Expanded Width */}
       <div className="max-w-7xl mx-auto w-full">
-        {/* Problem Header */}
-        <Card className="mb-6">
+        {/* Problem Header - FIXED: Reduced margin */}
+        <Card className="mb-4 problem-card">
           <CardHeader>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4">
