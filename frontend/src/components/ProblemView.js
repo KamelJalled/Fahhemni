@@ -376,9 +376,9 @@ const ProblemView = () => {
     try {
       setLoading(true);
 
-      // Fetch problem details
+      // Fetch problem details with username for access control
       const problemResponse = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/problems/${problemId}`
+        `${process.env.REACT_APP_BACKEND_URL}/api/problems/${problemId}?username=${user.username}`
       );
       
       let problemData = null;
