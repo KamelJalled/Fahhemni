@@ -98,12 +98,13 @@ class StageAccessControlTester:
             print("Testing that assessment2 and examprep2 are LOCKED initially")
             print("Testing that direct API calls to locked stages are blocked")
             
-            # Create fresh test student
-            if not self.create_test_student_section2():
+            # Create fresh test student for initial lock testing
+            initial_test_student = "security_initial_test_student"
+            if not self.create_fresh_test_student(initial_test_student, "GR9-B"):
                 return False
             
             # Test 1: Direct API call to assessment2 should be blocked
-            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
+            response = self.session.get(f"{self.base_url}/problems/assessment2?username={initial_test_student}")
             
             if response.status_code == 403:
                 self.log_test("Assessment2 Initial Lock Status", True, 
@@ -123,7 +124,7 @@ class StageAccessControlTester:
                 return False
             
             # Test 2: Direct API call to examprep2 should be blocked
-            response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={initial_test_student}")
             
             if response.status_code == 403:
                 self.log_test("Examprep2 Initial Lock Status", True, 
@@ -150,7 +151,7 @@ class StageAccessControlTester:
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                f"{self.base_url}/students/{initial_test_student}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
@@ -180,7 +181,7 @@ class StageAccessControlTester:
             }
             
             response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                f"{self.base_url}/students/{initial_test_student}/attempt",
                 json=attempt_data,
                 headers={"Content-Type": "application/json"}
             )
@@ -208,6 +209,36 @@ class StageAccessControlTester:
             
         except Exception as e:
             self.log_test("Initial Stage Access Control Testing", False, f"Test execution error: {str(e)}")
+            return False
+
+    def create_fresh_test_student(self, username, class_name):
+        """Create a fresh test student for testing"""
+        try:
+            test_student = {"username": username, "class_name": class_name}
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("class_name") == class_name:
+                    self.log_test(f"Fresh Test Student Creation ({username})", True, 
+                                f"✅ Created fresh test student '{username}' in class {class_name}")
+                    return True
+                else:
+                    self.log_test(f"Fresh Test Student Creation ({username})", False, 
+                                f"Expected class {class_name}, got {data.get('class_name')}")
+                    return False
+            else:
+                self.log_test(f"Fresh Test Student Creation ({username})", False, 
+                            f"Failed to create test student: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test(f"Fresh Test Student Creation ({username})", False, f"Request error: {str(e)}")
             return False
 
     def test_partial_practice_completion_security(self):
