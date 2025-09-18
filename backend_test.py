@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - CRITICAL STEP VALIDATION LOGIC TESTING
-Tests step validation business rules to ensure students complete the correct number of steps for educational purposes
+Backend API Test Suite for Math Tutoring App - CRITICAL NAVIGATION FLOW BUG TESTING
+Tests Section 2 navigation sequence to debug the critical navigation flow bug
 """
 
 import requests
@@ -12,7 +12,7 @@ import re
 from datetime import datetime
 
 # Use backend URL from frontend/.env as specified in review request
-BACKEND_URL = "https://bilingual-algebra.preview.emergentagent.com/api"
+BACKEND_URL = "http://localhost:8001/api"
 
 class StepValidationTester:
     def __init__(self, base_url):
