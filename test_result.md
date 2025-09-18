@@ -1084,6 +1084,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "❌ CRITICAL NAVIGATION FLOW BUG CONFIRMED: Frontend routing is broken - problem URLs redirect to backend instead of rendering React components. Navigation logic in ProblemView.js appears correct: sectionSequences array properly defines Section 2 as ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'], so practice2_1 should navigate to practice2_2. Backend API serving Section 2 data correctly. Issue is frontend routing preventing proper navigation testing. Root cause: React Router configuration or build issues preventing proper URL handling."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL NAVIGATION BUG ROOT CAUSE IDENTIFIED: The getSectionNumber function in ProblemView.js line 992 uses regex /(\d+)$/ which matches digits at the END of the string. For 'practice2_1', this returns 1 instead of 2, causing navigation to look in section 1's sequence instead of section 2's sequence. Backend testing confirms: ✅ All Section 2 problem IDs verified (prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2), ✅ Navigation logic working (practice2_1 → practice2_2), ✅ Backend serves correct next problems. The issue is purely in frontend getSectionNumber function extracting wrong section number from problem IDs with underscores like 'practice2_1' and 'practice2_2'. Fix required: Change regex to match the first digit after letters, not the last digit in the string."
 
   - task: "Tabbed Explanation Interface Issues"
     implemented: true
