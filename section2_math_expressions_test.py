@@ -250,48 +250,42 @@ class Section2MathExpressionTester:
         """Verify Example 3A (k / (-4) ≤ 2) shows complete operations with sign flip"""
         try:
             # Check if this is the correct example (k / (-4) ≤ 2)
-            problem = example_3a.get("problem", "")
-            if "k" not in problem and ("(-4)" not in problem and "-4" not in problem) and "2" not in problem:
+            problem_en = example_3a.get("problem_en", "")
+            if "k" not in problem_en and ("(-4)" not in problem_en and "-4" not in problem_en) and "2" not in problem_en:
                 self.log_test("Example 3A Problem Identification", False, 
-                            f"Expected problem with 'k', '(-4)' or '-4', and '2', got: {problem}")
+                            f"Expected problem with 'k', '(-4)' or '-4', and '2', got: {problem_en}")
                 return False
             
-            # Check step solutions for complete operations with sign flip
-            step_solutions = example_3a.get("step_solutions", [])
-            if not step_solutions or len(step_solutions) < 2:
-                self.log_test("Example 3A Step Solutions", False, 
-                            f"Expected at least 2 step solutions, got {len(step_solutions)}")
+            self.log_test("Example 3A Problem Identification", True, 
+                        f"✅ Found Example 3A: {problem_en}")
+            
+            # Check solution for complete operations with sign flip
+            solution_en = example_3a.get("solution_en", "")
+            if not solution_en:
+                self.log_test("Example 3A Solution Content", False, 
+                            "Missing solution_en field")
                 return False
             
-            # Step 1 should show: "k / (-4) * (-4) ≥ 2 * (-4)" (both sides with sign flip)
-            step1 = step_solutions[0] if len(step_solutions) > 0 else {}
-            step1_solution = step1.get("solution", "")
-            
-            # Check for complete operation on both sides with sign flip indication
-            has_complete_operation = (
-                ("k" in step1_solution and "(-4)" in step1_solution and "*" in step1_solution and "2" in step1_solution) or
-                ("×" in step1_solution and "-4" in step1_solution) or
-                ("≥" in step1_solution and "2 *" in step1_solution)
-            )
-            
-            if has_complete_operation:
-                self.log_test("Example 3A Step 1 Complete Operations with Sign Flip", True, 
-                            f"✅ Step 1 shows complete operations with sign flip: {step1_solution}")
+            # The solution should show the complete mathematical progression with sign flip
+            # Looking for patterns like "k / (-4) ≤ 2" → "k ≥ 2 * (-4)" → "k ≥ -8"
+            if ("2 * (-4)" in solution_en or "2*(-4)" in solution_en) and "Sign flipped" in solution_en:
+                self.log_test("Example 3A Complete Operations with Sign Flip", True, 
+                            f"✅ Solution shows complete operations with sign flip: {solution_en}")
+            elif "k / (-4)" in solution_en and "2" in solution_en and "k ≥" in solution_en:
+                self.log_test("Example 3A Complete Operations with Sign Flip", True, 
+                            f"✅ Solution shows multiplication with sign flip: {solution_en}")
             else:
-                self.log_test("Example 3A Step 1 Complete Operations with Sign Flip", False, 
-                            f"❌ Step 1 should show complete operations with sign flip, got: {step1_solution}")
+                self.log_test("Example 3A Complete Operations with Sign Flip", False, 
+                            f"❌ Solution should show complete operations with sign flip, got: {solution_en}")
                 return False
             
-            # Step 2 should show: "k ≥ -8" (simplified)
-            step2 = step_solutions[1] if len(step_solutions) > 1 else {}
-            step2_solution = step2.get("solution", "")
-            
-            if "k" in step2_solution and ("-8" in step2_solution or "≥" in step2_solution):
-                self.log_test("Example 3A Step 2 Simplified Result", True, 
-                            f"✅ Step 2 shows simplified result: {step2_solution}")
+            # Check that the final result shows sign flip
+            if "k ≥ -8" in solution_en:
+                self.log_test("Example 3A Final Result with Sign Flip", True, 
+                            f"✅ Solution shows correct final result with sign flip")
             else:
-                self.log_test("Example 3A Step 2 Simplified Result", False, 
-                            f"❌ Step 2 should show simplified result, got: {step2_solution}")
+                self.log_test("Example 3A Final Result with Sign Flip", False, 
+                            f"❌ Solution should show 'k ≥ -8', got: {solution_en}")
                 return False
             
             return True
