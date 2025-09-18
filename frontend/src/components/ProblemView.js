@@ -830,14 +830,13 @@ const ProblemView = () => {
       const currentAttempts = attempts + 1;
       
       if (currentAttempts === 1) {
-        // First wrong attempt - auto-show Hint 1
-        let errorMessage = language === 'en' ? 'Try again.' : 'حاول مرة أخرى.';
+        // First wrong attempt - CRITICAL: Use pedagogical hint system (never show direct answers)
+        let errorMessage = language === 'en' ? 'Not quite right.' : 'ليس صحيحاً تماماً.';
         
-        if (problem.hints_en?.length > 0 || problem.hints_ar?.length > 0) {
-          const hint1 = language === 'en' ? problem.hints_en[0] : problem.hints_ar[0];
-          errorMessage += ` 💡 ${hint1}`;
-          setHintsUsed(1);
-        }
+        const guidanceHint = generateGuidanceHint(problem, 1);
+        const pedagogicalHint = language === 'en' ? guidanceHint.en : guidanceHint.ar;
+        errorMessage += ` 💡 ${pedagogicalHint}`;
+        setHintsUsed(1);
         
         setShowEncouragement(errorMessage);
         setTimeout(() => setShowEncouragement(''), 8000);
