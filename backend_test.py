@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - CRITICAL SECURITY FIX TESTING
-Tests stage access control security to prevent cheating by skipping learning stages
+Backend API Test Suite for Math Tutoring App - CRITICAL STEP VALIDATION LOGIC TESTING
+Tests step validation business rules to ensure students complete the correct number of steps for educational purposes
 """
 
 import requests
