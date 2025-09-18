@@ -381,8 +381,9 @@ const ProblemView = () => {
         `${process.env.REACT_APP_BACKEND_URL}/api/problems/${problemId}`
       );
       
+      let problemData = null;
       if (problemResponse.ok) {
-        const problemData = await problemResponse.json();
+        problemData = await problemResponse.json();
         setProblem(problemData);
       }
 
