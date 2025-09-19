@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Update Section 2 content with new curriculum: 'Solving Inequalities by Multiplication or Division'. Replace all problems, examples, hints, and step-by-step solutions with the provided curriculum content covering positive coefficients, negative coefficients, and division by negative numbers. Maintain bilingual support and existing functionality."
+user_problem_statement: "CRITICAL BUG FIX: Fix Word Problem Hints in Section 2 - NEVER Show the Inequality. Current hints for practice2_2 (ticket sales) and examprep2 (candy distribution) violate Socratic teaching method by showing direct answers like '10t ≥ 500'. Required: Implement progressive 3-step hints that guide thinking without revealing inequality. Update both backend database hints and frontend hint system to use progressive pedagogical guidance instead of direct answers."
 
 backend:
   - task: "Section 2 Content Update - New Curriculum Implementation"
