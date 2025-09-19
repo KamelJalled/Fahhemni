@@ -100,7 +100,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "CRITICAL BUG INVESTIGATION: Navigation from practice2_2 to assessment2 broken. User reports 'The navigation button after the second practice (real life example) is broken. Cannot move to the assessment stage.' Need to investigate stage access control logic and fix navigation flow."
+user_problem_statement: "URGENT FIX: Section 2 Explanation Stage - Step Completion Bug. CRITICAL BUG DESCRIPTION: Location: Section 2, Explanation Stage, Level 1B (First Example). Problem: System advances to next example after Step 1, skipping required Step 2. Current WRONG Behavior: Student enters Step 1: 4x/4 ≥ 20/4 ✓, System immediately moves to Example 2 ❌, Step 2 (simplification to x ≥ 5) is never requested ❌. Required CORRECT Behavior: Student enters Step 1: 4x/4 ≥ 20/4 ✓, System shows: 'جيد! الآن بسّط الطرفين / Good! Now simplify both sides', Student enters Step 2: x ≥ 5 ✓, ONLY THEN move to Example 2. All examples in Section 2 Explanation Stage must require exactly 2 steps before advancing."
 
 backend:
   - task: "Section 2 Navigation Bug Investigation - Assessment2 Access Control"
