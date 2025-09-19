@@ -1772,11 +1772,8 @@ const ProblemView = () => {
                           </div>
                         )}
 
-                        {/* Interactive Step-by-Step Mode - For interactive explanation stages */}
-                        {!problem.show_full_solution && (
-
-                        {/* Solution Display */}
-                        {showExample && (
+                        {/* Solution Display - Only for read-only mode */}
+                        {showExample && problem.show_full_solution && (
                           <div>
                             <div className="bg-green-50 p-8 rounded-lg mb-8 border border-green-200 max-w-5xl mx-auto">
                               <h4 className="font-bold text-2xl text-green-800 mb-6">
