@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 2 Progressive Socratic Hints Testing
-Tests the progressive Socratic hints system for Section 2 word problems as requested by user.
+Backend API Test Suite for Math Tutoring App - Section 2 Explanation Stage Step Completion Bug Fix Testing
+Tests the critical bug fix for Section 2 Explanation Stage step completion as requested by user.
 
-CRITICAL REQUIREMENTS BEING TESTED:
-- practice2_2 (tickets problem): 3 progressive hints displayed on wrong attempts
-- examprep2 (candy problem): 3 progressive hints displayed on wrong attempts  
-- Database verification: hints are correctly stored in database
-- API response check: problem endpoints return correct hints
-- Critical test: wrong attempts trigger progressive hint display
-- Hint content verification: exact hint text matches expected Socratic guidance
+CRITICAL BUG FIX BEING TESTED:
+- Section 2 explanation2 problem structure verification
+- All 3 levels (1B, 2B, 3B) have proper 2-step structure
+- step_solutions array contains exactly 6 step definitions (2 per level)
+- Each step has correct possible_answers arrays
+- Hints are properly aligned with the 6 steps
+- Interactive examples match user specifications:
+  * Level 1B: 4x ≥ 20 (was 4y < 24)
+  * Level 2B: -3m < 15 
+  * Level 3B: -6k ≥ 30
 """
 
 import requests
