@@ -5,7 +5,8 @@ import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
-import { Globe, LogOut, Trophy, Star, Medal, Crown, Play, Lock, CheckCircle, XCircle, ChevronRight, RotateCcw } from 'lucide-react';
+import { Globe, LogOut, Trophy, Star, Medal, Crown, Play, Lock, CheckCircle, XCircle, ChevronRight, RotateCcw, BookOpen, HelpCircle } from 'lucide-react';
+import RulesModal from './RulesModal';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
