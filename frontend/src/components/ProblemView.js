@@ -1759,8 +1759,8 @@ const ProblemView = () => {
                           </div>
                         </div>
 
-                        {/* Show Solution Button */}
-                        {!showExample && (
+                        {/* Show Solution Button - Only for read-only mode */}
+                        {!showExample && problem.show_full_solution && (
                           <div className="text-center mb-8">
                             <Button 
                               onClick={() => setShowExample(true)}
@@ -1771,6 +1771,9 @@ const ProblemView = () => {
                             </Button>
                           </div>
                         )}
+
+                        {/* Interactive Step-by-Step Mode - For interactive explanation stages */}
+                        {!problem.show_full_solution && (
 
                         {/* Solution Display */}
                         {showExample && (
