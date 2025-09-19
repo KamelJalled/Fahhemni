@@ -100,7 +100,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "URGENT FIX: Section 2 Explanation Stage - Step Completion Bug. CRITICAL BUG DESCRIPTION: Location: Section 2, Explanation Stage, Level 1B (First Example). Problem: System advances to next example after Step 1, skipping required Step 2. Current WRONG Behavior: Student enters Step 1: 4x/4 ≥ 20/4 ✓, System immediately moves to Example 2 ❌, Step 2 (simplification to x ≥ 5) is never requested ❌. Required CORRECT Behavior: Student enters Step 1: 4x/4 ≥ 20/4 ✓, System shows: 'جيد! الآن بسّط الطرفين / Good! Now simplify both sides', Student enters Step 2: x ≥ 5 ✓, ONLY THEN move to Example 2. All examples in Section 2 Explanation Stage must require exactly 2 steps before advancing."
+user_problem_statement: "Global Fix: Negative Number Input Validation & Mathematical Rules Display. PART 1: Input Validation for Negative Numbers - Students entering expressions like k ≤ -5 or m > -0.5 may write them with or without parentheses around negative numbers. System must handle both formats. GLOBAL VALIDATION RULE: Apply normalizeAndValidateAnswer logic to ALL sections in the MVP to accept formats like: k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. PART 2: Mathematical Rules Display - Add 'Solving Rules' button to Dashboard and (?) icons in each section with bilingual rules modal. IMMEDIATE + HIGH PRIORITY implementation requested. Focus testing on Section 1 and Section 2 only."
 
 backend:
   - task: "Section 2 Explanation Stage Step Completion Bug Fix"
