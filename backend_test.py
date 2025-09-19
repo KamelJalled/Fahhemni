@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 2 Explanation Stage Step Completion Bug Fix Testing
-Tests the critical bug fix for Section 2 Explanation Stage step completion as requested by user.
+Backend API Test Suite for Math Tutoring App - Global Negative Number Input Validation Testing
+Tests the critical global negative number input validation enhancement as requested by user.
 
-CRITICAL BUG FIX BEING TESTED:
-- Section 2 explanation2 problem structure verification
-- All 3 levels (1B, 2B, 3B) have proper 2-step structure
-- step_solutions array contains exactly 6 step definitions (2 per level)
-- Each step has correct possible_answers arrays
-- Hints are properly aligned with the 6 steps
-- Interactive examples match user specifications:
-  * Level 1B: 4x ≥ 20 (was 4y < 24)
-  * Level 2B: -3m < 15 
-  * Level 3B: -6k ≥ 30
+CRITICAL GLOBAL ENHANCEMENT BEING TESTED:
+- Backend support for multiple negative number formats
+- Section 1 and Section 2 negative number validation (as requested)
+- Test formats like: "k ≤ -5", "k ≤ (-5)", "k<=-5", "ك ≤ (-٥)", "ك≤(-٥)"
+- Arabic numerals and variable names acceptance
+- Space variations in mathematical expressions
+- Parentheses around negative numbers support
 """
 
 import requests
