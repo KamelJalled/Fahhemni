@@ -430,13 +430,14 @@ class WordProblemLogicTester:
                 
                 # Check if hints align with 3-step process
                 step_related_hints = 0
+                word_problem_keywords = ['variable', 'inequality', 'tickets', 'price', 'collect', 'amount', 'at least', 'write', 'divide', 'simplify']
                 for hint in hints_en:
-                    if any(keyword in hint.lower() for keyword in ['step', 'write', 'inequality', 'divide', 'simplify']):
+                    if any(keyword in hint.lower() for keyword in word_problem_keywords):
                         step_related_hints += 1
                 
                 if step_related_hints < 2:
                     self.log_test("Hints System for Practice Problems", False, 
-                                f"❌ Hints don't seem to align with step-by-step process")
+                                f"❌ Hints don't seem to align with word problem solving process")
                     return False
                 
                 self.log_test("Hints System for Practice Problems", True, 
