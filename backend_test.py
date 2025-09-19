@@ -261,7 +261,7 @@ class WordProblemLogicTester:
                 assessment_type = assessment_data.get('type', '')
                 
                 print(f"   Practice Steps: {len(practice_steps)}")
-                print(f"   Assessment Steps: {len(assessment_steps)}")
+                print(f"   Assessment Steps: {len(assessment_steps) if assessment_steps else 0}")
                 print(f"   Assessment Type: {assessment_type}")
                 
                 # Assessment should be type 'assessment'
