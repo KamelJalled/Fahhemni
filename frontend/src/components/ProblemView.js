@@ -2023,6 +2023,13 @@ const ProblemView = () => {
                                         {language === 'ar' ? currentStep.step_ar : currentStep.step_en}
                                       </h5>
                                       
+                                      {/* Step-by-Step Explanation/Clarification */}
+                                      <div className="mb-4 p-3 bg-white rounded border border-blue-100">
+                                        <div className="text-sm text-gray-700 leading-relaxed">
+                                          {language === 'ar' ? currentStep.explanation_ar : currentStep.explanation_en}
+                                        </div>
+                                      </div>
+                                      
                                       {/* Show previous steps */}
                                       {explanationStep > 0 && (
                                         <div className="mb-3">
