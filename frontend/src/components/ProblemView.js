@@ -1131,6 +1131,111 @@ const ProblemView = () => {
     setIsSubmitted(true);
   };
 
+  // 5. PRACTICE WORD PROBLEMS: 3-step process with hints visible from start
+  const handlePracticeWordStage = async () => {
+    console.log('📝 PRACTICE WORD PROBLEM: 3-step process with hints');
+    
+    const currentAnswer = stepAnswers[currentStep]?.trim() || '';
+    
+    if (!currentAnswer) {
+      setShowEncouragement(language === 'en' 
+        ? 'Please enter your answer for this step.'
+        : 'يرجى إدخال إجابتك لهذه الخطوة.');
+      setTimeout(() => setShowEncouragement(''), 3000);
+      return;
+    }
+    
+    const expectedStepAnswers = problem.step_solutions || [];
+    const currentStepData = expectedStepAnswers[currentStep];
+    
+    if (!currentStepData) {
+      console.error('No step data found for current step:', currentStep);
+      return;
+    }
+    
+    const normalizedUserAnswer = normalizeAnswer(currentAnswer);
+    const possibleAnswers = language === 'en' ? currentStepData.possible_answers : currentStepData.possible_answers_ar;
+    const stepInstruction = language === 'en' ? currentStepData.step_en : currentStepData.step_ar;
+    
+    // Use enhanced validation
+    const isStepCorrect = validateInequalityStep(currentAnswer, possibleAnswers, stepInstruction);
+    
+    if (isStepCorrect) {
+      // ✅ CORRECT STEP
+      console.log(`✅ Step ${currentStep + 1} correct for practice word problem`);
+      
+      const requiredSteps = getRequiredSteps(problem.type, problem.id, problem);
+      
+      if (currentStep < requiredSteps - 1) {
+        // Move to next step
+        setCurrentStep(prev => prev + 1);
+        const nextStepMessage = language === 'en' 
+          ? `Great! Step ${currentStep + 1} complete. Continue to Step ${currentStep + 2}.`
+          : `رائع! تم إكمال الخطوة ${currentStep + 1}. انتقل للخطوة ${currentStep + 2}.`;
+        
+        setShowEncouragement(nextStepMessage);
+        setTimeout(() => setShowEncouragement(''), 3000);
+      } else {
+        // All steps complete
+        setAllStepsComplete(true);
+        setIsCorrect(true);
+        
+        const completionMessage = language === 'en' 
+          ? `🎉 Excellent! You've completed all 3 steps of this word problem!`
+          : `🎉 ممتاز! لقد أكملت جميع الخطوات الثلاث لهذه المسألة الكلامية!`;
+        
+        setShowEncouragement(completionMessage);
+        setTimeout(() => setShowEncouragement(''), 5000);
+        await submitToBackend();
+      }
+    } else {
+      // ❌ WRONG ANSWER - Show progressive hints (hints are already visible)
+      setIsCorrect(false);
+      setAttempts(prev => prev + 1);
+      const currentAttempts = attempts + 1;
+      
+      if (currentAttempts <= 2) {
+        // Show encouragement and additional hint
+        const backendHints = language === 'en' ? problem.hints_en : problem.hints_ar;
+        const hintIndex = Math.min(currentAttempts - 1, backendHints?.length - 1 || 0);
+        const additionalHint = backendHints?.[hintIndex] || '';
+        
+        let errorMessage = language === 'en' 
+          ? `Not quite right for Step ${currentStep + 1}. Try again!`
+          : `ليس صحيحاً تماماً للخطوة ${currentStep + 1}. حاول مرة أخرى!`;
+        
+        if (additionalHint && currentAttempts > 1) {
+          errorMessage += ` 💡 ${additionalHint}`;
+        }
+        
+        setShowEncouragement(errorMessage);
+        setTimeout(() => setShowEncouragement(''), 8000);
+      } else {
+        // Third attempt - redirect to explanation of SAME section
+        const currentSection = getCurrentSection();
+        const redirectMessage = language === 'en' 
+          ? `Let's review the explanation for Section ${currentSection} to master this concept.`
+          : `لنراجع شرح القسم ${currentSection} لإتقان هذا المفهوم.`;
+        
+        setShowEncouragement(redirectMessage);
+        setShowRedirectionButton(true);
+        setTimeout(() => setShowEncouragement(''), 6000);
+      }
+    }
+    
+    setIsSubmitted(true);
+  };
+
+  // Helper function to get current section number  
+  const getCurrentSection = () => {
+    if (problemId?.includes('1') || problem?.section_id === 'section1') return 1;
+    if (problemId?.includes('2') || problem?.section_id === 'section2') return 2;
+    if (problemId?.includes('3') || problem?.section_id === 'section3') return 3;
+    if (problemId?.includes('4') || problem?.section_id === 'section4') return 4;
+    if (problemId?.includes('5') || problem?.section_id === 'section5') return 5;
+    return 1; // Default to section 1
+  };
+
   const submitToBackend = async () => {
     // Get the user's actual answer
     const userSubmittedAnswer = problem.step_solutions ? 
