@@ -15,7 +15,22 @@ const Dashboard = () => {
   const [userProgress, setUserProgress] = useState(null);
   const [userStats, setUserStats] = useState({ totalPoints: 0, badges: [] });
   const [sections, setSections] = useState([]);
-  const [selectedSection, setSelectedSection] = useState('section1');
+  const [selectedSection, setSelectedSection] = useState(() => {
+    // NAVIGATION CONTEXT FIX: Preserve current section from localStorage or URL
+    const savedContext = localStorage.getItem('mathapp_navigation_context');
+    if (savedContext) {
+      try {
+        const context = JSON.parse(savedContext);
+        // Only use saved context if it's recent (within 1 hour)
+        if (Date.now() - context.timestamp < 3600000) {
+          return context.section || 'section1';
+        }
+      } catch (e) {
+        console.log('Error parsing navigation context:', e);
+      }
+    }
+    return 'section1'; // Default
+  });
   const [loading, setLoading] = useState(true);
   const [showRulesModal, setShowRulesModal] = useState(false);
 
