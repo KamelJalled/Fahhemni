@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 2 Word Problem Hints Socratic Method Fix
-Tests the critical pedagogical bug fix where word problem hints were showing direct inequalities
-instead of using progressive Socratic guidance to help students discover solutions.
+Backend API Test Suite for Math Tutoring App - Section 2 Word Problem 3-Step Enforcement Fix
+Tests the critical pedagogical bug fix where word problems were completing at Step 2 instead of 
+requiring the complete 3-step mathematical process for proper learning.
+
+CRITICAL REQUIREMENTS BEING TESTED:
+- Both word problems must have exactly 3 steps (not 2)
+- Step 2 must only accept operation display, not final simplified answer
+- Step 3 must be required for completion
+- System must not allow progression to next stage until Step 3 is completed
 """
 
 import requests
