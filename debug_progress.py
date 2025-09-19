@@ -6,7 +6,7 @@ Debug script to check progress update issue
 import requests
 import json
 
-BACKEND_URL = "https://inequal-progression.preview.emergentagent.com/api"
+BACKEND_URL = "https://step-by-step-math-3.preview.emergentagent.com/api"
 
 def debug_progress():
     # Create student

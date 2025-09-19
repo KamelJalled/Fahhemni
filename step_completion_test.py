@@ -7,7 +7,7 @@ Tests that Section 2 explanation stage now requires exactly 2 steps per level be
 import requests
 import json
 
-BACKEND_URL = "https://inequal-progression.preview.emergentagent.com/api"
+BACKEND_URL = "https://step-by-step-math-3.preview.emergentagent.com/api"
 
 def test_step_completion_bug_fix():
     """Test that the step completion bug has been fixed"""
