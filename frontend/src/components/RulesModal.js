@@ -38,7 +38,7 @@ const RulesModal = ({ isOpen, onClose }) => {
             </p>
             <div className="examples bg-gray-900 text-green-400 p-4 rounded-md font-mono text-sm">
               <div className="mb-2">k ≤ -5 ✓  {language === 'ar' ? 'أو' : 'or'}  k ≤ (-5) ✓</div>
-              <div className="mb-2">m > -0.5 ✓  {language === 'ar' ? 'أو' : 'or'}  m > (-0.5) ✓</div>
+              <div className="mb-2">m {'>'} -0.5 ✓  {language === 'ar' ? 'أو' : 'or'}  m {'>'} (-0.5) ✓</div>
               <div>-3m/(-3) ✓  {language === 'ar' ? 'أو' : 'or'}  -3m/-3 ✓</div>
             </div>
           </div>
