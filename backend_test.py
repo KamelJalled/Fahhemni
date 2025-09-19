@@ -593,7 +593,8 @@ class Section2NavigationTester:
             ("Assessment2 Access Control", self.test_assessment2_access_control, "critical"),
             ("Assessment2 Submission", self.test_assessment2_submission, "high"),
             ("Navigation Sequence Verification", self.test_navigation_sequence_verification, "critical"),
-            ("Stage Access Control Logic", self.test_stage_access_control_logic, "critical")
+            ("Stage Access Control Logic", self.test_stage_access_control_logic, "critical"),
+            ("Real User Scenario Analysis", self.test_real_user_scenario_analysis, "critical")
         ]
         
         results = {}
