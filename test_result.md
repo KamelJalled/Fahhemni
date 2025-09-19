@@ -56,7 +56,7 @@
 ##
 ## agent_communication:
 ##     -agent: "main"
-##     -message: "Investigated Section 2 navigation 'bug' from practice2_2 to assessment2. Backend testing revealed this is NOT a bug - the system is working correctly. Assessment2 requires BOTH practice2_1 AND practice2_2 to be completed before access is granted. User experienced 403 error because they completed practice2_2 but skipped practice2_1. Stage access control properly enforces educational progression. No fixes needed - recommend improving UI clarity about practice stage requirements."
+##     -message: "CRITICAL BUG ANALYSIS COMPLETE: Located root cause of Section 2 Explanation Stage step completion bug. The issue is in backend/database.py where Level 1B step_solutions only defines 1 step instead of required 2 steps. Current structure: Level 1B has 'Level 1B Step 1: Divide both sides by 4' but missing 'Level 1B Step 2: Simplify'. This causes system to advance to next example after Step 1 completion instead of requiring Step 2. User specification requires ALL examples to have exactly 2 steps: Step 1 (operation), Step 2 (simplification). Need to add missing Step 2 definitions for all levels and update practice questions to match user's specific examples: Example 1B: 4x ≥ 20, Example 2B: -3m < 15, Example 3B: -6k ≥ 30. Ready to implement fix."
 
 # Protocol Guidelines for Main agent
 #
