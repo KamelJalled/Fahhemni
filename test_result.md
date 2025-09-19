@@ -103,17 +103,17 @@
 user_problem_statement: "CRITICAL BUG FIX: Fix Word Problem Step Count Requirements. Current issue: System accepts Step 2 answer as final and moves to next stage, but word problems MUST require exactly 3 steps: (1) Write inequality from word problem, (2) Perform operation (show division/multiplication), (3) Simplify to final answer. Only after Step 3 should system move to next stage. Affects both practice2_2 (tickets) and examprep2 (candy) problems."
 
 backend:
-  - task: "Section 2 Word Problem Hints - Socratic Method Fix"
+  - task: "Section 2 Word Problem Step Count Requirements - 3-Step Enforcement"
     implemented: true
-    working: true
+    working: false
     file: "backend/database.py, frontend/src/components/ProblemView.js"
     stuck_count: 0
     priority: "critical"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "✅ IMPLEMENTATION COMPLETE: Fixed critical bug where word problem hints were showing direct inequalities like '10t ≥ 500' instead of guiding student thinking. 1) BACKEND DATABASE UPDATES: Updated hints for practice2_2 (ticket sales problem) and examprep2 (candy distribution problem) with progressive 3-step Socratic guidance that NEVER shows the inequality directly. Ticket problem now guides through: variable identification → mathematical relationship → inequality symbol meaning. Candy problem guides through: variable/children count → total calculation → 'at least' meaning. 2) FRONTEND HINT SYSTEM OVERHAUL: Modified preparation and assessment stage handlers in ProblemView.js to use backend database hints directly instead of generic generateGuidanceHint function. Progressive hints now pull from problem.hints_en/hints_ar arrays for proper pedagogical guidance. 3) DATABASE RESET: Applied admin database reset to ensure new hint content is loaded. The system now follows strict Socratic method: guides discovery process, never reveals direct answers, uses progressive hint difficulty."
+        comment: "✅ IMPLEMENTATION COMPLETE: Fixed critical pedagogical bug where word problems were accepting Step 2 answers as final instead of requiring complete 3-step process. 1) FRONTEND LOGIC UPDATES: Updated getRequiredSteps function to enforce 3 steps for word problems in ALL stages (practice, assessment, examprep). Word problem detection enhanced to identify tickets/candy problems. 2) BACKEND DATABASE UPDATES: practice2_2 (tickets): Updated step_solutions from 2 to 3 steps - Step 1: Write inequality (10t ≥ 500), Step 2: Show operation (10t/10 ≥ 500/10), Step 3: Simplify final (t ≥ 50). examprep2 (candy): Added complete 3-step solutions - Step 1: Write inequality (15p ≥ 60), Step 2: Show operation (15p/15 ≥ 60/15), Step 3: Simplify final (p ≥ 4). 3) STEP VALIDATION ENHANCEMENT: Removed t ≥ 50 from Step 2 possible answers to prevent premature completion. Step 2 now only accepts operation display, Step 3 accepts final simplified answer. 4) DATABASE RESET: Applied to load updated step structure. Students now must complete full 3-step solving process for proper mathematical understanding."
       - working: "NA"
         agent: "main"
         comment: "Successfully implemented Section 2 new curriculum content: 'Solving Inequalities by Multiplication or Division'. Updated all 6 stages: Preparation (4x < 20), Explanation (3 levels covering positive coefficient, negative coefficient, division by negative), Practice (classic -2/3 k > 8 and real-life ticket problem), Assessment (y/(-2) > 6), and Exam Prep (candy distribution problem). All content includes proper step-by-step solutions, bilingual hints, and maintains existing database structure."
