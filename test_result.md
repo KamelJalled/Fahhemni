@@ -1144,15 +1144,21 @@ test_plan:
 
   - task: "Progressive Socratic Hints System - Section 2 Word Problems"
     implemented: true
-    working: true
-    file: "backend/database.py, backend/server.py"
-    stuck_count: 0
+    working: false
+    file: "backend/database.py, frontend/src/components/ProblemView.js"
+    stuck_count: 1
     priority: "critical"
     needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
         comment: "✅ PROGRESSIVE SOCRATIC HINTS SYSTEM COMPLETELY VERIFIED: Comprehensive testing confirms the progressive Socratic hints are working correctly for Section 2 word problems. DETAILED RESULTS: 1) ✅ practice2_2 (tickets problem) has all 3 progressive hints stored correctly in database: Hint 1 'Think about the variable: t represents number of tickets. What's the price per ticket? What amount needs to be collected?', Hint 2 'If you sell t tickets at 10 SAR each, how much will you collect? Does it need to be greater than or equal to 500?', Hint 3 'Amount collected = price per ticket × number of tickets. Use ≥ symbol because it says at least'. 2) ✅ examprep2 (candy problem) has all 3 progressive hints: Hint 1 'Variable p represents pieces per child. How many children? How many total pieces needed?', Hint 2 'If each child gets p pieces, and you have 15 children, how many pieces total will you distribute?', Hint 3 'Total = number of children × pieces per child. Must be at least 60'. 3) ✅ Database verification: hints correctly stored with proper English/Arabic bilingual support. 4) ✅ API response structure: problem endpoints return hints in correct format with hints_en and hints_ar arrays. 5) ✅ Progressive display: wrong attempts trigger progressive hint display correctly - tested with 3 wrong attempts per problem. 6) ✅ Socratic guidance: hint content provides proper question-based learning approach guiding students through problem-solving steps. All 8 test categories PASSED (100% success rate). The progressive Socratic hints system is functioning exactly as designed and providing proper educational guidance to students for word problems."
+      - working: false
+        agent: "user"
+        comment: "CRITICAL BUG: Progressive Socratic hints not working for Section 2 word problems despite backend verification. User reports hints are NOT displaying after wrong attempts in practice2_2 (tickets problem)."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE CONFIRMED: Progressive Socratic hints are NOT working for practice2_2 (tickets problem). COMPREHENSIVE TESTING RESULTS: 1) ✅ Successfully accessed practice2_2 via direct URL navigation, 2) ✅ Problem loaded correctly with tickets word problem, 3) ✅ Input field functional - tested 3 wrong attempts: 't = 40', 't > 30', '10t = 400', 4) ❌ NO PROGRESSIVE HINTS DISPLAYED after any wrong attempts. ROOT CAUSE IDENTIFIED: System treats practice2_2 as 'PRACTICE STAGE: Step-by-step guided' (console logs confirm) instead of using preparation/assessment stage logic that includes progressive hints. The getStageType() function in ProblemView.js routes practice stages to step-by-step solving WITHOUT hints, while progressive hints are only available in preparation/assessment stages. ARCHITECTURAL MISMATCH: User expects progressive hints in practice stages, but system design only provides them in preparation/assessment stages. ADDITIONAL ISSUES: Backend API connectivity problems ('Failed to fetch' errors), problem data not loading correctly (hints_en/hints_ar not found in window.problemData). The expected progressive hints are not displaying because practice2_2 uses practice stage logic, not the hint-enabled preparation/assessment logic."
 
 agent_communication:
   - agent: "main"
