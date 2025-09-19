@@ -386,9 +386,22 @@ const ProblemView = () => {
       return 'explanation';
     }
     
-    // PRACTICE STAGES: Step-by-step guided (no hints needed)
+    // PRACTICE STAGES: Check if it's a word problem that needs hints
     if (problemType === 'practice' || problemId?.includes('practice')) {
-      return 'practice';
+      // CRITICAL FIX: Word problems in practice stages should get progressive hints like preparation stages
+      const questionText = (language === 'en' ? problem?.question_en : problem?.question_ar) || '';
+      const isWordProblem = questionText.length > 50 || 
+                           questionText.toLowerCase().includes('word') ||
+                           questionText.includes('ريال') ||
+                           questionText.includes('tickets') ||
+                           questionText.includes('candy') ||
+                           questionText.includes('children');
+      
+      if (isWordProblem) {
+        return 'preparation'; // Use preparation logic which includes progressive hints
+      } else {
+        return 'practice'; // Regular step-by-step guided for non-word problems
+      }
     }
     
     // ASSESSMENT & EXAM PREP: Final answer with score penalties
