@@ -317,10 +317,10 @@ class Section2StepEnforcementTester:
             return False
 
     def test_step_progression_logic(self):
-        """Test that the system properly requires completion of all 3 steps before marking complete"""
+        """Test that the system properly requires the final answer for completion"""
         try:
             print("\n🔄 STEP PROGRESSION LOGIC")
-            print("Testing that all 3 steps must be completed before problem is marked as complete")
+            print("Testing that only the final answer (t ≥ 50, p ≥ 4) marks problems as complete")
             
             # Create a fresh test student for step progression testing
             step_test_student = "step_progression_test_student"
@@ -343,8 +343,8 @@ class Section2StepEnforcementTester:
                             "❌ Failed to complete prerequisites for practice2_2")
                 return False
             
-            # Test practice2_2 step progression
-            # Step 1: Submit correct answer for Step 1
+            # Test practice2_2 - intermediate step answers should NOT complete the problem
+            # Try submitting Step 1 answer (should be rejected as it's not the final answer)
             step1_attempt = {
                 "problem_id": "practice2_2",
                 "answer": "10t ≥ 500",
@@ -359,26 +359,19 @@ class Section2StepEnforcementTester:
             
             if response.status_code == 200:
                 result = response.json()
-                if result.get("correct"):
-                    # Check that problem is NOT marked as completed after Step 1
-                    progress = result.get("progress", {})
-                    if not progress.get("completed", True):  # Should be False
-                        self.log_test("practice2_2 Step 1 Incomplete", True, 
-                                    f"✅ Problem correctly remains incomplete after Step 1")
-                    else:
-                        self.log_test("practice2_2 Step 1 Incomplete", False, 
-                                    f"❌ CRITICAL BUG: Problem marked complete after Step 1")
-                        return False
+                if not result.get("correct"):
+                    self.log_test("practice2_2 Step 1 Rejection", True, 
+                                f"✅ Step 1 answer '10t ≥ 500' correctly rejected (not final answer)")
                 else:
-                    self.log_test("practice2_2 Step 1 Answer", False, 
-                                f"❌ Step 1 answer '10t ≥ 500' was rejected")
+                    self.log_test("practice2_2 Step 1 Rejection", False, 
+                                f"❌ CRITICAL BUG: Step 1 answer '10t ≥ 500' was accepted (should only accept final answer)")
                     return False
             else:
                 self.log_test("practice2_2 Step 1 Submission", False, 
                             f"Failed to submit Step 1: HTTP {response.status_code}")
                 return False
             
-            # Step 2: Submit correct answer for Step 2
+            # Try submitting Step 2 answer (should be rejected as it's not the final answer)
             step2_attempt = {
                 "problem_id": "practice2_2",
                 "answer": "10t / 10 ≥ 500 / 10",
@@ -393,27 +386,20 @@ class Section2StepEnforcementTester:
             
             if response.status_code == 200:
                 result = response.json()
-                if result.get("correct"):
-                    # Check that problem is STILL NOT marked as completed after Step 2
-                    progress = result.get("progress", {})
-                    if not progress.get("completed", True):  # Should be False
-                        self.log_test("practice2_2 Step 2 Incomplete", True, 
-                                    f"✅ Problem correctly remains incomplete after Step 2")
-                    else:
-                        self.log_test("practice2_2 Step 2 Incomplete", False, 
-                                    f"❌ CRITICAL BUG: Problem marked complete after Step 2 (should require Step 3)")
-                        return False
+                if not result.get("correct"):
+                    self.log_test("practice2_2 Step 2 Rejection", True, 
+                                f"✅ Step 2 answer '10t / 10 ≥ 500 / 10' correctly rejected (not final answer)")
                 else:
-                    self.log_test("practice2_2 Step 2 Answer", False, 
-                                f"❌ Step 2 answer '10t / 10 ≥ 500 / 10' was rejected")
+                    self.log_test("practice2_2 Step 2 Rejection", False, 
+                                f"❌ CRITICAL BUG: Step 2 answer was accepted (should only accept final answer)")
                     return False
             else:
                 self.log_test("practice2_2 Step 2 Submission", False, 
                             f"Failed to submit Step 2: HTTP {response.status_code}")
                 return False
             
-            # Step 3: Submit correct answer for Step 3
-            step3_attempt = {
+            # Submit the final answer (should be accepted and mark problem as complete)
+            final_attempt = {
                 "problem_id": "practice2_2",
                 "answer": "t ≥ 50",
                 "hints_used": 0
@@ -421,30 +407,30 @@ class Section2StepEnforcementTester:
             
             response = self.session.post(
                 f"{self.base_url}/students/{step_test_student}/attempt",
-                json=step3_attempt,
+                json=final_attempt,
                 headers={"Content-Type": "application/json"}
             )
             
             if response.status_code == 200:
                 result = response.json()
                 if result.get("correct"):
-                    # Check that problem is NOW marked as completed after Step 3
+                    # Check that problem is NOW marked as completed with final answer
                     progress = result.get("progress", {})
                     if progress.get("completed", False):  # Should be True
-                        self.log_test("practice2_2 Step 3 Complete", True, 
-                                    f"✅ Problem correctly marked complete after Step 3")
+                        self.log_test("practice2_2 Final Answer Acceptance", True, 
+                                    f"✅ Final answer 't ≥ 50' correctly accepted and problem marked complete")
                         return True
                     else:
-                        self.log_test("practice2_2 Step 3 Complete", False, 
-                                    f"❌ CRITICAL BUG: Problem not marked complete after Step 3")
+                        self.log_test("practice2_2 Final Answer Acceptance", False, 
+                                    f"❌ CRITICAL BUG: Final answer accepted but problem not marked complete")
                         return False
                 else:
-                    self.log_test("practice2_2 Step 3 Answer", False, 
-                                f"❌ Step 3 answer 't ≥ 50' was rejected")
+                    self.log_test("practice2_2 Final Answer Acceptance", False, 
+                                f"❌ CRITICAL BUG: Final answer 't ≥ 50' was rejected")
                     return False
             else:
-                self.log_test("practice2_2 Step 3 Submission", False, 
-                            f"Failed to submit Step 3: HTTP {response.status_code}")
+                self.log_test("practice2_2 Final Answer Submission", False, 
+                            f"Failed to submit final answer: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
