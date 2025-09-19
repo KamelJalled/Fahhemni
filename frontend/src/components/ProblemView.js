@@ -1010,11 +1010,21 @@ const ProblemView = () => {
         const hintIndex = currentAttempts - 1;
         let errorMessage = language === 'en' ? 'Incorrect.' : 'غير صحيح.';
         
-        // CRITICAL: Use pedagogical hint system based on attempt number (never show direct answers)
+        // CRITICAL: Use progressive hints from database (never show direct answers)
         if (currentAttempts <= 3) {
-          const guidanceHint = generateGuidanceHint(problem, currentAttempts);
-          const pedagogicalHint = language === 'en' ? guidanceHint.en : guidanceHint.ar;
-          errorMessage += ` 💡 ${pedagogicalHint}`;
+          // Use backend hints directly for progressive guidance
+          const backendHints = language === 'en' ? problem.hints_en : problem.hints_ar;
+          const hintIndex = Math.min(currentAttempts - 1, (backendHints?.length || 3) - 1);
+          const progressiveHint = backendHints?.[hintIndex] || '';
+          
+          if (progressiveHint) {
+            errorMessage += ` 💡 ${progressiveHint}`;
+          } else {
+            // Fallback to old system if no backend hints
+            const guidanceHint = generateGuidanceHint(problem, currentAttempts);
+            const pedagogicalHint = language === 'en' ? guidanceHint.en : guidanceHint.ar;
+            errorMessage += ` 💡 ${pedagogicalHint}`;
+          }
         } else {
           // After 3 attempts, suggest going to explanation stage
           errorMessage += language === 'en' 
