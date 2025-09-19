@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - CRITICAL NAVIGATION FLOW BUG TESTING
-Tests Section 2 navigation sequence to debug the critical navigation flow bug
+Backend API Test Suite for Math Tutoring App - Section 2 Word Problem Hints Socratic Method Fix
+Tests the critical pedagogical bug fix where word problem hints were showing direct inequalities
+instead of using progressive Socratic guidance to help students discover solutions.
 """
 
 import requests
@@ -12,14 +13,14 @@ import re
 from datetime import datetime
 
 # Use backend URL from frontend/.env as specified in review request
-BACKEND_URL = "http://localhost:8001/api"
+BACKEND_URL = "https://inequality-solver.preview.emergentagent.com/api"
 
-class NavigationFlowTester:
+class Section2HintsTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "navigation_test_student"
+        self.test_student_username = "hints_test_student"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -63,7 +64,7 @@ class NavigationFlowTester:
             return False
 
     def create_test_student(self):
-        """Create test student for navigation testing"""
+        """Create test student for hints testing"""
         try:
             test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
@@ -92,366 +93,357 @@ class NavigationFlowTester:
             self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
             return False
 
-    def test_section2_problem_ids_verification(self):
-        """Test Section 2 Problem ID Verification - List all Section 2 problem IDs"""
+    def test_practice2_2_database_verification(self):
+        """Test practice2_2 (ticket sales problem) database content and hints"""
         try:
-            print("\n🔍 SECTION 2 PROBLEM ID VERIFICATION")
-            print("Expected sequence: prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2")
+            print("\n🎫 PRACTICE2_2 (TICKET SALES PROBLEM) DATABASE VERIFICATION")
+            print("Expected: Progressive Socratic hints that DO NOT show '10t ≥ 500' directly")
             
-            # Get all Section 2 problems
-            response = self.session.get(f"{self.base_url}/problems/section/section2")
+            # Get practice2_2 problem data
+            response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
             
             if response.status_code == 200:
-                problems = response.json()
-                problem_ids = [problem.get("id") for problem in problems]
+                problem_data = response.json()
                 
-                expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
+                # Verify problem content integrity
+                expected_question = "Tickets must be sold at SAR 10 each to collect at least SAR 500"
+                expected_answer = "t ≥ 50"
                 
-                # Check if all expected IDs are present
-                missing_ids = [pid for pid in expected_sequence if pid not in problem_ids]
-                extra_ids = [pid for pid in problem_ids if pid not in expected_sequence]
-                
-                if not missing_ids and not extra_ids:
-                    self.log_test("Section 2 Problem IDs Complete", True, 
-                                f"✅ Found all expected Section 2 problem IDs: {problem_ids}")
-                    
-                    # Verify sequence order
-                    actual_sequence = []
-                    for expected_id in expected_sequence:
-                        for problem in problems:
-                            if problem.get("id") == expected_id:
-                                actual_sequence.append(expected_id)
-                                break
-                    
-                    if actual_sequence == expected_sequence:
-                        self.log_test("Section 2 Sequence Order", True, 
-                                    f"✅ Section 2 problems in correct sequence: {actual_sequence}")
-                        return True
-                    else:
-                        self.log_test("Section 2 Sequence Order", False, 
-                                    f"❌ Sequence mismatch. Expected: {expected_sequence}, Got: {actual_sequence}")
-                        return False
+                if expected_question in problem_data.get("question_en", ""):
+                    self.log_test("practice2_2 Question Content", True, 
+                                f"✅ Question content correct: '{problem_data.get('question_en')[:60]}...'")
                 else:
-                    error_details = []
-                    if missing_ids:
-                        error_details.append(f"Missing: {missing_ids}")
-                    if extra_ids:
-                        error_details.append(f"Extra: {extra_ids}")
-                    
-                    self.log_test("Section 2 Problem IDs Complete", False, 
-                                f"❌ Problem ID mismatch. {', '.join(error_details)}")
+                    self.log_test("practice2_2 Question Content", False, 
+                                f"❌ Question content mismatch. Got: '{problem_data.get('question_en')}'")
                     return False
-            else:
-                self.log_test("Section 2 Problem IDs Complete", False, 
-                            f"Failed to fetch Section 2 problems: HTTP {response.status_code}")
-                return False
                 
-        except Exception as e:
-            self.log_test("Section 2 Problem ID Verification", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_navigation_logic_simulation(self):
-        """Test Navigation Logic - Simulate completing practice2_1 and check next problem"""
-        try:
-            print("\n🧭 NAVIGATION LOGIC TESTING")
-            print("Simulating completion of practice2_1 and testing what should be next")
-            
-            # Step 1: Complete practice2_1 for test student
-            practice2_1_attempt = {
-                "problem_id": "practice2_1",
-                "answer": "k < -12",  # Correct answer for -2/3 k > 8
-                "hints_used": 0
-            }
-            
-            response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
-                json=practice2_1_attempt,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("correct"):
-                    self.log_test("practice2_1 Completion", True, 
-                                f"✅ Successfully completed practice2_1 with score: {data.get('score')}")
+                if problem_data.get("answer") == expected_answer:
+                    self.log_test("practice2_2 Answer Content", True, 
+                                f"✅ Answer correct: {problem_data.get('answer')}")
                 else:
-                    self.log_test("practice2_1 Completion", False, 
-                                f"❌ practice2_1 answer was incorrect: {data}")
+                    self.log_test("practice2_2 Answer Content", False, 
+                                f"❌ Answer incorrect. Expected: {expected_answer}, Got: {problem_data.get('answer')}")
                     return False
-            else:
-                self.log_test("practice2_1 Completion", False, 
-                            f"Failed to submit practice2_1: HTTP {response.status_code}")
-                return False
-            
-            # Step 2: Test navigation logic - what should come after practice2_1?
-            expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
-            
-            # Find index of practice2_1
-            try:
-                practice2_1_index = expected_sequence.index("practice2_1")
-                next_index = practice2_1_index + 1
                 
-                if next_index < len(expected_sequence):
-                    expected_next = expected_sequence[next_index]
-                    
-                    self.log_test("Navigation Logic Calculation", True, 
-                                f"✅ practice2_1 is at index {practice2_1_index}, next should be {expected_next} at index {next_index}")
-                    
-                    # Step 3: Verify the next problem exists and is accessible
-                    response = self.session.get(f"{self.base_url}/problems/{expected_next}?username={self.test_student_username}")
-                    
-                    if response.status_code == 200:
-                        next_problem = response.json()
-                        self.log_test("Next Problem Accessibility", True, 
-                                    f"✅ Next problem {expected_next} is accessible: '{next_problem.get('question_en', '')[:50]}...'")
-                        return True
-                    else:
-                        self.log_test("Next Problem Accessibility", False, 
-                                    f"❌ Next problem {expected_next} not accessible: HTTP {response.status_code}")
-                        return False
+                # CRITICAL: Verify hints follow Socratic method and DO NOT show direct inequality
+                hints_en = problem_data.get("hints_en", [])
+                hints_ar = problem_data.get("hints_ar", [])
+                
+                if len(hints_en) == 3 and len(hints_ar) == 3:
+                    self.log_test("practice2_2 Hint Count", True, 
+                                f"✅ Correct number of hints: {len(hints_en)} English, {len(hints_ar)} Arabic")
                 else:
-                    self.log_test("Navigation Logic Calculation", False, 
-                                f"❌ practice2_1 is the last problem in sequence (index {practice2_1_index})")
+                    self.log_test("practice2_2 Hint Count", False, 
+                                f"❌ Expected 3 hints each. Got: {len(hints_en)} English, {len(hints_ar)} Arabic")
                     return False
-                    
-            except ValueError:
-                self.log_test("Navigation Logic Calculation", False, 
-                            f"❌ practice2_1 not found in expected sequence: {expected_sequence}")
-                return False
                 
-        except Exception as e:
-            self.log_test("Navigation Logic Testing", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_problem_id_matching(self):
-        """Test Problem ID Matching - String matching and case sensitivity"""
-        try:
-            print("\n🔤 PROBLEM ID MATCHING TESTING")
-            print("Testing string matching for 'practice2_1' with array elements")
-            
-            # Test exact string matching
-            expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
-            test_id = "practice2_1"
-            
-            # Test 1: Exact match
-            exact_match = test_id in expected_sequence
-            if exact_match:
-                match_index = expected_sequence.index(test_id)
-                self.log_test("Exact String Matching", True, 
-                            f"✅ '{test_id}' matches exactly at index {match_index}")
-            else:
-                self.log_test("Exact String Matching", False, 
-                            f"❌ '{test_id}' not found in sequence: {expected_sequence}")
-                return False
-            
-            # Test 2: Case sensitivity
-            case_variants = ["Practice2_1", "PRACTICE2_1", "practice2_1", "Practice2_1"]
-            case_results = []
-            
-            for variant in case_variants:
-                is_match = variant in expected_sequence
-                case_results.append(f"{variant}: {'✅' if is_match else '❌'}")
-            
-            # Only lowercase should match
-            correct_case_behavior = case_variants[2] in expected_sequence and all(
-                variant not in expected_sequence for variant in case_variants[:2] + case_variants[3:]
-            )
-            
-            if correct_case_behavior:
-                self.log_test("Case Sensitivity Test", True, 
-                            f"✅ Case sensitivity working correctly: {', '.join(case_results)}")
-            else:
-                self.log_test("Case Sensitivity Test", False, 
-                            f"❌ Case sensitivity issue: {', '.join(case_results)}")
-                return False
-            
-            # Test 3: Special character handling
-            special_variants = ["practice2_1", "practice2-1", "practice2.1", "practice21"]
-            special_results = []
-            
-            for variant in special_variants:
-                is_match = variant in expected_sequence
-                special_results.append(f"{variant}: {'✅' if is_match else '❌'}")
-            
-            # Only underscore version should match
-            correct_special_behavior = special_variants[0] in expected_sequence and all(
-                variant not in expected_sequence for variant in special_variants[1:]
-            )
-            
-            if correct_special_behavior:
-                self.log_test("Special Character Test", True, 
-                            f"✅ Special character handling correct: {', '.join(special_results)}")
+                # CRITICAL: Check that hints DO NOT contain direct inequality "10t ≥ 500"
+                forbidden_patterns = ["10t ≥ 500", "10t >= 500", "10 * t ≥ 500", "10 * t >= 500"]
+                direct_inequality_found = False
+                
+                for hint in hints_en + hints_ar:
+                    for pattern in forbidden_patterns:
+                        if pattern in hint:
+                            direct_inequality_found = True
+                            self.log_test("practice2_2 No Direct Inequality", False, 
+                                        f"❌ CRITICAL BUG: Found direct inequality '{pattern}' in hint: '{hint}'")
+                            break
+                    if direct_inequality_found:
+                        break
+                
+                if not direct_inequality_found:
+                    self.log_test("practice2_2 No Direct Inequality", True, 
+                                f"✅ CRITICAL FIX VERIFIED: No direct inequalities found in hints")
+                else:
+                    return False
+                
+                # Verify progressive Socratic guidance structure
+                # Expected progression: Variable identification → Mathematical relationship → Inequality symbol meaning
+                hint1_keywords = ["variable", "t represents", "tickets", "price", "amount"]
+                hint2_keywords = ["sell", "collect", "greater than or equal", "≥"]
+                hint3_keywords = ["Amount collected", "price per ticket", "number of tickets", "at least"]
+                
+                hint1_valid = any(keyword.lower() in hints_en[0].lower() for keyword in hint1_keywords)
+                hint2_valid = any(keyword.lower() in hints_en[1].lower() for keyword in hint2_keywords)
+                hint3_valid = any(keyword.lower() in hints_en[2].lower() for keyword in hint3_keywords)
+                
+                if hint1_valid and hint2_valid and hint3_valid:
+                    self.log_test("practice2_2 Socratic Progression", True, 
+                                f"✅ Progressive Socratic guidance verified: Variable ID → Math relationship → Symbol meaning")
+                else:
+                    self.log_test("practice2_2 Socratic Progression", False, 
+                                f"❌ Socratic progression incomplete. Hint1: {hint1_valid}, Hint2: {hint2_valid}, Hint3: {hint3_valid}")
+                    return False
+                
+                # Verify bilingual support
+                arabic_keywords_present = any("ت" in hint or "تذكرة" in hint or "ريال" in hint for hint in hints_ar)
+                if arabic_keywords_present:
+                    self.log_test("practice2_2 Bilingual Support", True, 
+                                f"✅ Arabic hints properly implemented with mathematical terms")
+                else:
+                    self.log_test("practice2_2 Bilingual Support", False, 
+                                f"❌ Arabic hints missing proper mathematical terminology")
+                    return False
+                
                 return True
+                
             else:
-                self.log_test("Special Character Test", False, 
-                            f"❌ Special character handling issue: {', '.join(special_results)}")
+                self.log_test("practice2_2 Database Access", False, 
+                            f"Failed to fetch practice2_2: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Problem ID Matching Test", False, f"Test execution error: {str(e)}")
+            self.log_test("practice2_2 Database Verification", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_current_navigation_issue_debug(self):
-        """Test Current Navigation Issue Debug - Identify why navigation goes to prep instead of practice2_2"""
+    def test_examprep2_database_verification(self):
+        """Test examprep2 (candy distribution problem) database content and hints"""
         try:
-            print("\n🐛 CURRENT NAVIGATION ISSUE DEBUG")
-            print("Debugging why navigation goes to prep stage instead of practice2_2 after practice2_1")
+            print("\n🍬 EXAMPREP2 (CANDY DISTRIBUTION PROBLEM) DATABASE VERIFICATION")
+            print("Expected: Progressive Socratic hints that DO NOT show '15p ≥ 60' directly")
             
-            # Step 1: Get student progress to see current state
-            response = self.session.get(f"{self.base_url}/students/{self.test_student_username}/progress")
+            # Get examprep2 problem data
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
             if response.status_code == 200:
-                progress_data = response.json()
-                section2_progress = progress_data.get("progress", {}).get("section2", {})
+                problem_data = response.json()
                 
-                # Check practice2_1 completion status
-                practice2_1_status = section2_progress.get("practice2_1", {})
-                is_practice2_1_completed = practice2_1_status.get("completed", False)
+                # Verify problem content integrity
+                expected_question = "distribute at least 60 pieces of candy equally among 15 children"
+                expected_answer = "p ≥ 4"
                 
-                if is_practice2_1_completed:
-                    self.log_test("practice2_1 Completion Status", True, 
-                                f"✅ practice2_1 is marked as completed in progress: {practice2_1_status}")
+                if expected_question.lower() in problem_data.get("question_en", "").lower():
+                    self.log_test("examprep2 Question Content", True, 
+                                f"✅ Question content correct: '{problem_data.get('question_en')[:60]}...'")
                 else:
-                    self.log_test("practice2_1 Completion Status", False, 
-                                f"❌ practice2_1 not marked as completed: {practice2_1_status}")
+                    self.log_test("examprep2 Question Content", False, 
+                                f"❌ Question content mismatch. Got: '{problem_data.get('question_en')}'")
                     return False
                 
-                # Step 2: Check what the next problem should be according to sequence
-                expected_sequence = ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"]
-                practice2_1_index = expected_sequence.index("practice2_1")
-                expected_next = expected_sequence[practice2_1_index + 1]
-                
-                self.log_test("Expected Next Problem", True, 
-                            f"✅ After practice2_1 (index {practice2_1_index}), next should be {expected_next}")
-                
-                # Step 3: Test if practice2_2 is accessible
-                response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
-                
-                if response.status_code == 200:
-                    practice2_2_data = response.json()
-                    self.log_test("practice2_2 Accessibility", True, 
-                                f"✅ practice2_2 is accessible: '{practice2_2_data.get('question_en', '')[:50]}...'")
+                if problem_data.get("answer") == expected_answer:
+                    self.log_test("examprep2 Answer Content", True, 
+                                f"✅ Answer correct: {problem_data.get('answer')}")
                 else:
-                    self.log_test("practice2_2 Accessibility", False, 
-                                f"❌ practice2_2 not accessible: HTTP {response.status_code}")
+                    self.log_test("examprep2 Answer Content", False, 
+                                f"❌ Answer incorrect. Expected: {expected_answer}, Got: {problem_data.get('answer')}")
                     return False
                 
-                # Step 4: Check if there are any hardcoded navigation rules
-                # Test accessing prep2 to see if it's incorrectly being suggested
-                response = self.session.get(f"{self.base_url}/problems/prep2?username={self.test_student_username}")
+                # CRITICAL: Verify hints follow Socratic method and DO NOT show direct inequality
+                hints_en = problem_data.get("hints_en", [])
+                hints_ar = problem_data.get("hints_ar", [])
                 
-                if response.status_code == 200:
-                    prep2_data = response.json()
-                    self.log_test("prep2 Accessibility Check", True, 
-                                f"✅ prep2 is also accessible (this might be the issue): '{prep2_data.get('question_en', '')[:30]}...'")
-                    
-                    # This suggests the issue might be in frontend navigation logic, not backend
-                    self.log_test("Navigation Issue Analysis", True, 
-                                f"✅ Backend correctly serves both prep2 and practice2_2. Issue likely in frontend navigation logic.")
-                    return True
+                if len(hints_en) == 3 and len(hints_ar) == 3:
+                    self.log_test("examprep2 Hint Count", True, 
+                                f"✅ Correct number of hints: {len(hints_en)} English, {len(hints_ar)} Arabic")
                 else:
-                    self.log_test("prep2 Accessibility Check", False, 
-                                f"❌ prep2 not accessible: HTTP {response.status_code}")
+                    self.log_test("examprep2 Hint Count", False, 
+                                f"❌ Expected 3 hints each. Got: {len(hints_en)} English, {len(hints_ar)} Arabic")
                     return False
-                    
+                
+                # CRITICAL: Check that hints DO NOT contain direct inequality "15p ≥ 60"
+                forbidden_patterns = ["15p ≥ 60", "15p >= 60", "15 * p ≥ 60", "15 * p >= 60"]
+                direct_inequality_found = False
+                
+                for hint in hints_en + hints_ar:
+                    for pattern in forbidden_patterns:
+                        if pattern in hint:
+                            direct_inequality_found = True
+                            self.log_test("examprep2 No Direct Inequality", False, 
+                                        f"❌ CRITICAL BUG: Found direct inequality '{pattern}' in hint: '{hint}'")
+                            break
+                    if direct_inequality_found:
+                        break
+                
+                if not direct_inequality_found:
+                    self.log_test("examprep2 No Direct Inequality", True, 
+                                f"✅ CRITICAL FIX VERIFIED: No direct inequalities found in hints")
+                else:
+                    return False
+                
+                # Verify progressive Socratic guidance structure
+                # Expected progression: Variable/children count → Total calculation → "At least" meaning
+                hint1_keywords = ["Variable p", "pieces per child", "children", "total pieces"]
+                hint2_keywords = ["each child gets", "15 children", "pieces total", "distribute"]
+                hint3_keywords = ["Total", "number of children", "pieces per child", "at least"]
+                
+                hint1_valid = any(keyword.lower() in hints_en[0].lower() for keyword in hint1_keywords)
+                hint2_valid = any(keyword.lower() in hints_en[1].lower() for keyword in hint2_keywords)
+                hint3_valid = any(keyword.lower() in hints_en[2].lower() for keyword in hint3_keywords)
+                
+                if hint1_valid and hint2_valid and hint3_valid:
+                    self.log_test("examprep2 Socratic Progression", True, 
+                                f"✅ Progressive Socratic guidance verified: Variable/children → Total calc → 'At least' meaning")
+                else:
+                    self.log_test("examprep2 Socratic Progression", False, 
+                                f"❌ Socratic progression incomplete. Hint1: {hint1_valid}, Hint2: {hint2_valid}, Hint3: {hint3_valid}")
+                    return False
+                
+                # Verify bilingual support
+                arabic_keywords_present = any("ح" in hint or "طفل" in hint or "قطعة" in hint for hint in hints_ar)
+                if arabic_keywords_present:
+                    self.log_test("examprep2 Bilingual Support", True, 
+                                f"✅ Arabic hints properly implemented with mathematical terms")
+                else:
+                    self.log_test("examprep2 Bilingual Support", False, 
+                                f"❌ Arabic hints missing proper mathematical terminology")
+                    return False
+                
+                return True
+                
             else:
-                self.log_test("Student Progress Check", False, 
-                            f"Failed to get student progress: HTTP {response.status_code}")
+                self.log_test("examprep2 Database Access", False, 
+                            f"Failed to fetch examprep2: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Current Navigation Issue Debug", False, f"Test execution error: {str(e)}")
+            self.log_test("examprep2 Database Verification", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_section_sequences_array_lookup(self):
-        """Test Section Sequences Array Lookup - Verify sectionSequences array functionality"""
+    def test_hint_content_detailed_analysis(self):
+        """Detailed analysis of hint content to ensure pedagogical correctness"""
         try:
-            print("\n📋 SECTION SEQUENCES ARRAY LOOKUP TESTING")
-            print("Testing if sectionSequences array lookup works correctly for Section 2")
+            print("\n🔍 DETAILED HINT CONTENT ANALYSIS")
+            print("Analyzing hint content for pedagogical correctness and Socratic method compliance")
             
-            # Simulate the frontend sectionSequences array
-            section_sequences = {
-                "section1": ["prep1", "explanation1", "practice1", "practice2", "assessment1", "examprep1"],
-                "section2": ["prep2", "explanation2", "practice2_1", "practice2_2", "assessment2", "examprep2"],
-                "section3": ["prep3", "explanation3", "practice3_1", "practice3_2", "assessment3", "examprep3"],
-                "section4": ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"],
-                "section5": ["prep5", "explanation5", "practice5_1", "practice5_2", "assessment5", "examprep5"]
-            }
+            # Get both problems
+            practice2_2_response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
+            examprep2_response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
-            # Test Section 2 sequence lookup
-            section2_sequence = section_sequences.get("section2", [])
-            
-            if section2_sequence:
-                self.log_test("Section 2 Sequence Lookup", True, 
-                            f"✅ Section 2 sequence found: {section2_sequence}")
+            if practice2_2_response.status_code == 200 and examprep2_response.status_code == 200:
+                practice2_2_data = practice2_2_response.json()
+                examprep2_data = examprep2_response.json()
                 
-                # Test finding practice2_1 in the sequence
-                if "practice2_1" in section2_sequence:
-                    practice2_1_index = section2_sequence.index("practice2_1")
-                    next_index = practice2_1_index + 1
+                # Analyze practice2_2 hints in detail
+                practice2_2_hints = practice2_2_data.get("hints_en", [])
+                print(f"\n📝 PRACTICE2_2 HINT ANALYSIS:")
+                for i, hint in enumerate(practice2_2_hints, 1):
+                    print(f"   Hint {i}: {hint}")
                     
-                    if next_index < len(section2_sequence):
-                        next_problem = section2_sequence[next_index]
-                        
-                        if next_problem == "practice2_2":
-                            self.log_test("Sequence Navigation Logic", True, 
-                                        f"✅ practice2_1 at index {practice2_1_index} → next is {next_problem} at index {next_index}")
-                            
-                            # Verify this matches backend data
-                            response = self.session.get(f"{self.base_url}/problems/section/section2")
-                            
-                            if response.status_code == 200:
-                                backend_problems = response.json()
-                                backend_ids = [p.get("id") for p in backend_problems]
-                                
-                                # Check if backend sequence matches frontend expectation
-                                sequence_match = all(pid in backend_ids for pid in section2_sequence)
-                                
-                                if sequence_match:
-                                    self.log_test("Backend-Frontend Sequence Match", True, 
-                                                f"✅ Backend problems match frontend sequence expectations")
-                                    return True
-                                else:
-                                    missing_in_backend = [pid for pid in section2_sequence if pid not in backend_ids]
-                                    self.log_test("Backend-Frontend Sequence Match", False, 
-                                                f"❌ Backend missing problems: {missing_in_backend}")
-                                    return False
-                            else:
-                                self.log_test("Backend Sequence Verification", False, 
-                                            f"Failed to fetch backend problems: HTTP {response.status_code}")
-                                return False
-                        else:
-                            self.log_test("Sequence Navigation Logic", False, 
-                                        f"❌ Expected practice2_2 after practice2_1, got {next_problem}")
-                            return False
-                    else:
-                        self.log_test("Sequence Navigation Logic", False, 
-                                    f"❌ practice2_1 is last in sequence (index {practice2_1_index})")
+                    # Check for pedagogical violations
+                    violations = []
+                    if "10t ≥ 500" in hint or "10t >= 500" in hint:
+                        violations.append("Shows direct inequality")
+                    if "t ≥ 50" in hint or "t >= 50" in hint:
+                        violations.append("Shows final answer")
+                    if "50" in hint and i < 3:  # Final answer shouldn't appear in first 2 hints
+                        violations.append("Reveals answer too early")
+                    
+                    if violations:
+                        self.log_test(f"practice2_2 Hint {i} Pedagogical Check", False, 
+                                    f"❌ Violations: {', '.join(violations)}")
                         return False
-                else:
-                    self.log_test("practice2_1 in Sequence", False, 
-                                f"❌ practice2_1 not found in Section 2 sequence: {section2_sequence}")
-                    return False
+                    else:
+                        self.log_test(f"practice2_2 Hint {i} Pedagogical Check", True, 
+                                    f"✅ Follows Socratic method")
+                
+                # Analyze examprep2 hints in detail
+                examprep2_hints = examprep2_data.get("hints_en", [])
+                print(f"\n📝 EXAMPREP2 HINT ANALYSIS:")
+                for i, hint in enumerate(examprep2_hints, 1):
+                    print(f"   Hint {i}: {hint}")
+                    
+                    # Check for pedagogical violations
+                    violations = []
+                    if "15p ≥ 60" in hint or "15p >= 60" in hint:
+                        violations.append("Shows direct inequality")
+                    if "p ≥ 4" in hint or "p >= 4" in hint:
+                        violations.append("Shows final answer")
+                    if "4" in hint and i < 3:  # Final answer shouldn't appear in first 2 hints
+                        violations.append("Reveals answer too early")
+                    
+                    if violations:
+                        self.log_test(f"examprep2 Hint {i} Pedagogical Check", False, 
+                                    f"❌ Violations: {', '.join(violations)}")
+                        return False
+                    else:
+                        self.log_test(f"examprep2 Hint {i} Pedagogical Check", True, 
+                                    f"✅ Follows Socratic method")
+                
+                return True
+                
             else:
-                self.log_test("Section 2 Sequence Lookup", False, 
-                            f"❌ Section 2 sequence not found in sectionSequences")
+                self.log_test("Hint Content Analysis", False, 
+                            f"Failed to fetch problems for analysis")
                 return False
                 
         except Exception as e:
-            self.log_test("Section Sequences Array Lookup", False, f"Test execution error: {str(e)}")
+            self.log_test("Hint Content Analysis", False, f"Test execution error: {str(e)}")
             return False
 
-    def generate_navigation_summary(self, results, critical_failures):
-        """Generate comprehensive summary of navigation flow testing"""
+    def test_bilingual_hint_consistency(self):
+        """Test bilingual hint consistency between English and Arabic"""
+        try:
+            print("\n🌐 BILINGUAL HINT CONSISTENCY TESTING")
+            print("Verifying English and Arabic hints convey the same pedagogical guidance")
+            
+            # Get both problems
+            practice2_2_response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
+            examprep2_response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
+            
+            if practice2_2_response.status_code == 200 and examprep2_response.status_code == 200:
+                practice2_2_data = practice2_2_response.json()
+                examprep2_data = examprep2_response.json()
+                
+                # Check practice2_2 bilingual consistency
+                practice2_2_hints_en = practice2_2_data.get("hints_en", [])
+                practice2_2_hints_ar = practice2_2_data.get("hints_ar", [])
+                
+                if len(practice2_2_hints_en) == len(practice2_2_hints_ar):
+                    self.log_test("practice2_2 Bilingual Count Match", True, 
+                                f"✅ English and Arabic hint counts match: {len(practice2_2_hints_en)}")
+                else:
+                    self.log_test("practice2_2 Bilingual Count Match", False, 
+                                f"❌ Hint count mismatch: {len(practice2_2_hints_en)} EN vs {len(practice2_2_hints_ar)} AR")
+                    return False
+                
+                # Check examprep2 bilingual consistency
+                examprep2_hints_en = examprep2_data.get("hints_en", [])
+                examprep2_hints_ar = examprep2_data.get("hints_ar", [])
+                
+                if len(examprep2_hints_en) == len(examprep2_hints_ar):
+                    self.log_test("examprep2 Bilingual Count Match", True, 
+                                f"✅ English and Arabic hint counts match: {len(examprep2_hints_en)}")
+                else:
+                    self.log_test("examprep2 Bilingual Count Match", False, 
+                                f"❌ Hint count mismatch: {len(examprep2_hints_en)} EN vs {len(examprep2_hints_ar)} AR")
+                    return False
+                
+                # Verify Arabic hints contain appropriate mathematical terminology
+                arabic_math_terms = ["ت", "ح", "ريال", "قطعة", "طفل", "تذكرة", "≥", "على الأقل"]
+                
+                practice2_2_arabic_valid = any(term in " ".join(practice2_2_hints_ar) for term in arabic_math_terms[:4])
+                examprep2_arabic_valid = any(term in " ".join(examprep2_hints_ar) for term in arabic_math_terms[1:])
+                
+                if practice2_2_arabic_valid and examprep2_arabic_valid:
+                    self.log_test("Arabic Mathematical Terminology", True, 
+                                f"✅ Arabic hints contain appropriate mathematical terms")
+                else:
+                    self.log_test("Arabic Mathematical Terminology", False, 
+                                f"❌ Arabic hints missing mathematical terminology")
+                    return False
+                
+                return True
+                
+            else:
+                self.log_test("Bilingual Consistency Test", False, 
+                            f"Failed to fetch problems for bilingual testing")
+                return False
+                
+        except Exception as e:
+            self.log_test("Bilingual Consistency Test", False, f"Test execution error: {str(e)}")
+            return False
+
+    def generate_section2_hints_summary(self, results, critical_failures):
+        """Generate comprehensive summary of Section 2 hints testing"""
         print("\n" + "=" * 80)
-        print("🧭 CRITICAL NAVIGATION FLOW BUG TESTING SUMMARY")
+        print("🎯 SECTION 2 WORD PROBLEM HINTS - SOCRATIC METHOD FIX TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL NAVIGATION FLOW TEST RESULTS:")
+        print(f"\n📈 OVERALL SECTION 2 HINTS TEST RESULTS:")
         print(f"   Total Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
@@ -463,53 +455,53 @@ class NavigationFlowTester:
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL NAVIGATION FLOW ISSUES:")
+            print(f"\n🚨 CRITICAL PEDAGOGICAL ISSUES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
-            print(f"\n⚠️  NAVIGATION RISK: Students cannot progress properly through Section 2!")
-            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix navigation flow logic")
+            print(f"\n⚠️  EDUCATIONAL RISK: Students are seeing direct answers instead of guided discovery!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix Socratic method implementation")
         else:
-            print(f"\n🎉 NO CRITICAL NAVIGATION FLOW ISSUES DETECTED")
+            print(f"\n🎉 NO CRITICAL PEDAGOGICAL ISSUES DETECTED")
         
-        print(f"\n📋 NAVIGATION FLOW STATUS:")
+        print(f"\n📋 SECTION 2 HINTS STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL NAVIGATION FLOW TESTS PASSED")
-            print("   ✅ Section 2 problem IDs verified (prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2)")
-            print("   ✅ Navigation logic working (practice2_1 → practice2_2)")
-            print("   ✅ Problem ID matching working correctly")
-            print("   ✅ Backend serves correct next problems")
-            print("   ✅ Section sequences array lookup functional")
-            print("   🛡️  NAVIGATION INTEGRITY: PROTECTED")
+            print("   🎯 ALL SECTION 2 HINTS TESTS PASSED")
+            print("   ✅ practice2_2 (ticket sales) hints follow Socratic method")
+            print("   ✅ examprep2 (candy distribution) hints follow Socratic method")
+            print("   ✅ No direct inequalities (10t ≥ 500, 15p ≥ 60) shown in hints")
+            print("   ✅ Progressive guidance: Variable ID → Math relationship → Symbol meaning")
+            print("   ✅ Bilingual support (English/Arabic) properly implemented")
+            print("   ✅ Problem content integrity maintained")
+            print("   🛡️  PEDAGOGICAL INTEGRITY: PROTECTED")
         else:
-            print("   ⚠️  NAVIGATION FLOW ISSUES DETECTED")
-            print("   🔧 Navigation logic needs fixes")
-            print("   🚨 STUDENT PROGRESSION: BLOCKED")
+            print("   ⚠️  SECTION 2 HINTS ISSUES DETECTED")
+            print("   🔧 Socratic method implementation needs fixes")
+            print("   🚨 STUDENT LEARNING: COMPROMISED")
         
         print("\n" + "=" * 80)
 
-    def run_navigation_flow_tests(self):
-        """Run comprehensive navigation flow tests"""
+    def run_section2_hints_tests(self):
+        """Run comprehensive Section 2 word problem hints tests"""
         print("=" * 80)
-        print("🧭 CRITICAL NAVIGATION FLOW BUG TESTING")
+        print("🎯 SECTION 2 WORD PROBLEM HINTS - SOCRATIC METHOD FIX TESTING")
         print("=" * 80)
-        print("Testing Section 2 navigation sequence to debug the critical navigation flow bug")
+        print("Testing critical pedagogical bug fix: hints must guide thinking, not show direct answers")
         
-        # Test categories for navigation flow
+        # Test categories for Section 2 hints
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
             ("Test Student Creation", self.create_test_student, "critical"),
-            ("Section 2 Problem IDs Verification", self.test_section2_problem_ids_verification, "critical"),
-            ("Navigation Logic Simulation", self.test_navigation_logic_simulation, "critical"),
-            ("Problem ID Matching", self.test_problem_id_matching, "critical"),
-            ("Current Navigation Issue Debug", self.test_current_navigation_issue_debug, "critical"),
-            ("Section Sequences Array Lookup", self.test_section_sequences_array_lookup, "high")
+            ("practice2_2 Database Verification", self.test_practice2_2_database_verification, "critical"),
+            ("examprep2 Database Verification", self.test_examprep2_database_verification, "critical"),
+            ("Hint Content Detailed Analysis", self.test_hint_content_detailed_analysis, "critical"),
+            ("Bilingual Hint Consistency", self.test_bilingual_hint_consistency, "high")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 NAVIGATION FLOW TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 SECTION 2 HINTS TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -524,28 +516,28 @@ class NavigationFlowTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive navigation flow summary
-        self.generate_navigation_summary(results, critical_failures)
+        # Generate comprehensive Section 2 hints summary
+        self.generate_section2_hints_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run navigation flow tests"""
-    print("🚀 Starting CRITICAL NAVIGATION FLOW BUG Testing...")
-    print("🎯 Goal: Debug Section 2 navigation sequence issue where practice2_1 → prep instead of practice2_2")
+    """Main function to run Section 2 hints tests"""
+    print("🚀 Starting SECTION 2 WORD PROBLEM HINTS - SOCRATIC METHOD FIX Testing...")
+    print("🎯 Goal: Verify hints guide thinking process without showing direct inequalities")
     
-    tester = NavigationFlowTester(BACKEND_URL)
-    results = tester.run_navigation_flow_tests()
+    tester = Section2HintsTester(BACKEND_URL)
+    results = tester.run_section2_hints_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
     
     if failed_tests > 0:
-        print(f"\n🚨 NAVIGATION FLOW ALERT: {failed_tests} test(s) failed!")
-        print("🔧 Navigation flow logic implementation required to fix student progression")
+        print(f"\n🚨 SECTION 2 HINTS ALERT: {failed_tests} test(s) failed!")
+        print("🔧 Socratic method implementation needs fixes to prevent showing direct answers")
     else:
-        print(f"\n🛡️  NAVIGATION FLOW CONFIRMED: All navigation flow tests passed!")
-        print("✅ Section 2 navigation sequence is working correctly")
+        print(f"\n🛡️  SECTION 2 HINTS CONFIRMED: All pedagogical tests passed!")
+        print("✅ Word problem hints properly guide student discovery without revealing answers")
     
     sys.exit(failed_tests)
 
