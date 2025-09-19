@@ -2233,6 +2233,102 @@ const ProblemView = () => {
                           </div>
                         );
                         
+                      case 'practice_word':
+                        return (
+                          // 5. PRACTICE WORD PROBLEMS: 3-step process with hints visible from start
+                          <div>
+                            <h4 className="font-semibold mb-4 text-green-800 flex items-center">
+                              <BookOpen className="w-5 h-5 mr-2" />
+                              {language === 'en' ? `Step ${currentStep + 1}: Word Problem Solving` : `الخطوة ${currentStep + 1}: حل المسائل الكلامية`}
+                            </h4>
+                            
+                            {/* HINTS VISIBLE FROM START - Key difference from regular practice */}
+                            <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                              <div className="flex items-start gap-2">
+                                <Lightbulb className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <h5 className="font-medium text-blue-800 mb-2">
+                                    {language === 'en' ? 'Hint:' : 'تلميح:'}
+                                  </h5>
+                                  <p className="text-blue-700 text-sm">
+                                    {(() => {
+                                      const backendHints = language === 'en' ? problem.hints_en : problem.hints_ar;
+                                      const currentStepHint = backendHints?.[currentStep] || 
+                                        (language === 'en' ? 'Think step by step.' : 'فكر خطوة بخطوة.');
+                                      return currentStepHint;
+                                    })()}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Step Progress Indicator */}
+                            <div className="mb-3 stage-progress">
+                              <div className="flex items-center justify-center space-x-2 mb-2">
+                                {(() => {
+                                  const requiredSteps = getRequiredSteps(problem.type, problem.id, problem);
+                                  return Array.from({ length: requiredSteps }, (_, step) => (
+                                    <div
+                                      key={step}
+                                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                                        step < currentStep
+                                          ? 'bg-green-500 text-white'
+                                          : step === currentStep
+                                          ? 'bg-blue-500 text-white'
+                                          : 'bg-gray-200 text-gray-500'
+                                      }`}
+                                    >
+                                      {step + 1}
+                                    </div>
+                                  ))
+                                })()}
+                              </div>
+                              <p className="text-center text-sm text-gray-600">
+                                {language === 'en' 
+                                  ? `Step ${currentStep + 1} of ${getRequiredSteps(problem.type, problem.id, problem)}`
+                                  : `الخطوة ${currentStep + 1} من ${getRequiredSteps(problem.type, problem.id, problem)}`}
+                              </p>
+                            </div>
+
+                            {/* Show completed steps above current step */}
+                            {currentStep > 0 && (
+                              <div className="mb-4">
+                                <h5 className="font-medium text-gray-700 mb-2">
+                                  {language === 'en' ? 'Your previous steps:' : 'خطواتك السابقة:'}
+                                </h5>
+                                {stepAnswers.slice(0, currentStep).map((answer, index) => (
+                                  answer && (
+                                    <div key={index} className="mb-2 p-2 bg-green-100 rounded text-sm text-green-800">
+                                      {language === 'en' ? `Step ${index + 1}: ` : `الخطوة ${index + 1}: `}{answer}
+                                    </div>
+                                  )
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Explicit Step Instruction */}
+                            <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                              <h5 className="font-medium text-green-800 mb-2">
+                                {problem.step_solutions?.[currentStep] 
+                                  ? (language === 'en' ? problem.step_solutions[currentStep].step_en : problem.step_solutions[currentStep].step_ar)
+                                  : (language === 'en' ? `Complete this step` : `أكمل هذه الخطوة`)}
+                              </h5>
+                            </div>
+                            
+                            {/* Step Input */}
+                            <Input
+                              value={stepAnswers[currentStep] || ''}
+                              onChange={(e) => {
+                                const newStepAnswers = [...stepAnswers];
+                                newStepAnswers[currentStep] = e.target.value;
+                                setStepAnswers(newStepAnswers);
+                              }}
+                              placeholder={language === 'en' ? `Enter your answer for step ${currentStep + 1}...` : `أدخل إجابتك للخطوة ${currentStep + 1}...`}
+                              className="mb-4 text-lg h-12"
+                            />
+                          </div>
+                        );
+                        
                       case 'assessment':
                         return (
                           // 4. ASSESSMENT STAGE: Final answer with score penalties - FIXED: Layout classes
