@@ -322,7 +322,26 @@ const Dashboard = () => {
     
     // Only navigate if access is allowed
     if (status !== 'locked') {
-      navigate(`/problem/${problemId}`);
+      const targetUrl = `/problem/${problemId}`;
+      console.log(`🚀 DASHBOARD NAVIGATION: Navigating to ${targetUrl}`);
+      
+      // Try React Router navigate first
+      try {
+        navigate(targetUrl);
+        
+        // Force navigation if React Router doesn't work
+        setTimeout(() => {
+          if (window.location.pathname !== targetUrl) {
+            console.log(`🔄 React Router navigation failed, forcing with window.location`);
+            window.location.href = targetUrl;
+          }
+        }, 100);
+        
+      } catch (error) {
+        console.error('Dashboard navigation error:', error);
+        // Fallback: Force navigation with window.location
+        window.location.href = targetUrl;
+      }
     }
   };
 
