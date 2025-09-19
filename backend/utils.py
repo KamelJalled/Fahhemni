@@ -13,12 +13,27 @@ def convert_to_western_numerals(text: str) -> str:
     return re.sub(r'[٠-٩]', lambda x: arabic_to_western[x.group()], text)
 
 def basic_normalize_answer(answer: str) -> str:
-    """Basic normalization without preparation stage logic"""
+    """Basic normalization without preparation stage logic - ENHANCED for global negative number validation"""
     if not answer:
         return ''
     
-    # Convert Arabic numerals to Western and س to x
-    normalized = convert_to_western_numerals(answer.lower().replace('س', 'x').strip())
+    # Convert Arabic numerals to Western
+    normalized = convert_to_western_numerals(answer.lower().strip())
+    
+    # GLOBAL ENHANCEMENT: Convert ALL Arabic variables to Western equivalents
+    arabic_to_western_vars = {
+        'س': 'x', 'ص': 'y', 'ك': 'k', 'م': 'm', 'ن': 'n'
+    }
+    for arabic_var, western_var in arabic_to_western_vars.items():
+        normalized = normalized.replace(arabic_var, western_var)
+    
+    # GLOBAL ENHANCEMENT: Handle parentheses around negative numbers
+    # Convert (-5) to -5, (-12) to -12, etc.
+    normalized = re.sub(r'\(\s*(-?\d+\.?\d*)\s*\)', r'\1', normalized)
+    
+    # GLOBAL ENHANCEMENT: Handle fractions with parentheses
+    # Convert (-3)/(-6) to -3/-6
+    normalized = re.sub(r'\(\s*(-?\d+\.?\d*)\s*\)/\(\s*(-?\d+\.?\d*)\s*\)', r'\1/\2', normalized)
     
     # Normalize operators and spaces more carefully
     normalized = re.sub(r'÷', '/', normalized)  # Convert ÷ to /
