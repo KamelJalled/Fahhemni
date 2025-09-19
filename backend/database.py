@@ -714,14 +714,14 @@ async def init_database():
             "show_full_solution": False,
             "hide_answer": True,
             "hints_en": [
-                "Start by identifying the variable and what it represents in this problem.",
-                "Look for keywords that indicate mathematical relationships - what does 'at least' suggest?",
-                "Once you write the inequality, what operation will help isolate the variable?"
+                "Variable p represents pieces per child. How many children? How many total pieces needed?",
+                "If each child gets p pieces, and you have 15 children, how many pieces total will you distribute?",
+                "Total = number of children × pieces per child. Must be \"at least\" 60"
             ],
             "hints_ar": [
-                "ابدأ بتحديد المتغير وما يمثله في هذه المسألة.",
-                "ابحث عن الكلمات المفتاحية التي تشير إلى العلاقات الرياضية - ماذا تعني 'على الأقل'؟",
-                "بمجرد كتابة المتباينة، ما العملية التي ستساعد في عزل المتغير؟"
+                "المتغير ح يمثل عدد القطع لكل طفل. كم طفل لدينا؟ كم قطعة إجمالاً نحتاج؟",
+                "إذا أعطيت كل طفل ح قطعة، و لديك ١٥ طفل، كم قطعة ستوزع إجمالاً؟",
+                "العدد الإجمالي = عدد الأطفال × القطع لكل طفل. يجب أن يكون \"على الأقل\" ٦٠"
             ]
         }
     ]
