@@ -661,7 +661,7 @@ const ProblemView = () => {
 
     } catch (error) {
       console.error('Error fetching data:', error);
-      navigate('/dashboard');
+      navigateToSectionDashboard();
     } finally {
       setLoading(false);
     }
