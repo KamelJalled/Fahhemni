@@ -2176,7 +2176,7 @@ const ProblemView = () => {
                                               const globalStepIndex = allSteps.findIndex(step => 
                                                 step.step_en === currentStepSolution?.step_en
                                               );
-                                              const correctHints = language === 'ar' ? problem.hints_en : problem.hints_ar;
+                                              const correctHints = language === 'en' ? problem.hints_en : problem.hints_ar;
                                               const stepHint = correctHints?.[globalStepIndex] || '';
                                               
                                               feedback = stepHint || (language === 'en' 
