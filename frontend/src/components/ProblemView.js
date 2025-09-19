@@ -1301,7 +1301,16 @@ const ProblemView = () => {
       });
       
       // Update progress immediately
+      console.log('🔄 Updating progress after successful submission...');
       await fetchData();
+      console.log('✅ Progress update completed');
+      
+      // Add explicit progress check
+      setTimeout(async () => {
+        console.log('🔍 Checking if progress was updated properly...');
+        await fetchData();
+        console.log('🔍 Final progress check completed');
+      }, 1000);
     }
   };
 
