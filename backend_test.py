@@ -198,11 +198,49 @@ class WordProblemLogicTester:
             print("\n🎯 PRACTICE VS ASSESSMENT DIFFERENTIATION TESTING")
             print("Testing backend logic for practice (3-step) vs assessment (1-step) word problems")
             
+            # First complete practice stages to unlock assessment access
+            print("   Completing practice stages to unlock assessment access...")
+            
+            # Complete practice2_1 first
+            practice2_1_attempt = {
+                "problem_id": "practice2_1",
+                "answer": "k < -12",
+                "hints_used": 0
+            }
+            
+            practice2_1_response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_1_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if practice2_1_response.status_code == 200:
+                print("   ✅ Completed practice2_1")
+            
+            # Complete practice2_2 
+            practice2_2_attempt = {
+                "problem_id": "practice2_2",
+                "answer": "t ≥ 50",
+                "hints_used": 0
+            }
+            
+            practice2_2_response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_2_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if practice2_2_response.status_code == 200:
+                print("   ✅ Completed practice2_2")
+            
             # Test practice2_2 (should have step_solutions)
             practice_response = self.session.get(f"{self.base_url}/problems/practice2_2")
             
             # Test assessment2 (should NOT have step_solutions or have different structure)
-            assessment_response = self.session.get(f"{self.base_url}/problems/assessment2")
+            assessment_response = self.session.get(
+                f"{self.base_url}/problems/assessment2",
+                params={"username": self.test_student_username}
+            )
             
             if practice_response.status_code == 200 and assessment_response.status_code == 200:
                 practice_data = practice_response.json()
