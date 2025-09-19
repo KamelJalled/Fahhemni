@@ -2563,7 +2563,7 @@ const ProblemView = () => {
                       <Button 
                         onClick={() => {
                           resetProblemState();
-                          navigate('/problem/explanation1');
+                          redirectToExplanation();
                         }}
                         className="w-full h-12 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
                       >
