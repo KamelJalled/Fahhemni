@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [sections, setSections] = useState([]);
   const [selectedSection, setSelectedSection] = useState('section1');
   const [loading, setLoading] = useState(true);
+  const [showRulesModal, setShowRulesModal] = useState(false);
 
   const sections_info = [
     { id: 'section1', title_en: 'Section 1: Solving Inequalities by Addition or Subtraction', title_ar: 'القسم الأول: حل المتباينات بالجمع أو بالطرح' },
