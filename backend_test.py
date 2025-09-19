@@ -371,7 +371,7 @@ class Section2HintsTester:
             print("\n🔍 DETAILED HINT CONTENT ANALYSIS")
             print("Analyzing hint content for pedagogical correctness and Socratic method compliance")
             
-            # Get both problems
+            # Get both problems (examprep2 should be accessible after completing prerequisites)
             practice2_2_response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
             examprep2_response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
