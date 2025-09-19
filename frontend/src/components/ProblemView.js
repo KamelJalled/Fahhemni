@@ -454,25 +454,31 @@ const ProblemView = () => {
     return 'preparation'; // Default
   };
 
-  // FIXED: Enhanced answer normalization with proper validation (NO RECURSION)
-  const normalizeAnswer = (answer) => {
+  // GLOBAL: Helper function for basic normalization without recursion
+  const basicNormalizeAnswer = (answer) => {
     if (!answer) return '';
     
-    let normalized = basicNormalizeAnswer(answer);
+    // Convert Arabic numerals to Western and Arabic variables to English
+    const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
+    let normalized = answer.toLowerCase()
+      .replace(/س/g, 'x')
+      .replace(/ص/g, 'y')
+      .replace(/ك/g, 'k')
+      .replace(/م/g, 'm')
+      .replace(/ن/g, 'n')
+      .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
+      .trim();
     
-    // ENHANCEMENT: For preparation stage, accept both "x = 7" and "7" formats
-    if (problem && (problem.type === 'preparation' || problem.id?.includes('prep'))) {
-      // If input is just a number and expected answer has "x =", add "x ="
-      if (/^-?\d+(\.\d+)?$/.test(normalized)) {
-        // Use basicNormalizeAnswer to avoid recursion
-        const expectedNormalized = basicNormalizeAnswer(problem.answer || '');
-        if (expectedNormalized.includes('x=') && !normalized.includes('x')) {
-          normalized = 'x=' + normalized;
-        }
-      }
-    }
+    // Normalize operators and spaces more carefully
+    normalized = normalized
+      .replace(/÷/g, '/') // Convert ÷ to /
+      .replace(/×/g, '*') // Convert × to *
+      .replace(/\s+/g, ' ') // Normalize multiple spaces to single
+      .replace(/\s*([+\-*/=])\s*/g, '$1') // Remove spaces around basic operators
+      .replace(/\s*([<>])\s*/g, '$1') // Remove spaces around inequality signs
+      .replace(/\s*([≤≥])\s*/g, '$1') // Remove spaces around unicode inequalities
+      .replace(/\s*([<>]=?)\s*/g, '$1'); // Handle <= >= combinations
     
-    console.log(`🔍 Answer normalization: "${answer}" → "${normalized}"`);
     return normalized;
   };
 
