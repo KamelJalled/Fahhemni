@@ -55,8 +55,8 @@ const RulesModal = ({ isOpen, onClose }) => {
                 : 'When dividing or multiplying by a negative, flip the sign:'}
             </p>
             <div className="examples bg-gray-900 text-green-400 p-4 rounded-md font-mono text-sm">
-              <div className="mb-2">-3m &lt; 15 → m > -5 ✓</div>
-              <div className="mb-2">&lt; {language === 'ar' ? 'يصبح' : 'becomes'} > ✓</div>
+              <div className="mb-2">-3m &lt; 15 → m {'>'} -5 ✓</div>
+              <div className="mb-2">&lt; {language === 'ar' ? 'يصبح' : 'becomes'} {'>'} ✓</div>
               <div>≤ {language === 'ar' ? 'يصبح' : 'becomes'} ≥ ✓</div>
             </div>
           </div>
