@@ -1109,11 +1109,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Section 2 Mathematical Expression Display Fix - SUCCESSFULLY VERIFIED"
-    - "Section 2 Step Validation Logic Fix - COMPLETELY VERIFIED"
+    - "Section 2 Explanation Stage Step Completion Bug Fix - CRITICAL PRIORITY"
+    - "Verify all Section 2 explanation examples require exactly 2 steps before advancing"
   stuck_tasks: []
   test_all: false
-  test_priority: "high_first"
+  test_priority: "critical_first"
 
   - task: "UI Layout Improvements Testing"
     implemented: true
