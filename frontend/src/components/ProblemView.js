@@ -2427,7 +2427,7 @@ const ProblemView = () => {
                       className="flex-1 h-12 bg-gradient-to-r from-emerald-500 to-teal-600"
                       disabled={isChecking || (() => {
                         const stageType = getStageType(problem.type, problem.id);
-                        if (stageType === 'practice') {
+                        if (stageType === 'practice' || stageType === 'practice_word') {
                           return !stepAnswers[currentStep]?.trim();
                         } else {
                           return !userAnswer?.trim();
