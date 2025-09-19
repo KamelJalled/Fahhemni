@@ -2393,6 +2393,12 @@ const ProblemView = () => {
           {/* Hints section completely removed as per requirements */}
         </div>
       </div>
+
+      {/* Rules Modal */}
+      <RulesModal 
+        isOpen={showRulesModal} 
+        onClose={() => setShowRulesModal(false)} 
+      />
     </div>
   );
 };
