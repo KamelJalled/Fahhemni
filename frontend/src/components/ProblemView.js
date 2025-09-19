@@ -2417,11 +2417,25 @@ const ProblemView = () => {
                           {text[language].completion.checking}
                         </div>
                       ) : (
+                        {/* FIXED: Dynamic submit button text based on stage and step */}
                         (() => {
                           const stageType = getStageType(problem.type, problem.id);
-                          if (stageType === 'practice') {
+                          
+                          if (stageType === 'practice' || stageType === 'practice_word') {
+                            const requiredSteps = getRequiredSteps(problem.type, problem.id, problem);
+                            if (requiredSteps > 1) {
+                              // Multi-step problems - show current step
+                              return language === 'en' 
+                                ? `Submit Step ${currentStep + 1} Answer`
+                                : `أرسل إجابة الخطوة ${currentStep + 1}`;
+                            } else {
+                              // Single step practice problems
+                              return language === 'en' ? 'Submit Answer' : 'إرسال الإجابة';
+                            }
+                          } else if (stageType === 'explanation') {
                             return language === 'en' ? 'Submit Step' : 'إرسال الخطوة';
                           } else {
+                            // Assessment, exam prep, preparation
                             return language === 'en' ? 'Submit Final Answer' : 'إرسال الإجابة النهائية';
                           }
                         })()
