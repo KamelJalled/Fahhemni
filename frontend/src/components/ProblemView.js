@@ -2500,7 +2500,7 @@ const ProblemView = () => {
                       <VoiceInput
                         onResult={(result) => {
                           const stageType = getStageType(problem.type, problem.id);
-                          if (stageType === 'practice') {
+                          if (stageType === 'practice' || stageType === 'practice_word') {
                             const newStepAnswers = [...stepAnswers];
                             newStepAnswers[currentStep] = result;
                             setStepAnswers(newStepAnswers);
