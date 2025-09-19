@@ -1570,7 +1570,7 @@ const ProblemView = () => {
             </div>
             
             <Button 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigateToSectionDashboard()}
               className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
             >
               {text[language].completion.returnToDashboard}
