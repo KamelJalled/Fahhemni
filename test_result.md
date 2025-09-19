@@ -105,13 +105,17 @@
 user_problem_statement: "CRITICAL BUG FIX: Fix Word Problem Hints in Section 2 - NEVER Show the Inequality. Current hints for practice2_2 (ticket sales) and examprep2 (candy distribution) violate Socratic teaching method by showing direct answers like '10t ≥ 500'. Required: Implement progressive 3-step hints that guide thinking without revealing inequality. Update both backend database hints and frontend hint system to use progressive pedagogical guidance instead of direct answers."
 
 backend:
-  - task: "Section 2 Content Update - New Curriculum Implementation"
+  - task: "Section 2 Word Problem Hints - Socratic Method Fix"
     implemented: true
-    working: true
-    file: "backend/database.py"
-    stuck_count: 3
+    working: false
+    file: "backend/database.py, frontend/src/components/ProblemView.js"
+    stuck_count: 0
     priority: "critical"
-    needs_retesting: false
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "✅ IMPLEMENTATION COMPLETE: Fixed critical bug where word problem hints were showing direct inequalities like '10t ≥ 500' instead of guiding student thinking. 1) BACKEND DATABASE UPDATES: Updated hints for practice2_2 (ticket sales problem) and examprep2 (candy distribution problem) with progressive 3-step Socratic guidance that NEVER shows the inequality directly. Ticket problem now guides through: variable identification → mathematical relationship → inequality symbol meaning. Candy problem guides through: variable/children count → total calculation → 'at least' meaning. 2) FRONTEND HINT SYSTEM OVERHAUL: Modified preparation and assessment stage handlers in ProblemView.js to use backend database hints directly instead of generic generateGuidanceHint function. Progressive hints now pull from problem.hints_en/hints_ar arrays for proper pedagogical guidance. 3) DATABASE RESET: Applied admin database reset to ensure new hint content is loaded. The system now follows strict Socratic method: guides discovery process, never reveals direct answers, uses progressive hint difficulty."
     status_history:
       - working: "NA"
         agent: "main"
