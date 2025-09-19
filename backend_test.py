@@ -157,8 +157,48 @@ class Section2HintsTester:
             print("\n🎯 EXAMPREP2 DATABASE HINTS VERIFICATION")
             print("Testing if examprep2 has the 3 expected progressive Socratic hints in database")
             
-            # Get examprep2 problem data
-            response = self.session.get(f"{self.base_url}/problems/examprep2")
+            # Complete prerequisites first to access examprep2
+            # Complete practice2_1
+            practice2_1_attempt = {
+                "problem_id": "practice2_1",
+                "answer": "k < -12",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_1_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            # Complete practice2_2
+            practice2_2_attempt = {
+                "problem_id": "practice2_2",
+                "answer": "t ≥ 50",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_2_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            # Complete assessment2
+            assessment2_attempt = {
+                "problem_id": "assessment2",
+                "answer": "y < -12",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=assessment2_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            # Get examprep2 problem data with username for access control
+            response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
             if response.status_code == 200:
                 problem_data = response.json()
