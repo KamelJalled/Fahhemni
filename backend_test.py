@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 2 Word Problem 3-Step Enforcement Fix
-Tests the critical pedagogical bug fix where word problems were completing at Step 2 instead of 
-requiring the complete 3-step mathematical process for proper learning.
+Backend API Test Suite for Math Tutoring App - Section 2 Navigation Bug Testing
+Tests the critical navigation bug from practice2_2 to assessment2 where students cannot 
+access assessment2 after completing both practice stages.
 
 CRITICAL REQUIREMENTS BEING TESTED:
-- Both word problems must have exactly 3 steps (not 2)
-- Step 2 must only accept operation display, not final simplified answer
-- Step 3 must be required for completion
-- System must not allow progression to next stage until Step 3 is completed
+- Stage Access Control Logic: assessment2 requires both practice2_1 and practice2_2 completion
+- Practice Stage Completion Tracking: practice stages are properly marked as completed
+- Progress Data Verification: student progress data structure is correct
+- Assessment2 Access Bug: assessment2 becomes accessible after completing both practice stages
+- Navigation Sequence: prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2
 """
 
 import requests
