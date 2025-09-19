@@ -48,7 +48,7 @@ section2_problems = [
         "question_ar": "تعلم متباينات الضرب والقسمة",
         "answer": "",
         "answer_ar": "",
-        "show_full_solution": True,
+        "show_full_solution": False,
         "hide_answer": False,
         "explanation_en": "Learn to solve inequalities involving multiplication and division",
         "explanation_ar": "تعلم حل المتباينات التي تتضمن الضرب والقسمة",
