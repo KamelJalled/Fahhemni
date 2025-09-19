@@ -49,14 +49,14 @@
 ##
 ## test_plan:
 ##   current_focus:
-##     - "Section 2 Word Problem Hints - Socratic Method Fix"
+##     - "Section 2 Word Problem Step Count Requirements - 3-Step Enforcement"
 ##   stuck_tasks: []
 ##   test_all: false
 ##   test_priority: "high_first"
 ##
 ## agent_communication:
 ##     -agent: "main"
-##     -message: "Fixed critical word problem hint bug in Section 2. Updated database hints for practice2_2 and examprep2 to use progressive Socratic guidance instead of showing direct inequalities. Modified frontend to use database hints directly. Database reset applied. Need testing to verify progressive hints work correctly for both ticket sales and candy distribution problems without revealing answers."
+##     -message: "Fixed critical word problem step count bug in Section 2. Updated frontend getRequiredSteps to enforce 3 steps for word problems in ALL stages. Updated database step_solutions for both practice2_2 (tickets) and examprep2 (candy) to have proper 3-step structure. Removed premature completion at Step 2 by separating operation step from final answer step. Database reset applied. Need testing to verify 3-step enforcement works correctly and prevents students from completing at Step 2."
 
 # Protocol Guidelines for Main agent
 #
