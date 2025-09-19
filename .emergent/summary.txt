@@ -1,72 +1,49 @@
 <analysis>
-The AI engineer's work involved an initial content update for Section 2, Solving Inequalities by Multiplication or Division, across all stages in English and Arabic. Following this, the user reported six critical bug prompts for Section 2. The AI systematically addressed these: fixing navigation flows, implementing dynamic progress tracking, enhancing mathematical validation (including sign flipping and multiple answer formats), enforcing correct step progression for various problem types, correcting word problem displays, and overhauling the hint system to provide guidance without direct answers. A critical security bug allowing stage skipping was fixed with comprehensive frontend and backend access control. A UI layout issue was also addressed. Throughout, the AI utilized backend and frontend testing agents, and an admin database reset was crucial for applying some content changes. The trajectory concluded with the AI confirming the login functionality after a user-reported issue.
+The previous AI engineer focused on refining Section 2 of the Math Tutoring App. Initial work addressed two critical user-reported issues: progressive hint implementation for word problems and correct three-step progression for all word problems. The AI first updated backend  with user-specified Socratic hints and correct step definitions for Ticket Sales and Candy Distribution problems. Concurrently,  was modified to leverage these backend hints, especially after an initial claim of hint implementation was refuted by the user. The  function was a key architectural fix to ensure practice stage word problems received hints. The stage access control () was also clarified, confirming that navigation to assessment stages is intentionally blocked until all prerequisite practice stages are complete. Extensive backend and frontend testing agents were utilized to validate each fix, including database resets. The trajectory concluded with successful verification of the progressive hint system and the frontend login flow.
 </analysis>
 <product_requirements>
-The Math Tutoring App, targeting Grade 9 Saudi students, offers bilingual (Arabic/English) content, optimized for mobile with responsive design. Its pedagogical structure includes Preparation, Explanation (tabbed, step-by-step, explicit validation), Practice (guided, previous answers visible), and Assessment & Exam Prep (final answers, score penalties). Initial development included Section 1 Explanation.
+The Math Tutoring App, designed for Grade 9 Saudi students, offers bilingual (Arabic/English) content with responsive mobile design. Its pedagogical model includes Preparation, Explanation, Practice, Assessment, and Exam Prep stages. The core task involved updating content for Section 2 (Solving Inequalities by Multiplication or Division) across all stages, including new problems, bilingual hints, and step-by-step solutions, while maintaining existing functionality.
 
-The current major task involved a comprehensive content update for Linear Inequalities module, specifically Section 2 (Solving Inequalities by Multiplication or Division). This required replacing all problems, examples, explanations, and answers for Preparation, Explanation (3 levels), Practice (classic/real-life), Assessment, and Exam Prep stages, with specific bilingual hints. Functionality and UI structure must remain unchanged, only content updated.
-
-Subsequent user feedback led to critical bug fixes for Section 2: correcting stage navigation and dashboard context, ensuring progress tracking updates, implementing robust mathematical validation for inequality operations (including sign flipping), enforcing specific step counts for different problem types, fixing word problem display, implementing critical stage access control to prevent cheating, refining UI layout spacing, and overhauling the hint system to provide guidance instead of direct answers. The overall structure and solving methodology from Section 1 were to be applied to all sections (2-5).
+Key bug fixes for Section 2 included:
+1.  **Word Problem Hints**: Hints must *never* reveal the inequality directly, but progressively guide students using Socratic questions about variables, relationships, and inequality symbols (e.g., at least implies ≥).
+2.  **Step Count Enforcement**: Word problems *must* require 3 distinct steps (Write Inequality, Perform Operation, Simplify) for practice stages. For Assessment/Exam Prep, the 3-step mental process is required, but only the final simplified answer is accepted.
+3.  **Navigation**: Ensure correct stage progression, particularly from practice to assessment, understanding that assessment stages are locked until all practice stages are complete.
+4.  **Existing Functionality**: Overall structure and solving methodology from Section 1 were to be applied to all sections.
 </product_requirements>
 <key_technical_concepts>
-- **Full-stack Development**: React.js (Frontend), FastAPI (Backend), MongoDB (Database).
-- **Frontend UI/Styling**: CSS Customization, , , React Router.
-- **Backend Data Handling**: Pydantic models, JSON serialization.
-- **Internationalization (i18n)**: Arabic/English, RTL support.
-- **Deployment**: Kubernetes, Supervisorctl, .env management.
-- **Problem Solving**: Dynamic multi-step form validation, conditional rendering, regex for ID parsing.
+-   **Full-stack Development**: React.js (Frontend), FastAPI (Backend), MongoDB (Database).
+-   **Frontend State Management**: , .
+-   **Routing**: React Router.
+-   **Internationalization**: Arabic/English bilingual support.
+-   **Backend Logic**: Dynamic multi-step form validation, conditional rendering.
+-   **Deployment**: Kubernetes, Supervisorctl.
 </key_technical_concepts>
 <code_architecture>
 
--   ****
-    -   **Summary**: Main React application file, configures routing and context providers (e.g., AuthProvider).
-    -   **Changes**: Verified React Router configuration for problem views; no direct modifications were detailed in the trajectory, only inspection.
--   ****
-    -   **Summary**: Controls the display and navigation of math sections on the student dashboard.
-    -   **Changes**: Updated section names (English/Arabic). Implemented styling fixes (, , responsive font sizes) for Arabic text on dashboard section tabs to prevent cutoff, originally identified in Chat Message 1 and further refined for Section 2.
--   ****
-    -   **Summary**: Manages student interaction with math problems, including input, validation, hints, and stage progression.
-    -   **Changes**:
-        -   **Navigation**: Refactored  and  (regex fix from  to ) for dynamic section-aware navigation and correct problem ID parsing (Chat Message 329).  passed in .
-        -   **Progress Tracking**: Implemented dynamic section-aware progress tracking for prep stages.
-        -   **Mathematical Validation**: Added  for sign flipping logic (division/multiplication by negative/positive), enhanced answer format support (e.g., , ).
-        -   **Step Progression**: Implemented  and  to enforce 2 steps for simple inequalities, 3 for practice, and 2 for word problems; dynamic progress indicators.
-        -   **Stage Access Control**: Added frontend security (, , problem card rendering,  integration) to lock Assessment/Exam Prep until practice stages are complete.
-        -   **Hint System**: Implemented , , ,  for dynamic, pedagogical hints that avoid direct answers. Replaced old hint display logic.
-        -   **UI Layout**: Applied CSS classes (, , , ) to adjust margins and spacing.
--   ****
-    -   **Summary**: Contains global CSS styles for the frontend application.
-    -   **Changes**: Modified to support responsive display of dashboard section tabs. Added/refined CSS for , , ,  to control layout, margins, and spacing.
--   ****
-    -   **Summary**: Houses the backend logic for initializing and structuring math problems and curriculum content.
-    -   **Changes**:
-        -   **Section 2 Content Update**: Comprehensive content replacement for Solving Inequalities by Multiplication or Division across all stages (Preparation, Explanation, Practice, Assessment, Exam Prep), including new problems, bilingual hints, and detailed step-by-step solutions.
-        -   **Mathematical Expression Display**: Corrected  (system-solved examples) to show complete mathematical operations on both sides (e.g., ).
-        -   **Step Validation**: Updated  problem definition to contain 2 distinct steps (operation and simplification) instead of 1.
-        -   **Hint Overhaul**: Modified hints for , , and  to remove direct answers and provide guidance.
--   ****
-    -   **Summary**: FastAPI backend, handles API routes, database interaction, and business logic.
-    -   **Changes**:
-        -   **Stage Access Control**: Implemented backend security ( function) and integrated it into  and  endpoints to prevent direct API access to locked stages.
-        -   **Progress Endpoint**: Updated to support all sections dynamically.
-        -   **Database Reset Endpoint**: Utilized  to force reinitialization of database content, crucial for applying  changes.
--   ****
-    -   **Summary**: Stores environment variables for frontend configuration.
-    -   **Changes**:  was temporarily changed and then reverted, as detailed in Chat Message 1. No other explicit changes in this trajectory.
+-   ****: Main React application file, configures routing and context providers. No direct modifications mentioned in this trajectory.
+-   ****: Controls the display and navigation of math sections on the student dashboard. No direct modifications mentioned in this trajectory.
+-   ****: Critical file managing student interaction, input, validation, hints, and stage progression.
+    -   **Hint System Fixes**: Modified hint display logic in preparation and assessment stages to directly use / from the backend, replacing generic  and  calls (Chat Message 45, 51).
+    -   **Stage Type Routing**: Corrected  function to ensure word problems in practice stages are properly routed to hint-enabled logic, addressing a bug where they were routed to step-by-step solving without hints (Chat Message 131).
+    -   **Step Count Enforcement**: Updated  to ensure Assessment and Exam Prep stages correctly enforce 3 steps for word problems (Chat Message 72).
+    -   **Stage Access Control**: Contains  which was clarified to enforce completion of all practice stages before accessing assessment stages (Chat Message 110).
+-   ****: Contains global CSS styles for the frontend application. No direct modifications related to the trajectory.
+-   ****: Houses the backend logic for initializing and structuring math problems and curriculum content.
+    -   **Word Problem Hint Update**: Updated  and  for  (Ticket Sales) and  (Candy Distribution) problems to include the user-specified progressive, Socratic hints (Chat Message 31, 33).
+    -   **Step Solution Update**: Corrected  for  to accurately define 3 distinct steps for word problems, ensuring step 2 is the operation and step 3 is the final simplification (Chat Message 76).
+    -   **Exam Prep Step Definition**: Added  for  to explicitly define its 3-step structure, even if only the final answer is accepted (Chat Message 82).
+-   ****: FastAPI backend, handles API routes and business logic. Utilized  for database reinitialization (Chat Message 53, 84). No direct code modifications mentioned in the trajectory for  related to the fixes.
+-   ****: Stores environment variables for frontend configuration. No modifications mentioned in this trajectory.
 </code_architecture>
 <pending_tasks>
-- **Comprehensive Content Update (Sections 3-5)**: Update all remaining sections with curriculum content, ensuring all stages and bilingual aspects are correctly implemented following the Section 1 and 2 structure and methodology.
-These fixes apply to ALL SECTIONS in the MVP, not just Section 2. The Socratic method principle means:
-NEVER give direct answers
-ALWAYS guide the student to discover the solution
-REQUIRE proper step-by-step progression
-LOCK advanced stages until prerequisites are complete
+-   **Comprehensive Content Update (Sections 3-5)**: Update all remaining sections with curriculum content, ensuring all stages and bilingual aspects are correctly implemented following the Section 1 and 2 structure and methodology.
 </pending_tasks>
 <current_work>
-Immediately before this summary request, the AI engineer was addressing a user report regarding the login screen not allowing student or teacher access to the app. The AI conducted a thorough investigation, including manually testing student and teacher login flows via API calls and utilizing a frontend testing agent.
-
-The investigation concluded that there was **no authentication bug**. Both the student and teacher login systems were found to be fully functional, with backend APIs returning proper 200 responses for valid credentials and the frontend correctly redirecting to the respective dashboards. The teacher login was verified to correctly require an . The frontend testing agent confirmed 100% functionality for both login flows, including error handling for invalid credentials. The AI determined the user's report was either based on a previously resolved issue, user error (incorrect credentials), or a temporary client-side problem. This final verification confirmed the stability of the core authentication mechanism.
+Immediately before this summary request, the AI engineer was addressing a critical user report that progressive hints for Section 2 word problems were not implemented, despite prior claims. After re-verifying backend hint data in  (which was correct), a frontend testing agent  identified the root cause: an architectural bug in  where the  function incorrectly routed practice stages to a step-by-step solving mode without hints, instead of the intended hint-enabled logic. The AI modified  to correctly route word problems in practice stages to receive progressive hints. This fix was thoroughly tested using , confirming that hints now display progressively in both English and Arabic. The last action was a comprehensive verification of the hints flow after login.
 </current_work>
 <optional_next_step>
-I will ask the user to verify the state of Section 2 and then provide curriculum content for Sections 3-5.
+URGENT FIX: Section 2 Explanation Stage - Step Completion Bug
+CRITICAL BUG DESCRIPTION:
+Location: Section 2, Explanation Stage, Level 1B (First Example)
+Problem: System advances to next example after Step 1, skipping required Step 2
 </optional_next_step>

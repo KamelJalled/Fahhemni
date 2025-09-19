@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 
 # Use backend URL from frontend/.env as specified in review request
-BACKEND_URL = "https://inequality-solver.preview.emergentagent.com/api"
+BACKEND_URL = "https://inequal-progression.preview.emergentagent.com/api"
 
 class Section2CurriculumTester:
     def __init__(self, base_url):
