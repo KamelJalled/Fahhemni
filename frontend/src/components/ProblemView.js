@@ -1704,7 +1704,7 @@ const ProblemView = () => {
             )}
 
             {/* INTERACTIVE PRACTICE EXAMPLES - FIXED: Reduced spacing */}
-            {problem.interactive_examples && (
+            {problem.interactive_examples && !problem.show_full_solution && (
               <Card className="mb-4 w-full">
                 <CardHeader className="pb-4">
                   <CardTitle className="text-center text-2xl font-bold text-gray-800">
