@@ -103,20 +103,17 @@
 user_problem_statement: "Global Fix: Negative Number Input Validation & Mathematical Rules Display. PART 1: Input Validation for Negative Numbers - Students entering expressions like k ≤ -5 or m > -0.5 may write them with or without parentheses around negative numbers. System must handle both formats. GLOBAL VALIDATION RULE: Apply normalizeAndValidateAnswer logic to ALL sections in the MVP to accept formats like: k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. PART 2: Mathematical Rules Display - Add 'Solving Rules' button to Dashboard and (?) icons in each section with bilingual rules modal. IMMEDIATE + HIGH PRIORITY implementation requested. Focus testing on Section 1 and Section 2 only."
 
 backend:
-  - task: "Section 2 Explanation Stage Step Completion Bug Fix"
-    implemented: true
-    working: true
-    file: "backend/database.py"
+  - task: "Global Negative Number Input Validation - Backend Support"
+    implemented: false
+    working: false
+    file: "backend/server.py, backend/utils.py"
     stuck_count: 0
     priority: "critical"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
-        comment: "CRITICAL BUG IDENTIFIED: Section 2 explanation stage Level 1B is missing Step 2 definition in database.py step_solutions. Currently only has 1 step defined ('Level 1B Step 1: Divide both sides by 4') but should have 2 steps total. Level 1B example 4y < 24 should require Step 1: 4y/4 < 24/4 and Step 2: y < 6. System advances to next example after Step 1 because step_solutions array is incomplete. Need to add missing Step 2 for Level 1B and verify all other levels have correct 2-step structure as specified by user."
-      - working: true
-        agent: "main"
-        comment: "✅ CRITICAL BUG FIX IMPLEMENTED AND VERIFIED: Successfully updated Section 2 explanation stage structure in backend/database.py. Fixed interactive_examples to match user specifications: Level 1B: 4x ≥ 20, Level 2B: -3m < 15, Level 3B: -6k ≥ 30. Added missing Step 2 definitions for all levels - now ALL levels have exactly 2 steps before advancing to next example. Updated step_solutions array with 6 total steps (2 per level). Fixed possible_answers arrays for correct validation. Updated hints_en and hints_ar to align with 6-step structure. Backend testing confirmed 85.7% success rate (6/7 categories passed) - only minor non-critical hint alignment issue for step 6."
+        comment: "GLOBAL ENHANCEMENT REQUIRED: Implement backend support for global negative number input validation. Need to ensure backend validation logic handles formats like k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. across ALL sections. Backend should accept multiple valid formats for the same mathematical expression involving negative numbers."
       - working: true
         agent: "testing"
         comment: "✅ CRITICAL BUG FIX VERIFIED: Section 2 explanation stage step completion bug has been successfully fixed! Comprehensive testing confirmed: 1) ✅ Interactive examples updated to match user specifications: Level 1B: 4x ≥ 20 (was 4y < 24), Level 2B: -3m < 15, Level 3B: -6k ≥ 30. 2) ✅ Step solutions structure corrected: Now contains exactly 6 step definitions (2 per level) - Level 1B Step 1: 'Divide both sides by 4' → accepts '4x/4 ≥ 20/4', Level 1B Step 2: 'Simplify' → accepts 'x ≥ 5', Level 2B Step 1: 'Divide both sides by -3 (flip sign)' → accepts 'm > 15/(-3)', Level 2B Step 2: 'Simplify' → accepts 'm > -5', Level 3B Step 1: 'Divide both sides by -6 (flip sign)' → accepts 'k ≤ 30/(-6)', Level 3B Step 2: 'Simplify' → accepts 'k ≤ -5'. 3) ✅ All step possible_answers arrays contain correct validation options. 4) ✅ Backend response structure complete with all required fields. 5) ✅ Database reset and reinitialized successfully with new data. The system will now require students to complete BOTH Step 1 AND Step 2 for each level before advancing to the next example, fixing the critical progression bug where students were advancing after only Step 1."
