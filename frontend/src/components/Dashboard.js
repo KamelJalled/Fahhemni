@@ -344,6 +344,15 @@ const Dashboard = () => {
         </div>
         <div className="flex gap-2">
           <Button 
+            onClick={() => setShowRulesModal(true)}
+            variant="outline" 
+            size="sm"
+            className="text-blue-600 border-blue-300 hover:bg-blue-50"
+          >
+            <BookOpen className="w-4 h-4 mr-2" />
+            {language === 'en' ? 'Solving Rules' : 'قواعد الحل'}
+          </Button>
+          <Button 
             onClick={() => {
               // Reset to beginning - clear progress and refresh
               if (window.confirm(language === 'en' ? 
