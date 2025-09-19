@@ -1301,6 +1301,10 @@ const ProblemView = () => {
         description: `${text[language].points}: ${result.score}`,
       });
       
+      // FIXED: Complete stage immediately with proper progress tracking
+      const currentSection = getCurrentSection();
+      await completeStage(currentSection, problemId);
+      
       // Update progress immediately
       console.log('🔄 Updating progress after successful submission...');
       await fetchData();
@@ -1312,6 +1316,68 @@ const ProblemView = () => {
         await fetchData();
         console.log('🔍 Final progress check completed');
       }, 1000);
+    }
+  };
+
+  // PROGRESS FIX: Complete stage and update both backend and frontend
+  const completeStage = async (section, stage) => {
+    console.log(`🎯 Completing stage: section${section}_${stage}`);
+    
+    try {
+      // Update backend via API
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updateProgress`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: user.username,
+          section: section,
+          stage: stage,
+          status: 'complete'
+        })
+      });
+      
+      if (response.ok) {
+        console.log('✅ Backend progress updated successfully');
+      }
+    } catch (error) {
+      console.log('⚠️ Backend update failed, continuing with localStorage update:', error);
+    }
+    
+    // Update localStorage immediately for instant UI feedback
+    const progress = JSON.parse(localStorage.getItem('progress') || '{}');
+    progress[`section${section}_${stage}`] = 'complete';
+    localStorage.setItem('progress', JSON.stringify(progress));
+    console.log(`✅ localStorage updated: section${section}_${stage} = complete`);
+    
+    // Check if Assessment should unlock
+    checkAndUnlockAssessment(section);
+  };
+
+  // PROGRESS FIX: Check and unlock assessment when both practice stages are complete
+  const checkAndUnlockAssessment = (section) => {
+    console.log(`🔍 Checking if Assessment should unlock for section ${section}`);
+    
+    const progress = JSON.parse(localStorage.getItem('progress') || '{}');
+    const practice1Complete = progress[`section${section}_practice${section}_1`] === 'complete' || 
+                              progress[`section${section}_practice1`] === 'complete';
+    const practice2Complete = progress[`section${section}_practice${section}_2`] === 'complete' || 
+                              progress[`section${section}_practice2`] === 'complete';
+    
+    console.log(`🔍 Practice1 complete: ${practice1Complete}, Practice2 complete: ${practice2Complete}`);
+    
+    if (practice1Complete && practice2Complete) {
+      console.log('🎉 Both practice stages complete - Assessment should unlock!');
+      
+      // Mark assessment as unlocked in localStorage
+      progress[`section${section}_assessment_unlocked`] = true;
+      localStorage.setItem('progress', JSON.stringify(progress));
+      
+      // Force refresh progress from backend to update UI
+      setTimeout(() => {
+        fetchData();
+      }, 500);
     }
   };
 
