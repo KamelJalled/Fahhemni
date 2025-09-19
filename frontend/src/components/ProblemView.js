@@ -1822,10 +1822,13 @@ const ProblemView = () => {
                                           <p className="text-sm text-gray-600 mb-2">
                                             {language === 'en' ? 'Your previous steps:' : 'خطواتك السابقة:'}
                                           </p>
-                                          {explanationAnswers.slice(0, explanationStep).map((answer, stepIdx) => (
-                                            answer && (
-                                              <div key={stepIdx} className="mb-2 p-2 bg-blue-100 rounded text-center text-sm text-blue-800">
-                                                {language === 'en' ? `Step ${stepIdx + 1}: ` : `الخطوة ${stepIdx + 1}: `}{answer}
+                                          {explanationStepHistory.slice(0, explanationStep).map((stepAnswer, stepIdx) => (
+                                            stepAnswer && (
+                                              <div key={stepIdx} className="mb-2 p-2 bg-green-100 rounded text-center text-sm text-green-800 border border-green-300">
+                                                <span className="inline-block bg-green-200 px-2 py-1 rounded-full text-xs font-semibold mr-2">
+                                                  {language === 'en' ? `Step ${stepIdx + 1}` : `الخطوة ${stepIdx + 1}`}
+                                                </span>
+                                                <span className="font-mono">{stepAnswer}</span>
                                               </div>
                                             )
                                           ))}
