@@ -1226,7 +1226,7 @@ const ProblemView = () => {
     setIsSubmitted(true);
   };
 
-  // Helper function to get current section number  
+  // Helper function to get current section number from problem  
   const getCurrentSection = () => {
     if (problemId?.includes('1') || problem?.section_id === 'section1') return 1;
     if (problemId?.includes('2') || problem?.section_id === 'section2') return 2;
@@ -1234,6 +1234,29 @@ const ProblemView = () => {
     if (problemId?.includes('4') || problem?.section_id === 'section4') return 4;
     if (problemId?.includes('5') || problem?.section_id === 'section5') return 5;
     return 1; // Default to section 1
+  };
+
+  // NAVIGATION CONTEXT FIX: Helper to save navigation context
+  const saveNavigationContext = (section, stage = null) => {
+    const context = {
+      section: `section${section}`,
+      stage: stage,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('mathapp_navigation_context', JSON.stringify(context));
+  };
+
+  // NAVIGATION CONTEXT FIX: Navigate back to dashboard with context preservation
+  const navigateToSectionDashboard = () => {
+    const currentSection = getCurrentSection();
+    saveNavigationContext(currentSection);
+    navigate('/dashboard');
+  };
+
+  // NAVIGATION CONTEXT FIX: Redirect to correct section's explanation after failure
+  const redirectToExplanation = () => {
+    const currentSection = getCurrentSection();
+    navigate(`/section${currentSection}/explanation`);
   };
 
   const submitToBackend = async () => {
