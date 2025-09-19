@@ -391,7 +391,8 @@ class Section2HintsTester:
                         violations.append("Shows direct inequality")
                     if "t ≥ 50" in hint or "t >= 50" in hint:
                         violations.append("Shows final answer")
-                    if "50" in hint and i < 3:  # Final answer shouldn't appear in first 2 hints
+                    # Don't flag "500" as it's the target amount from problem statement, not the answer "50"
+                    if " 50" in hint and i < 3 and "500" not in hint:  # Final answer shouldn't appear in first 2 hints
                         violations.append("Reveals answer too early")
                     
                     if violations:
