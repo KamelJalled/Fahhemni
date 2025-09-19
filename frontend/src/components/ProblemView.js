@@ -195,9 +195,22 @@ const ProblemView = () => {
       }
     }
     
-    // Business Rule 3: Assessment and Exam Prep typically require 2 steps
+    // Business Rule 3: Assessment and Exam Prep word problems ALSO require 3 steps
     if (problemType === 'assessment' || problemType === 'examprep') {
-      return 2; // Step 1: Show operation, Step 2: Simplified answer
+      // Check if this is a word problem
+      const questionText = (language === 'en' ? problemQuestion?.question_en : problemQuestion?.question_ar) || '';
+      const isWordProblem = questionText.length > 50 || 
+                           questionText.toLowerCase().includes('word') ||
+                           questionText.includes('ريال') ||
+                           questionText.includes('tickets') ||
+                           questionText.includes('candy') ||
+                           questionText.includes('children');
+      
+      if (isWordProblem) {
+        return 3; // Step 1: Write inequality, Step 2: Show operation, Step 3: Simplified answer
+      } else {
+        return 2; // Simple assessment problems: Step 1: Show operation, Step 2: Simplified answer
+      }
     }
     
     return 2; // Default: 2 steps for most problems
