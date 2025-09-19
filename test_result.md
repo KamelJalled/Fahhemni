@@ -103,17 +103,17 @@
 user_problem_statement: "URGENT FIX: Section 2 Explanation Stage - Step Completion Bug. CRITICAL BUG DESCRIPTION: Location: Section 2, Explanation Stage, Level 1B (First Example). Problem: System advances to next example after Step 1, skipping required Step 2. Current WRONG Behavior: Student enters Step 1: 4x/4 ≥ 20/4 ✓, System immediately moves to Example 2 ❌, Step 2 (simplification to x ≥ 5) is never requested ❌. Required CORRECT Behavior: Student enters Step 1: 4x/4 ≥ 20/4 ✓, System shows: 'جيد! الآن بسّط الطرفين / Good! Now simplify both sides', Student enters Step 2: x ≥ 5 ✓, ONLY THEN move to Example 2. All examples in Section 2 Explanation Stage must require exactly 2 steps before advancing."
 
 backend:
-  - task: "Section 2 Navigation Bug Investigation - Assessment2 Access Control"
+  - task: "Section 2 Explanation Stage Step Completion Bug Fix"
     implemented: false
-    working: true
-    file: "frontend/src/components/ProblemView.js, backend/server.py"
+    working: false
+    file: "backend/database.py"
     stuck_count: 0
-    priority: "high"
-    needs_retesting: false
+    priority: "critical"
+    needs_retesting: true
     status_history:
-      - working: true
+      - working: false
         agent: "main"
-        comment: "✅ INVESTIGATION COMPLETE: Navigation 'bug' is actually system working correctly. Backend testing confirmed assessment2 access control properly requires BOTH practice2_1 AND practice2_2 to be completed before assessment2 becomes accessible. ROOT CAUSE: User 'Sami' completed practice2_2 but skipped practice2_1, triggering 403 Forbidden error with message 'You must complete all practice stages first. Incomplete: practice2_1'. SYSTEM BEHAVIOR: Correctly enforces educational progression: prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2. RECOMMENDATION: No fixes needed - stage access control logic is working as designed to ensure proper learning sequence. Consider adding clearer UI indicators to show which practice stages are required for assessment access."
+        comment: "CRITICAL BUG IDENTIFIED: Section 2 explanation stage Level 1B is missing Step 2 definition in database.py step_solutions. Currently only has 1 step defined ('Level 1B Step 1: Divide both sides by 4') but should have 2 steps total. Level 1B example 4y < 24 should require Step 1: 4y/4 < 24/4 and Step 2: y < 6. System advances to next example after Step 1 because step_solutions array is incomplete. Need to add missing Step 2 for Level 1B and verify all other levels have correct 2-step structure as specified by user."
   - task: "Remove Vercel-specific configurations"
     implemented: true
     working: true
