@@ -2599,11 +2599,12 @@ const ProblemView = () => {
 
                   {/* Action Buttons */}
                   <div className="mt-4 flex gap-2">
-                    {/* Continue to Next Stage */}
+                    {/* Continue to Next Stage - FIXED: Better completion detection */}
                     {(isCorrect || allStepsComplete) && (
                       <Button 
                         onClick={() => {
                           console.log('🔍 Continue button clicked, navigating to next stage');
+                          console.log(`🔍 Current problem: ${problemId}, isCorrect: ${isCorrect}, allStepsComplete: ${allStepsComplete}`);
                           handleNextProblem();
                         }}
                         className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
@@ -2611,10 +2612,17 @@ const ProblemView = () => {
                         <Trophy className="w-4 h-4 mr-2" />
                         {(() => {
                           const stageType = getStageType(problem.type, problem.id);
+                          // FIXED: Better button text for practice word problems
                           if (stageType === 'preparation') {
                             return language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←';
+                          } else if (stageType === 'practice' || stageType === 'practice_word') {
+                            return language === 'en' ? 'Continue to Assessment →' : 'انتقل للتقييم ←';
                           } else if (problem.id === 'examprep1') {
                             return language === 'en' ? 'Start Section 2: Multiplication/Division →' : 'ابدأ القسم ٢: الضرب/القسمة ←';
+                          } else if (problem.id?.includes('examprep')) {
+                            const currentSection = getCurrentSection();
+                            const nextSection = currentSection + 1;
+                            return language === 'en' ? `Start Section ${nextSection} →` : `ابدأ القسم ${nextSection} ←`;
                           } else {
                             return language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←';
                           }
