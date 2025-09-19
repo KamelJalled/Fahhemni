@@ -1470,10 +1470,21 @@ const ProblemView = () => {
           <ArrowLeft className="w-4 h-4 mr-2" />
           {text[language].back}
         </Button>
-        <Button onClick={toggleLanguage} variant="outline" size="sm">
-          <Globe className="w-4 h-4 mr-2" />
-          {language === 'en' ? 'العربية' : 'English'}
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={() => setShowRulesModal(true)}
+            variant="outline" 
+            size="sm"
+            className="text-blue-600 border-blue-300 hover:bg-blue-50"
+            title={language === 'en' ? 'Show solving rules' : 'عرض قواعد الحل'}
+          >
+            <HelpCircle className="w-4 h-4" />
+          </Button>
+          <Button onClick={toggleLanguage} variant="outline" size="sm">
+            <Globe className="w-4 h-4 mr-2" />
+            {language === 'en' ? 'العربية' : 'English'}
+          </Button>
+        </div>
       </div>
 
       {/* Main Content Container - Expanded Width */}
