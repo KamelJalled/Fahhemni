@@ -2936,9 +2936,9 @@ const ProblemView = () => {
                     {(isCorrect || allStepsComplete) && (
                       <Button 
                         onClick={() => {
-                          console.log('🔍 Continue button clicked, navigating to next stage');
+                          console.log('🔍 Continue button clicked, navigating to next stage with forced navigation');
                           console.log(`🔍 Current problem: ${problemId}, isCorrect: ${isCorrect}, allStepsComplete: ${allStepsComplete}`);
-                          handleNextProblem();
+                          handleNavigationClick();
                         }}
                         className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
                       >
