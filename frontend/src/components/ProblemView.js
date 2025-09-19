@@ -2366,8 +2366,8 @@ const ProblemView = () => {
                         onClick={async () => {
                           // Submit explanation completion to backend first
                           await submitToBackend();
-                          // Then navigate to next problem
-                          handleNextProblem();
+                          // Then navigate to next problem with forced navigation
+                          handleNavigationClick();
                         }}
                         className="mt-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-16 py-6 text-2xl font-semibold"
                       >
