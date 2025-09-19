@@ -239,6 +239,48 @@ async def get_progress(username: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@api_router.post("/updateProgress")
+async def update_progress_endpoint(progress_update: dict):
+    """Update progress status for stage completion"""
+    try:
+        username = progress_update.get("username")
+        section = progress_update.get("section")
+        stage = progress_update.get("stage")
+        status = progress_update.get("status")
+        
+        if not all([username, section, stage, status]):
+            raise HTTPException(status_code=400, detail="Missing required fields")
+        
+        # Get current progress for the stage
+        current_progress = await get_student_progress(username)
+        stage_progress = next(
+            (p for p in current_progress if p.problem_id == stage), 
+            None
+        )
+        
+        # Update the stage as completed
+        section_id = f"section{section}"
+        progress_data = {
+            "student_username": username,
+            "section_id": section_id,
+            "problem_id": stage,
+            "completed": status == 'complete',
+            "score": stage_progress.score if stage_progress else 100,
+            "attempts": stage_progress.attempts if stage_progress else 1,
+            "hints_used": stage_progress.hints_used if stage_progress else 0
+        }
+        
+        updated_progress = await update_progress(username, stage, progress_data)
+        
+        return {
+            "success": True,
+            "message": f"Progress updated for {stage}",
+            "progress": updated_progress
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @api_router.post("/students/{username}/attempt")
 async def submit_attempt(username: str, attempt: ProblemAttempt):
     """Submit a problem attempt with stage access control"""
