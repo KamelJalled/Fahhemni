@@ -1216,10 +1216,9 @@ const ProblemView = () => {
         setTimeout(() => setShowEncouragement(''), 8000);
       } else {
         // Third attempt - redirect to explanation of SAME section
-        const currentSection = getCurrentSection();
         const redirectMessage = language === 'en' 
-          ? `Let's review the explanation for Section ${currentSection} to master this concept.`
-          : `لنراجع شرح القسم ${currentSection} لإتقان هذا المفهوم.`;
+          ? `Let's review the explanation for this section to master this concept.`
+          : `لنراجع شرح هذا القسم لإتقان هذا المفهوم.`;
         
         setShowEncouragement(redirectMessage);
         setShowRedirectionButton(true);
