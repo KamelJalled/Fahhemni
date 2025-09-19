@@ -1250,7 +1250,7 @@ const ProblemView = () => {
   const navigateToSectionDashboard = () => {
     const currentSection = getCurrentSection();
     saveNavigationContext(currentSection);
-    navigate('/dashboard');
+    navigateToSectionDashboard();
   };
 
   // NAVIGATION CONTEXT FIX: Redirect to correct section's explanation after failure
