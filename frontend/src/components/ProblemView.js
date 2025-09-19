@@ -2522,7 +2522,7 @@ const ProblemView = () => {
                       <MathKeyboard
                         onSymbolSelect={(symbol) => {
                           const stageType = getStageType(problem.type, problem.id);
-                          if (stageType === 'practice') {
+                          if (stageType === 'practice' || stageType === 'practice_word') {
                             const newStepAnswers = [...stepAnswers];
                             newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '') + symbol;
                             setStepAnswers(newStepAnswers);
@@ -2532,7 +2532,7 @@ const ProblemView = () => {
                         }}
                         onNumberSelect={(number) => {
                           const stageType = getStageType(problem.type, problem.id);
-                          if (stageType === 'practice') {
+                          if (stageType === 'practice' || stageType === 'practice_word') {
                             const newStepAnswers = [...stepAnswers];
                             newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '') + number;
                             setStepAnswers(newStepAnswers);
@@ -2542,7 +2542,7 @@ const ProblemView = () => {
                         }}
                         onOperatorSelect={(operator) => {
                           const stageType = getStageType(problem.type, problem.id);
-                          if (stageType === 'practice') {
+                          if (stageType === 'practice' || stageType === 'practice_word') {
                             const newStepAnswers = [...stepAnswers];
                             newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '') + ` ${operator} `;
                             setStepAnswers(newStepAnswers);
