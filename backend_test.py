@@ -442,7 +442,7 @@ class Section2HintsTester:
             print("\n🌐 BILINGUAL HINT CONSISTENCY TESTING")
             print("Verifying English and Arabic hints convey the same pedagogical guidance")
             
-            # Get both problems
+            # Get both problems (examprep2 should be accessible after completing prerequisites)
             practice2_2_response = self.session.get(f"{self.base_url}/problems/practice2_2?username={self.test_student_username}")
             examprep2_response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
             
