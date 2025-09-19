@@ -100,7 +100,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "CRITICAL BUG FIX: Fix Word Problem Step Count Requirements. Current issue: System accepts Step 2 answer as final and moves to next stage, but word problems MUST require exactly 3 steps: (1) Write inequality from word problem, (2) Perform operation (show division/multiplication), (3) Simplify to final answer. Only after Step 3 should system move to next stage. Affects both practice2_2 (tickets) and examprep2 (candy) problems."
+user_problem_statement: "CRITICAL BUG INVESTIGATION: Navigation from practice2_2 to assessment2 broken. User reports 'The navigation button after the second practice (real life example) is broken. Cannot move to the assessment stage.' Need to investigate stage access control logic and fix navigation flow."
 
 backend:
   - task: "Section 2 Word Problem Step Count Requirements - 3-Step Enforcement"
