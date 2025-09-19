@@ -474,7 +474,7 @@ const Dashboard = () => {
                     } ${isSelected ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-50'}`}
                     onClick={() => {
                       console.log(`Switching to section: ${section.id}`);
-                      setSelectedSection(section.id);
+                      updateSelectedSection(section.id);
                     }}
                     disabled={!hasProblems}
                     style={{
