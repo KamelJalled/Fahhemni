@@ -114,6 +114,31 @@ backend:
       - working: false
         agent: "main"
         comment: "GLOBAL ENHANCEMENT REQUIRED: Implement backend support for global negative number input validation. Need to ensure backend validation logic handles formats like k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. across ALL sections. Backend should accept multiple valid formats for the same mathematical expression involving negative numbers."
+
+frontend:
+  - task: "Global Negative Number Validation - Frontend Implementation"
+    implemented: true
+    working: false
+    file: "frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "✅ IMPLEMENTED: Enhanced normalizeAnswer function with global negative number validation. Added normalizeNegativeNumbers helper and normalizeAndValidateAnswer function to handle formats like k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. Updated basicNormalizeAnswer to support Arabic variables (س، ص، ك، م، ن) and numerals conversion. System now accepts multiple mathematical expression formats globally."
+
+  - task: "Rules Modal and Help System - UI Implementation"
+    implemented: true
+    working: false
+    file: "frontend/src/components/RulesModal.js, frontend/src/components/Dashboard.js, frontend/src/components/ProblemView.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "✅ IMPLEMENTED: Created comprehensive RulesModal component with bilingual mathematical rules (Arabic/English). Added 'Solving Rules' button to Dashboard header and (?) help icon to ProblemView header. Modal includes 4 rule sections: Writing Negative Numbers, Flipping Inequality Signs, Accepted Answer Formats, Mathematical Symbols, plus helpful tips. Styled with proper responsive design and accessibility features."
       - working: true
         agent: "testing"
         comment: "✅ CRITICAL BUG FIX VERIFIED: Section 2 explanation stage step completion bug has been successfully fixed! Comprehensive testing confirmed: 1) ✅ Interactive examples updated to match user specifications: Level 1B: 4x ≥ 20 (was 4y < 24), Level 2B: -3m < 15, Level 3B: -6k ≥ 30. 2) ✅ Step solutions structure corrected: Now contains exactly 6 step definitions (2 per level) - Level 1B Step 1: 'Divide both sides by 4' → accepts '4x/4 ≥ 20/4', Level 1B Step 2: 'Simplify' → accepts 'x ≥ 5', Level 2B Step 1: 'Divide both sides by -3 (flip sign)' → accepts 'm > 15/(-3)', Level 2B Step 2: 'Simplify' → accepts 'm > -5', Level 3B Step 1: 'Divide both sides by -6 (flip sign)' → accepts 'k ≤ 30/(-6)', Level 3B Step 2: 'Simplify' → accepts 'k ≤ -5'. 3) ✅ All step possible_answers arrays contain correct validation options. 4) ✅ Backend response structure complete with all required fields. 5) ✅ Database reset and reinitialized successfully with new data. The system will now require students to complete BOTH Step 1 AND Step 2 for each level before advancing to the next example, fixing the critical progression bug where students were advancing after only Step 1."
