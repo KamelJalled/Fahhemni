@@ -81,7 +81,7 @@ const RulesModal = ({ isOpen, onClose }) => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="p-3 border border-gray-200 font-mono text-sm">x > 5</td>
+                    <td className="p-3 border border-gray-200 font-mono text-sm">x {'>'} 5</td>
                     <td rowSpan="4" className="p-3 border border-gray-200 text-center text-green-600 text-xl font-bold">✓</td>
                   </tr>
                   <tr>
@@ -91,7 +91,7 @@ const RulesModal = ({ isOpen, onClose }) => {
                     <td className="p-3 border border-gray-200 font-mono text-sm">5 &lt; x</td>
                   </tr>
                   <tr>
-                    <td className="p-3 border border-gray-200 font-mono text-sm">س > ٥</td>
+                    <td className="p-3 border border-gray-200 font-mono text-sm">س {'>'} ٥</td>
                   </tr>
                 </tbody>
               </table>
