@@ -103,51 +103,42 @@
 user_problem_statement: "CRITICAL FIX: Word Problem Logic and Navigation Issues. ISSUE 1: Word Problem Structure in Practice Stage - CURRENT WRONG BEHAVIOR: System asks for 'Final Answer' immediately, No step-by-step solving, Hints not shown from beginning. CORRECT BEHAVIOR FOR PRACTICE WORD PROBLEMS: Practice Stage Word Problems MUST have 3 STEPS: Step 1: Write the inequality (hints visible from start), Step 2: Perform the operation, Step 3: Simplify final answer. ISSUE 2: Assessment/Exam Prep Logic (Different from Practice) - Should only ask for final answer (1 step), no immediate hints. ISSUE 3: Navigation Context Fix - CRITICAL BUG: Dashboard Always Returns to Section 1. Must preserve current section context and failed attempts redirect to CORRECT section's explanation (not Section 1). PRIORITY: CRITICAL - fundamental flow issues that break learning experience."
 
 backend:
-  - task: "Global Negative Number Input Validation - Backend Support"
-    implemented: true
-    working: true
-    file: "backend/server.py, backend/utils.py"
+  - task: "Word Problem Stage Logic Fix - Practice vs Assessment Differentiation"
+    implemented: false
+    working: false
+    file: "backend/database.py, backend/server.py"
     stuck_count: 0
     priority: "critical"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
-        comment: "GLOBAL ENHANCEMENT REQUIRED: Implement backend support for global negative number input validation. Need to ensure backend validation logic handles formats like k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. across ALL sections. Backend should accept multiple valid formats for the same mathematical expression involving negative numbers."
-      - working: true
-        agent: "testing"
-        comment: "✅ CRITICAL GLOBAL ENHANCEMENT SUCCESSFULLY IMPLEMENTED AND TESTED: Backend now fully supports global negative number input validation across ALL sections. COMPREHENSIVE TESTING RESULTS: 1) ✅ Section 1 Testing: All formats accepted - 'x > 15', 'x>15', 'س > ١٥', 'س>١٥' for prep1 problem (x - 5 > 10). 2) ✅ Section 2 Testing: All negative formats accepted - 'k < -12', 'k < (-12)', 'k<-12', 'ك < (-١٢)', 'ك<(-١٢)' for practice2_1 problem (-2/3 k > 8). 3) ✅ Arabic Support: All Arabic variables (س، ص، ك، م، ن) and numerals (٠-٩) properly converted and accepted. 4) ✅ Parentheses Support: Expressions like 'k ≤ (-5)' correctly normalized to 'k ≤ -5'. 5) ✅ Space Variations: All space patterns handled correctly. 6) ✅ Backend Enhancement: Updated basic_normalize_answer() function in utils.py with comprehensive Arabic variable mapping, parentheses handling, and fraction normalization. BACKEND VALIDATION: 100% success rate across 8 test categories. Global negative number input validation is FULLY WORKING across all sections as requested."
+        comment: "CRITICAL LOGIC BUG: Practice stage word problems incorrectly configured as single-step final answer problems instead of required 3-step structure. Practice problems MUST have: Step 1 (Write inequality with hints visible), Step 2 (Perform operation), Step 3 (Simplify). Assessment/Exam should only ask for final answer. Need to differentiate Practice vs Assessment word problem behavior in backend data structure."
 
 frontend:
-  - task: "Global Negative Number Validation - Frontend Implementation"
-    implemented: true
-    working: true
+  - task: "Word Problem UI Logic Fix - Practice 3-Step vs Assessment 1-Step"
+    implemented: false
+    working: false
     file: "frontend/src/components/ProblemView.js"
     stuck_count: 0
     priority: "critical"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
-        comment: "✅ IMPLEMENTED: Enhanced normalizeAnswer function with global negative number validation. Added normalizeNegativeNumbers helper and normalizeAndValidateAnswer function to handle formats like k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), etc. Updated basicNormalizeAnswer to support Arabic variables (س، ص، ك، م، ن) and numerals conversion. System now accepts multiple mathematical expression formats globally."
-      - working: true
-        agent: "main"
-        comment: "✅ IMPLEMENTATION COMPLETE AND VERIFIED: Global negative number validation successfully implemented in frontend with comprehensive format support. Backend testing confirmed 100% success rate (8/8 test categories passed) for multiple format acceptance including: k ≤ -5, k ≤ (-5), k<=-5, ك ≤ (-٥), ك≤(-٥), Arabic variables (س، ص، ك، م، ن), and space variations. Backend was automatically enhanced with improved utils.py normalization. System now accepts all requested mathematical expression formats across ALL sections as specified."
+        comment: "CRITICAL UI BUG: Practice stage word problems showing 'Final Answer' input instead of step-by-step 3-step process. Hints not visible from start in Practice stage. Need to implement getStageType logic to differentiate Practice (3 steps with hints visible) vs Assessment/Exam (1 step final answer only)."
 
-  - task: "Rules Modal and Help System - UI Implementation"
-    implemented: true
-    working: true
-    file: "frontend/src/components/RulesModal.js, frontend/src/components/Dashboard.js, frontend/src/components/ProblemView.js"
+  - task: "Navigation Context Preservation Fix"
+    implemented: false
+    working: false
+    file: "frontend/src/components/Dashboard.js, frontend/src/components/ProblemView.js"
     stuck_count: 0
-    priority: "high"
-    needs_retesting: false
+    priority: "critical"  
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
-        comment: "✅ IMPLEMENTED: Created comprehensive RulesModal component with bilingual mathematical rules (Arabic/English). Added 'Solving Rules' button to Dashboard header and (?) help icon to ProblemView header. Modal includes 4 rule sections: Writing Negative Numbers, Flipping Inequality Signs, Accepted Answer Formats, Mathematical Symbols, plus helpful tips. Styled with proper responsive design and accessibility features."
-      - working: true
-        agent: "main"
-        comment: "✅ IMPLEMENTATION COMPLETE: Rules Modal and Help System fully implemented with bilingual support. Created comprehensive RulesModal.js component with 4 key sections covering negative numbers, inequality sign flipping, accepted formats, and mathematical symbols. Added 'Solving Rules' button to Dashboard header and (?) help icon to ProblemView header. Modal includes responsive design, proper accessibility, and comprehensive bilingual content (Arabic/English) as requested. Help system now provides students with clear guidance on input formats and mathematical rules."
+        comment: "CRITICAL NAVIGATION BUG: Dashboard always returns to Section 1 instead of preserving current section context. Back button and failed attempt redirections lose section context. Need to implement navigationContext with localStorage to preserve current section and redirect to correct section's explanation after failures."
       - working: true
         agent: "testing"
         comment: "✅ CRITICAL BUG FIX VERIFIED: Section 2 explanation stage step completion bug has been successfully fixed! Comprehensive testing confirmed: 1) ✅ Interactive examples updated to match user specifications: Level 1B: 4x ≥ 20 (was 4y < 24), Level 2B: -3m < 15, Level 3B: -6k ≥ 30. 2) ✅ Step solutions structure corrected: Now contains exactly 6 step definitions (2 per level) - Level 1B Step 1: 'Divide both sides by 4' → accepts '4x/4 ≥ 20/4', Level 1B Step 2: 'Simplify' → accepts 'x ≥ 5', Level 2B Step 1: 'Divide both sides by -3 (flip sign)' → accepts 'm > 15/(-3)', Level 2B Step 2: 'Simplify' → accepts 'm > -5', Level 3B Step 1: 'Divide both sides by -6 (flip sign)' → accepts 'k ≤ 30/(-6)', Level 3B Step 2: 'Simplify' → accepts 'k ≤ -5'. 3) ✅ All step possible_answers arrays contain correct validation options. 4) ✅ Backend response structure complete with all required fields. 5) ✅ Database reset and reinitialized successfully with new data. The system will now require students to complete BOTH Step 1 AND Step 2 for each level before advancing to the next example, fixing the critical progression bug where students were advancing after only Step 1."
