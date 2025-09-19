@@ -82,7 +82,7 @@ async def init_database():
             "question_ar": "تعلم متباينات الجمع والطرح",
             "answer": "",
             "answer_ar": "",
-            "show_full_solution": True,
+            "show_full_solution": False,
             "hide_answer": False,
             "explanation_en": "Learn to solve inequalities involving addition and subtraction",
             "explanation_ar": "تعلم حل المتباينات التي تتضمن الجمع والطرح",
