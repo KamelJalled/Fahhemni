@@ -100,7 +100,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "CRITICAL BUG FIX: Fix Word Problem Hints in Section 2 - NEVER Show the Inequality. Current hints for practice2_2 (ticket sales) and examprep2 (candy distribution) violate Socratic teaching method by showing direct answers like '10t ≥ 500'. Required: Implement progressive 3-step hints that guide thinking without revealing inequality. Update both backend database hints and frontend hint system to use progressive pedagogical guidance instead of direct answers."
+user_problem_statement: "CRITICAL BUG FIX: Fix Word Problem Step Count Requirements. Current issue: System accepts Step 2 answer as final and moves to next stage, but word problems MUST require exactly 3 steps: (1) Write inequality from word problem, (2) Perform operation (show division/multiplication), (3) Simplify to final answer. Only after Step 3 should system move to next stage. Affects both practice2_2 (tickets) and examprep2 (candy) problems."
 
 backend:
   - task: "Section 2 Word Problem Hints - Socratic Method Fix"
