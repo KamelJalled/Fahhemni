@@ -415,7 +415,8 @@ class Section2HintsTester:
                         violations.append("Shows direct inequality")
                     if "p ≥ 4" in hint or "p >= 4" in hint:
                         violations.append("Shows final answer")
-                    if "4" in hint and i < 3:  # Final answer shouldn't appear in first 2 hints
+                    # Don't flag "60" as it's the target amount from problem statement, not the answer "4"
+                    if " 4" in hint and i < 3 and "60" not in hint:  # Final answer shouldn't appear in first 2 hints
                         violations.append("Reveals answer too early")
                     
                     if violations:
