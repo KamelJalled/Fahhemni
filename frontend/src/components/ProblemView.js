@@ -853,6 +853,9 @@ const ProblemView = () => {
         case 'practice':
           await handlePracticeStage();
           break;
+        case 'practice_word':
+          await handlePracticeWordStage();
+          break;
         case 'assessment':
           await handleAssessmentStage();
           break;
