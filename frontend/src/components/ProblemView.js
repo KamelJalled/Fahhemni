@@ -2318,14 +2318,22 @@ const ProblemView = () => {
 
                             {/* Show completed steps above current step */}
                             {currentStep > 0 && (
-                              <div className="mb-4">
-                                <h5 className="font-medium text-gray-700 mb-2">
+                              <div className="mb-4 previous-steps-container bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                <h5 className="font-medium text-gray-700 mb-3 flex items-center">
+                                  <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
                                   {language === 'en' ? 'Your previous steps:' : 'خطواتك السابقة:'}
                                 </h5>
                                 {stepAnswers.slice(0, currentStep).map((answer, index) => (
                                   answer && (
-                                    <div key={index} className="mb-2 p-2 bg-green-100 rounded text-sm text-green-800">
-                                      {language === 'en' ? `Step ${index + 1}: ` : `الخطوة ${index + 1}: `}{answer}
+                                    <div key={index} className="step-display bg-white border border-green-200 rounded-md p-3 mb-2 shadow-sm">
+                                      <div className="flex items-center gap-2">
+                                        <span className="step-label font-semibold text-green-700 bg-green-100 px-2 py-1 rounded text-sm">
+                                          {language === 'en' ? `Step ${index + 1}:` : `الخطوة ${index + 1}:`}
+                                        </span>
+                                        <span className="step-value font-mono text-green-800 bg-green-50 px-2 py-1 rounded">
+                                          {answer}
+                                        </span>
+                                      </div>
                                     </div>
                                   )
                                 ))}
