@@ -457,34 +457,34 @@ async def init_database():
                     "problem_ar": "٥س ≥ ٣٠",
                     "solution_en": "Original inequality: 5x ≥ 30\n\nStep 1: Divide both sides by 5\n5x / 5 ≥ 30 / 5\nStep 2: Simplify\nx ≥ 6",
                     "solution_ar": "المتباينة الأصلية: ٥س ≥ ٣٠\n\nالخطوة ١: اقسم كلا الطرفين على ٥\n٥س / ٥ ≥ ٣٠ / ٥\nالخطوة ٢: بسّط\nس ≥ ٦",
-                    "practice_question_en": "Now solve: 4y < 24",
-                    "practice_question_ar": "الآن حل: ٤ص < ٢٤",
-                    "practice_answer": "y < 6",
-                    "practice_answer_ar": "ص < ٦"
+                    "practice_question_en": "Now solve: 4x ≥ 20",
+                    "practice_question_ar": "الآن حل: ٤س ≥ ٢٠",
+                    "practice_answer": "x ≥ 5",
+                    "practice_answer_ar": "س ≥ ٥"
                 },
                 {
                     "title_en": "Level 2: Medium (Negative Coefficient) - Example 2A (System Solved)",
                     "title_ar": "المستوى ٢: متوسط (معامل سالب) - المثال ٢أ (حل النظام)",
-                    "problem_en": "-3m > 15",
-                    "problem_ar": "-٣م > ١٥",
-                    "solution_en": "Original inequality: -3m > 15\n\nStep 1: Divide both sides by -3 (flip sign)\n-3m / (-3) < 15 / (-3)\nStep 2: Simplify\nm < -5",
-                    "solution_ar": "المتباينة الأصلية: -٣م > ١٥\n\nالخطوة ١: اقسم كلا الطرفين على -٣ (اقلب الإشارة)\n-٣م / (-٣) < ١٥ / (-٣)\nالخطوة ٢: بسّط\nم < -٥",
-                    "practice_question_en": "Now solve: -6k ≤ 30", 
-                    "practice_question_ar": "الآن حل: -٦ك ≤ ٣٠",
-                    "practice_answer": "k ≥ -5",
-                    "practice_answer_ar": "ك ≥ -٥"
+                    "problem_en": "-2p > 8",
+                    "problem_ar": "-٢ف > ٨",
+                    "solution_en": "Original inequality: -2p > 8\n\nStep 1: Divide both sides by -2 (flip sign)\n-2p / (-2) < 8 / (-2)\nStep 2: Simplify\np < -4",
+                    "solution_ar": "المتباينة الأصلية: -٢ف > ٨\n\nالخطوة ١: اقسم كلا الطرفين على -٢ (اقلب الإشارة)\n-٢ف / (-٢) < ٨ / (-٢)\nالخطوة ٢: بسّط\nف < -٤",
+                    "practice_question_en": "Now solve: -3m < 15", 
+                    "practice_question_ar": "الآن حل: -٣م < ١٥",
+                    "practice_answer": "m > -5",
+                    "practice_answer_ar": "م > -٥"
                 },
                 {
-                    "title_en": "Level 3: Advanced (Division by Negative) - Example 3A (System Solved)",
-                    "title_ar": "المستوى ٣: متقدم (القسمة على عدد سالب) - المثال ٣أ (حل النظام)",
-                    "problem_en": "k / (-4) ≤ 2",
-                    "problem_ar": "ك / (-٤) ≤ ٢",
-                    "solution_en": "Original inequality: k / (-4) ≤ 2\n\nStep 1: Multiply both sides by -4 (flip sign)\nk / (-4) * (-4) ≥ 2 * (-4)\nStep 2: Simplify\nk ≥ -8",
-                    "solution_ar": "المتباينة الأصلية: ك / (-٤) ≤ ٢\n\nالخطوة ١: اضرب كلا الطرفين في -٤ (اقلب الإشارة)\nك / (-٤) * (-٤) ≥ ٢ * (-٤)\nالخطوة ٢: بسّط\nك ≥ -٨",
-                    "practice_question_en": "Now solve: n / (-3) > 5",
-                    "practice_question_ar": "الآن حل: ن / (-٣) > ٥", 
-                    "practice_answer": "n < -15",
-                    "practice_answer_ar": "ن < -١٥"
+                    "title_en": "Level 3: Advanced (Negative Division) - Example 3A (System Solved)",
+                    "title_ar": "المستوى ٣: متقدم (القسمة السالبة) - المثال ٣أ (حل النظام)",
+                    "problem_en": "-5w ≤ 25",
+                    "problem_ar": "-٥و ≤ ٢٥",
+                    "solution_en": "Original inequality: -5w ≤ 25\n\nStep 1: Divide both sides by -5 (flip sign)\n-5w / (-5) ≥ 25 / (-5)\nStep 2: Simplify\nw ≥ -5",
+                    "solution_ar": "المتباينة الأصلية: -٥و ≤ ٢٥\n\nالخطوة ١: اقسم كلا الطرفين على -٥ (اقلب الإشارة)\n-٥و / (-٥) ≥ ٢٥ / (-٥)\nالخطوة ٢: بسّط\nو ≥ -٥",
+                    "practice_question_en": "Now solve: -6k ≥ 30",
+                    "practice_question_ar": "الآن حل: -٦ك ≥ ٣٠", 
+                    "practice_answer": "k ≤ -5",
+                    "practice_answer_ar": "ك ≤ -٥"
                 }
             ],
             "step_solutions": [
