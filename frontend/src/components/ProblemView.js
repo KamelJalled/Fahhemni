@@ -51,6 +51,7 @@ const ProblemView = () => {
   const [currentScore, setCurrentScore] = useState(100); // Start with 100%
   const [explanationStep, setExplanationStep] = useState(0); // For explanation stage step tracking
   const [explanationAnswers, setExplanationAnswers] = useState(['', '', '']); // Single input per example (simplified management)
+  const [showRulesModal, setShowRulesModal] = useState(false); // Rules modal state
 
   // GLOBAL: Enhanced normalization for negative numbers and mathematical expressions
   const normalizeAnswer = (answer) => {
