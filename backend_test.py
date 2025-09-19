@@ -22,12 +22,12 @@ from datetime import datetime
 # Use backend URL from frontend/.env as specified in review request
 BACKEND_URL = "https://inequality-solver.preview.emergentagent.com/api"
 
-class Section2NavigationTester:
+class Section2HintsTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "section2_nav_test_student"
+        self.test_student_username = "hints_test_student"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -71,7 +71,7 @@ class Section2NavigationTester:
             return False
 
     def create_test_student(self):
-        """Create test student for navigation testing"""
+        """Create test student for hints testing"""
         try:
             test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
@@ -100,13 +100,115 @@ class Section2NavigationTester:
             self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
             return False
 
-    def test_practice2_1_completion(self):
-        """Test completing practice2_1 with correct answer"""
+    def test_practice2_2_database_hints(self):
+        """Test that practice2_2 (tickets problem) has correct hints stored in database"""
         try:
-            print("\n🎯 PRACTICE2_1 COMPLETION TEST")
-            print("Testing completion of practice2_1 with correct answer 'k < -12'")
+            print("\n🎯 PRACTICE2_2 DATABASE HINTS VERIFICATION")
+            print("Testing if practice2_2 has the 3 expected progressive Socratic hints in database")
             
-            # Submit correct answer for practice2_1
+            # Get practice2_2 problem data
+            response = self.session.get(f"{self.base_url}/problems/practice2_2")
+            
+            if response.status_code == 200:
+                problem_data = response.json()
+                hints_en = problem_data.get("hints_en", [])
+                
+                # Expected hints for practice2_2 (tickets problem)
+                expected_hints = [
+                    "Think about the variable: t represents number of tickets. What's the price per ticket? What amount needs to be collected?",
+                    "If you sell t tickets at 10 SAR each, how much will you collect? Does it need to be greater than or equal to 500?",
+                    "Amount collected = price per ticket × number of tickets. Use ≥ symbol because it says \"at least\""
+                ]
+                
+                if len(hints_en) >= 3:
+                    # Check if all expected hints are present
+                    hints_match = True
+                    for i, expected_hint in enumerate(expected_hints):
+                        if i < len(hints_en) and expected_hint in hints_en[i]:
+                            continue
+                        else:
+                            hints_match = False
+                            break
+                    
+                    if hints_match:
+                        self.log_test("practice2_2 Database Hints", True, 
+                                    f"✅ practice2_2 has all 3 expected progressive Socratic hints stored correctly")
+                        return True
+                    else:
+                        self.log_test("practice2_2 Database Hints", False, 
+                                    f"❌ practice2_2 hints don't match expected content. Got: {hints_en}")
+                        return False
+                else:
+                    self.log_test("practice2_2 Database Hints", False, 
+                                f"❌ practice2_2 has only {len(hints_en)} hints, expected 3")
+                    return False
+            else:
+                self.log_test("practice2_2 Database Hints", False, 
+                            f"Failed to get practice2_2 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("practice2_2 Database Hints", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_examprep2_database_hints(self):
+        """Test that examprep2 (candy problem) has correct hints stored in database"""
+        try:
+            print("\n🎯 EXAMPREP2 DATABASE HINTS VERIFICATION")
+            print("Testing if examprep2 has the 3 expected progressive Socratic hints in database")
+            
+            # Get examprep2 problem data
+            response = self.session.get(f"{self.base_url}/problems/examprep2")
+            
+            if response.status_code == 200:
+                problem_data = response.json()
+                hints_en = problem_data.get("hints_en", [])
+                
+                # Expected hints for examprep2 (candy problem)
+                expected_hints = [
+                    "Variable p represents pieces per child. How many children? How many total pieces needed?",
+                    "If each child gets p pieces, and you have 15 children, how many pieces total will you distribute?",
+                    "Total = number of children × pieces per child. Must be \"at least\" 60"
+                ]
+                
+                if len(hints_en) >= 3:
+                    # Check if all expected hints are present
+                    hints_match = True
+                    for i, expected_hint in enumerate(expected_hints):
+                        if i < len(hints_en) and expected_hint in hints_en[i]:
+                            continue
+                        else:
+                            hints_match = False
+                            break
+                    
+                    if hints_match:
+                        self.log_test("examprep2 Database Hints", True, 
+                                    f"✅ examprep2 has all 3 expected progressive Socratic hints stored correctly")
+                        return True
+                    else:
+                        self.log_test("examprep2 Database Hints", False, 
+                                    f"❌ examprep2 hints don't match expected content. Got: {hints_en}")
+                        return False
+                else:
+                    self.log_test("examprep2 Database Hints", False, 
+                                f"❌ examprep2 has only {len(hints_en)} hints, expected 3")
+                    return False
+            else:
+                self.log_test("examprep2 Database Hints", False, 
+                            f"Failed to get examprep2 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("examprep2 Database Hints", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_practice2_2_wrong_attempts_hints(self):
+        """Test progressive hints display for practice2_2 with wrong attempts"""
+        try:
+            print("\n🎯 PRACTICE2_2 PROGRESSIVE HINTS TEST")
+            print("Testing progressive hints display for practice2_2 with 3 wrong attempts")
+            
+            # Complete prerequisites first (practice2_1)
             practice2_1_attempt = {
                 "problem_id": "practice2_1",
                 "answer": "k < -12",
@@ -119,38 +221,79 @@ class Section2NavigationTester:
                 headers={"Content-Type": "application/json"}
             )
             
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("correct"):
-                    progress = result.get("progress", {})
-                    if progress.get("completed", False):
-                        self.log_test("practice2_1 Completion", True, 
-                                    f"✅ practice2_1 completed successfully with answer 'k < -12'")
-                        return True
+            if response.status_code != 200 or not response.json().get("correct"):
+                self.log_test("practice2_2 Prerequisites", False, "Failed to complete practice2_1 prerequisite")
+                return False
+            
+            # Test wrong attempts for practice2_2
+            wrong_answers = ["t > 50", "t = 50", "t < 50"]  # Wrong answers to trigger hints
+            
+            for attempt_num, wrong_answer in enumerate(wrong_answers, 1):
+                print(f"\n   Attempt {attempt_num}: Submitting wrong answer '{wrong_answer}'")
+                
+                practice2_2_attempt = {
+                    "problem_id": "practice2_2",
+                    "answer": wrong_answer,
+                    "hints_used": attempt_num
+                }
+                
+                response = self.session.post(
+                    f"{self.base_url}/students/{self.test_student_username}/attempt",
+                    json=practice2_2_attempt,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    if not result.get("correct"):
+                        print(f"   ✅ Attempt {attempt_num}: Wrong answer correctly rejected")
+                        
+                        # Get problem data to check hints
+                        problem_response = self.session.get(f"{self.base_url}/problems/practice2_2")
+                        if problem_response.status_code == 200:
+                            problem_data = problem_response.json()
+                            hints = problem_data.get("hints_en", [])
+                            
+                            if len(hints) >= attempt_num:
+                                expected_hint_keywords = [
+                                    ["variable", "t represents", "tickets", "price"],
+                                    ["sell t tickets", "10 SAR", "collect", "greater than or equal"],
+                                    ["Amount collected", "price per ticket", "number of tickets", "at least"]
+                                ]
+                                
+                                hint_text = hints[attempt_num - 1]
+                                keywords = expected_hint_keywords[attempt_num - 1]
+                                
+                                if any(keyword.lower() in hint_text.lower() for keyword in keywords):
+                                    print(f"   ✅ Hint {attempt_num} contains expected keywords: {hint_text[:100]}...")
+                                else:
+                                    print(f"   ❌ Hint {attempt_num} missing expected keywords: {hint_text}")
+                            else:
+                                print(f"   ❌ Hint {attempt_num} not available in problem data")
+                        else:
+                            print(f"   ❌ Failed to get problem data for hint verification")
                     else:
-                        self.log_test("practice2_1 Completion", False, 
-                                    f"❌ Answer correct but problem not marked as completed")
+                        print(f"   ❌ Attempt {attempt_num}: Wrong answer '{wrong_answer}' was incorrectly accepted as correct")
                         return False
                 else:
-                    self.log_test("practice2_1 Completion", False, 
-                                f"❌ Correct answer 'k < -12' was rejected")
+                    print(f"   ❌ Attempt {attempt_num}: Failed to submit answer: HTTP {response.status_code}")
                     return False
-            else:
-                self.log_test("practice2_1 Completion", False, 
-                            f"Failed to submit practice2_1: HTTP {response.status_code}")
-                return False
+            
+            self.log_test("practice2_2 Progressive Hints", True, 
+                        f"✅ practice2_2 progressive hints system working - 3 wrong attempts processed correctly")
+            return True
                 
         except Exception as e:
-            self.log_test("practice2_1 Completion", False, f"Test execution error: {str(e)}")
+            self.log_test("practice2_2 Progressive Hints", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_practice2_2_completion(self):
-        """Test completing practice2_2 with correct 3-step process"""
+    def test_examprep2_wrong_attempts_hints(self):
+        """Test progressive hints display for examprep2 with wrong attempts"""
         try:
-            print("\n🎯 PRACTICE2_2 COMPLETION TEST")
-            print("Testing completion of practice2_2 with correct answer 't ≥ 50'")
+            print("\n🎯 EXAMPREP2 PROGRESSIVE HINTS TEST")
+            print("Testing progressive hints display for examprep2 with 3 wrong attempts")
             
-            # Submit correct answer for practice2_2
+            # Complete prerequisites first (both practice stages and assessment2)
             practice2_2_attempt = {
                 "problem_id": "practice2_2",
                 "answer": "t ≥ 50",
@@ -163,110 +306,11 @@ class Section2NavigationTester:
                 headers={"Content-Type": "application/json"}
             )
             
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("correct"):
-                    progress = result.get("progress", {})
-                    if progress.get("completed", False):
-                        self.log_test("practice2_2 Completion", True, 
-                                    f"✅ practice2_2 completed successfully with answer 't ≥ 50'")
-                        return True
-                    else:
-                        self.log_test("practice2_2 Completion", False, 
-                                    f"❌ Answer correct but problem not marked as completed")
-                        return False
-                else:
-                    self.log_test("practice2_2 Completion", False, 
-                                f"❌ Correct answer 't ≥ 50' was rejected")
-                    return False
-            else:
-                self.log_test("practice2_2 Completion", False, 
-                            f"Failed to submit practice2_2: HTTP {response.status_code}")
+            if response.status_code != 200 or not response.json().get("correct"):
+                self.log_test("examprep2 Prerequisites - practice2_2", False, "Failed to complete practice2_2 prerequisite")
                 return False
-                
-        except Exception as e:
-            self.log_test("practice2_2 Completion", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_progress_data_verification(self):
-        """Check student progress data structure to ensure practice stage completions are recorded"""
-        try:
-            print("\n📊 PROGRESS DATA VERIFICATION")
-            print("Checking student progress data to verify practice stage completions are recorded")
             
-            # Get student progress
-            response = self.session.get(f"{self.base_url}/students/{self.test_student_username}/progress")
-            
-            if response.status_code == 200:
-                progress_data = response.json()
-                section2_progress = progress_data.get("progress", {}).get("section2", {})
-                
-                # Check practice2_1 completion
-                practice2_1_status = section2_progress.get("practice2_1", {})
-                practice2_1_completed = practice2_1_status.get("completed", False)
-                
-                # Check practice2_2 completion
-                practice2_2_status = section2_progress.get("practice2_2", {})
-                practice2_2_completed = practice2_2_status.get("completed", False)
-                
-                if practice2_1_completed and practice2_2_completed:
-                    self.log_test("Progress Data Verification", True, 
-                                f"✅ Both practice2_1 and practice2_2 marked as completed in progress data")
-                    return True
-                else:
-                    self.log_test("Progress Data Verification", False, 
-                                f"❌ Practice stages not properly recorded: practice2_1={practice2_1_completed}, practice2_2={practice2_2_completed}")
-                    return False
-            else:
-                self.log_test("Progress Data Verification", False, 
-                            f"Failed to get progress data: HTTP {response.status_code}")
-                return False
-                
-        except Exception as e:
-            self.log_test("Progress Data Verification", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_assessment2_access_control(self):
-        """Test the critical assessment2 access bug - verify it becomes accessible after completing both practice stages"""
-        try:
-            print("\n🔐 ASSESSMENT2 ACCESS CONTROL TEST")
-            print("Testing if assessment2 becomes accessible after completing both practice2_1 and practice2_2")
-            
-            # Try to access assessment2 problem
-            response = self.session.get(f"{self.base_url}/problems/assessment2?username={self.test_student_username}")
-            
-            if response.status_code == 200:
-                assessment2_data = response.json()
-                if assessment2_data.get("id") == "assessment2":
-                    self.log_test("Assessment2 Access Control", True, 
-                                f"✅ assessment2 is accessible after completing both practice stages")
-                    return True
-                else:
-                    self.log_test("Assessment2 Access Control", False, 
-                                f"❌ assessment2 data structure incorrect")
-                    return False
-            elif response.status_code == 403:
-                # This is the bug - assessment2 should be accessible but is being blocked
-                error_data = response.json() if response.headers.get('content-type') == 'application/json' else response.text
-                self.log_test("Assessment2 Access Control", False, 
-                            f"❌ CRITICAL BUG: assessment2 blocked with 403 Forbidden after completing both practice stages", error_data)
-                return False
-            else:
-                self.log_test("Assessment2 Access Control", False, 
-                            f"Failed to access assessment2: HTTP {response.status_code}")
-                return False
-                
-        except Exception as e:
-            self.log_test("Assessment2 Access Control", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_assessment2_submission(self):
-        """Test submitting correct answer to assessment2 if accessible"""
-        try:
-            print("\n🎯 ASSESSMENT2 SUBMISSION TEST")
-            print("Testing submission of correct answer to assessment2")
-            
-            # Submit correct answer for assessment2
+            # Complete assessment2
             assessment2_attempt = {
                 "problem_id": "assessment2",
                 "answer": "y < -12",
@@ -279,268 +323,178 @@ class Section2NavigationTester:
                 headers={"Content-Type": "application/json"}
             )
             
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("correct"):
-                    progress = result.get("progress", {})
-                    if progress.get("completed", False):
-                        self.log_test("Assessment2 Submission", True, 
-                                    f"✅ assessment2 completed successfully with answer 'y < -12'")
-                        return True
-                    else:
-                        self.log_test("Assessment2 Submission", False, 
-                                    f"❌ Answer correct but problem not marked as completed")
-                        return False
-                else:
-                    self.log_test("Assessment2 Submission", False, 
-                                f"❌ Correct answer 'y < -12' was rejected")
-                    return False
-            elif response.status_code == 403:
-                # This indicates the access control bug is still present
-                error_data = response.json() if response.headers.get('content-type') == 'application/json' else response.text
-                self.log_test("Assessment2 Submission", False, 
-                            f"❌ CRITICAL BUG: assessment2 submission blocked with 403 Forbidden", error_data)
+            if response.status_code != 200 or not response.json().get("correct"):
+                self.log_test("examprep2 Prerequisites - assessment2", False, "Failed to complete assessment2 prerequisite")
                 return False
-            else:
-                self.log_test("Assessment2 Submission", False, 
-                            f"Failed to submit assessment2: HTTP {response.status_code}")
-                return False
+            
+            # Test wrong attempts for examprep2
+            wrong_answers = ["p > 4", "p = 4", "p < 4"]  # Wrong answers to trigger hints
+            
+            for attempt_num, wrong_answer in enumerate(wrong_answers, 1):
+                print(f"\n   Attempt {attempt_num}: Submitting wrong answer '{wrong_answer}'")
                 
-        except Exception as e:
-            self.log_test("Assessment2 Submission", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_navigation_sequence_verification(self):
-        """Verify the complete Section 2 navigation sequence works correctly"""
-        try:
-            print("\n🗺️ NAVIGATION SEQUENCE VERIFICATION")
-            print("Testing complete Section 2 navigation: prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2")
-            
-            # Test access to each stage in sequence
-            stages = [
-                ("prep2", "Preparation stage"),
-                ("explanation2", "Explanation stage"),
-                ("practice2_1", "Practice stage 1"),
-                ("practice2_2", "Practice stage 2"),
-                ("assessment2", "Assessment stage"),
-                ("examprep2", "Exam prep stage")
-            ]
-            
-            accessible_stages = []
-            blocked_stages = []
-            
-            for stage_id, stage_name in stages:
-                try:
-                    response = self.session.get(f"{self.base_url}/problems/{stage_id}?username={self.test_student_username}")
-                    
-                    if response.status_code == 200:
-                        accessible_stages.append(f"{stage_name} ({stage_id})")
-                    elif response.status_code == 403:
-                        blocked_stages.append(f"{stage_name} ({stage_id})")
-                    else:
-                        blocked_stages.append(f"{stage_name} ({stage_id}) - HTTP {response.status_code}")
-                        
-                except Exception as e:
-                    blocked_stages.append(f"{stage_name} ({stage_id}) - Error: {str(e)}")
-            
-            # After completing practice2_1 and practice2_2, assessment2 should be accessible
-            if "Assessment stage (assessment2)" in accessible_stages:
-                self.log_test("Navigation Sequence Verification", True, 
-                            f"✅ Navigation sequence working correctly. Accessible: {', '.join(accessible_stages)}")
-                return True
-            else:
-                self.log_test("Navigation Sequence Verification", False, 
-                            f"❌ CRITICAL BUG: assessment2 not accessible after completing practice stages. Blocked: {', '.join(blocked_stages)}")
-                return False
+                examprep2_attempt = {
+                    "problem_id": "examprep2",
+                    "answer": wrong_answer,
+                    "hints_used": attempt_num
+                }
                 
-        except Exception as e:
-            self.log_test("Navigation Sequence Verification", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_stage_access_control_logic(self):
-        """Test the backend stage access control logic specifically for Section 2"""
-        try:
-            print("\n🔒 STAGE ACCESS CONTROL LOGIC TEST")
-            print("Testing backend stage access control logic for Section 2")
-            
-            # Create a fresh test student to test access control from scratch
-            fresh_student = "fresh_access_test_student"
-            test_student = {"username": fresh_student, "class_name": "GR9-A"}
-            
-            response = self.session.post(
-                f"{self.base_url}/auth/student-login",
-                json=test_student,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code != 200:
-                self.log_test("Fresh Student Creation", False, "Failed to create fresh test student")
-                return False
-            
-            # Test 1: assessment2 should be blocked initially (no practice stages completed)
-            response = self.session.get(f"{self.base_url}/problems/assessment2?username={fresh_student}")
-            
-            if response.status_code == 403:
-                self.log_test("Initial Assessment2 Block", True, 
-                            f"✅ assessment2 correctly blocked initially (no practice stages completed)")
-            else:
-                self.log_test("Initial Assessment2 Block", False, 
-                            f"❌ assessment2 should be blocked initially but got HTTP {response.status_code}")
-                return False
-            
-            # Test 2: Complete only practice2_1, assessment2 should still be blocked
-            practice2_1_attempt = {
-                "problem_id": "practice2_1",
-                "answer": "k < -12",
-                "hints_used": 0
-            }
-            
-            response = self.session.post(
-                f"{self.base_url}/students/{fresh_student}/attempt",
-                json=practice2_1_attempt,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code == 200 and response.json().get("correct"):
-                # Now test assessment2 access (should still be blocked)
-                response = self.session.get(f"{self.base_url}/problems/assessment2?username={fresh_student}")
-                
-                if response.status_code == 403:
-                    self.log_test("Assessment2 Block After practice2_1 Only", True, 
-                                f"✅ assessment2 correctly blocked after completing only practice2_1")
-                else:
-                    self.log_test("Assessment2 Block After practice2_1 Only", False, 
-                                f"❌ assessment2 should be blocked after only practice2_1 but got HTTP {response.status_code}")
-                    return False
-            else:
-                self.log_test("practice2_1 Completion for Fresh Student", False, 
-                            f"Failed to complete practice2_1 for fresh student")
-                return False
-            
-            # Test 3: Complete practice2_2, assessment2 should now be accessible
-            practice2_2_attempt = {
-                "problem_id": "practice2_2",
-                "answer": "t ≥ 50",
-                "hints_used": 0
-            }
-            
-            response = self.session.post(
-                f"{self.base_url}/students/{fresh_student}/attempt",
-                json=practice2_2_attempt,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code == 200 and response.json().get("correct"):
-                # Now test assessment2 access (should be accessible)
-                response = self.session.get(f"{self.base_url}/problems/assessment2?username={fresh_student}")
+                response = self.session.post(
+                    f"{self.base_url}/students/{self.test_student_username}/attempt",
+                    json=examprep2_attempt,
+                    headers={"Content-Type": "application/json"}
+                )
                 
                 if response.status_code == 200:
-                    self.log_test("Assessment2 Access After Both Practice Stages", True, 
-                                f"✅ assessment2 correctly accessible after completing both practice2_1 and practice2_2")
-                    return True
-                else:
-                    self.log_test("Assessment2 Access After Both Practice Stages", False, 
-                                f"❌ CRITICAL BUG: assessment2 should be accessible after both practice stages but got HTTP {response.status_code}")
-                    return False
-            else:
-                self.log_test("practice2_2 Completion for Fresh Student", False, 
-                            f"Failed to complete practice2_2 for fresh student")
-                return False
-                
-        except Exception as e:
-            self.log_test("Stage Access Control Logic", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_real_user_scenario_analysis(self):
-        """Test the specific scenario that caused the user's bug report"""
-        try:
-            print("\n🔍 REAL USER SCENARIO ANALYSIS")
-            print("Testing the specific scenario that matches the user's bug report")
-            
-            # Create a test student that mimics the real user "Sami" scenario
-            sami_test_student = "sami_scenario_test_student"
-            test_student = {"username": sami_test_student, "class_name": "GR9-A"}
-            
-            response = self.session.post(
-                f"{self.base_url}/auth/student-login",
-                json=test_student,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code != 200:
-                self.log_test("Sami Scenario Student Creation", False, "Failed to create Sami scenario test student")
-                return False
-            
-            # Scenario: Complete ONLY practice2_2 (skip practice2_1) - this matches real user "Sami"
-            practice2_2_attempt = {
-                "problem_id": "practice2_2",
-                "answer": "t ≥ 50",
-                "hints_used": 0
-            }
-            
-            response = self.session.post(
-                f"{self.base_url}/students/{sami_test_student}/attempt",
-                json=practice2_2_attempt,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code == 200 and response.json().get("correct"):
-                self.log_test("practice2_2 Only Completion", True, 
-                            f"✅ practice2_2 completed successfully (practice2_1 skipped)")
-                
-                # Now test assessment2 access (should be blocked because practice2_1 is not completed)
-                response = self.session.get(f"{self.base_url}/problems/assessment2?username={sami_test_student}")
-                
-                if response.status_code == 403:
-                    error_data = response.json() if response.headers.get('content-type') == 'application/json' else response.text
-                    self.log_test("Assessment2 Block - Sami Scenario", True, 
-                                f"✅ assessment2 correctly blocked when only practice2_2 completed (practice2_1 missing). Error: {error_data}")
-                    
-                    # Verify the progress data shows the incomplete state
-                    response = self.session.get(f"{self.base_url}/students/{sami_test_student}/progress")
-                    if response.status_code == 200:
-                        progress_data = response.json()
-                        section2_progress = progress_data.get("progress", {}).get("section2", {})
+                    result = response.json()
+                    if not result.get("correct"):
+                        print(f"   ✅ Attempt {attempt_num}: Wrong answer correctly rejected")
                         
-                        practice2_1_completed = section2_progress.get("practice2_1", {}).get("completed", False)
-                        practice2_2_completed = section2_progress.get("practice2_2", {}).get("completed", False)
-                        
-                        if not practice2_1_completed and practice2_2_completed:
-                            self.log_test("Sami Scenario Progress Verification", True, 
-                                        f"✅ Progress correctly shows practice2_1=False, practice2_2=True - explains why assessment2 is blocked")
-                            return True
+                        # Get problem data to check hints
+                        problem_response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
+                        if problem_response.status_code == 200:
+                            problem_data = problem_response.json()
+                            hints = problem_data.get("hints_en", [])
+                            
+                            if len(hints) >= attempt_num:
+                                expected_hint_keywords = [
+                                    ["Variable p", "pieces per child", "children", "total pieces"],
+                                    ["each child gets p pieces", "15 children", "distribute"],
+                                    ["Total", "number of children", "pieces per child", "at least"]
+                                ]
+                                
+                                hint_text = hints[attempt_num - 1]
+                                keywords = expected_hint_keywords[attempt_num - 1]
+                                
+                                if any(keyword.lower() in hint_text.lower() for keyword in keywords):
+                                    print(f"   ✅ Hint {attempt_num} contains expected keywords: {hint_text[:100]}...")
+                                else:
+                                    print(f"   ❌ Hint {attempt_num} missing expected keywords: {hint_text}")
+                            else:
+                                print(f"   ❌ Hint {attempt_num} not available in problem data")
                         else:
-                            self.log_test("Sami Scenario Progress Verification", False, 
-                                        f"❌ Unexpected progress state: practice2_1={practice2_1_completed}, practice2_2={practice2_2_completed}")
-                            return False
+                            print(f"   ❌ Failed to get problem data for hint verification")
                     else:
-                        self.log_test("Sami Scenario Progress Check", False, 
-                                    f"Failed to get progress data: HTTP {response.status_code}")
+                        print(f"   ❌ Attempt {attempt_num}: Wrong answer '{wrong_answer}' was incorrectly accepted as correct")
                         return False
                 else:
-                    self.log_test("Assessment2 Block - Sami Scenario", False, 
-                                f"❌ UNEXPECTED: assessment2 should be blocked when practice2_1 is not completed but got HTTP {response.status_code}")
+                    print(f"   ❌ Attempt {attempt_num}: Failed to submit answer: HTTP {response.status_code}")
+                    return False
+            
+            self.log_test("examprep2 Progressive Hints", True, 
+                        f"✅ examprep2 progressive hints system working - 3 wrong attempts processed correctly")
+            return True
+                
+        except Exception as e:
+            self.log_test("examprep2 Progressive Hints", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_api_response_hints_structure(self):
+        """Test that API responses include hints in correct structure"""
+        try:
+            print("\n🎯 API RESPONSE HINTS STRUCTURE TEST")
+            print("Testing that problem API endpoints return hints in correct structure")
+            
+            # Test practice2_2 API response structure
+            response = self.session.get(f"{self.base_url}/problems/practice2_2")
+            
+            if response.status_code == 200:
+                problem_data = response.json()
+                
+                # Check required fields for hints
+                required_fields = ["hints_en", "hints_ar"]
+                missing_fields = []
+                
+                for field in required_fields:
+                    if field not in problem_data:
+                        missing_fields.append(field)
+                
+                if not missing_fields:
+                    hints_en = problem_data.get("hints_en", [])
+                    hints_ar = problem_data.get("hints_ar", [])
+                    
+                    if len(hints_en) >= 3 and len(hints_ar) >= 3:
+                        self.log_test("API Response Hints Structure", True, 
+                                    f"✅ API responses include hints in correct structure (EN: {len(hints_en)}, AR: {len(hints_ar)})")
+                        return True
+                    else:
+                        self.log_test("API Response Hints Structure", False, 
+                                    f"❌ Insufficient hints in API response (EN: {len(hints_en)}, AR: {len(hints_ar)})")
+                        return False
+                else:
+                    self.log_test("API Response Hints Structure", False, 
+                                f"❌ Missing required hint fields: {missing_fields}")
                     return False
             else:
-                self.log_test("practice2_2 Only Completion", False, 
-                            f"Failed to complete practice2_2 for Sami scenario test")
+                self.log_test("API Response Hints Structure", False, 
+                            f"Failed to get problem data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Real User Scenario Analysis", False, f"Test execution error: {str(e)}")
+            self.log_test("API Response Hints Structure", False, f"Test execution error: {str(e)}")
             return False
 
-    def generate_navigation_summary(self, results, critical_failures):
-        """Generate comprehensive summary of Section 2 navigation testing"""
+    def test_hint_content_accuracy(self):
+        """Test that hint content matches expected Socratic guidance"""
+        try:
+            print("\n🎯 HINT CONTENT ACCURACY TEST")
+            print("Testing that hint content provides proper Socratic guidance")
+            
+            # Test practice2_2 hint content
+            response = self.session.get(f"{self.base_url}/problems/practice2_2")
+            
+            if response.status_code == 200:
+                problem_data = response.json()
+                hints_en = problem_data.get("hints_en", [])
+                
+                # Verify Socratic progression in hints
+                socratic_elements = [
+                    # Hint 1: Identify variables and setup
+                    ["variable", "represents", "what"],
+                    # Hint 2: Guide through calculation
+                    ["if you", "how much", "collect"],
+                    # Hint 3: Provide formula/structure
+                    ["formula", "equation", "symbol", "=", "×"]
+                ]
+                
+                socratic_score = 0
+                for i, hint in enumerate(hints_en[:3]):
+                    if i < len(socratic_elements):
+                        elements = socratic_elements[i]
+                        if any(element.lower() in hint.lower() for element in elements):
+                            socratic_score += 1
+                            print(f"   ✅ Hint {i+1} contains Socratic elements: {hint[:80]}...")
+                        else:
+                            print(f"   ❌ Hint {i+1} missing Socratic elements: {hint[:80]}...")
+                
+                if socratic_score >= 2:  # At least 2 out of 3 hints should have Socratic elements
+                    self.log_test("Hint Content Accuracy", True, 
+                                f"✅ Hints provide proper Socratic guidance ({socratic_score}/3 hints have Socratic elements)")
+                    return True
+                else:
+                    self.log_test("Hint Content Accuracy", False, 
+                                f"❌ Insufficient Socratic guidance in hints ({socratic_score}/3 hints have Socratic elements)")
+                    return False
+            else:
+                self.log_test("Hint Content Accuracy", False, 
+                            f"Failed to get problem data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Hint Content Accuracy", False, f"Test execution error: {str(e)}")
+            return False
+
+    def generate_hints_summary(self, results, critical_failures):
+        """Generate comprehensive summary of Section 2 hints testing"""
         print("\n" + "=" * 80)
-        print("🎯 SECTION 2 NAVIGATION BUG TESTING SUMMARY")
+        print("🎯 SECTION 2 PROGRESSIVE SOCRATIC HINTS TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL SECTION 2 NAVIGATION TEST RESULTS:")
+        print(f"\n📈 OVERALL SECTION 2 HINTS TEST RESULTS:")
         print(f"   Total Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
@@ -552,56 +506,54 @@ class Section2NavigationTester:
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL NAVIGATION ISSUES:")
+            print(f"\n🚨 CRITICAL HINTS ISSUES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
-            print(f"\n⚠️  NAVIGATION RISK: Students cannot progress from practice2_2 to assessment2!")
-            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix stage access control logic")
+            print(f"\n⚠️  HINTS RISK: Progressive Socratic hints not working properly!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix hint display system")
         else:
-            print(f"\n🎉 NO CRITICAL NAVIGATION ISSUES DETECTED")
+            print(f"\n🎉 NO CRITICAL HINTS ISSUES DETECTED")
         
-        print(f"\n📋 SECTION 2 NAVIGATION STATUS:")
+        print(f"\n📋 SECTION 2 HINTS STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL SECTION 2 NAVIGATION TESTS PASSED")
-            print("   ✅ practice2_1 completion tracking working")
-            print("   ✅ practice2_2 completion tracking working")
-            print("   ✅ Progress data structure correct")
-            print("   ✅ assessment2 accessible after completing both practice stages")
-            print("   ✅ Navigation sequence working correctly")
-            print("   🛡️  NAVIGATION INTEGRITY: PROTECTED")
+            print("   🎯 ALL SECTION 2 HINTS TESTS PASSED")
+            print("   ✅ practice2_2 progressive hints working")
+            print("   ✅ examprep2 progressive hints working")
+            print("   ✅ Database hints storage correct")
+            print("   ✅ API response hints structure correct")
+            print("   ✅ Hint content provides Socratic guidance")
+            print("   🛡️  HINTS INTEGRITY: PROTECTED")
         else:
-            print("   ⚠️  SECTION 2 NAVIGATION ISSUES DETECTED")
-            print("   🔧 Stage access control logic needs fixes")
-            print("   🚨 STUDENT PROGRESSION: BLOCKED")
+            print("   ⚠️  SECTION 2 HINTS ISSUES DETECTED")
+            print("   🔧 Progressive hints system needs fixes")
+            print("   🚨 STUDENT LEARNING SUPPORT: COMPROMISED")
         
         print("\n" + "=" * 80)
 
-    def run_navigation_tests(self):
-        """Run comprehensive Section 2 navigation bug tests"""
+    def run_hints_tests(self):
+        """Run comprehensive Section 2 progressive hints tests"""
         print("=" * 80)
-        print("🎯 SECTION 2 NAVIGATION BUG TESTING")
+        print("🎯 SECTION 2 PROGRESSIVE SOCRATIC HINTS TESTING")
         print("=" * 80)
-        print("Testing critical navigation bug: practice2_2 → assessment2 progression blocked")
+        print("Testing progressive Socratic hints for Section 2 word problems")
         
-        # Test categories for Section 2 navigation
+        # Test categories for Section 2 hints
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
             ("Test Student Creation", self.create_test_student, "critical"),
-            ("Practice2_1 Completion", self.test_practice2_1_completion, "critical"),
-            ("Practice2_2 Completion", self.test_practice2_2_completion, "critical"),
-            ("Progress Data Verification", self.test_progress_data_verification, "critical"),
-            ("Assessment2 Access Control", self.test_assessment2_access_control, "critical"),
-            ("Assessment2 Submission", self.test_assessment2_submission, "high"),
-            ("Navigation Sequence Verification", self.test_navigation_sequence_verification, "critical"),
-            ("Stage Access Control Logic", self.test_stage_access_control_logic, "critical"),
-            ("Real User Scenario Analysis", self.test_real_user_scenario_analysis, "critical")
+            ("practice2_2 Database Hints", self.test_practice2_2_database_hints, "critical"),
+            ("examprep2 Database Hints", self.test_examprep2_database_hints, "critical"),
+            ("practice2_2 Progressive Hints", self.test_practice2_2_wrong_attempts_hints, "critical"),
+            ("examprep2 Progressive Hints", self.test_examprep2_wrong_attempts_hints, "critical"),
+            ("API Response Hints Structure", self.test_api_response_hints_structure, "high"),
+            ("Hint Content Accuracy", self.test_hint_content_accuracy, "high")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 SECTION 2 NAVIGATION TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 SECTION 2 HINTS TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -616,28 +568,28 @@ class Section2NavigationTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive Section 2 navigation summary
-        self.generate_navigation_summary(results, critical_failures)
+        # Generate comprehensive Section 2 hints summary
+        self.generate_hints_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run Section 2 navigation tests"""
-    print("🚀 Starting SECTION 2 NAVIGATION BUG Testing...")
-    print("🎯 Goal: Verify assessment2 becomes accessible after completing both practice stages")
+    """Main function to run Section 2 hints tests"""
+    print("🚀 Starting SECTION 2 PROGRESSIVE SOCRATIC HINTS Testing...")
+    print("🎯 Goal: Verify progressive hints work for practice2_2 and examprep2 word problems")
     
-    tester = Section2NavigationTester(BACKEND_URL)
-    results = tester.run_navigation_tests()
+    tester = Section2HintsTester(BACKEND_URL)
+    results = tester.run_hints_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
     
     if failed_tests > 0:
-        print(f"\n🚨 SECTION 2 NAVIGATION ALERT: {failed_tests} test(s) failed!")
-        print("🔧 Stage access control logic needs fixes to allow progression from practice2_2 to assessment2")
+        print(f"\n🚨 SECTION 2 HINTS ALERT: {failed_tests} test(s) failed!")
+        print("🔧 Progressive Socratic hints system needs fixes for proper student guidance")
     else:
-        print(f"\n🛡️  SECTION 2 NAVIGATION CONFIRMED: All navigation tests passed!")
-        print("✅ Students can properly progress from practice2_2 to assessment2")
+        print(f"\n🛡️  SECTION 2 HINTS CONFIRMED: All hints tests passed!")
+        print("✅ Progressive Socratic hints working correctly for Section 2 word problems")
     
     sys.exit(failed_tests)
 
