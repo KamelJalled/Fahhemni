@@ -400,7 +400,7 @@ async def init_database():
             "answer_ar": "س < ٥",
             "explanation_en": "This is a review problem for solving inequalities by multiplication or division.",
             "explanation_ar": "هذه مسألة مراجعة لحل المتباينات بالضرب أو بالقسمة.",
-            "show_full_solution": True,
+            "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
