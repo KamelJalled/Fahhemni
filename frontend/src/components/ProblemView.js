@@ -1181,6 +1181,9 @@ const ProblemView = () => {
         setTimeout(() => setShowEncouragement(''), 3000);
       } else {
         // All steps complete
+        console.log('🎉 PRACTICE WORD PROBLEM COMPLETED: All 3 steps finished!');
+        console.log(`🔍 Problem ID: ${problemId}, Current Step: ${currentStep}, Required Steps: ${getRequiredSteps(problem.type, problem.id, problem)}`);
+        
         setAllStepsComplete(true);
         setIsCorrect(true);
         
@@ -1190,7 +1193,10 @@ const ProblemView = () => {
         
         setShowEncouragement(completionMessage);
         setTimeout(() => setShowEncouragement(''), 5000);
+        
+        console.log('🚀 Submitting to backend and updating progress...');
         await submitToBackend();
+        console.log('✅ Backend submission completed, allStepsComplete should trigger Continue button');
       }
     } else {
       // ❌ WRONG ANSWER - Show progressive hints (hints are already visible)
