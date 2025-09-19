@@ -572,24 +572,20 @@ async def init_database():
                 }
             ],
             "hints_en": [
-                "لعزل 'ص'، على أي رقم يجب أن تقسم؟",
-                "هل تتغير إشارة المتباينة عند القسمة على عدد موجب؟",
-                "ما هي العملية اللازمة لعزل 'ك'؟",
-                "تذكر القاعدة! ماذا يحدث لإشارة المتباينة عند القسمة على عدد سالب؟",
-                "قم بتبسيط العملية الحسابية.",
-                "للتخلص من القسمة، استخدم الضرب.",
-                "لقد ضربت في عدد سالب. ماذا يعني ذلك للإشارة؟",
-                "ما هو ناتج ٥ × (-٣)؟"
+                "To isolate x, what number should you divide both sides by?",
+                "Now simplify both sides to get the final answer.",
+                "What operation is needed to isolate m? Remember the sign flip rule!",
+                "Simplify the arithmetic to get the final inequality.",
+                "To isolate k, divide by -6. What happens to the inequality sign?",
+                "Complete the simplification to get the final answer."
             ],
             "hints_ar": [
-                "To isolate 'y', what number should you divide by?",
-                "Does the inequality sign change when dividing by a positive number?",
-                "What operation is needed to isolate 'k'?",
-                "Remember the rule! What happens to the inequality sign when you divide by a negative number?",
-                "Simplify the calculation.",
-                "To undo division, use multiplication.",
-                "You multiplied by a negative number. What does that mean for the sign?",
-                "What is the result of 5 * (-3)?"
+                "لعزل س، على أي رقم يجب أن تقسم الطرفين؟",
+                "الآن بسّط الطرفين للحصول على الإجابة النهائية.",
+                "ما العملية اللازمة لعزل م؟ تذكر قاعدة قلب الإشارة!",
+                "بسّط العملية الحسابية للحصول على المتباينة النهائية.",
+                "لعزل ك، اقسم على -٦. ماذا يحدث لإشارة المتباينة؟",
+                "أكمل التبسيط للحصول على الإجابة النهائية."
             ]
         },
         {
