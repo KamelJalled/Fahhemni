@@ -11,7 +11,7 @@ section2_problems = [
         "answer_ar": "س < ٥",
         "explanation_en": "This is a review problem for solving inequalities with multiplication/division.",
         "explanation_ar": "هذه مسألة مراجعة لحل المتباينات مع الضرب/القسمة.",
-        "show_full_solution": True,
+        "show_full_solution": False,
         "hide_answer": False,
         "step_solutions": [
             {
