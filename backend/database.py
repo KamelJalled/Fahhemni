@@ -643,8 +643,8 @@ async def init_database():
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Write the inequality: 10t ≥ 500",
-                    "step_ar": "اكتب المتباينة: ١٠ت ≥ ٥٠٠",
+                    "step_en": "Step 1: Write the inequality from the word problem",
+                    "step_ar": "الخطوة ١: اكتب المتباينة من المسألة الكلامية",
                     "possible_answers": [
                         "10t ≥ 500",
                         "10 * t ≥ 500"
@@ -655,16 +655,24 @@ async def init_database():
                     ]
                 },
                 {
-                    "step_en": "Divide both sides by 10",
-                    "step_ar": "اقسم كلا الطرفين على ١٠",
+                    "step_en": "Step 2: Divide both sides by 10 (show the operation)",
+                    "step_ar": "الخطوة ٢: اقسم كلا الطرفين على ١٠ (اظهر العملية)",
                     "possible_answers": [
                         "10t / 10 ≥ 500 / 10",
-                        "t ≥ 500 / 10",
-                        "t ≥ 50"
+                        "t ≥ 500 / 10"
                     ],
                     "possible_answers_ar": [
                         "١٠ت / ١٠ ≥ ٥٠٠ / ١٠",
-                        "ت ≥ ٥٠٠ / ١٠",
+                        "ت ≥ ٥٠٠ / ١٠"
+                    ]
+                },
+                {
+                    "step_en": "Step 3: Simplify to final answer",
+                    "step_ar": "الخطوة ٣: بسّط للحصول على الإجابة النهائية",
+                    "possible_answers": [
+                        "t ≥ 50"
+                    ],
+                    "possible_answers_ar": [
                         "ت ≥ ٥٠"
                     ]
                 }
