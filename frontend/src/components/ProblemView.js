@@ -830,24 +830,42 @@ const ProblemView = () => {
       const currentAttempts = attempts + 1;
       
       if (currentAttempts === 1) {
-        // First wrong attempt - CRITICAL: Use pedagogical hint system (never show direct answers)
+        // First wrong attempt - Use progressive hints from database
         let errorMessage = language === 'en' ? 'Not quite right.' : 'ليس صحيحاً تماماً.';
         
-        const guidanceHint = generateGuidanceHint(problem, 1);
-        const pedagogicalHint = language === 'en' ? guidanceHint.en : guidanceHint.ar;
-        errorMessage += ` 💡 ${pedagogicalHint}`;
+        // Use backend hints directly for progressive guidance
+        const backendHints = language === 'en' ? problem.hints_en : problem.hints_ar;
+        const firstHint = backendHints?.[0] || '';
+        
+        if (firstHint) {
+          errorMessage += ` 💡 ${firstHint}`;
+        } else {
+          // Fallback to old system if no backend hints
+          const guidanceHint = generateGuidanceHint(problem, 1);
+          const pedagogicalHint = language === 'en' ? guidanceHint.en : guidanceHint.ar;
+          errorMessage += ` 💡 ${pedagogicalHint}`;
+        }
         setHintsUsed(1);
         
         setShowEncouragement(errorMessage);
         setTimeout(() => setShowEncouragement(''), 8000);
         
       } else if (currentAttempts === 2) {
-        // Second wrong attempt - CRITICAL: Use error-specific guidance (never show direct answers)
+        // Second wrong attempt - Use second progressive hint from database
         let errorMessage = language === 'en' ? 'Still not quite right.' : 'ما زال ليس صحيحاً تماماً.';
         
-        const errorSpecificHint = generateErrorSpecificHint(userAnswer, [problem.answer], problem.type);
-        const pedagogicalHint = language === 'en' ? errorSpecificHint.en : errorSpecificHint.ar;
-        errorMessage += ` 💡 ${pedagogicalHint}`;
+        // Use backend hints directly for progressive guidance
+        const backendHints = language === 'en' ? problem.hints_en : problem.hints_ar;
+        const secondHint = backendHints?.[1] || '';
+        
+        if (secondHint) {
+          errorMessage += ` 💡 ${secondHint}`;
+        } else {
+          // Fallback to old system if no backend hints
+          const errorSpecificHint = generateErrorSpecificHint(userAnswer, [problem.answer], problem.type);
+          const pedagogicalHint = language === 'en' ? errorSpecificHint.en : errorSpecificHint.ar;
+          errorMessage += ` 💡 ${pedagogicalHint}`;
+        }
         setHintsUsed(2);
         
         setShowEncouragement(errorMessage);
