@@ -2444,7 +2444,7 @@ const ProblemView = () => {
                           onClick={async () => {
                             // Mark preparation stage as completed
                             await submitToBackend();
-                            handleNextProblem();
+                            handleNavigationClick();
                           }}
                           className="w-full bg-gradient-to-r from-green-500 to-emerald-600"
                         >
