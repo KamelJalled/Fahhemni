@@ -1772,6 +1772,206 @@ const ProblemView = () => {
                           </div>
                         )}
 
+                        {/* Interactive Step-by-Step Mode - For interactive explanation stages */}
+                        {!problem.show_full_solution && (
+                          <div>
+                            {/* Display the practice question directly */}
+                            <div className="bg-yellow-50 p-8 rounded-lg border border-yellow-200 max-w-3xl mx-auto mb-6">
+                              <h4 className="font-bold text-2xl text-yellow-800 mb-6 text-center">
+                                {language === 'en' ? '✏️ Interactive Practice:' : '✏️ تدريب تفاعلي:'}
+                              </h4>
+                              
+                              <div className="text-center mb-6">
+                                <div className="bg-white p-6 rounded border text-2xl font-mono text-gray-800 max-w-lg mx-auto">
+                                  {language === 'en' ? example.practice_question_en : example.practice_question_ar}
+                                </div>
+                              </div>
+                              
+                              {/* RESTORED: Step-by-Step Practice with Simplified Input Management */}
+                              <div className="space-y-6">
+                                {/* Dynamic Multi-Step System */}
+                                {(() => {
+                                  // Determine how many steps this level has
+                                  const levelSteps = problem.step_solutions?.filter(step => 
+                                    step.step_en.includes(`Level ${index + 1}B Step`)
+                                  ) || [];
+                                  
+                                  const currentStepIndex = explanationStep;
+                                  const currentStep = levelSteps[currentStepIndex];
+                                  
+                                  if (!currentStep) return null;
+                                  
+                                  return (
+                                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                      <h5 className="font-semibold text-blue-800 mb-3">
+                                        {language === 'ar' ? currentStep.step_ar : currentStep.step_en}
+                                      </h5>
+                                      
+                                      {/* Show previous steps */}
+                                      {explanationStep > 0 && (
+                                        <div className="mb-3">
+                                          <p className="text-sm text-gray-600 mb-2">
+                                            {language === 'en' ? 'Your previous steps:' : 'خطواتك السابقة:'}
+                                          </p>
+                                          {explanationStepHistory.slice(0, explanationStep).map((stepAnswer, stepIdx) => (
+                                            stepAnswer && (
+                                              <div key={stepIdx} className="mb-2 p-2 bg-green-100 rounded text-center text-sm text-green-800 border border-green-300">
+                                                <span className="inline-block bg-green-200 px-2 py-1 rounded-full text-xs font-semibold mr-2">
+                                                  {language === 'en' ? `Step ${stepIdx + 1}` : `الخطوة ${stepIdx + 1}`}
+                                                </span>
+                                                <span className="font-mono">{stepAnswer}</span>
+                                              </div>
+                                            )
+                                          ))}
+                                        </div>
+                                      )}
+                                      
+                                      {/* Symbol Shortcut Buttons */}
+                                      <div className="symbol-buttons-container flex flex-wrap justify-center gap-2 md:flex-nowrap mb-3">
+                                        {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
+                                          <Button
+                                            key={symbol}
+                                            variant="outline"
+                                            className="symbol-button px-3 py-2 text-lg font-mono border-gray-300 hover:bg-gray-50 min-w-[45px] h-[45px] flex-shrink-0"
+                                            onClick={() => {
+                                              const newAnswers = [...explanationAnswers];
+                                              newAnswers[index] = (newAnswers[index] || '') + symbol;
+                                              setExplanationAnswers(newAnswers);
+                                            }}
+                                          >
+                                            {symbol}
+                                          </Button>
+                                        ))}
+                                      </div>
+
+                                      {/* Input field for current step */}
+                                      <Input
+                                        value={explanationAnswers[index] || ''}
+                                        onChange={(e) => {
+                                          const newAnswers = [...explanationAnswers];
+                                          newAnswers[index] = e.target.value;
+                                          setExplanationAnswers(newAnswers);
+                                        }}
+                                        onFocus={(e) => {
+                                          setActiveInputIndex(index);
+                                          e.target.setAttribute('data-active-input', 'true');
+                                        }}
+                                        onBlur={(e) => {
+                                          e.target.removeAttribute('data-active-input');
+                                        }}
+                                        placeholder=""
+                                        className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
+                                      />
+
+                                      <Button 
+                                        onClick={() => {
+                                          console.log(`🔍 Explanation stage - checking step ${explanationStep + 1}, index:`, index);
+                                          console.log('🔍 User answer:', explanationAnswers[index]);
+                                          
+                                          const normalized = normalizeAnswer(explanationAnswers[index]);
+                                          
+                                          // Find the current step solution for this level
+                                          const levelStepSolutions = problem.step_solutions?.filter(step => 
+                                            step.step_en.includes(`Level ${index + 1}B Step`)
+                                          ) || [];
+                                          
+                                          const currentStepSolution = levelStepSolutions[explanationStep];
+                                          
+                                          let stepCorrect = false;
+                                          if (currentStepSolution) {
+                                            const possibleAnswers = language === 'ar' 
+                                              ? currentStepSolution.possible_answers_ar 
+                                              : currentStepSolution.possible_answers;
+                                            
+                                            stepCorrect = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
+                                          }
+                                          
+                                          console.log(`🔍 Step ${explanationStep + 1} correct:`, stepCorrect);
+                                          
+                                          if (stepCorrect) {
+                                            if (explanationStep < levelSteps.length - 1) {
+                                              // Store the current step answer in history before moving to next step
+                                              const newHistory = [...explanationStepHistory];
+                                              newHistory[explanationStep] = explanationAnswers[index];
+                                              setExplanationStepHistory(newHistory);
+                                              
+                                              // Move to next step
+                                              setExplanationStep(explanationStep + 1);
+                                              const newAnswers = [...explanationAnswers];
+                                              newAnswers[index] = ''; // Clear for next step
+                                              setExplanationAnswers(newAnswers);
+                                              setShowEncouragement(language === 'en' ? "Excellent! Continue to the next step." : "ممتاز! انتقل للخطوة التالية.");
+                                            } else {
+                                              // Store the final step answer in history
+                                              const newHistory = [...explanationStepHistory];
+                                              newHistory[explanationStep] = explanationAnswers[index];
+                                              setExplanationStepHistory(newHistory);
+                                              
+                                              // Completed all steps for this level
+                                              const newPracticeComplete = [...practiceComplete];
+                                              newPracticeComplete[index] = true;
+                                              setPracticeComplete(newPracticeComplete);
+                                              setExplanationStep(0);
+                                              // Reset step history for next level
+                                              setExplanationStepHistory([]);
+                                              const newAnswers = [...explanationAnswers];
+                                              newAnswers[index] = '';
+                                              setExplanationAnswers(newAnswers);
+                                              setShowEncouragement(language === 'en' ? "Perfect! Level completed!" : "ممتاز! تم إكمال المستوى!");
+                                              
+                                              // Auto-move to next level or complete
+                                              if (index < problem.interactive_examples.length - 1) {
+                                                setTimeout(() => {
+                                                  setCurrentExample(index + 1);
+                                                  setShowExample(false);
+                                                  setShowEncouragement('');
+                                                }, 3000);
+                                              } else {
+                                                // All examples completed - mark as complete but DON'T submit to backend yet
+                                                setAllStepsComplete(true);
+                                                setIsCorrect(true);
+                                                setTimeout(() => {
+                                                  setShowEncouragement('');
+                                                  // Don't submit to backend until user clicks Continue button
+                                                }, 3000);
+                                              }
+                                            }
+                                            setTimeout(() => setShowEncouragement(''), 3000);
+                                          } else {
+                                            // Show error feedback
+                                            const feedback = language === 'en' 
+                                              ? `Not quite. Please try again.`
+                                              : `ليس تماماً. يرجى المحاولة مرة أخرى.`;
+                                            
+                                            setShowEncouragement(feedback);
+                                            setTimeout(() => setShowEncouragement(''), 6000);
+                                          }
+                                        }}
+                                        className="w-full bg-blue-500 hover:bg-blue-600"
+                                        disabled={!explanationAnswers[index]?.trim()}
+                                      >
+                                        {language === 'en' ? `Check Step ${explanationStep + 1}` : `تحقق من الخطوة ${explanationStep + 1}`}
+                                      </Button>
+                                    </div>
+                                  );
+                                })()}
+
+                                {/* Success Message */}
+                                {practiceComplete[index] && (
+                                  <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded text-center font-semibold text-lg">
+                                    🎉 {language === 'en' ? 'Perfect! Well done!' : 'ممتاز! أحسنت!'}
+                                    {index < problem.interactive_examples.length - 1 && (
+                                      <p className="text-base mt-2">
+                                        {language === 'en' ? 'Moving to next example in 3 seconds...' : 'الانتقال للمثال التالي خلال 3 ثوان...'}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
                         {/* Solution Display - Only for read-only mode */}
                         {showExample && problem.show_full_solution && (
                           <div>
