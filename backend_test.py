@@ -451,6 +451,85 @@ class Section2NavigationTester:
             self.log_test("Stage Access Control Logic", False, f"Test execution error: {str(e)}")
             return False
 
+    def test_real_user_scenario_analysis(self):
+        """Test the specific scenario that caused the user's bug report"""
+        try:
+            print("\n🔍 REAL USER SCENARIO ANALYSIS")
+            print("Testing the specific scenario that matches the user's bug report")
+            
+            # Create a test student that mimics the real user "Sami" scenario
+            sami_test_student = "sami_scenario_test_student"
+            test_student = {"username": sami_test_student, "class_name": "GR9-A"}
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/student-login",
+                json=test_student,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200:
+                self.log_test("Sami Scenario Student Creation", False, "Failed to create Sami scenario test student")
+                return False
+            
+            # Scenario: Complete ONLY practice2_2 (skip practice2_1) - this matches real user "Sami"
+            practice2_2_attempt = {
+                "problem_id": "practice2_2",
+                "answer": "t ≥ 50",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{sami_test_student}/attempt",
+                json=practice2_2_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200 and response.json().get("correct"):
+                self.log_test("practice2_2 Only Completion", True, 
+                            f"✅ practice2_2 completed successfully (practice2_1 skipped)")
+                
+                # Now test assessment2 access (should be blocked because practice2_1 is not completed)
+                response = self.session.get(f"{self.base_url}/problems/assessment2?username={sami_test_student}")
+                
+                if response.status_code == 403:
+                    error_data = response.json() if response.headers.get('content-type') == 'application/json' else response.text
+                    self.log_test("Assessment2 Block - Sami Scenario", True, 
+                                f"✅ assessment2 correctly blocked when only practice2_2 completed (practice2_1 missing). Error: {error_data}")
+                    
+                    # Verify the progress data shows the incomplete state
+                    response = self.session.get(f"{self.base_url}/students/{sami_test_student}/progress")
+                    if response.status_code == 200:
+                        progress_data = response.json()
+                        section2_progress = progress_data.get("progress", {}).get("section2", {})
+                        
+                        practice2_1_completed = section2_progress.get("practice2_1", {}).get("completed", False)
+                        practice2_2_completed = section2_progress.get("practice2_2", {}).get("completed", False)
+                        
+                        if not practice2_1_completed and practice2_2_completed:
+                            self.log_test("Sami Scenario Progress Verification", True, 
+                                        f"✅ Progress correctly shows practice2_1=False, practice2_2=True - explains why assessment2 is blocked")
+                            return True
+                        else:
+                            self.log_test("Sami Scenario Progress Verification", False, 
+                                        f"❌ Unexpected progress state: practice2_1={practice2_1_completed}, practice2_2={practice2_2_completed}")
+                            return False
+                    else:
+                        self.log_test("Sami Scenario Progress Check", False, 
+                                    f"Failed to get progress data: HTTP {response.status_code}")
+                        return False
+                else:
+                    self.log_test("Assessment2 Block - Sami Scenario", False, 
+                                f"❌ UNEXPECTED: assessment2 should be blocked when practice2_1 is not completed but got HTTP {response.status_code}")
+                    return False
+            else:
+                self.log_test("practice2_2 Only Completion", False, 
+                            f"Failed to complete practice2_2 for Sami scenario test")
+                return False
+                
+        except Exception as e:
+            self.log_test("Real User Scenario Analysis", False, f"Test execution error: {str(e)}")
+            return False
+
     def generate_navigation_summary(self, results, critical_failures):
         """Generate comprehensive summary of Section 2 navigation testing"""
         print("\n" + "=" * 80)
