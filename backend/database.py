@@ -492,62 +492,82 @@ async def init_database():
                     "step_en": "Level 1B Step 1: Divide both sides by 4",
                     "step_ar": "المستوى ١ب الخطوة ١: اقسم كلا الطرفين على ٤",
                     "possible_answers": [
-                        "4y / 4 < 24 / 4",
-                        "y < 24 / 4",
-                        "y < 6"
+                        "4x / 4 ≥ 20 / 4",
+                        "x ≥ 20 / 4",
+                        "4x/4 ≥ 20/4"
                     ],
                     "possible_answers_ar": [
-                        "٤ص / ٤ < ٢٤ / ٤",
-                        "ص < ٢٤ / ٤",
-                        "ص < ٦"
+                        "٤س / ٤ ≥ ٢٠ / ٤",
+                        "س ≥ ٢٠ / ٤",
+                        "٤س/٤ ≥ ٢٠/٤"
                     ]
                 },
                 {
-                    "step_en": "Level 2B Step 1: Divide both sides by -6",
-                    "step_ar": "المستوى ٢ب الخطوة ١: اقسم كلا الطرفين على -٦",
+                    "step_en": "Level 1B Step 2: Simplify",
+                    "step_ar": "المستوى ١ب الخطوة ٢: بسّط",
                     "possible_answers": [
-                        "-6k / -6 ≤ 30 / -6",
-                        "k ≥ 30 / -6",
-                        "k ≥ -5"
+                        "x ≥ 5",
+                        "س ≥ ٥"
                     ],
                     "possible_answers_ar": [
-                        "-٦ك / -٦ ≤ ٣٠ / -٦",
-                        "ك ≥ ٣٠ / -٦",
-                        "ك ≥ -٥"
+                        "س ≥ ٥",
+                        "x ≥ 5"
                     ]
                 },
                 {
-                    "step_en": "Level 2B Step 2: Flip the inequality sign",
-                    "step_ar": "المستوى ٢ب الخطوة ٢: اقلب إشارة المتباينة",
+                    "step_en": "Level 2B Step 1: Divide both sides by -3 (flip the inequality sign)",
+                    "step_ar": "المستوى ٢ب الخطوة ١: اقسم كلا الطرفين على -٣ (اقلب إشارة المتباينة)",
                     "possible_answers": [
-                        "k ≥ -5"
+                        "-3m / (-3) > 15 / (-3)",
+                        "m > 15 / (-3)",
+                        "-3m/(-3) > 15/(-3)",
+                        "m > -5"
                     ],
                     "possible_answers_ar": [
-                        "ك ≥ -٥"
+                        "-٣م / (-٣) > ١٥ / (-٣)",
+                        "م > ١٥ / (-٣)",
+                        "-٣م/(-٣) > ١٥/(-٣)",
+                        "م > -٥"
                     ]
                 },
                 {
-                    "step_en": "Level 3B Step 1: Multiply both sides by -3",
-                    "step_ar": "المستوى ٣ب الخطوة ١: اضرب كلا الطرفين في -٣",
+                    "step_en": "Level 2B Step 2: Simplify",
+                    "step_ar": "المستوى ٢ب الخطوة ٢: بسّط",
                     "possible_answers": [
-                        "n / (-3) * (-3) > 5 * (-3)",
-                        "n < 5 * (-3)",
-                        "n < -15"
+                        "m > -5",
+                        "م > -٥"
                     ],
                     "possible_answers_ar": [
-                        "ن / (-٣) * (-٣) > ٥ * (-٣)",
-                        "ن < ٥ * (-٣)",
-                        "ن < -١٥"
+                        "م > -٥",
+                        "m > -5"
                     ]
                 },
                 {
-                    "step_en": "Level 3B Step 2: Flip the inequality sign",
-                    "step_ar": "المستوى ٣ب الخطوة ٢: اقلب إشارة المتباينة",
+                    "step_en": "Level 3B Step 1: Divide both sides by -6 (flip the inequality sign)",
+                    "step_ar": "المستوى ٣ب الخطوة ١: اقسم كلا الطرفين على -٦ (اقلب إشارة المتباينة)",
                     "possible_answers": [
-                        "n < -15"
+                        "-6k / (-6) ≤ 30 / (-6)",
+                        "k ≤ 30 / (-6)",
+                        "-6k/(-6) ≤ 30/(-6)",
+                        "k ≤ -5"
                     ],
                     "possible_answers_ar": [
-                        "ن < -١٥"
+                        "-٦ك / (-٦) ≤ ٣٠ / (-٦)",
+                        "ك ≤ ٣٠ / (-٦)",
+                        "-٦ك/(-٦) ≤ ٣٠/(-٦)",
+                        "ك ≤ -٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 2: Simplify",
+                    "step_ar": "المستوى ٣ب الخطوة ٢: بسّط",
+                    "possible_answers": [
+                        "k ≤ -5",
+                        "ك ≤ -٥"
+                    ],
+                    "possible_answers_ar": [
+                        "ك ≤ -٥",
+                        "k ≤ -5"
                     ]
                 }
             ],
