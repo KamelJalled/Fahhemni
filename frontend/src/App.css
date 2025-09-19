@@ -200,6 +200,58 @@
   background: #a8a8a8;
 }
 
+/* Previous Steps Display for Word Problems */
+.previous-steps-container {
+    background: #f0f4f8;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.previous-steps-container label {
+    font-weight: 600;
+    color: #475569;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.step-display {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 4px 0;
+    font-family: 'Courier New', monospace;
+    color: #059669;
+}
+
+.step-label {
+    font-weight: 600;
+    background: #10b981;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 8px;
+    font-size: 0.875rem;
+}
+
+.step-value {
+    background: #f0fdf4;
+    color: #166534;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Submit Button Styling */
+.submit-step-button {
+    background: #3b82f6;
+}
+
+.submit-final-button {
+    background: #10b981;
+}
+
 /* Mobile Section Tab Buttons */
 @media (max-width: 768px) {
   .section-tab-button {
