@@ -1363,7 +1363,7 @@ const ProblemView = () => {
       } else {
         // All sections completed
         console.log('🎯 All sections completed - returning to dashboard');
-        navigate('/dashboard');
+        navigateToSectionDashboard();
       }
     }
   };
