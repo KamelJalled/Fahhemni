@@ -1896,6 +1896,11 @@ const ProblemView = () => {
                                           
                                           if (stepCorrect) {
                                             if (explanationStep < levelSteps.length - 1) {
+                                              // Store the current step answer in history before moving to next step
+                                              const newHistory = [...explanationStepHistory];
+                                              newHistory[explanationStep] = explanationAnswers[index];
+                                              setExplanationStepHistory(newHistory);
+                                              
                                               // Move to next step
                                               setExplanationStep(explanationStep + 1);
                                               const newAnswers = [...explanationAnswers];
