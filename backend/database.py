@@ -721,6 +721,42 @@ async def init_database():
             "answer_ar": "ح ≥ ٤",
             "show_full_solution": False,
             "hide_answer": True,
+            "step_solutions": [
+                {
+                    "step_en": "Step 1: Write the inequality from the word problem",
+                    "step_ar": "الخطوة ١: اكتب المتباينة من المسألة الكلامية",
+                    "possible_answers": [
+                        "15p ≥ 60",
+                        "15 * p ≥ 60"
+                    ],
+                    "possible_answers_ar": [
+                        "١٥ح ≥ ٦٠",
+                        "١٥ * ح ≥ ٦٠"
+                    ]
+                },
+                {
+                    "step_en": "Step 2: Divide both sides by 15 (show the operation)",
+                    "step_ar": "الخطوة ٢: اقسم كلا الطرفين على ١٥ (اظهر العملية)",
+                    "possible_answers": [
+                        "15p / 15 ≥ 60 / 15",
+                        "p ≥ 60 / 15"
+                    ],
+                    "possible_answers_ar": [
+                        "١٥ح / ١٥ ≥ ٦٠ / ١٥",
+                        "ح ≥ ٦٠ / ١٥"
+                    ]
+                },
+                {
+                    "step_en": "Step 3: Simplify to final answer",
+                    "step_ar": "الخطوة ٣: بسّط للحصول على الإجابة النهائية",
+                    "possible_answers": [
+                        "p ≥ 4"
+                    ],
+                    "possible_answers_ar": [
+                        "ح ≥ ٤"
+                    ]
+                }
+            ],
             "hints_en": [
                 "Variable p represents pieces per child. How many children? How many total pieces needed?",
                 "If each child gets p pieces, and you have 15 children, how many pieces total will you distribute?",
