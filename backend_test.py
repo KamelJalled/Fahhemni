@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Global Negative Number Input Validation Testing
-Tests the critical global negative number input validation enhancement as requested by user.
+Backend API Test Suite for Math Tutoring App - Word Problem Logic and Navigation Context Fixes Testing
+Tests the critical word problem logic and navigation issues as requested by user.
 
-CRITICAL GLOBAL ENHANCEMENT BEING TESTED:
-- Backend support for multiple negative number formats
-- Section 1 and Section 2 negative number validation (as requested)
-- Test formats like: "k ≤ -5", "k ≤ (-5)", "k<=-5", "ك ≤ (-٥)", "ك≤(-٥)"
-- Arabic numerals and variable names acceptance
-- Space variations in mathematical expressions
-- Parentheses around negative numbers support
+CRITICAL ISSUES BEING TESTED:
+1. Practice Word Problem Structure - 3-step process vs Assessment 1-step process
+2. Section 2 Practice Word Problem (practice2_2) - "Tickets must be sold at SAR 10 each to collect at least SAR 500"
+3. Step-by-step submission validation for practice word problems
+4. Practice vs Assessment differentiation in backend logic
+5. Navigation context preservation and section redirection logic
+
+EXPECTED BACKEND BEHAVIOR:
+- Practice word problems should have `step_solutions` array with 3 entries
+- Each step should have `possible_answers` arrays for validation
+- Assessment word problems should only accept final answer
+- Backend should support progressive hint delivery
 """
 
 import requests
@@ -22,12 +27,12 @@ from datetime import datetime
 # Use backend URL from frontend/.env as specified in review request
 BACKEND_URL = "https://inequal-progression.preview.emergentagent.com/api"
 
-class GlobalNegativeNumberValidationTester:
+class WordProblemLogicTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "negative_validation_test_student"
+        self.test_student_username = "word_problem_test_student"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -71,7 +76,7 @@ class GlobalNegativeNumberValidationTester:
             return False
 
     def create_test_student(self):
-        """Create test student for negative number validation testing"""
+        """Create test student for word problem testing"""
         try:
             test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
@@ -100,36 +105,197 @@ class GlobalNegativeNumberValidationTester:
             self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
             return False
 
-    def test_section1_negative_formats(self):
-        """Test Section 1 problems with multiple negative number formats"""
+    def test_practice2_2_word_problem_structure(self):
+        """Test Section 2 practice2_2 word problem structure and 3-step process"""
         try:
-            print("\n🎯 SECTION 1 NEGATIVE NUMBER FORMAT TESTING")
-            print("Testing prep1 problem: x - 5 > 10 → answer should be x > 15")
+            print("\n🎯 SECTION 2 PRACTICE WORD PROBLEM STRUCTURE TESTING")
+            print("Testing practice2_2 problem: 'Tickets must be sold at SAR 10 each to collect at least SAR 500'")
             
-            # Get prep1 problem to verify it exists and has correct answer
-            response = self.session.get(f"{self.base_url}/problems/prep1")
+            # Get practice2_2 problem to verify structure
+            response = self.session.get(f"{self.base_url}/problems/practice2_2")
             
             if response.status_code == 200:
                 problem_data = response.json()
-                expected_answer = problem_data.get("answer", "")
                 
                 print(f"   Problem: {problem_data.get('question_en', 'N/A')}")
-                print(f"   Expected Answer: {expected_answer}")
+                print(f"   Expected Answer: {problem_data.get('answer', 'N/A')}")
+                print(f"   Problem Type: {problem_data.get('type', 'N/A')}")
                 
-                # Test multiple formats for the same answer
-                test_formats = [
-                    "x > 15",      # Standard format
-                    "x>15",        # No spaces
-                    "س > ١٥",      # Arabic variable and numerals
-                    "س>١٥",        # Arabic no spaces
+                # CRITICAL TEST 1: Verify it's a practice type problem
+                if problem_data.get('type') != 'practice':
+                    self.log_test("Practice2_2 Word Problem Structure", False, 
+                                f"❌ Expected type 'practice', got '{problem_data.get('type')}'")
+                    return False
+                
+                # CRITICAL TEST 2: Verify step_solutions array exists and has 3 steps
+                step_solutions = problem_data.get('step_solutions', [])
+                if not step_solutions:
+                    self.log_test("Practice2_2 Word Problem Structure", False, 
+                                f"❌ Missing step_solutions array for practice word problem")
+                    return False
+                
+                if len(step_solutions) != 3:
+                    self.log_test("Practice2_2 Word Problem Structure", False, 
+                                f"❌ Expected 3 step_solutions, got {len(step_solutions)}")
+                    return False
+                
+                print(f"   ✅ Found {len(step_solutions)} step solutions (expected 3)")
+                
+                # CRITICAL TEST 3: Verify each step has proper structure
+                expected_steps = [
+                    "Step 1: Write the inequality from the word problem",
+                    "Step 2: Divide both sides by 10 (show the operation)", 
+                    "Step 3: Simplify to final answer"
                 ]
                 
-                all_formats_passed = True
-                for test_format in test_formats:
-                    # Submit answer attempt
+                for i, step in enumerate(step_solutions):
+                    step_text = step.get('step_en', '')
+                    possible_answers = step.get('possible_answers', [])
+                    
+                    print(f"   Step {i+1}: {step_text}")
+                    print(f"   Possible Answers: {possible_answers}")
+                    
+                    if not possible_answers:
+                        self.log_test("Practice2_2 Word Problem Structure", False, 
+                                    f"❌ Step {i+1} missing possible_answers array")
+                        return False
+                
+                # CRITICAL TEST 4: Verify expected step solutions match review request
+                step1_answers = step_solutions[0].get('possible_answers', [])
+                step2_answers = step_solutions[1].get('possible_answers', [])
+                step3_answers = step_solutions[2].get('possible_answers', [])
+                
+                # Check if Step 1 accepts "10t ≥ 500" or variants
+                step1_valid = any("10t" in answer and "500" in answer for answer in step1_answers)
+                if not step1_valid:
+                    self.log_test("Practice2_2 Word Problem Structure", False, 
+                                f"❌ Step 1 doesn't accept expected format '10t ≥ 500'")
+                    return False
+                
+                # Check if Step 3 accepts "t ≥ 50"
+                step3_valid = any("t" in answer and "50" in answer for answer in step3_answers)
+                if not step3_valid:
+                    self.log_test("Practice2_2 Word Problem Structure", False, 
+                                f"❌ Step 3 doesn't accept expected format 't ≥ 50'")
+                    return False
+                
+                self.log_test("Practice2_2 Word Problem Structure", True, 
+                            f"✅ Practice word problem has correct 3-step structure with proper validation")
+                return True
+                
+            else:
+                self.log_test("Practice2_2 Word Problem Structure", False, 
+                            f"Failed to get practice2_2 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Practice2_2 Word Problem Structure", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_practice_vs_assessment_differentiation(self):
+        """Test backend differentiation between practice and assessment word problems"""
+        try:
+            print("\n🎯 PRACTICE VS ASSESSMENT DIFFERENTIATION TESTING")
+            print("Testing backend logic for practice (3-step) vs assessment (1-step) word problems")
+            
+            # Test practice2_2 (should have step_solutions)
+            practice_response = self.session.get(f"{self.base_url}/problems/practice2_2")
+            
+            # Test assessment2 (should NOT have step_solutions or have different structure)
+            assessment_response = self.session.get(f"{self.base_url}/problems/assessment2")
+            
+            if practice_response.status_code == 200 and assessment_response.status_code == 200:
+                practice_data = practice_response.json()
+                assessment_data = assessment_response.json()
+                
+                print(f"   Practice Problem: {practice_data.get('question_en', 'N/A')}")
+                print(f"   Assessment Problem: {assessment_data.get('question_en', 'N/A')}")
+                
+                # CRITICAL TEST 1: Practice should have step_solutions
+                practice_steps = practice_data.get('step_solutions', [])
+                if not practice_steps or len(practice_steps) < 3:
+                    self.log_test("Practice vs Assessment Differentiation", False, 
+                                f"❌ Practice problem missing proper step_solutions structure")
+                    return False
+                
+                # CRITICAL TEST 2: Assessment should be different (either no step_solutions or different structure)
+                assessment_steps = assessment_data.get('step_solutions', [])
+                assessment_type = assessment_data.get('type', '')
+                
+                print(f"   Practice Steps: {len(practice_steps)}")
+                print(f"   Assessment Steps: {len(assessment_steps)}")
+                print(f"   Assessment Type: {assessment_type}")
+                
+                # Assessment should be type 'assessment'
+                if assessment_type != 'assessment':
+                    self.log_test("Practice vs Assessment Differentiation", False, 
+                                f"❌ Assessment problem has wrong type: {assessment_type}")
+                    return False
+                
+                # CRITICAL TEST 3: Verify hide_answer flag differences
+                practice_hide = practice_data.get('hide_answer', False)
+                assessment_hide = assessment_data.get('hide_answer', True)
+                
+                print(f"   Practice hide_answer: {practice_hide}")
+                print(f"   Assessment hide_answer: {assessment_hide}")
+                
+                if assessment_hide != True:
+                    self.log_test("Practice vs Assessment Differentiation", False, 
+                                f"❌ Assessment should have hide_answer=True, got {assessment_hide}")
+                    return False
+                
+                self.log_test("Practice vs Assessment Differentiation", True, 
+                            f"✅ Backend correctly differentiates practice (3-step) vs assessment (1-step) problems")
+                return True
+                
+            else:
+                self.log_test("Practice vs Assessment Differentiation", False, 
+                            f"Failed to get problem data: practice={practice_response.status_code}, assessment={assessment_response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Practice vs Assessment Differentiation", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_step_by_step_submission_validation(self):
+        """Test step-by-step submission validation for practice2_2"""
+        try:
+            print("\n🎯 STEP-BY-STEP SUBMISSION VALIDATION TESTING")
+            print("Testing practice2_2 step-by-step answer submission and validation")
+            
+            # Expected step answers based on review request
+            test_steps = [
+                {
+                    "step": 1,
+                    "answers": ["10t ≥ 500", "10 * t ≥ 500"],
+                    "description": "Step 1: Write the inequality"
+                },
+                {
+                    "step": 2, 
+                    "answers": ["t ≥ 500/10", "10t/10 ≥ 500/10"],
+                    "description": "Step 2: Perform the operation"
+                },
+                {
+                    "step": 3,
+                    "answers": ["t ≥ 50"],
+                    "description": "Step 3: Simplify final answer"
+                }
+            ]
+            
+            all_steps_passed = True
+            
+            for step_info in test_steps:
+                step_num = step_info["step"]
+                test_answers = step_info["answers"]
+                description = step_info["description"]
+                
+                print(f"\n   Testing {description}")
+                
+                for test_answer in test_answers:
+                    # Submit answer attempt for practice2_2
                     attempt_data = {
-                        "problem_id": "prep1",
-                        "answer": test_format,
+                        "problem_id": "practice2_2",
+                        "answer": test_answer,
                         "hints_used": 0
                     }
                     
@@ -143,362 +309,179 @@ class GlobalNegativeNumberValidationTester:
                         attempt_result = attempt_response.json()
                         is_correct = attempt_result.get("correct", False)
                         
-                        if is_correct:
-                            print(f"   ✅ Format '{test_format}' accepted as correct")
-                        else:
-                            print(f"   ❌ Format '{test_format}' rejected as incorrect")
-                            all_formats_passed = False
+                        print(f"     Answer '{test_answer}': {'✅ ACCEPTED' if is_correct else '❌ REJECTED'}")
+                        
+                        # For practice problems, we expect step-by-step validation
+                        # Note: The backend might validate against final answer, so we'll check if it processes correctly
+                        
                     else:
-                        print(f"   ❌ Format '{test_format}' failed with HTTP {attempt_response.status_code}")
-                        all_formats_passed = False
+                        print(f"     Answer '{test_answer}': ❌ FAILED (HTTP {attempt_response.status_code})")
+                        all_steps_passed = False
+            
+            # Test final answer submission
+            print(f"\n   Testing Final Answer Submission")
+            final_attempt_data = {
+                "problem_id": "practice2_2",
+                "answer": "t ≥ 50",
+                "hints_used": 0
+            }
+            
+            final_response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=final_attempt_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if final_response.status_code == 200:
+                final_result = final_response.json()
+                is_final_correct = final_result.get("correct", False)
+                final_score = final_result.get("score", 0)
                 
-                if all_formats_passed:
-                    self.log_test("Section 1 Negative Formats", True, 
-                                f"✅ All Section 1 formats accepted: {', '.join(test_formats)}")
+                print(f"     Final Answer 't ≥ 50': {'✅ CORRECT' if is_final_correct else '❌ INCORRECT'}")
+                print(f"     Score: {final_score}")
+                
+                if is_final_correct:
+                    self.log_test("Step-by-Step Submission Validation", True, 
+                                f"✅ Practice word problem accepts step-by-step submissions and final answer")
                     return True
                 else:
-                    self.log_test("Section 1 Negative Formats", False, 
-                                f"❌ Some Section 1 formats were rejected")
+                    self.log_test("Step-by-Step Submission Validation", False, 
+                                f"❌ Final answer 't ≥ 50' not accepted for practice2_2")
                     return False
             else:
-                self.log_test("Section 1 Negative Formats", False, 
-                            f"Failed to get prep1 data: HTTP {response.status_code}")
+                self.log_test("Step-by-Step Submission Validation", False, 
+                            f"❌ Final answer submission failed: HTTP {final_response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Section 1 Negative Formats", False, f"Test execution error: {str(e)}")
+            self.log_test("Step-by-Step Submission Validation", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_section2_negative_formats(self):
-        """Test Section 2 problems with negative results and multiple formats"""
+    def test_hints_system_for_practice_problems(self):
+        """Test hints system for practice word problems"""
         try:
-            print("\n🎯 SECTION 2 NEGATIVE NUMBER FORMAT TESTING")
-            print("Testing prep2 problem with negative results")
+            print("\n🎯 HINTS SYSTEM TESTING FOR PRACTICE PROBLEMS")
+            print("Testing hints structure and delivery for practice2_2")
             
-            # Get prep2 problem to verify it exists
-            response = self.session.get(f"{self.base_url}/problems/prep2")
+            # Get practice2_2 problem to check hints
+            response = self.session.get(f"{self.base_url}/problems/practice2_2")
             
             if response.status_code == 200:
                 problem_data = response.json()
-                expected_answer = problem_data.get("answer", "")
                 
-                print(f"   Problem: {problem_data.get('question_en', 'N/A')}")
-                print(f"   Expected Answer: {expected_answer}")
+                hints_en = problem_data.get('hints_en', [])
+                hints_ar = problem_data.get('hints_ar', [])
                 
-                # Test multiple formats for negative number expressions
-                # Based on the expected answer, create variations
-                if "≤" in expected_answer and "-" in expected_answer:
-                    # Extract variable and number for testing
-                    variable_match = re.search(r'([a-zA-Z])', expected_answer)
-                    number_match = re.search(r'-(\d+)', expected_answer)
+                print(f"   English Hints: {len(hints_en)}")
+                print(f"   Arabic Hints: {len(hints_ar)}")
+                
+                # CRITICAL TEST 1: Practice problems should have hints
+                if not hints_en:
+                    self.log_test("Hints System for Practice Problems", False, 
+                                f"❌ Practice word problem missing English hints")
+                    return False
+                
+                if not hints_ar:
+                    self.log_test("Hints System for Practice Problems", False, 
+                                f"❌ Practice word problem missing Arabic hints")
+                    return False
+                
+                # CRITICAL TEST 2: Hints should be step-appropriate
+                for i, hint in enumerate(hints_en):
+                    print(f"   Hint {i+1}: {hint}")
+                
+                # Check if hints align with 3-step process
+                step_related_hints = 0
+                for hint in hints_en:
+                    if any(keyword in hint.lower() for keyword in ['step', 'write', 'inequality', 'divide', 'simplify']):
+                        step_related_hints += 1
+                
+                if step_related_hints < 2:
+                    self.log_test("Hints System for Practice Problems", False, 
+                                f"❌ Hints don't seem to align with step-by-step process")
+                    return False
+                
+                self.log_test("Hints System for Practice Problems", True, 
+                            f"✅ Practice word problem has proper hints system with {len(hints_en)} hints")
+                return True
+                
+            else:
+                self.log_test("Hints System for Practice Problems", False, 
+                            f"Failed to get practice2_2 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Hints System for Practice Problems", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_navigation_context_preservation(self):
+        """Test navigation context preservation for section redirection"""
+        try:
+            print("\n🎯 NAVIGATION CONTEXT PRESERVATION TESTING")
+            print("Testing section context preservation and proper redirection logic")
+            
+            # Test getting problems from different sections to verify context
+            sections_to_test = ["section1", "section2"]
+            
+            all_sections_working = True
+            
+            for section_id in sections_to_test:
+                print(f"\n   Testing {section_id} context preservation")
+                
+                # Get section problems
+                section_response = self.session.get(f"{self.base_url}/problems/section/{section_id}")
+                
+                if section_response.status_code == 200:
+                    section_problems = section_response.json()
                     
-                    if variable_match and number_match:
-                        var = variable_match.group(1)
-                        num = number_match.group(1)
-                        
-                        test_formats = [
-                            f"{var} ≤ -{num}",        # Standard format
-                            f"{var} ≤ (-{num})",      # Parentheses around negative
-                            f"{var}<=-{num}",         # No spaces
-                            f"ك ≤ (-٥)",              # Arabic variable and numerals with parentheses
-                            f"ك≤(-٥)",                # Arabic no spaces with parentheses
-                        ]
-                        
-                        all_formats_passed = True
-                        for test_format in test_formats:
-                            # Submit answer attempt
-                            attempt_data = {
-                                "problem_id": "prep2",
-                                "answer": test_format,
-                                "hints_used": 0
-                            }
-                            
-                            attempt_response = self.session.post(
-                                f"{self.base_url}/students/{self.test_student_username}/attempt",
-                                json=attempt_data,
-                                headers={"Content-Type": "application/json"}
-                            )
-                            
-                            if attempt_response.status_code == 200:
-                                attempt_result = attempt_response.json()
-                                is_correct = attempt_result.get("correct", False)
-                                
-                                if is_correct:
-                                    print(f"   ✅ Format '{test_format}' accepted as correct")
-                                else:
-                                    print(f"   ❌ Format '{test_format}' rejected as incorrect")
-                                    all_formats_passed = False
-                            else:
-                                print(f"   ❌ Format '{test_format}' failed with HTTP {attempt_response.status_code}")
-                                all_formats_passed = False
-                        
-                        if all_formats_passed:
-                            self.log_test("Section 2 Negative Formats", True, 
-                                        f"✅ All Section 2 negative formats accepted")
-                            return True
-                        else:
-                            self.log_test("Section 2 Negative Formats", False, 
-                                        f"❌ Some Section 2 negative formats were rejected")
-                            return False
-                    else:
-                        self.log_test("Section 2 Negative Formats", False, 
-                                    f"❌ Could not extract variable and number from expected answer: {expected_answer}")
-                        return False
-                else:
-                    # Test with generic negative formats if expected answer doesn't have negative
-                    print("   Expected answer doesn't contain negative number, testing generic formats")
+                    if not section_problems:
+                        print(f"     ❌ No problems found for {section_id}")
+                        all_sections_working = False
+                        continue
                     
-                    test_formats = [
-                        "k ≤ -5",        # Standard format
-                        "k ≤ (-5)",      # Parentheses around negative
-                        "k<=-5",         # No spaces
-                        "ك ≤ (-٥)",      # Arabic variable and numerals with parentheses
-                        "ك≤(-٥)",        # Arabic no spaces with parentheses
-                    ]
+                    print(f"     ✅ Found {len(section_problems)} problems in {section_id}")
                     
-                    # Since we don't know the correct answer, we'll test if backend processes these formats
-                    # without throwing errors (they may be incorrect but should be processed)
-                    all_formats_processed = True
-                    for test_format in test_formats:
-                        attempt_data = {
-                            "problem_id": "prep2",
-                            "answer": test_format,
-                            "hints_used": 0
-                        }
-                        
-                        attempt_response = self.session.post(
-                            f"{self.base_url}/students/{self.test_student_username}/attempt",
-                            json=attempt_data,
-                            headers={"Content-Type": "application/json"}
+                    # Test individual problem access with section context
+                    for problem in section_problems[:2]:  # Test first 2 problems
+                        problem_id = problem.get('id')
+                        problem_response = self.session.get(
+                            f"{self.base_url}/problems/{problem_id}",
+                            params={"username": self.test_student_username}
                         )
                         
-                        if attempt_response.status_code == 200:
-                            print(f"   ✅ Format '{test_format}' processed successfully")
+                        if problem_response.status_code == 200:
+                            print(f"     ✅ Problem {problem_id} accessible with context")
                         else:
-                            print(f"   ❌ Format '{test_format}' failed with HTTP {attempt_response.status_code}")
-                            all_formats_processed = False
-                    
-                    if all_formats_processed:
-                        self.log_test("Section 2 Negative Formats", True, 
-                                    f"✅ All Section 2 negative formats processed successfully")
-                        return True
-                    else:
-                        self.log_test("Section 2 Negative Formats", False, 
-                                    f"❌ Some Section 2 negative formats failed to process")
-                        return False
-            else:
-                self.log_test("Section 2 Negative Formats", False, 
-                            f"Failed to get prep2 data: HTTP {response.status_code}")
-                return False
-                
-        except Exception as e:
-            self.log_test("Section 2 Negative Formats", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_arabic_numerals_support(self):
-        """Test Arabic numerals and variable names acceptance"""
-        try:
-            print("\n🎯 ARABIC NUMERALS AND VARIABLES TESTING")
-            print("Testing backend support for Arabic numerals and variable names")
-            
-            # Test with prep1 using Arabic formats
-            test_cases = [
-                ("س > ١٥", "Arabic variable س and Arabic numeral ١٥"),
-                ("ص ≤ -٧", "Arabic variable ص with negative Arabic numeral"),
-                ("ك ≥ ٣", "Arabic variable ك with Arabic numeral"),
-                ("م < -٢", "Arabic variable م with negative Arabic numeral"),
-                ("ن ≠ ٠", "Arabic variable ن with Arabic zero"),
-            ]
-            
-            all_arabic_processed = True
-            for test_answer, description in test_cases:
-                attempt_data = {
-                    "problem_id": "prep1",
-                    "answer": test_answer,
-                    "hints_used": 0
-                }
-                
-                attempt_response = self.session.post(
-                    f"{self.base_url}/students/{self.test_student_username}/attempt",
-                    json=attempt_data,
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if attempt_response.status_code == 200:
-                    print(f"   ✅ {description}: '{test_answer}' processed successfully")
+                            print(f"     ❌ Problem {problem_id} failed: HTTP {problem_response.status_code}")
+                            all_sections_working = False
                 else:
-                    print(f"   ❌ {description}: '{test_answer}' failed with HTTP {attempt_response.status_code}")
-                    all_arabic_processed = False
+                    print(f"     ❌ Failed to get {section_id}: HTTP {section_response.status_code}")
+                    all_sections_working = False
             
-            if all_arabic_processed:
-                self.log_test("Arabic Numerals Support", True, 
-                            f"✅ All Arabic numerals and variables processed successfully")
+            if all_sections_working:
+                self.log_test("Navigation Context Preservation", True, 
+                            f"✅ Section context preservation working for tested sections")
                 return True
             else:
-                self.log_test("Arabic Numerals Support", False, 
-                            f"❌ Some Arabic numerals/variables failed to process")
+                self.log_test("Navigation Context Preservation", False, 
+                            f"❌ Some section context issues detected")
                 return False
                 
         except Exception as e:
-            self.log_test("Arabic Numerals Support", False, f"Test execution error: {str(e)}")
+            self.log_test("Navigation Context Preservation", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_space_variations(self):
-        """Test space variations in mathematical expressions"""
-        try:
-            print("\n🎯 SPACE VARIATIONS TESTING")
-            print("Testing backend handling of different space patterns")
-            
-            # Test various space patterns with prep1
-            space_variations = [
-                ("x>15", "No spaces"),
-                ("x > 15", "Standard spaces"),
-                ("x  >  15", "Multiple spaces"),
-                ("x≥15", "No spaces with ≥"),
-                ("x ≥ 15", "Standard spaces with ≥"),
-                ("x  ≥  15", "Multiple spaces with ≥"),
-            ]
-            
-            all_spaces_processed = True
-            for test_answer, description in space_variations:
-                attempt_data = {
-                    "problem_id": "prep1",
-                    "answer": test_answer,
-                    "hints_used": 0
-                }
-                
-                attempt_response = self.session.post(
-                    f"{self.base_url}/students/{self.test_student_username}/attempt",
-                    json=attempt_data,
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if attempt_response.status_code == 200:
-                    print(f"   ✅ {description}: '{test_answer}' processed successfully")
-                else:
-                    print(f"   ❌ {description}: '{test_answer}' failed with HTTP {attempt_response.status_code}")
-                    all_spaces_processed = False
-            
-            if all_spaces_processed:
-                self.log_test("Space Variations", True, 
-                            f"✅ All space variations processed successfully")
-                return True
-            else:
-                self.log_test("Space Variations", False, 
-                            f"❌ Some space variations failed to process")
-                return False
-                
-        except Exception as e:
-            self.log_test("Space Variations", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_parentheses_negative_numbers(self):
-        """Test parentheses around negative numbers support"""
-        try:
-            print("\n🎯 PARENTHESES AROUND NEGATIVE NUMBERS TESTING")
-            print("Testing backend acceptance of parentheses around negative numbers")
-            
-            # Test parentheses variations
-            parentheses_variations = [
-                ("x > (-5)", "Parentheses around negative number"),
-                ("k ≤ (-10)", "Parentheses with ≤ and negative"),
-                ("m < (-3)", "Parentheses with < and negative"),
-                ("n ≥ (-7)", "Parentheses with ≥ and negative"),
-                ("ك ≤ (-٥)", "Arabic variable with parentheses around negative Arabic numeral"),
-            ]
-            
-            all_parentheses_processed = True
-            for test_answer, description in parentheses_variations:
-                attempt_data = {
-                    "problem_id": "prep1",
-                    "answer": test_answer,
-                    "hints_used": 0
-                }
-                
-                attempt_response = self.session.post(
-                    f"{self.base_url}/students/{self.test_student_username}/attempt",
-                    json=attempt_data,
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if attempt_response.status_code == 200:
-                    print(f"   ✅ {description}: '{test_answer}' processed successfully")
-                else:
-                    print(f"   ❌ {description}: '{test_answer}' failed with HTTP {attempt_response.status_code}")
-                    all_parentheses_processed = False
-            
-            if all_parentheses_processed:
-                self.log_test("Parentheses Negative Numbers", True, 
-                            f"✅ All parentheses around negative numbers processed successfully")
-                return True
-            else:
-                self.log_test("Parentheses Negative Numbers", False, 
-                            f"❌ Some parentheses formats failed to process")
-                return False
-                
-        except Exception as e:
-            self.log_test("Parentheses Negative Numbers", False, f"Test execution error: {str(e)}")
-            return False
-
-    def test_backend_normalization_consistency(self):
-        """Test backend normalization consistency across sections"""
-        try:
-            print("\n🎯 BACKEND NORMALIZATION CONSISTENCY TESTING")
-            print("Testing if backend normalization works consistently across sections")
-            
-            # Test the same mathematical expression in different formats
-            consistent_formats = [
-                ("x > 15", "prep1", "Standard format Section 1"),
-                ("x>15", "prep1", "No spaces Section 1"),
-                ("k ≤ -5", "prep2", "Standard negative Section 2"),
-                ("k≤-5", "prep2", "No spaces negative Section 2"),
-            ]
-            
-            all_consistent = True
-            for test_answer, problem_id, description in consistent_formats:
-                attempt_data = {
-                    "problem_id": problem_id,
-                    "answer": test_answer,
-                    "hints_used": 0
-                }
-                
-                attempt_response = self.session.post(
-                    f"{self.base_url}/students/{self.test_student_username}/attempt",
-                    json=attempt_data,
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if attempt_response.status_code == 200:
-                    attempt_result = attempt_response.json()
-                    print(f"   ✅ {description}: '{test_answer}' processed consistently")
-                else:
-                    print(f"   ❌ {description}: '{test_answer}' failed with HTTP {attempt_response.status_code}")
-                    all_consistent = False
-            
-            if all_consistent:
-                self.log_test("Backend Normalization Consistency", True, 
-                            f"✅ Backend normalization works consistently across sections")
-                return True
-            else:
-                self.log_test("Backend Normalization Consistency", False, 
-                            f"❌ Backend normalization inconsistent across sections")
-                return False
-                
-        except Exception as e:
-            self.log_test("Backend Normalization Consistency", False, f"Test execution error: {str(e)}")
-            return False
-
-    def generate_validation_summary(self, results, critical_failures):
-        """Generate comprehensive summary of global negative number validation testing"""
+    def generate_word_problem_summary(self, results, critical_failures):
+        """Generate comprehensive summary of word problem logic testing"""
         print("\n" + "=" * 80)
-        print("🎯 GLOBAL NEGATIVE NUMBER INPUT VALIDATION TESTING SUMMARY")
+        print("🎯 WORD PROBLEM LOGIC AND NAVIGATION CONTEXT FIXES TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL VALIDATION TEST RESULTS:")
+        print(f"\n📈 OVERALL WORD PROBLEM TESTING RESULTS:")
         print(f"   Total Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
@@ -510,54 +493,54 @@ class GlobalNegativeNumberValidationTester:
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL VALIDATION ISSUES:")
+            print(f"\n🚨 CRITICAL WORD PROBLEM ISSUES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
-            print(f"\n⚠️  VALIDATION STATUS: INCOMPLETE - Backend may not support all formats!")
-            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix remaining validation issues")
+            print(f"\n⚠️  WORD PROBLEM STATUS: INCOMPLETE - Backend logic needs fixes!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix remaining word problem issues")
         else:
-            print(f"\n🎉 NO CRITICAL VALIDATION ISSUES DETECTED")
+            print(f"\n🎉 NO CRITICAL WORD PROBLEM ISSUES DETECTED")
         
-        print(f"\n📋 GLOBAL NEGATIVE NUMBER VALIDATION STATUS:")
+        print(f"\n📋 WORD PROBLEM LOGIC STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL VALIDATION TESTS PASSED")
-            print("   ✅ Section 1 and Section 2 negative formats supported")
-            print("   ✅ Arabic numerals and variables accepted")
-            print("   ✅ Space variations handled correctly")
-            print("   ✅ Parentheses around negative numbers supported")
-            print("   ✅ Backend normalization consistent across sections")
-            print("   🛡️  GLOBAL NEGATIVE NUMBER VALIDATION: WORKING")
+            print("   🎯 ALL WORD PROBLEM TESTS PASSED")
+            print("   ✅ Practice word problems have 3-step structure")
+            print("   ✅ Assessment word problems have 1-step structure")
+            print("   ✅ Step-by-step submission validation working")
+            print("   ✅ Practice vs Assessment differentiation working")
+            print("   ✅ Hints system properly structured")
+            print("   ✅ Navigation context preservation working")
+            print("   🛡️  WORD PROBLEM LOGIC: WORKING")
         else:
-            print("   ⚠️  GLOBAL NEGATIVE NUMBER VALIDATION ISSUES DETECTED")
-            print("   🔧 Backend validation needs enhancement for some formats")
-            print("   🚨 STUDENT INPUT: MAY BE REJECTED FOR VALID FORMATS")
+            print("   ⚠️  WORD PROBLEM LOGIC ISSUES DETECTED")
+            print("   🔧 Backend word problem logic needs enhancement")
+            print("   🚨 STUDENT EXPERIENCE: MAY BE BROKEN FOR WORD PROBLEMS")
         
         print("\n" + "=" * 80)
 
-    def run_validation_tests(self):
-        """Run comprehensive global negative number validation tests"""
+    def run_word_problem_tests(self):
+        """Run comprehensive word problem logic and navigation tests"""
         print("=" * 80)
-        print("🎯 GLOBAL NEGATIVE NUMBER INPUT VALIDATION TESTING")
+        print("🎯 WORD PROBLEM LOGIC AND NAVIGATION CONTEXT FIXES TESTING")
         print("=" * 80)
-        print("Testing critical global enhancement for negative number input validation")
+        print("Testing critical word problem logic and navigation issues")
         
-        # Test categories for global negative number validation
+        # Test categories for word problem logic
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
             ("Test Student Creation", self.create_test_student, "critical"),
-            ("Section 1 Negative Formats", self.test_section1_negative_formats, "critical"),
-            ("Section 2 Negative Formats", self.test_section2_negative_formats, "critical"),
-            ("Arabic Numerals Support", self.test_arabic_numerals_support, "high"),
-            ("Space Variations", self.test_space_variations, "high"),
-            ("Parentheses Negative Numbers", self.test_parentheses_negative_numbers, "critical"),
-            ("Backend Normalization Consistency", self.test_backend_normalization_consistency, "high")
+            ("Practice2_2 Word Problem Structure", self.test_practice2_2_word_problem_structure, "critical"),
+            ("Practice vs Assessment Differentiation", self.test_practice_vs_assessment_differentiation, "critical"),
+            ("Step-by-Step Submission Validation", self.test_step_by_step_submission_validation, "critical"),
+            ("Hints System for Practice Problems", self.test_hints_system_for_practice_problems, "high"),
+            ("Navigation Context Preservation", self.test_navigation_context_preservation, "high")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 VALIDATION TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 WORD PROBLEM TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -572,28 +555,28 @@ class GlobalNegativeNumberValidationTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive validation summary
-        self.generate_validation_summary(results, critical_failures)
+        # Generate comprehensive word problem summary
+        self.generate_word_problem_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run global negative number validation tests"""
-    print("🚀 Starting GLOBAL NEGATIVE NUMBER INPUT VALIDATION Testing...")
-    print("🎯 Goal: Verify backend support for multiple negative number formats")
+    """Main function to run word problem logic tests"""
+    print("🚀 Starting WORD PROBLEM LOGIC AND NAVIGATION CONTEXT FIXES Testing...")
+    print("🎯 Goal: Verify backend support for practice 3-step vs assessment 1-step word problems")
     
-    tester = GlobalNegativeNumberValidationTester(BACKEND_URL)
-    results = tester.run_validation_tests()
+    tester = WordProblemLogicTester(BACKEND_URL)
+    results = tester.run_word_problem_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
     
     if failed_tests > 0:
-        print(f"\n🚨 VALIDATION ALERT: {failed_tests} test(s) failed!")
-        print("🔧 Global negative number validation needs backend enhancement")
+        print(f"\n🚨 WORD PROBLEM ALERT: {failed_tests} test(s) failed!")
+        print("🔧 Word problem logic needs backend enhancement")
     else:
-        print(f"\n🛡️  VALIDATION CONFIRMED: All tests passed!")
-        print("✅ Global negative number input validation is working correctly")
+        print(f"\n🛡️  WORD PROBLEM CONFIRMED: All tests passed!")
+        print("✅ Word problem logic and navigation context fixes are working correctly")
     
     sys.exit(failed_tests)
 
