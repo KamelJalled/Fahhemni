@@ -51,28 +51,69 @@ const ProblemView = () => {
   const [explanationStep, setExplanationStep] = useState(0); // For explanation stage step tracking
   const [explanationAnswers, setExplanationAnswers] = useState(['', '', '']); // Single input per example (simplified management)
 
-  // Helper function for basic normalization without recursion
-  const basicNormalizeAnswer = (answer) => {
+  // GLOBAL: Enhanced normalization for negative numbers and mathematical expressions
+  const normalizeAnswer = (answer) => {
     if (!answer) return '';
     
-    // Convert Arabic numerals to Western and س to x
-    const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
-    let normalized = answer.toLowerCase()
-      .replace(/س/g, 'x')
-      .replace(/[٠-٩]/g, (digit) => arabicToWestern[digit])
-      .trim();
+    // Use basic normalization first
+    let normalized = basicNormalizeAnswer(answer);
     
-    // Normalize operators and spaces more carefully
+    // GLOBAL NEGATIVE NUMBER VALIDATION ENHANCEMENT
+    // Handle negative numbers with or without parentheses: -5 vs (-5)
+    normalized = normalizeNegativeNumbers(normalized);
+    
+    // Enhanced space and operator normalization
     normalized = normalized
-      .replace(/÷/g, '/') // Convert ÷ to /
-      .replace(/×/g, '*') // Convert × to *
-      .replace(/\s+/g, ' ') // Normalize multiple spaces to single
-      .replace(/\s*([+\-*/=])\s*/g, '$1') // Remove spaces around basic operators
-      .replace(/\s*([<>])\s*/g, '$1') // Remove spaces around inequality signs
-      .replace(/\s*([≤≥])\s*/g, '$1') // Remove spaces around unicode inequalities
-      .replace(/\s*([<>]=?)\s*/g, '$1'); // Handle <= >= combinations
+      .replace(/\s+/g, '') // Remove all spaces completely
+      .replace(/\(\s*(-?\d+\.?\d*)\s*\)/g, '$1') // Convert (number) to number
+      .replace(/\(\s*(-?\d+\.?\d*\/?\d*\.?\d*)\s*\)/g, '$1') // Handle fractions in parentheses
+      .toLowerCase();
     
     return normalized;
+  };
+
+  // GLOBAL: Normalize negative numbers with multiple format support
+  const normalizeNegativeNumbers = (expression) => {
+    if (!expression) return '';
+    
+    let normalized = expression.trim();
+    
+    // Handle Arabic numerals to Western conversion
+    const arabicToWestern = {'٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'};
+    normalized = normalized.replace(/[٠-٩]/g, (digit) => arabicToWestern[digit]);
+    
+    // Convert Arabic variable names
+    normalized = normalized.replace(/س/g, 'x').replace(/ص/g, 'y').replace(/ك/g, 'k').replace(/م/g, 'm').replace(/ن/g, 'n');
+    
+    // Remove spaces around operators and parentheses
+    normalized = normalized.replace(/\s+/g, '');
+    
+    // Normalize parentheses around negative numbers: (-5) → -5
+    normalized = normalized.replace(/\((-?\d+\.?\d*)\)/g, '$1');
+    
+    // Handle fractions with parentheses: (-3)/(-6) → -3/-6
+    normalized = normalized.replace(/\((-?\d+\.?\d*)\)\/\((-?\d+\.?\d*)\)/g, '$1/$2');
+    
+    // Handle mixed parentheses: -3m/(-3) → -3m/-3
+    normalized = normalized.replace(/\((-?\d+\.?\d*)\)/g, '$1');
+    
+    // Normalize inequality operators
+    normalized = normalized.replace(/≥/g, '>=').replace(/≤/g, '<=');
+    
+    return normalized;
+  };
+
+  // GLOBAL: Enhanced validation that accepts multiple formats
+  const normalizeAndValidateAnswer = (userInput, expectedAnswers) => {
+    if (!userInput || !Array.isArray(expectedAnswers)) return false;
+    
+    const normalizedInput = normalizeAnswer(userInput);
+    
+    // Check against all expected answer formats
+    return expectedAnswers.some(expected => {
+      const normalizedExpected = normalizeAnswer(expected);
+      return normalizedInput === normalizedExpected;
+    });
   };
 
   // CRITICAL: Pedagogical hint system - NEVER show direct answers
