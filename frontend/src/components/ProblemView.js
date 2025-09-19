@@ -1346,6 +1346,66 @@ const ProblemView = () => {
     return hints[`${stage}_step${step}`]?.[isEnglish ? 'en' : 'ar'];
   };
 
+  // Fix navigation button not working - force navigation
+  const handleNavigationClick = () => {
+    // Get the next stage using existing logic
+    const getSectionNumber = (id) => {
+      const match = id.match(/[a-zA-Z]+(\d+)/);
+      return match ? parseInt(match[1]) : 1;
+    };
+    
+    const currentSectionNum = getSectionNumber(problemId);
+    
+    const sectionSequences = {
+      1: ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'],
+      2: ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'],
+      3: ['prep3', 'explanation3', 'practice3_1', 'practice3_2', 'assessment3', 'examprep3'],
+      4: ['prep4', 'explanation4', 'practice4_1', 'practice4_2', 'assessment4', 'examprep4'],
+      5: ['prep5', 'explanation5', 'practice5_1', 'practice5_2', 'assessment5', 'examprep5']
+    };
+    
+    const currentSequence = sectionSequences[currentSectionNum] || sectionSequences[1];
+    const currentIndex = currentSequence.indexOf(problemId);
+    
+    let nextStage = null;
+    if (currentIndex < currentSequence.length - 1) {
+      nextStage = `/problem/${currentSequence[currentIndex + 1]}`;
+    } else {
+      // Move to next section
+      const nextSectionNum = currentSectionNum + 1;
+      if (nextSectionNum <= 5 && sectionSequences[nextSectionNum]) {
+        nextStage = `/problem/${sectionSequences[nextSectionNum][0]}`;
+      } else {
+        nextStage = '/dashboard';
+      }
+    }
+    
+    if (nextStage) {
+      console.log(`🚀 FORCE NAVIGATION: Navigating to ${nextStage}`);
+      
+      // Don't just update URL, actually navigate
+      resetProblemState();
+      
+      // Try React Router navigate first
+      try {
+        navigate(nextStage);
+        
+        // Force component reload if navigation doesn't work
+        setTimeout(() => {
+          if (window.location.pathname !== nextStage) {
+            console.log(`🔄 React Router failed, forcing with window.location`);
+            window.location.href = nextStage;
+          }
+        }, 100);
+        
+      } catch (error) {
+        console.error('Navigation error:', error);
+        // Fallback: Force navigation with window.location
+        window.location.href = nextStage;
+      }
+    }
+  };
+
   const resetProblemState = () => {
     setStepAnswers(['', '', '']);
     setCurrentStep(0);
