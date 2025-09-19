@@ -2440,7 +2440,7 @@ const ProblemView = () => {
                           {text[language].completion.checking}
                         </div>
                       ) : (
-                        {/* FIXED: Dynamic submit button text based on stage and step */}
+                        /* FIXED: Dynamic submit button text based on stage and step */
                         (() => {
                           const stageType = getStageType(problem.type, problem.id);
                           
