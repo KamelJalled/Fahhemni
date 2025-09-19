@@ -8,7 +8,7 @@ import json
 import sys
 
 # Use backend URL from frontend/.env
-BACKEND_URL = "https://bilingual-algebra.preview.emergentagent.com/api"
+BACKEND_URL = "https://inequality-solver.preview.emergentagent.com/api"
 
 class StepProgressionLogicTester:
     def __init__(self, base_url):
