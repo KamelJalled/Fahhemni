@@ -1775,6 +1775,16 @@ const ProblemView = () => {
                         {/* Interactive Step-by-Step Mode - For interactive explanation stages */}
                         {!problem.show_full_solution && (
                           <div>
+                            {/* Display the step-by-step solution first */}
+                            <div className="bg-green-50 p-8 rounded-lg mb-8 border border-green-200 max-w-5xl mx-auto">
+                              <h4 className="font-bold text-2xl text-green-800 mb-6">
+                                {language === 'en' ? '💡 Step-by-Step Solution:' : '💡 الحل خطوة بخطوة:'}
+                              </h4>
+                              <pre className="whitespace-pre-wrap text-lg text-green-700 leading-relaxed font-mono">
+                                {language === 'en' ? example.solution_en : example.solution_ar}
+                              </pre>
+                            </div>
+                            
                             {/* Display the practice question directly */}
                             <div className="bg-yellow-50 p-8 rounded-lg border border-yellow-200 max-w-3xl mx-auto mb-6">
                               <h4 className="font-bold text-2xl text-yellow-800 mb-6 text-center">
