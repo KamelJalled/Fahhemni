@@ -123,6 +123,18 @@ backend:
         comment: "✅ COMPREHENSIVE WORD PROBLEM LOGIC TESTING COMPLETE: All critical backend tests PASSED (7/7, 100% success rate). VERIFIED: 1) ✅ Practice2_2 Word Problem Structure - Section 2 practice word problem 'Tickets must be sold at SAR 10 each to collect at least SAR 500' has correct 3-step structure with proper step_solutions array containing: Step 1 'Write inequality' accepts ['10t ≥ 500', '10 * t ≥ 500'], Step 2 'Divide both sides' accepts ['10t / 10 ≥ 500 / 10', 't ≥ 500 / 10'], Step 3 'Simplify' accepts ['t ≥ 50']. 2) ✅ Practice vs Assessment Differentiation - Backend correctly differentiates practice (3-step with step_solutions, hide_answer=false) vs assessment (1-step, no step_solutions, hide_answer=true). 3) ✅ Step-by-Step Submission Validation - Practice word problems accept step-by-step submissions and final answer 't ≥ 50' correctly validated with score 40. 4) ✅ Hints System - Practice problems have proper 3-hint system aligned with word problem solving process. 5) ✅ Navigation Context Preservation - Section context properly maintained across section1 and section2. Backend word problem logic and navigation context fixes are working correctly."
 
 frontend:
+  - task: "Critical Navigation Bug Test - Section 2 Explanation to Practice2_1"
+    implemented: true
+    working: false
+    file: "frontend/src/components/ProblemView.js, frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL NAVIGATION BUG CONFIRMED: Comprehensive testing revealed the navigation bug is NOT fully fixed. DETAILED FINDINGS: 1) ✅ Login & Dashboard Access: Successfully logged in as 'navbugtest' and accessed Section 2 dashboard, 2) ✅ Section Navigation: Section 2 tab switching works correctly, showing proper problem cards, 3) ❌ CRITICAL ISSUE: Explanation Start Button Not Working - Clicking the 'Start' button in the Explanation card does not navigate to the explanation2 page. URL remains on dashboard (/dashboard) instead of changing to /problem/explanation2, 4) ❌ ROOT CAUSE: The Start button click is not triggering proper navigation. This prevents testing the actual navigation fix (handleNavigationClick function) because users cannot even access the explanation stage to complete it, 5) ❌ TESTING BLOCKED: Cannot test the specific user scenario (Complete Explanation → Click Continue to Practice → Navigate to Practice2_1) because the first step (accessing explanation stage) fails. CONCLUSION: While the handleNavigationClick function may be implemented correctly, there's a more fundamental issue with the Start button navigation from dashboard to individual problem pages. The navigation bug testing cannot be completed until the Start button functionality is fixed."
+
   - task: "BUG 1: Practice2 Navigation Button Not Working"
     implemented: true
     working: true
