@@ -670,14 +670,14 @@ async def init_database():
                 }
             ],
             "hints_en": [
-                "Start by identifying what variable represents in this word problem.",
-                "Look for key phrases that indicate mathematical operations and relationships.",
-                "Think about what equation or inequality represents the constraint described."
+                "Think about the variable: t represents number of tickets. What's the price per ticket? What amount needs to be collected?",
+                "If you sell t tickets at 10 SAR each, how much will you collect? Does it need to be greater than or equal to 500?",
+                "Amount collected = price per ticket × number of tickets. Use ≥ symbol because it says \"at least\""
             ],
             "hints_ar": [
-                "ابدأ بتحديد ما يمثله المتغير في هذه المسألة الكلامية.",
-                "ابحث عن العبارات الأساسية التي تشير إلى العمليات والعلاقات الرياضية.",
-                "فكر في أي معادلة أو متباينة تمثل القيد الموصوف."
+                "فكر في المتغير: ت يمثل عدد التذاكر. ما هو سعر التذكرة الواحدة؟ وما المبلغ المطلوب جمعه؟",
+                "إذا بعت ت تذكرة بسعر ١٠ ريال، كم ستجمع؟ هل تحتاج أن يكون المبلغ أكبر من أو يساوي ٥٠٠؟",
+                "المبلغ المجموع = سعر التذكرة × عدد التذاكر. استخدم الرمز ≥ لأن المطلوب \"على الأقل\""
             ]
         },
         {
