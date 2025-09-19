@@ -417,7 +417,7 @@ const ProblemView = () => {
     return isCorrect;
   };
 
-  // UPDATED: Redesigned stage structure for proper Socratic tutoring
+  // FIXED: Redesigned stage structure for proper word problem handling
   const getStageType = (problemType, problemId) => {
     // PREPARATION STAGE: Final answer only with auto-hints
     if (problemType === 'preparation' || problemId?.startsWith('prep')) {
@@ -429,9 +429,9 @@ const ProblemView = () => {
       return 'explanation';
     }
     
-    // PRACTICE STAGES: Check if it's a word problem that needs hints
+    // PRACTICE STAGES: Check if it's a word problem that needs special handling
     if (problemType === 'practice' || problemId?.includes('practice')) {
-      // CRITICAL FIX: Word problems in practice stages should get progressive hints like preparation stages
+      // CRITICAL FIX: Word problems in practice stages should use 3-step process with hints
       const questionText = (language === 'en' ? problem?.question_en : problem?.question_ar) || '';
       const isWordProblem = questionText.length > 50 || 
                            questionText.toLowerCase().includes('word') ||
@@ -441,7 +441,7 @@ const ProblemView = () => {
                            questionText.includes('children');
       
       if (isWordProblem) {
-        return 'preparation'; // Use preparation logic which includes progressive hints
+        return 'practice_word'; // NEW: Special type for practice word problems
       } else {
         return 'practice'; // Regular step-by-step guided for non-word problems
       }
