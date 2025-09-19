@@ -196,11 +196,77 @@ class Section2HintsTester:
             self.log_test("practice2_2 Database Verification", False, f"Test execution error: {str(e)}")
             return False
 
+    def complete_required_stages_for_examprep2(self):
+        """Complete required stages to unlock examprep2 access"""
+        try:
+            # Complete practice2_1
+            practice2_1_attempt = {
+                "problem_id": "practice2_1",
+                "answer": "k < -12",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_1_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200 or not response.json().get("correct"):
+                return False
+            
+            # Complete practice2_2
+            practice2_2_attempt = {
+                "problem_id": "practice2_2",
+                "answer": "t ≥ 50",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=practice2_2_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200 or not response.json().get("correct"):
+                return False
+            
+            # Complete assessment2
+            assessment2_attempt = {
+                "problem_id": "assessment2",
+                "answer": "y < -12",
+                "hints_used": 0
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/students/{self.test_student_username}/attempt",
+                json=assessment2_attempt,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code != 200 or not response.json().get("correct"):
+                return False
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error completing required stages: {str(e)}")
+            return False
+
     def test_examprep2_database_verification(self):
         """Test examprep2 (candy distribution problem) database content and hints"""
         try:
             print("\n🍬 EXAMPREP2 (CANDY DISTRIBUTION PROBLEM) DATABASE VERIFICATION")
             print("Expected: Progressive Socratic hints that DO NOT show '15p ≥ 60' directly")
+            
+            # First complete required stages to unlock examprep2
+            if not self.complete_required_stages_for_examprep2():
+                self.log_test("examprep2 Prerequisites", False, 
+                            "❌ Failed to complete required stages (practice2_1, practice2_2, assessment2)")
+                return False
+            else:
+                self.log_test("examprep2 Prerequisites", True, 
+                            "✅ Completed required stages to unlock examprep2")
             
             # Get examprep2 problem data
             response = self.session.get(f"{self.base_url}/problems/examprep2?username={self.test_student_username}")
