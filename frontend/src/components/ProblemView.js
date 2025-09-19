@@ -1338,6 +1338,7 @@ const ProblemView = () => {
     setCurrentScore(100); // Reset score
     setExplanationStep(0); // Reset explanation step
     setExplanationAnswers(['', '', '']); // Reset explanation answers
+    setExplanationStepHistory([]); // Reset explanation step history
   };
 
   const handleNextProblem = () => {
