@@ -1911,11 +1911,18 @@ const ProblemView = () => {
                                               setExplanationAnswers(newAnswers);
                                               setShowEncouragement(language === 'en' ? "Excellent! Continue to the next step." : "ممتاز! انتقل للخطوة التالية.");
                                             } else {
+                                              // Store the final step answer in history
+                                              const newHistory = [...explanationStepHistory];
+                                              newHistory[explanationStep] = explanationAnswers[index];
+                                              setExplanationStepHistory(newHistory);
+                                              
                                               // Completed all steps for this level
                                               const newPracticeComplete = [...practiceComplete];
                                               newPracticeComplete[index] = true;
                                               setPracticeComplete(newPracticeComplete);
                                               setExplanationStep(0);
+                                              // Reset step history for next level
+                                              setExplanationStepHistory([]);
                                               const newAnswers = [...explanationAnswers];
                                               newAnswers[index] = '';
                                               setExplanationAnswers(newAnswers);
