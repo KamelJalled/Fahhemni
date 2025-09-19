@@ -49,6 +49,22 @@ const Dashboard = () => {
     { id: "inequality_expert", name: { en: "Inequality Expert", ar: "خبير المتباينات" }, description: { en: "Complete entire section", ar: "أكمل القسم بالكامل" }, icon: "crown" }
   ];
 
+  // NAVIGATION CONTEXT FIX: Helper to save navigation context
+  const saveNavigationContext = (section, stage = null) => {
+    const context = {
+      section: section,
+      stage: stage,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('mathapp_navigation_context', JSON.stringify(context));
+  };
+
+  // Update selected section and save context
+  const updateSelectedSection = (sectionId) => {
+    setSelectedSection(sectionId);
+    saveNavigationContext(sectionId);
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/');
