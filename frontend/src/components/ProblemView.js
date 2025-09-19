@@ -1315,6 +1315,37 @@ const ProblemView = () => {
     }
   };
 
+  // Helper function to get correct hint text based on language
+  const getHintText = (stage, step, language) => {
+    // CHECK the current language setting
+    const isEnglish = language === 'en' || localStorage.getItem('language') === 'en';
+    
+    const hints = {
+      'explanation_step1': {
+        ar: 'اقسم كلا الطرفين على 4',
+        en: 'Divide both sides by 4'
+      },
+      'explanation_step2': {
+        ar: 'بسّط الطرفين',
+        en: 'Simplify both sides'
+      },
+      'practice_step1': {
+        ar: 'اكتب المتباینة من الكلمات',
+        en: 'Write the inequality from the word problem'
+      },
+      'practice_step2': {
+        ar: 'قم بالعملية الحسابية',
+        en: 'Perform the mathematical operation'
+      },
+      'practice_step3': {
+        ar: 'بسّط للحصول على الإجابة النهائية',
+        en: 'Simplify to get the final answer'
+      }
+    };
+    
+    return hints[`${stage}_step${step}`]?.[isEnglish ? 'en' : 'ar'];
+  };
+
   const resetProblemState = () => {
     setStepAnswers(['', '', '']);
     setCurrentStep(0);
