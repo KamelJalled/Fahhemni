@@ -625,6 +625,12 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Rules Modal */}
+      <RulesModal 
+        isOpen={showRulesModal} 
+        onClose={() => setShowRulesModal(false)} 
+      />
     </div>
   );
 };
