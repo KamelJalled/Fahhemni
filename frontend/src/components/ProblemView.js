@@ -640,7 +640,11 @@ const ProblemView = () => {
           if (!securityCheck.access) {
             // SECURITY: Block access and redirect to dashboard with alert
             alert(`🔒 ${securityCheck.message}`);
-            navigate(securityCheck.redirectTo || '/dashboard');
+            if (securityCheck.redirectTo === '/dashboard' || !securityCheck.redirectTo) {
+              navigateToSectionDashboard();
+            } else {
+              navigate(securityCheck.redirectTo);
+            }
             return;
           }
         }
