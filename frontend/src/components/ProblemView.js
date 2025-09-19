@@ -537,7 +537,7 @@ const ProblemView = () => {
 
   useEffect(() => {
     if (!user || !problemId) {
-      navigate('/dashboard');
+      navigateToSectionDashboard();
       return;
     }
 
