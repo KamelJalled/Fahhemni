@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 2 Navigation Bug Testing
-Tests the critical navigation bug from practice2_2 to assessment2 where students cannot 
-access assessment2 after completing both practice stages.
+Backend API Test Suite for Math Tutoring App - Section 2 Progressive Socratic Hints Testing
+Tests the progressive Socratic hints system for Section 2 word problems as requested by user.
 
 CRITICAL REQUIREMENTS BEING TESTED:
-- Stage Access Control Logic: assessment2 requires both practice2_1 and practice2_2 completion
-- Practice Stage Completion Tracking: practice stages are properly marked as completed
-- Progress Data Verification: student progress data structure is correct
-- Assessment2 Access Bug: assessment2 becomes accessible after completing both practice stages
-- Navigation Sequence: prep2 → explanation2 → practice2_1 → practice2_2 → assessment2 → examprep2
+- practice2_2 (tickets problem): 3 progressive hints displayed on wrong attempts
+- examprep2 (candy problem): 3 progressive hints displayed on wrong attempts  
+- Database verification: hints are correctly stored in database
+- API response check: problem endpoints return correct hints
+- Critical test: wrong attempts trigger progressive hint display
+- Hint content verification: exact hint text matches expected Socratic guidance
 """
 
 import requests
