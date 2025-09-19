@@ -2553,7 +2553,7 @@ const ProblemView = () => {
                         onAction={(action) => {
                           const stageType = getStageType(problem.type, problem.id);
                           if (action === 'clear') {
-                            if (stageType === 'practice') {
+                            if (stageType === 'practice' || stageType === 'practice_word') {
                               const newStepAnswers = [...stepAnswers];
                               newStepAnswers[currentStep] = '';
                               setStepAnswers(newStepAnswers);
@@ -2561,7 +2561,7 @@ const ProblemView = () => {
                               setUserAnswer('');
                             }
                           } else if (action === 'backspace') {
-                            if (stageType === 'practice') {
+                            if (stageType === 'practice' || stageType === 'practice_word') {
                               const newStepAnswers = [...stepAnswers];
                               newStepAnswers[currentStep] = (newStepAnswers[currentStep] || '').slice(0, -1);
                               setStepAnswers(newStepAnswers);
