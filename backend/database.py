@@ -795,7 +795,7 @@ async def init_database():
     }
     await sections_collection.insert_one(section2)
     
-    # Section 3: Multi-Step Inequalities with Parentheses
+    # Section 3: Multi-Step Inequalities - COMPREHENSIVE UPDATE
     section3_problems = [
         {
             "id": "prep3",
