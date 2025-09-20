@@ -2354,7 +2354,10 @@ const ProblemView = () => {
                                                 setShowEncouragement(language === 'en' ? "Perfect! All examples completed!" : "ممتاز! تم إكمال جميع الأمثلة!");
                                               }
                                             }
-                                            setTimeout(() => setShowEncouragement(''), 3000);
+                                            // Only clear encouragement for incorrect answers, not for completion
+                                            if (!stepCorrect) {
+                                              setTimeout(() => setShowEncouragement(''), 3000);
+                                            }
                                           } else {
                                             // Find the hint index for this specific level and step
                                             const levelStepSolutions = problem.step_solutions?.filter(step => 
