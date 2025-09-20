@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 4 Compound Inequalities Testing
-Tests the comprehensive Section 4 Compound Inequalities implementation as requested by user.
+Backend API Test Suite for Math Tutoring App - Section 5 Absolute Value Inequalities Testing
+Tests the comprehensive Section 5 Absolute Value Inequalities implementation as requested by user.
 
 CRITICAL FEATURES BEING TESTED:
-Section 4 comprehensive Compound Inequalities implementation with all required components.
+Section 5 comprehensive Absolute Value Inequalities implementation with all required components.
 
 SPECIFIC VERIFICATION REQUIREMENTS:
-1. Section 4 API Endpoints - GET /api/problems/section/section4 returns all 6 problems
-2. Individual Problem Endpoints - Test each problem (prep4, explanation4, practice4_1, practice4_2, assessment4, examprep4)
-3. Updated Problem Content - prep4 changed from "3x + 5 < 2x + 9" to "3 < x + 2 < 8" with answer "1 < x < 6"
-4. Compound Inequality Structure - explanation4 has 3-level structure (Simple Compound, With Multiplication/Division, OR Inequalities)
+1. Section 5 API Endpoints - GET /api/problems/section/section5 returns all 6 problems
+2. Individual Problem Endpoints - Test each problem (prep5, explanation5, practice5_1, practice5_2, assessment5, examprep5)
+3. Updated Problem Content - prep5 changed from "-3 < 2x + 1 ≤ 7" to "|x| < 4" with absolute value answer "-4 < x < 4"
+4. Absolute Value Structure - explanation5 has 3-level structure (Simple Absolute Value, Greater Than, Complex Absolute Value)
 5. Step Solutions with Level Naming - Both interactive_examples and step_solutions arrays with Level 1B, 2B, 3B naming
-6. Temperature Conversion Word Problem - practice4_2 has Celsius to Fahrenheit conversion with 3-step structure
-7. Assessment Updates - assessment4 changed to "-8 ≤ 4 - 2x < 6" with answer "-1 < x ≤ 6"
-8. Exam Prep Updates - examprep4 changed to "2(x - 1) ≤ 6 AND x + 3 > 2" with answer "-1 < x ≤ 4"
+6. Manufacturing Tolerance Word Problem - practice5_2 has manufacturing tolerance problem with target length 50mm, tolerance ±0.5mm, 3-step structure
+7. Assessment Updates - assessment5 changed to "|4 - x| ≥ 3" with answer "x ≤ 1 or x ≥ 7"
+8. Exam Prep Updates - examprep5 changed to "|2x + 1| - 3 < 4" with answer "-4 < x < 3"
 9. Bilingual Content - Verify both English and Arabic content is properly structured
-10. Sign Flipping Logic - Test problems with negative coefficients for proper sign flipping documentation
+10. Absolute Value Conversion Rules - Test problems ensure proper conversion: |expr| < number → compound, |expr| > number → OR
 
 EXPECTED BACKEND BEHAVIOR:
-- All Section 4 endpoints should return proper compound inequality content
-- explanation4 should have both interactive_examples and step_solutions arrays
-- practice4_2 should be temperature conversion word problem with stage_type: "practice_word"
-- All problems should have proper bilingual support and compound inequality validation
+- All Section 5 endpoints should return proper absolute value inequality content
+- explanation5 should have both interactive_examples and step_solutions arrays
+- practice5_2 should be manufacturing tolerance word problem with stage_type: "practice_word"
+- All problems should have proper bilingual support and absolute value conversion rules
 """
 
 import requests
