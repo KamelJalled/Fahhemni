@@ -25,13 +25,14 @@ node_modules/
 next-env.d.ts
 *.tsbuildinfo
 
-# Production builds (keep frontend/build for deployment)
-# /build  # Commented out to include frontend/build
+# Production builds
 dist/
 dist
 
-# Environment files (comprehensive coverage)
-
+# Environment files
+.env
+.env.*
+!.env.example
 *token.json*
 *credentials.json*
 
@@ -48,7 +49,11 @@ dump.rdb
 
 # Python
 __pycache__/
-*pyc*
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
 venv/
 .venv/
 
@@ -79,102 +84,17 @@ agenthub/agents/youtube/db
 # Mobile development
 android-sdk/
 
-# Environment files (keep .env.example files)
-.env
-.env.*
-!.env.example
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
+# Test files and temporary files
+test_results*.json
+*_test.py
+debug_*.py
+step_*.py
+section*_test.py
+backend_test.py
+
+# Documentation (keeping main README.md)
+DEPLOYMENT_FIXED.md
+FIXES_SUMMARY.md
 -e 
 # Environment files
 *.env
