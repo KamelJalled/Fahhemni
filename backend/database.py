@@ -1109,22 +1109,23 @@ async def init_database():
             "id": "assessment3",
             "section_id": "section3",
             "type": ProblemType.ASSESSMENT,
-            "weight": 30,
-            "question_en": "4(x - 1) + 2 ≥ 18",
-            "question_ar": "٤(س - ١) + ٢ ≥ ١٨",
-            "answer": "x ≥ 5",
-            "answer_ar": "س ≥ ٥",
+            "weight": 20,
+            "question_en": "What is the solution set for the inequality: (x + 3) / 2 ≤ 5?",
+            "question_ar": "ما هي مجموعة حل المتباينة: (س + ٣) / ٢ ≤ ٥؟",
+            "answer": "x ≤ 7",
+            "answer_ar": "س ≤ ٧",
             "show_full_solution": False,
             "hide_answer": True,
+            "explanation_en": "Multiply both sides by 2, then subtract 3",
+            "explanation_ar": "اضرب كلا الطرفين في ٢، ثم اطرح ٣",
+            "final_answer_required": True,
             "hints_en": [
-                "Start by distributing 4 across the parentheses",
-                "Then combine like terms before solving",
-                "Follow the order of operations carefully"
+                "اضرب كلا الطرفين في ٢ أولاً / Multiply both sides by 2 first",
+                "بعد الضرب في ٢، اطرح ٣ / After multiplying by 2, subtract 3"
             ],
             "hints_ar": [
-                "ابدأ بتوزيع ٤ على الأقواس",
-                "ثم اجمع الحدود المتشابهة قبل الحل",
-                "اتبع ترتيب العمليات بعناية"
+                "اضرب كلا الطرفين في ٢ أولاً",
+                "بعد الضرب في ٢، اطرح ٣"
             ]
         },
         {
