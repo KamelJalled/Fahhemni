@@ -645,17 +645,18 @@ class Section3Tester:
                     
                     # CRITICAL TEST 4: Check step_solutions bilingual content
                     step_solutions = problem.get('step_solutions', [])
-                    for i, step in enumerate(step_solutions):
-                        step_en = step.get('step_en', '')
-                        step_ar = step.get('step_ar', '')
-                        
-                        if not step_en:
-                            print(f"     ❌ Step {i+1} missing step_en")
-                            all_bilingual = False
-                        
-                        if not step_ar:
-                            print(f"     ❌ Step {i+1} missing step_ar")
-                            all_bilingual = False
+                    if step_solutions:  # Only check if step_solutions exists
+                        for i, step in enumerate(step_solutions):
+                            step_en = step.get('step_en', '')
+                            step_ar = step.get('step_ar', '')
+                            
+                            if not step_en:
+                                print(f"     ❌ Step {i+1} missing step_en")
+                                all_bilingual = False
+                            
+                            if not step_ar:
+                                print(f"     ❌ Step {i+1} missing step_ar")
+                                all_bilingual = False
                     
                     if all([question_en, question_ar]):
                         print(f"     ✅ {problem_id} bilingual content verified")
