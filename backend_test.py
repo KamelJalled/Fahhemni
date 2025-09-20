@@ -35,12 +35,12 @@ from datetime import datetime
 # Use backend URL from frontend/.env as specified in review request
 BACKEND_URL = "https://math-bug-fixes.preview.emergentagent.com/api"
 
-class Section4CompoundInequalitiesTester:
+class Section5AbsoluteValueInequalitiesTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "section4_test_student"
+        self.test_student_username = "section5_test_student"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -84,7 +84,7 @@ class Section4CompoundInequalitiesTester:
             return False
 
     def create_test_student(self):
-        """Create test student for Section 4 testing"""
+        """Create test student for Section 5 testing"""
         try:
             test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
@@ -113,32 +113,32 @@ class Section4CompoundInequalitiesTester:
             self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
             return False
 
-    def test_section4_api_endpoints(self):
-        """Test Section 4 API Endpoints - GET /api/problems/section/section4"""
+    def test_section5_api_endpoints(self):
+        """Test Section 5 API Endpoints - GET /api/problems/section/section5"""
         try:
-            print("\n🎯 SECTION 4 API ENDPOINTS TESTING")
-            print("Testing GET /api/problems/section/section4 to ensure all 6 problems are returned")
+            print("\n🎯 SECTION 5 API ENDPOINTS TESTING")
+            print("Testing GET /api/problems/section/section5 to ensure all 6 problems are returned")
             
-            response = self.session.get(f"{self.base_url}/problems/section/section4")
+            response = self.session.get(f"{self.base_url}/problems/section/section5")
             
             if response.status_code == 200:
                 problems = response.json()
                 
-                print(f"   Found {len(problems)} problems in Section 4")
+                print(f"   Found {len(problems)} problems in Section 5")
                 
                 # CRITICAL TEST 1: Should have exactly 6 problems
                 if len(problems) != 6:
-                    self.log_test("Section 4 API Endpoints", False, 
+                    self.log_test("Section 5 API Endpoints", False, 
                                 f"❌ Expected 6 problems, got {len(problems)}")
                     return False
                 
                 # CRITICAL TEST 2: Verify all expected problem IDs are present
-                expected_problems = ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"]
+                expected_problems = ["prep5", "explanation5", "practice5_1", "practice5_2", "assessment5", "examprep5"]
                 found_problems = [p.get('id') for p in problems]
                 
                 missing_problems = [p for p in expected_problems if p not in found_problems]
                 if missing_problems:
-                    self.log_test("Section 4 API Endpoints", False, 
+                    self.log_test("Section 5 API Endpoints", False, 
                                 f"❌ Missing problems: {missing_problems}")
                     return False
                 
@@ -146,31 +146,31 @@ class Section4CompoundInequalitiesTester:
                 
                 # CRITICAL TEST 3: Verify section_id is correct for all problems
                 for problem in problems:
-                    if problem.get('section_id') != 'section4':
-                        self.log_test("Section 4 API Endpoints", False, 
+                    if problem.get('section_id') != 'section5':
+                        self.log_test("Section 5 API Endpoints", False, 
                                     f"❌ Problem {problem.get('id')} has wrong section_id: {problem.get('section_id')}")
                         return False
                 
-                self.log_test("Section 4 API Endpoints", True, 
-                            f"✅ Section 4 API endpoint returns all 6 problems correctly")
+                self.log_test("Section 5 API Endpoints", True, 
+                            f"✅ Section 5 API endpoint returns all 6 problems correctly")
                 return True
                 
             else:
-                self.log_test("Section 4 API Endpoints", False, 
-                            f"Failed to get Section 4 problems: HTTP {response.status_code}")
+                self.log_test("Section 5 API Endpoints", False, 
+                            f"Failed to get Section 5 problems: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Section 4 API Endpoints", False, f"Test execution error: {str(e)}")
+            self.log_test("Section 5 API Endpoints", False, f"Test execution error: {str(e)}")
             return False
 
     def test_individual_problem_endpoints(self):
-        """Test Individual Problem Endpoints for all 6 Section 4 problems"""
+        """Test Individual Problem Endpoints for all 6 Section 5 problems"""
         try:
             print("\n🎯 INDIVIDUAL PROBLEM ENDPOINTS TESTING")
-            print("Testing each problem endpoint (prep4, explanation4, practice4_1, practice4_2, assessment4, examprep4)")
+            print("Testing each problem endpoint (prep5, explanation5, practice5_1, practice5_2, assessment5, examprep5)")
             
-            expected_problems = ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"]
+            expected_problems = ["prep5", "explanation5", "practice5_1", "practice5_2", "assessment5", "examprep5"]
             all_problems_working = True
             
             for problem_id in expected_problems:
@@ -178,7 +178,7 @@ class Section4CompoundInequalitiesTester:
                 
                 # For assessment and examprep, we need username parameter
                 params = {}
-                if problem_id in ['assessment4', 'examprep4']:
+                if problem_id in ['assessment5', 'examprep5']:
                     params['username'] = self.test_student_username
                 
                 response = self.session.get(
@@ -218,81 +218,81 @@ class Section4CompoundInequalitiesTester:
             return False
 
     def test_updated_problem_content(self):
-        """Test Updated Problem Content - prep4 changed to compound inequality"""
+        """Test Updated Problem Content - prep5 changed to absolute value inequality"""
         try:
             print("\n🎯 UPDATED PROBLEM CONTENT TESTING")
-            print("Testing prep4 changed from '3x + 5 < 2x + 9' to '3 < x + 2 < 8' with answer '1 < x < 6'")
+            print("Testing prep5 changed from '-3 < 2x + 1 ≤ 7' to '|x| < 4' with answer '-4 < x < 4'")
             
-            response = self.session.get(f"{self.base_url}/problems/prep4")
+            response = self.session.get(f"{self.base_url}/problems/prep5")
             
             if response.status_code == 200:
-                prep4_data = response.json()
+                prep5_data = response.json()
                 
-                question_en = prep4_data.get('question_en', '')
-                answer = prep4_data.get('answer', '')
+                question_en = prep5_data.get('question_en', '')
+                answer = prep5_data.get('answer', '')
                 
                 print(f"   Current Question: {question_en}")
                 print(f"   Current Answer: {answer}")
                 
-                # CRITICAL TEST 1: Question should be compound inequality "3 < x + 2 < 8"
-                if "3 < x + 2 < 8" not in question_en:
+                # CRITICAL TEST 1: Question should be absolute value inequality "|x| < 4"
+                if "|x| < 4" not in question_en:
                     self.log_test("Updated Problem Content", False, 
-                                f"❌ prep4 question should contain '3 < x + 2 < 8', got: {question_en}")
+                                f"❌ prep5 question should contain '|x| < 4', got: {question_en}")
                     return False
                 
-                # CRITICAL TEST 2: Answer should be "1 < x < 6"
-                if answer != "1 < x < 6":
+                # CRITICAL TEST 2: Answer should be "-4 < x < 4"
+                if answer != "-4 < x < 4":
                     self.log_test("Updated Problem Content", False, 
-                                f"❌ prep4 answer should be '1 < x < 6', got: {answer}")
+                                f"❌ prep5 answer should be '-4 < x < 4', got: {answer}")
                     return False
                 
                 # CRITICAL TEST 3: Should be preparation type
-                if prep4_data.get('type') != 'preparation':
+                if prep5_data.get('type') != 'preparation':
                     self.log_test("Updated Problem Content", False, 
-                                f"❌ prep4 should be type 'preparation', got: {prep4_data.get('type')}")
+                                f"❌ prep5 should be type 'preparation', got: {prep5_data.get('type')}")
                     return False
                 
-                print(f"   ✅ prep4 has correct compound inequality content")
+                print(f"   ✅ prep5 has correct absolute value inequality content")
                 
                 self.log_test("Updated Problem Content", True, 
-                            f"✅ prep4 successfully updated to compound inequality '3 < x + 2 < 8' with answer '1 < x < 6'")
+                            f"✅ prep5 successfully updated to absolute value inequality '|x| < 4' with answer '-4 < x < 4'")
                 return True
                 
             else:
                 self.log_test("Updated Problem Content", False, 
-                            f"Failed to get prep4 data: HTTP {response.status_code}")
+                            f"Failed to get prep5 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
             self.log_test("Updated Problem Content", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_compound_inequality_structure(self):
-        """Test Compound Inequality Structure - explanation4 3-level structure"""
+    def test_absolute_value_structure(self):
+        """Test Absolute Value Structure - explanation5 3-level structure"""
         try:
-            print("\n🎯 COMPOUND INEQUALITY STRUCTURE TESTING")
-            print("Testing explanation4 has 3-level structure (Simple Compound, With Multiplication/Division, OR Inequalities)")
+            print("\n🎯 ABSOLUTE VALUE STRUCTURE TESTING")
+            print("Testing explanation5 has 3-level structure (Simple Absolute Value, Greater Than, Complex Absolute Value)")
             
-            response = self.session.get(f"{self.base_url}/problems/explanation4")
+            response = self.session.get(f"{self.base_url}/problems/explanation5")
             
             if response.status_code == 200:
-                explanation4_data = response.json()
+                explanation5_data = response.json()
                 
-                interactive_examples = explanation4_data.get('interactive_examples', [])
+                interactive_examples = explanation5_data.get('interactive_examples', [])
                 
                 print(f"   Found {len(interactive_examples)} interactive examples")
                 
                 # CRITICAL TEST 1: Should have exactly 3 interactive examples
                 if len(interactive_examples) != 3:
-                    self.log_test("Compound Inequality Structure", False, 
+                    self.log_test("Absolute Value Structure", False, 
                                 f"❌ Expected 3 interactive examples, got {len(interactive_examples)}")
                     return False
                 
                 # CRITICAL TEST 2: Verify the 3 levels are present
                 expected_levels = [
-                    "Simple Compound",
-                    "With Multiplication/Division", 
-                    "OR Inequalities"
+                    "Simple Absolute Value",
+                    "Greater Than", 
+                    "Complex Absolute Value"
                 ]
                 
                 found_levels = []
@@ -301,48 +301,48 @@ class Section4CompoundInequalitiesTester:
                     print(f"   Level {i+1}: {title}")
                     
                     # Check if this level matches expected content
-                    if "Simple Compound" in title or "Level 1" in title:
-                        found_levels.append("Simple Compound")
-                    elif "Multiplication" in title or "Division" in title or "Level 2" in title:
-                        found_levels.append("With Multiplication/Division")
-                    elif "OR" in title or "Level 3" in title:
-                        found_levels.append("OR Inequalities")
+                    if "Simple Absolute Value" in title or "Level 1" in title:
+                        found_levels.append("Simple Absolute Value")
+                    elif "Greater Than" in title or "Level 2" in title:
+                        found_levels.append("Greater Than")
+                    elif "Complex Absolute Value" in title or "Level 3" in title:
+                        found_levels.append("Complex Absolute Value")
                 
                 # Verify all 3 levels are found
                 missing_levels = [level for level in expected_levels if level not in found_levels]
                 if missing_levels:
-                    self.log_test("Compound Inequality Structure", False, 
+                    self.log_test("Absolute Value Structure", False, 
                                 f"❌ Missing levels: {missing_levels}")
                     return False
                 
-                print(f"   ✅ All 3 compound inequality levels found")
+                print(f"   ✅ All 3 absolute value inequality levels found")
                 
-                self.log_test("Compound Inequality Structure", True, 
-                            f"✅ explanation4 has correct 3-level structure for compound inequalities")
+                self.log_test("Absolute Value Structure", True, 
+                            f"✅ explanation5 has correct 3-level structure for absolute value inequalities")
                 return True
                 
             else:
-                self.log_test("Compound Inequality Structure", False, 
-                            f"Failed to get explanation4 data: HTTP {response.status_code}")
+                self.log_test("Absolute Value Structure", False, 
+                            f"Failed to get explanation5 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Compound Inequality Structure", False, f"Test execution error: {str(e)}")
+            self.log_test("Absolute Value Structure", False, f"Test execution error: {str(e)}")
             return False
 
     def test_step_solutions_with_level_naming(self):
         """Test Step Solutions with Level Naming - Both arrays with Level 1B, 2B, 3B naming"""
         try:
             print("\n🎯 STEP SOLUTIONS WITH LEVEL NAMING TESTING")
-            print("Testing explanation4 has both interactive_examples and step_solutions arrays with Level 1B, 2B, 3B naming")
+            print("Testing explanation5 has both interactive_examples and step_solutions arrays with Level 1B, 2B, 3B naming")
             
-            response = self.session.get(f"{self.base_url}/problems/explanation4")
+            response = self.session.get(f"{self.base_url}/problems/explanation5")
             
             if response.status_code == 200:
-                explanation4_data = response.json()
+                explanation5_data = response.json()
                 
-                interactive_examples = explanation4_data.get('interactive_examples', [])
-                step_solutions = explanation4_data.get('step_solutions', [])
+                interactive_examples = explanation5_data.get('interactive_examples', [])
+                step_solutions = explanation5_data.get('step_solutions', [])
                 
                 print(f"   Interactive Examples: {len(interactive_examples)}")
                 print(f"   Step Solutions: {len(step_solutions)}")
@@ -392,57 +392,57 @@ class Section4CompoundInequalitiesTester:
                 print(f"   ✅ All steps have possible_answers arrays")
                 
                 self.log_test("Step Solutions with Level Naming", True, 
-                            f"✅ explanation4 has both required arrays with proper Level 1B, 2B, 3B naming to prevent 'Inactive Practice' bug")
+                            f"✅ explanation5 has both required arrays with proper Level 1B, 2B, 3B naming to prevent 'Inactive Practice' bug")
                 return True
                 
             else:
                 self.log_test("Step Solutions with Level Naming", False, 
-                            f"Failed to get explanation4 data: HTTP {response.status_code}")
+                            f"Failed to get explanation5 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
             self.log_test("Step Solutions with Level Naming", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_temperature_conversion_word_problem(self):
-        """Test Temperature Conversion Word Problem - practice4_2"""
+    def test_manufacturing_tolerance_word_problem(self):
+        """Test Manufacturing Tolerance Word Problem - practice5_2"""
         try:
-            print("\n🎯 TEMPERATURE CONVERSION WORD PROBLEM TESTING")
-            print("Testing practice4_2 has Celsius to Fahrenheit temperature conversion with 3-step structure")
+            print("\n🎯 MANUFACTURING TOLERANCE WORD PROBLEM TESTING")
+            print("Testing practice5_2 has manufacturing tolerance problem with target length 50mm, tolerance ±0.5mm, 3-step structure")
             
-            response = self.session.get(f"{self.base_url}/problems/practice4_2")
+            response = self.session.get(f"{self.base_url}/problems/practice5_2")
             
             if response.status_code == 200:
-                practice4_2_data = response.json()
+                practice5_2_data = response.json()
                 
-                question_en = practice4_2_data.get('question_en', '')
-                stage_type = practice4_2_data.get('stage_type', '')
-                step_solutions = practice4_2_data.get('step_solutions', [])
+                question_en = practice5_2_data.get('question_en', '')
+                stage_type = practice5_2_data.get('stage_type', '')
+                step_solutions = practice5_2_data.get('step_solutions', [])
                 
                 print(f"   Question: {question_en[:100]}...")
                 print(f"   Stage Type: {stage_type}")
                 print(f"   Step Solutions: {len(step_solutions)}")
                 
-                # CRITICAL TEST 1: Should be temperature conversion problem
-                temperature_keywords = ['temperature', 'Celsius', 'Fahrenheit', '°C', '°F', 'F =', 'C']
-                if not any(keyword in question_en for keyword in temperature_keywords):
-                    self.log_test("Temperature Conversion Word Problem", False, 
-                                f"❌ practice4_2 should be temperature conversion problem, got: {question_en}")
+                # CRITICAL TEST 1: Should be manufacturing tolerance problem
+                tolerance_keywords = ['manufacturing', 'tolerance', '50mm', '±0.5', 'target length', 'machine', 'parts']
+                if not any(keyword in question_en for keyword in tolerance_keywords):
+                    self.log_test("Manufacturing Tolerance Word Problem", False, 
+                                f"❌ practice5_2 should be manufacturing tolerance problem, got: {question_en}")
                     return False
                 
                 # CRITICAL TEST 2: Should have stage_type "practice_word"
                 if stage_type != "practice_word":
-                    self.log_test("Temperature Conversion Word Problem", False, 
-                                f"❌ practice4_2 should have stage_type 'practice_word', got: {stage_type}")
+                    self.log_test("Manufacturing Tolerance Word Problem", False, 
+                                f"❌ practice5_2 should have stage_type 'practice_word', got: {stage_type}")
                     return False
                 
                 # CRITICAL TEST 3: Should have 3-step structure
                 if len(step_solutions) != 3:
-                    self.log_test("Temperature Conversion Word Problem", False, 
-                                f"❌ practice4_2 should have 3 step solutions, got {len(step_solutions)}")
+                    self.log_test("Manufacturing Tolerance Word Problem", False, 
+                                f"❌ practice5_2 should have 3 step solutions, got {len(step_solutions)}")
                     return False
                 
-                # CRITICAL TEST 4: Verify step content relates to temperature conversion
+                # CRITICAL TEST 4: Verify step content relates to manufacturing tolerance
                 for i, step in enumerate(step_solutions):
                     step_text = step.get('step_en', '')
                     possible_answers = step.get('possible_answers', [])
@@ -451,74 +451,74 @@ class Section4CompoundInequalitiesTester:
                     print(f"   Possible Answers: {possible_answers}")
                     
                     if not possible_answers:
-                        self.log_test("Temperature Conversion Word Problem", False, 
+                        self.log_test("Manufacturing Tolerance Word Problem", False, 
                                     f"❌ Step {i+1} missing possible_answers array")
                         return False
                 
-                print(f"   ✅ practice4_2 is temperature conversion word problem with 3-step structure")
+                print(f"   ✅ practice5_2 is manufacturing tolerance word problem with 3-step structure")
                 
-                self.log_test("Temperature Conversion Word Problem", True, 
-                            f"✅ practice4_2 has Celsius to Fahrenheit temperature conversion with proper 3-step structure and stage_type 'practice_word'")
+                self.log_test("Manufacturing Tolerance Word Problem", True, 
+                            f"✅ practice5_2 has manufacturing tolerance problem with target length 50mm, tolerance ±0.5mm, proper 3-step structure and stage_type 'practice_word'")
                 return True
                 
             else:
-                self.log_test("Temperature Conversion Word Problem", False, 
-                            f"Failed to get practice4_2 data: HTTP {response.status_code}")
+                self.log_test("Manufacturing Tolerance Word Problem", False, 
+                            f"Failed to get practice5_2 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Temperature Conversion Word Problem", False, f"Test execution error: {str(e)}")
+            self.log_test("Manufacturing Tolerance Word Problem", False, f"Test execution error: {str(e)}")
             return False
 
     def test_assessment_updates(self):
-        """Test Assessment Updates - assessment4 changed to new compound inequality"""
+        """Test Assessment Updates - assessment5 changed to new absolute value inequality"""
         try:
             print("\n🎯 ASSESSMENT UPDATES TESTING")
-            print("Testing assessment4 changed to '-8 ≤ 4 - 2x < 6' with answer '-1 < x ≤ 6'")
+            print("Testing assessment5 changed to '|4 - x| ≥ 3' with answer 'x ≤ 1 or x ≥ 7'")
             
             response = self.session.get(
-                f"{self.base_url}/problems/assessment4",
+                f"{self.base_url}/problems/assessment5",
                 params={"username": self.test_student_username}
             )
             
             if response.status_code == 200:
-                assessment4_data = response.json()
+                assessment5_data = response.json()
                 
-                question_en = assessment4_data.get('question_en', '')
-                answer = assessment4_data.get('answer', '')
-                problem_type = assessment4_data.get('type', '')
+                question_en = assessment5_data.get('question_en', '')
+                answer = assessment5_data.get('answer', '')
+                problem_type = assessment5_data.get('type', '')
                 
                 print(f"   Question: {question_en}")
                 print(f"   Answer: {answer}")
                 print(f"   Type: {problem_type}")
                 
-                # CRITICAL TEST 1: Question should contain "-8 ≤ 4 - 2x < 6"
-                if "-8 ≤ 4 - 2x < 6" not in question_en:
+                # CRITICAL TEST 1: Question should contain "|4 - x| ≥ 3"
+                if "|4 - x| ≥ 3" not in question_en:
                     self.log_test("Assessment Updates", False, 
-                                f"❌ assessment4 question should contain '-8 ≤ 4 - 2x < 6', got: {question_en}")
+                                f"❌ assessment5 question should contain '|4 - x| ≥ 3', got: {question_en}")
                     return False
                 
-                # CRITICAL TEST 2: Answer should be "-1 < x ≤ 6"
-                if answer != "-1 < x ≤ 6":
+                # CRITICAL TEST 2: Answer should be "x ≤ 1 or x ≥ 7"
+                if answer != "x ≤ 1 or x ≥ 7":
                     self.log_test("Assessment Updates", False, 
-                                f"❌ assessment4 answer should be '-1 < x ≤ 6', got: {answer}")
+                                f"❌ assessment5 answer should be 'x ≤ 1 or x ≥ 7', got: {answer}")
                     return False
                 
                 # CRITICAL TEST 3: Should be assessment type
                 if problem_type != 'assessment':
                     self.log_test("Assessment Updates", False, 
-                                f"❌ assessment4 should be type 'assessment', got: {problem_type}")
+                                f"❌ assessment5 should be type 'assessment', got: {problem_type}")
                     return False
                 
-                print(f"   ✅ assessment4 has correct compound inequality content")
+                print(f"   ✅ assessment5 has correct absolute value inequality content")
                 
                 self.log_test("Assessment Updates", True, 
-                            f"✅ assessment4 successfully updated to '-8 ≤ 4 - 2x < 6' with answer '-1 < x ≤ 6'")
+                            f"✅ assessment5 successfully updated to '|4 - x| ≥ 3' with answer 'x ≤ 1 or x ≥ 7'")
                 return True
                 
             else:
                 self.log_test("Assessment Updates", False, 
-                            f"Failed to get assessment4 data: HTTP {response.status_code}")
+                            f"Failed to get assessment5 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
@@ -526,54 +526,54 @@ class Section4CompoundInequalitiesTester:
             return False
 
     def test_exam_prep_updates(self):
-        """Test Exam Prep Updates - examprep4 changed to AND compound inequality"""
+        """Test Exam Prep Updates - examprep5 changed to complex absolute value inequality"""
         try:
             print("\n🎯 EXAM PREP UPDATES TESTING")
-            print("Testing examprep4 changed to '2(x - 1) ≤ 6 AND x + 3 > 2' with answer '-1 < x ≤ 4'")
+            print("Testing examprep5 changed to '|2x + 1| - 3 < 4' with answer '-4 < x < 3'")
             
             response = self.session.get(
-                f"{self.base_url}/problems/examprep4",
+                f"{self.base_url}/problems/examprep5",
                 params={"username": self.test_student_username}
             )
             
             if response.status_code == 200:
-                examprep4_data = response.json()
+                examprep5_data = response.json()
                 
-                question_en = examprep4_data.get('question_en', '')
-                answer = examprep4_data.get('answer', '')
-                problem_type = examprep4_data.get('type', '')
+                question_en = examprep5_data.get('question_en', '')
+                answer = examprep5_data.get('answer', '')
+                problem_type = examprep5_data.get('type', '')
                 
                 print(f"   Question: {question_en}")
                 print(f"   Answer: {answer}")
                 print(f"   Type: {problem_type}")
                 
-                # CRITICAL TEST 1: Question should contain "2(x - 1) ≤ 6 AND x + 3 > 2"
-                if "2(x - 1) ≤ 6" not in question_en or "x + 3 > 2" not in question_en:
+                # CRITICAL TEST 1: Question should contain "|2x + 1| - 3 < 4"
+                if "|2x + 1| - 3 < 4" not in question_en:
                     self.log_test("Exam Prep Updates", False, 
-                                f"❌ examprep4 question should contain '2(x - 1) ≤ 6 AND x + 3 > 2', got: {question_en}")
+                                f"❌ examprep5 question should contain '|2x + 1| - 3 < 4', got: {question_en}")
                     return False
                 
-                # CRITICAL TEST 2: Answer should be "-1 < x ≤ 4"
-                if answer != "-1 < x ≤ 4":
+                # CRITICAL TEST 2: Answer should be "-4 < x < 3"
+                if answer != "-4 < x < 3":
                     self.log_test("Exam Prep Updates", False, 
-                                f"❌ examprep4 answer should be '-1 < x ≤ 4', got: {answer}")
+                                f"❌ examprep5 answer should be '-4 < x < 3', got: {answer}")
                     return False
                 
                 # CRITICAL TEST 3: Should be examprep type
                 if problem_type != 'examprep':
                     self.log_test("Exam Prep Updates", False, 
-                                f"❌ examprep4 should be type 'examprep', got: {problem_type}")
+                                f"❌ examprep5 should be type 'examprep', got: {problem_type}")
                     return False
                 
-                print(f"   ✅ examprep4 has correct AND compound inequality content")
+                print(f"   ✅ examprep5 has correct complex absolute value inequality content")
                 
                 self.log_test("Exam Prep Updates", True, 
-                            f"✅ examprep4 successfully updated to '2(x - 1) ≤ 6 AND x + 3 > 2' with answer '-1 < x ≤ 4'")
+                            f"✅ examprep5 successfully updated to '|2x + 1| - 3 < 4' with answer '-4 < x < 3'")
                 return True
                 
             else:
                 self.log_test("Exam Prep Updates", False, 
-                            f"Failed to get examprep4 data: HTTP {response.status_code}")
+                            f"Failed to get examprep5 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
@@ -584,9 +584,9 @@ class Section4CompoundInequalitiesTester:
         """Test Bilingual Content - Verify both English and Arabic content"""
         try:
             print("\n🎯 BILINGUAL CONTENT TESTING")
-            print("Testing all Section 4 problems have proper English and Arabic content")
+            print("Testing all Section 5 problems have proper English and Arabic content")
             
-            problems_to_test = ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"]
+            problems_to_test = ["prep5", "explanation5", "practice5_1", "practice5_2", "assessment5", "examprep5"]
             all_bilingual_working = True
             
             for problem_id in problems_to_test:
@@ -594,7 +594,7 @@ class Section4CompoundInequalitiesTester:
                 
                 # For assessment and examprep, we need username parameter
                 params = {}
-                if problem_id in ['assessment4', 'examprep4']:
+                if problem_id in ['assessment5', 'examprep5']:
                     params['username'] = self.test_student_username
                 
                 response = self.session.get(
@@ -647,103 +647,110 @@ class Section4CompoundInequalitiesTester:
             
             if all_bilingual_working:
                 self.log_test("Bilingual Content", True, 
-                            f"✅ All Section 4 problems have proper English and Arabic content")
+                            f"✅ All Section 5 problems have proper English and Arabic content")
                 return True
             else:
                 self.log_test("Bilingual Content", False, 
-                            f"❌ Some Section 4 problems missing bilingual content")
+                            f"❌ Some Section 5 problems missing bilingual content")
                 return False
                 
         except Exception as e:
             self.log_test("Bilingual Content", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_sign_flipping_logic(self):
-        """Test Sign Flipping Logic - Test problems with negative coefficients"""
+    def test_absolute_value_conversion_rules(self):
+        """Test Absolute Value Conversion Rules - |expr| < number → compound, |expr| > number → OR"""
         try:
-            print("\n🎯 SIGN FLIPPING LOGIC TESTING")
-            print("Testing problems with negative coefficients for proper sign flipping documentation")
+            print("\n🎯 ABSOLUTE VALUE CONVERSION RULES TESTING")
+            print("Testing problems ensure proper conversion: |expr| < number → compound, |expr| > number → OR")
             
-            # Test assessment4 which has negative coefficient: -8 ≤ 4 - 2x < 6
+            # Test prep5 (|x| < 4 should convert to compound: -4 < x < 4)
+            response = self.session.get(f"{self.base_url}/problems/prep5")
+            
+            if response.status_code == 200:
+                prep5_data = response.json()
+                
+                question_en = prep5_data.get('question_en', '')
+                answer = prep5_data.get('answer', '')
+                
+                print(f"   prep5 Question: {question_en}")
+                print(f"   prep5 Answer: {answer}")
+                
+                # CRITICAL TEST 1: |x| < 4 should convert to compound inequality
+                if "|x| < 4" in question_en and answer == "-4 < x < 4":
+                    print(f"   ✅ prep5 correctly converts |x| < 4 to compound inequality -4 < x < 4")
+                else:
+                    self.log_test("Absolute Value Conversion Rules", False, 
+                                f"❌ prep5 should convert |x| < 4 to compound inequality -4 < x < 4")
+                    return False
+            
+            # Test assessment5 (|4 - x| ≥ 3 should convert to OR: x ≤ 1 or x ≥ 7)
             response = self.session.get(
-                f"{self.base_url}/problems/assessment4",
+                f"{self.base_url}/problems/assessment5",
                 params={"username": self.test_student_username}
             )
             
             if response.status_code == 200:
-                assessment4_data = response.json()
+                assessment5_data = response.json()
                 
-                question_en = assessment4_data.get('question_en', '')
-                answer = assessment4_data.get('answer', '')
-                explanation_en = assessment4_data.get('explanation_en', '')
-                hints_en = assessment4_data.get('hints_en', [])
+                question_en = assessment5_data.get('question_en', '')
+                answer = assessment5_data.get('answer', '')
                 
-                print(f"   Question: {question_en}")
-                print(f"   Answer: {answer}")
-                print(f"   Explanation: {explanation_en}")
-                print(f"   Hints: {hints_en}")
+                print(f"   assessment5 Question: {question_en}")
+                print(f"   assessment5 Answer: {answer}")
                 
-                # CRITICAL TEST 1: Problem should involve negative coefficient (-2x)
-                if "-2x" not in question_en:
-                    self.log_test("Sign Flipping Logic", False, 
-                                f"❌ assessment4 should contain negative coefficient '-2x', got: {question_en}")
+                # CRITICAL TEST 2: |4 - x| ≥ 3 should convert to OR inequality
+                if "|4 - x| ≥ 3" in question_en and answer == "x ≤ 1 or x ≥ 7":
+                    print(f"   ✅ assessment5 correctly converts |4 - x| ≥ 3 to OR inequality x ≤ 1 or x ≥ 7")
+                else:
+                    self.log_test("Absolute Value Conversion Rules", False, 
+                                f"❌ assessment5 should convert |4 - x| ≥ 3 to OR inequality x ≤ 1 or x ≥ 7")
                     return False
+            
+            # Test examprep5 (|2x + 1| - 3 < 4 should simplify to |2x + 1| < 7, then compound: -4 < x < 3)
+            response = self.session.get(
+                f"{self.base_url}/problems/examprep5",
+                params={"username": self.test_student_username}
+            )
+            
+            if response.status_code == 200:
+                examprep5_data = response.json()
                 
-                # CRITICAL TEST 2: Explanation or hints should mention sign flipping
-                sign_flip_keywords = ['flip', 'reverse', 'change', 'sign', 'negative', 'divide by -', 'multiply by -']
-                sign_flip_mentioned = False
+                question_en = examprep5_data.get('question_en', '')
+                answer = examprep5_data.get('answer', '')
                 
-                # Check explanation
-                if explanation_en:
-                    if any(keyword in explanation_en.lower() for keyword in sign_flip_keywords):
-                        sign_flip_mentioned = True
+                print(f"   examprep5 Question: {question_en}")
+                print(f"   examprep5 Answer: {answer}")
                 
-                # Check hints
-                for hint in hints_en:
-                    if any(keyword in hint.lower() for keyword in sign_flip_keywords):
-                        sign_flip_mentioned = True
-                        break
-                
-                if not sign_flip_mentioned:
-                    self.log_test("Sign Flipping Logic", False, 
-                                f"❌ assessment4 should mention sign flipping rules in explanation or hints")
+                # CRITICAL TEST 3: |2x + 1| - 3 < 4 should convert to compound inequality
+                if "|2x + 1| - 3 < 4" in question_en and answer == "-4 < x < 3":
+                    print(f"   ✅ examprep5 correctly converts |2x + 1| - 3 < 4 to compound inequality -4 < x < 3")
+                else:
+                    self.log_test("Absolute Value Conversion Rules", False, 
+                                f"❌ examprep5 should convert |2x + 1| - 3 < 4 to compound inequality -4 < x < 3")
                     return False
-                
-                # CRITICAL TEST 3: Answer should reflect proper sign flipping
-                # Original: -8 ≤ 4 - 2x < 6
-                # After subtracting 4: -12 ≤ -2x < 2  
-                # After dividing by -2 and flipping: -1 < x ≤ 6
-                if answer != "-1 < x ≤ 6":
-                    self.log_test("Sign Flipping Logic", False, 
-                                f"❌ assessment4 answer should reflect proper sign flipping: '-1 < x ≤ 6', got: {answer}")
-                    return False
-                
-                print(f"   ✅ assessment4 properly documents sign flipping logic")
-                
-                self.log_test("Sign Flipping Logic", True, 
-                            f"✅ Problems with negative coefficients properly document sign flipping rules")
-                return True
-                
-            else:
-                self.log_test("Sign Flipping Logic", False, 
-                            f"Failed to get assessment4 data: HTTP {response.status_code}")
-                return False
+            
+            print(f"   ✅ All absolute value conversion rules working correctly")
+            
+            self.log_test("Absolute Value Conversion Rules", True, 
+                        f"✅ Problems ensure proper conversion: |expr| < number → compound, |expr| > number → OR")
+            return True
                 
         except Exception as e:
-            self.log_test("Sign Flipping Logic", False, f"Test execution error: {str(e)}")
+            self.log_test("Absolute Value Conversion Rules", False, f"Test execution error: {str(e)}")
             return False
 
-    def generate_section4_summary(self, results, critical_failures):
-        """Generate comprehensive summary of Section 4 testing"""
+    def generate_section5_summary(self, results, critical_failures):
+        """Generate comprehensive summary of Section 5 testing"""
         print("\n" + "=" * 80)
-        print("🎯 SECTION 4 COMPOUND INEQUALITIES COMPREHENSIVE TESTING SUMMARY")
+        print("🎯 SECTION 5 ABSOLUTE VALUE INEQUALITIES COMPREHENSIVE TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL SECTION 4 TESTING RESULTS:")
+        print(f"\n📈 OVERALL SECTION 5 TESTING RESULTS:")
         print(f"   Total Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
@@ -755,62 +762,62 @@ class Section4CompoundInequalitiesTester:
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL SECTION 4 ISSUES:")
+            print(f"\n🚨 CRITICAL SECTION 5 ISSUES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
-            print(f"\n⚠️  SECTION 4 STATUS: INCOMPLETE - Implementation needs fixes!")
-            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix remaining Section 4 issues")
+            print(f"\n⚠️  SECTION 5 STATUS: INCOMPLETE - Implementation needs fixes!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix remaining Section 5 issues")
         else:
-            print(f"\n🎉 NO CRITICAL SECTION 4 ISSUES DETECTED")
+            print(f"\n🎉 NO CRITICAL SECTION 5 ISSUES DETECTED")
         
-        print(f"\n📋 SECTION 4 COMPOUND INEQUALITIES STATUS:")
+        print(f"\n📋 SECTION 5 ABSOLUTE VALUE INEQUALITIES STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL SECTION 4 TESTS PASSED")
-            print("   ✅ Section 4 API endpoints working")
+            print("   🎯 ALL SECTION 5 TESTS PASSED")
+            print("   ✅ Section 5 API endpoints working")
             print("   ✅ Individual problem endpoints accessible")
-            print("   ✅ prep4 updated to compound inequality")
-            print("   ✅ explanation4 has 3-level structure")
+            print("   ✅ prep5 updated to absolute value inequality")
+            print("   ✅ explanation5 has 3-level structure")
             print("   ✅ Step solutions with Level 1B, 2B, 3B naming")
-            print("   ✅ Temperature conversion word problem implemented")
+            print("   ✅ Manufacturing tolerance word problem implemented")
             print("   ✅ Assessment and exam prep updated")
             print("   ✅ Bilingual content properly structured")
-            print("   ✅ Sign flipping logic documented")
-            print("   🛡️  SECTION 4 COMPOUND INEQUALITIES: FULLY WORKING")
+            print("   ✅ Absolute value conversion rules working")
+            print("   🛡️  SECTION 5 ABSOLUTE VALUE INEQUALITIES: FULLY WORKING")
         else:
-            print("   ⚠️  SECTION 4 IMPLEMENTATION ISSUES DETECTED")
-            print("   🔧 Section 4 compound inequalities need enhancement")
-            print("   🚨 STUDENT EXPERIENCE: MAY BE BROKEN FOR SECTION 4")
+            print("   ⚠️  SECTION 5 IMPLEMENTATION ISSUES DETECTED")
+            print("   🔧 Section 5 absolute value inequalities need enhancement")
+            print("   🚨 STUDENT EXPERIENCE: MAY BE BROKEN FOR SECTION 5")
         
         print("\n" + "=" * 80)
 
-    def run_section4_tests(self):
-        """Run comprehensive Section 4 compound inequalities tests"""
+    def run_section5_tests(self):
+        """Run comprehensive Section 5 absolute value inequalities tests"""
         print("=" * 80)
-        print("🎯 SECTION 4 COMPOUND INEQUALITIES COMPREHENSIVE TESTING")
+        print("🎯 SECTION 5 ABSOLUTE VALUE INEQUALITIES COMPREHENSIVE TESTING")
         print("=" * 80)
-        print("Testing comprehensive Section 4 Compound Inequalities implementation")
+        print("Testing comprehensive Section 5 Absolute Value Inequalities implementation")
         
-        # Test categories for Section 4
+        # Test categories for Section 5
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
             ("Test Student Creation", self.create_test_student, "critical"),
-            ("Section 4 API Endpoints", self.test_section4_api_endpoints, "critical"),
+            ("Section 5 API Endpoints", self.test_section5_api_endpoints, "critical"),
             ("Individual Problem Endpoints", self.test_individual_problem_endpoints, "critical"),
             ("Updated Problem Content", self.test_updated_problem_content, "critical"),
-            ("Compound Inequality Structure", self.test_compound_inequality_structure, "critical"),
+            ("Absolute Value Structure", self.test_absolute_value_structure, "critical"),
             ("Step Solutions with Level Naming", self.test_step_solutions_with_level_naming, "critical"),
-            ("Temperature Conversion Word Problem", self.test_temperature_conversion_word_problem, "critical"),
+            ("Manufacturing Tolerance Word Problem", self.test_manufacturing_tolerance_word_problem, "critical"),
             ("Assessment Updates", self.test_assessment_updates, "critical"),
             ("Exam Prep Updates", self.test_exam_prep_updates, "critical"),
             ("Bilingual Content", self.test_bilingual_content, "high"),
-            ("Sign Flipping Logic", self.test_sign_flipping_logic, "high")
+            ("Absolute Value Conversion Rules", self.test_absolute_value_conversion_rules, "critical")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 SECTION 4 TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 SECTION 5 TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -825,28 +832,28 @@ class Section4CompoundInequalitiesTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive Section 4 summary
-        self.generate_section4_summary(results, critical_failures)
+        # Generate comprehensive Section 5 summary
+        self.generate_section5_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run Section 4 compound inequalities tests"""
-    print("🚀 Starting SECTION 4 COMPOUND INEQUALITIES COMPREHENSIVE Testing...")
-    print("🎯 Goal: Verify comprehensive Section 4 Compound Inequalities implementation")
+    """Main function to run Section 5 absolute value inequalities tests"""
+    print("🚀 Starting SECTION 5 ABSOLUTE VALUE INEQUALITIES COMPREHENSIVE Testing...")
+    print("🎯 Goal: Verify comprehensive Section 5 Absolute Value Inequalities implementation")
     
-    tester = Section4CompoundInequalitiesTester(BACKEND_URL)
-    results = tester.run_section4_tests()
+    tester = Section5AbsoluteValueInequalitiesTester(BACKEND_URL)
+    results = tester.run_section5_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
     
     if failed_tests > 0:
-        print(f"\n🚨 SECTION 4 ALERT: {failed_tests} test(s) failed!")
-        print("🔧 Section 4 compound inequalities need backend enhancement")
+        print(f"\n🚨 SECTION 5 ALERT: {failed_tests} test(s) failed!")
+        print("🔧 Section 5 absolute value inequalities need backend enhancement")
     else:
-        print(f"\n🛡️  SECTION 4 CONFIRMED: All tests passed!")
-        print("✅ Section 4 Compound Inequalities implementation is working correctly")
+        print(f"\n🛡️  SECTION 5 CONFIRMED: All tests passed!")
+        print("✅ Section 5 Absolute Value Inequalities implementation is working correctly")
     
     sys.exit(failed_tests)
 
