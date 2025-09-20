@@ -35,12 +35,12 @@ from datetime import datetime
 # Use backend URL from frontend/.env as specified in review request
 BACKEND_URL = "https://math-bug-fixes.preview.emergentagent.com/api"
 
-class WordProblemLogicTester:
+class Section4CompoundInequalitiesTester:
     def __init__(self, base_url):
         self.base_url = base_url
         self.session = requests.Session()
         self.test_results = []
-        self.test_student_username = "word_problem_test_student"
+        self.test_student_username = "section4_test_student"
         
     def log_test(self, test_name, success, details="", response_data=None):
         """Log test results"""
@@ -84,7 +84,7 @@ class WordProblemLogicTester:
             return False
 
     def create_test_student(self):
-        """Create test student for word problem testing"""
+        """Create test student for Section 4 testing"""
         try:
             test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
@@ -113,49 +113,336 @@ class WordProblemLogicTester:
             self.log_test("Test Student Creation", False, f"Request error: {str(e)}")
             return False
 
-    def test_practice2_2_word_problem_structure(self):
-        """Test Section 2 practice2_2 word problem structure and 3-step process"""
+    def test_section4_api_endpoints(self):
+        """Test Section 4 API Endpoints - GET /api/problems/section/section4"""
         try:
-            print("\n🎯 SECTION 2 PRACTICE WORD PROBLEM STRUCTURE TESTING")
-            print("Testing practice2_2 problem: 'Tickets must be sold at SAR 10 each to collect at least SAR 500'")
+            print("\n🎯 SECTION 4 API ENDPOINTS TESTING")
+            print("Testing GET /api/problems/section/section4 to ensure all 6 problems are returned")
             
-            # Get practice2_2 problem to verify structure
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
+            response = self.session.get(f"{self.base_url}/problems/section/section4")
             
             if response.status_code == 200:
-                problem_data = response.json()
+                problems = response.json()
                 
-                print(f"   Problem: {problem_data.get('question_en', 'N/A')}")
-                print(f"   Expected Answer: {problem_data.get('answer', 'N/A')}")
-                print(f"   Problem Type: {problem_data.get('type', 'N/A')}")
+                print(f"   Found {len(problems)} problems in Section 4")
                 
-                # CRITICAL TEST 1: Verify it's a practice type problem
-                if problem_data.get('type') != 'practice':
-                    self.log_test("Practice2_2 Word Problem Structure", False, 
-                                f"❌ Expected type 'practice', got '{problem_data.get('type')}'")
+                # CRITICAL TEST 1: Should have exactly 6 problems
+                if len(problems) != 6:
+                    self.log_test("Section 4 API Endpoints", False, 
+                                f"❌ Expected 6 problems, got {len(problems)}")
                     return False
                 
-                # CRITICAL TEST 2: Verify step_solutions array exists and has 3 steps
-                step_solutions = problem_data.get('step_solutions', [])
-                if not step_solutions:
-                    self.log_test("Practice2_2 Word Problem Structure", False, 
-                                f"❌ Missing step_solutions array for practice word problem")
+                # CRITICAL TEST 2: Verify all expected problem IDs are present
+                expected_problems = ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"]
+                found_problems = [p.get('id') for p in problems]
+                
+                missing_problems = [p for p in expected_problems if p not in found_problems]
+                if missing_problems:
+                    self.log_test("Section 4 API Endpoints", False, 
+                                f"❌ Missing problems: {missing_problems}")
                     return False
                 
-                if len(step_solutions) != 3:
-                    self.log_test("Practice2_2 Word Problem Structure", False, 
-                                f"❌ Expected 3 step_solutions, got {len(step_solutions)}")
+                print(f"   ✅ All 6 expected problems found: {found_problems}")
+                
+                # CRITICAL TEST 3: Verify section_id is correct for all problems
+                for problem in problems:
+                    if problem.get('section_id') != 'section4':
+                        self.log_test("Section 4 API Endpoints", False, 
+                                    f"❌ Problem {problem.get('id')} has wrong section_id: {problem.get('section_id')}")
+                        return False
+                
+                self.log_test("Section 4 API Endpoints", True, 
+                            f"✅ Section 4 API endpoint returns all 6 problems correctly")
+                return True
+                
+            else:
+                self.log_test("Section 4 API Endpoints", False, 
+                            f"Failed to get Section 4 problems: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Section 4 API Endpoints", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_individual_problem_endpoints(self):
+        """Test Individual Problem Endpoints for all 6 Section 4 problems"""
+        try:
+            print("\n🎯 INDIVIDUAL PROBLEM ENDPOINTS TESTING")
+            print("Testing each problem endpoint (prep4, explanation4, practice4_1, practice4_2, assessment4, examprep4)")
+            
+            expected_problems = ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"]
+            all_problems_working = True
+            
+            for problem_id in expected_problems:
+                print(f"\n   Testing GET /api/problems/{problem_id}")
+                
+                # For assessment and examprep, we need username parameter
+                params = {}
+                if problem_id in ['assessment4', 'examprep4']:
+                    params['username'] = self.test_student_username
+                
+                response = self.session.get(
+                    f"{self.base_url}/problems/{problem_id}",
+                    params=params
+                )
+                
+                if response.status_code == 200:
+                    problem_data = response.json()
+                    
+                    # Verify basic structure
+                    required_fields = ['id', 'section_id', 'type', 'question_en', 'question_ar']
+                    missing_fields = [field for field in required_fields if field not in problem_data]
+                    
+                    if missing_fields:
+                        print(f"     ❌ Missing required fields: {missing_fields}")
+                        all_problems_working = False
+                    else:
+                        print(f"     ✅ {problem_id} endpoint working - Type: {problem_data.get('type')}")
+                        print(f"     Question EN: {problem_data.get('question_en', 'N/A')[:80]}...")
+                        print(f"     Answer: {problem_data.get('answer', 'N/A')}")
+                else:
+                    print(f"     ❌ Failed to get {problem_id}: HTTP {response.status_code}")
+                    all_problems_working = False
+            
+            if all_problems_working:
+                self.log_test("Individual Problem Endpoints", True, 
+                            f"✅ All 6 individual problem endpoints working correctly")
+                return True
+            else:
+                self.log_test("Individual Problem Endpoints", False, 
+                            f"❌ Some individual problem endpoints failed")
+                return False
+                
+        except Exception as e:
+            self.log_test("Individual Problem Endpoints", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_updated_problem_content(self):
+        """Test Updated Problem Content - prep4 changed to compound inequality"""
+        try:
+            print("\n🎯 UPDATED PROBLEM CONTENT TESTING")
+            print("Testing prep4 changed from '3x + 5 < 2x + 9' to '3 < x + 2 < 8' with answer '1 < x < 6'")
+            
+            response = self.session.get(f"{self.base_url}/problems/prep4")
+            
+            if response.status_code == 200:
+                prep4_data = response.json()
+                
+                question_en = prep4_data.get('question_en', '')
+                answer = prep4_data.get('answer', '')
+                
+                print(f"   Current Question: {question_en}")
+                print(f"   Current Answer: {answer}")
+                
+                # CRITICAL TEST 1: Question should be compound inequality "3 < x + 2 < 8"
+                if "3 < x + 2 < 8" not in question_en:
+                    self.log_test("Updated Problem Content", False, 
+                                f"❌ prep4 question should contain '3 < x + 2 < 8', got: {question_en}")
                     return False
                 
-                print(f"   ✅ Found {len(step_solutions)} step solutions (expected 3)")
+                # CRITICAL TEST 2: Answer should be "1 < x < 6"
+                if answer != "1 < x < 6":
+                    self.log_test("Updated Problem Content", False, 
+                                f"❌ prep4 answer should be '1 < x < 6', got: {answer}")
+                    return False
                 
-                # CRITICAL TEST 3: Verify each step has proper structure
-                expected_steps = [
-                    "Step 1: Write the inequality from the word problem",
-                    "Step 2: Divide both sides by 10 (show the operation)", 
-                    "Step 3: Simplify to final answer"
+                # CRITICAL TEST 3: Should be preparation type
+                if prep4_data.get('type') != 'preparation':
+                    self.log_test("Updated Problem Content", False, 
+                                f"❌ prep4 should be type 'preparation', got: {prep4_data.get('type')}")
+                    return False
+                
+                print(f"   ✅ prep4 has correct compound inequality content")
+                
+                self.log_test("Updated Problem Content", True, 
+                            f"✅ prep4 successfully updated to compound inequality '3 < x + 2 < 8' with answer '1 < x < 6'")
+                return True
+                
+            else:
+                self.log_test("Updated Problem Content", False, 
+                            f"Failed to get prep4 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Updated Problem Content", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_compound_inequality_structure(self):
+        """Test Compound Inequality Structure - explanation4 3-level structure"""
+        try:
+            print("\n🎯 COMPOUND INEQUALITY STRUCTURE TESTING")
+            print("Testing explanation4 has 3-level structure (Simple Compound, With Multiplication/Division, OR Inequalities)")
+            
+            response = self.session.get(f"{self.base_url}/problems/explanation4")
+            
+            if response.status_code == 200:
+                explanation4_data = response.json()
+                
+                interactive_examples = explanation4_data.get('interactive_examples', [])
+                
+                print(f"   Found {len(interactive_examples)} interactive examples")
+                
+                # CRITICAL TEST 1: Should have exactly 3 interactive examples
+                if len(interactive_examples) != 3:
+                    self.log_test("Compound Inequality Structure", False, 
+                                f"❌ Expected 3 interactive examples, got {len(interactive_examples)}")
+                    return False
+                
+                # CRITICAL TEST 2: Verify the 3 levels are present
+                expected_levels = [
+                    "Simple Compound",
+                    "With Multiplication/Division", 
+                    "OR Inequalities"
                 ]
                 
+                found_levels = []
+                for i, example in enumerate(interactive_examples):
+                    title = example.get('title_en', '')
+                    print(f"   Level {i+1}: {title}")
+                    
+                    # Check if this level matches expected content
+                    if "Simple Compound" in title or "Level 1" in title:
+                        found_levels.append("Simple Compound")
+                    elif "Multiplication" in title or "Division" in title or "Level 2" in title:
+                        found_levels.append("With Multiplication/Division")
+                    elif "OR" in title or "Level 3" in title:
+                        found_levels.append("OR Inequalities")
+                
+                # Verify all 3 levels are found
+                missing_levels = [level for level in expected_levels if level not in found_levels]
+                if missing_levels:
+                    self.log_test("Compound Inequality Structure", False, 
+                                f"❌ Missing levels: {missing_levels}")
+                    return False
+                
+                print(f"   ✅ All 3 compound inequality levels found")
+                
+                self.log_test("Compound Inequality Structure", True, 
+                            f"✅ explanation4 has correct 3-level structure for compound inequalities")
+                return True
+                
+            else:
+                self.log_test("Compound Inequality Structure", False, 
+                            f"Failed to get explanation4 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Compound Inequality Structure", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_step_solutions_with_level_naming(self):
+        """Test Step Solutions with Level Naming - Both arrays with Level 1B, 2B, 3B naming"""
+        try:
+            print("\n🎯 STEP SOLUTIONS WITH LEVEL NAMING TESTING")
+            print("Testing explanation4 has both interactive_examples and step_solutions arrays with Level 1B, 2B, 3B naming")
+            
+            response = self.session.get(f"{self.base_url}/problems/explanation4")
+            
+            if response.status_code == 200:
+                explanation4_data = response.json()
+                
+                interactive_examples = explanation4_data.get('interactive_examples', [])
+                step_solutions = explanation4_data.get('step_solutions', [])
+                
+                print(f"   Interactive Examples: {len(interactive_examples)}")
+                print(f"   Step Solutions: {len(step_solutions)}")
+                
+                # CRITICAL TEST 1: Both arrays must exist
+                if not interactive_examples:
+                    self.log_test("Step Solutions with Level Naming", False, 
+                                f"❌ Missing interactive_examples array")
+                    return False
+                
+                if not step_solutions:
+                    self.log_test("Step Solutions with Level Naming", False, 
+                                f"❌ Missing step_solutions array - this causes 'Inactive Practice' bug")
+                    return False
+                
+                # CRITICAL TEST 2: Verify Level 1B, 2B, 3B naming convention in step_solutions
+                level_naming_found = []
+                for step in step_solutions:
+                    step_text = step.get('step_en', '')
+                    print(f"   Step: {step_text}")
+                    
+                    if "Level 1B" in step_text:
+                        level_naming_found.append("1B")
+                    elif "Level 2B" in step_text:
+                        level_naming_found.append("2B")
+                    elif "Level 3B" in step_text:
+                        level_naming_found.append("3B")
+                
+                # Verify all level naming conventions are present
+                expected_levels = ["1B", "2B", "3B"]
+                missing_levels = [level for level in expected_levels if level not in level_naming_found]
+                
+                if missing_levels:
+                    self.log_test("Step Solutions with Level Naming", False, 
+                                f"❌ Missing level naming conventions: Level {missing_levels}")
+                    return False
+                
+                # CRITICAL TEST 3: Each step should have possible_answers array
+                for i, step in enumerate(step_solutions):
+                    possible_answers = step.get('possible_answers', [])
+                    if not possible_answers:
+                        self.log_test("Step Solutions with Level Naming", False, 
+                                    f"❌ Step {i+1} missing possible_answers array")
+                        return False
+                
+                print(f"   ✅ Found Level 1B, 2B, 3B naming convention in step_solutions")
+                print(f"   ✅ All steps have possible_answers arrays")
+                
+                self.log_test("Step Solutions with Level Naming", True, 
+                            f"✅ explanation4 has both required arrays with proper Level 1B, 2B, 3B naming to prevent 'Inactive Practice' bug")
+                return True
+                
+            else:
+                self.log_test("Step Solutions with Level Naming", False, 
+                            f"Failed to get explanation4 data: HTTP {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Step Solutions with Level Naming", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_temperature_conversion_word_problem(self):
+        """Test Temperature Conversion Word Problem - practice4_2"""
+        try:
+            print("\n🎯 TEMPERATURE CONVERSION WORD PROBLEM TESTING")
+            print("Testing practice4_2 has Celsius to Fahrenheit temperature conversion with 3-step structure")
+            
+            response = self.session.get(f"{self.base_url}/problems/practice4_2")
+            
+            if response.status_code == 200:
+                practice4_2_data = response.json()
+                
+                question_en = practice4_2_data.get('question_en', '')
+                stage_type = practice4_2_data.get('stage_type', '')
+                step_solutions = practice4_2_data.get('step_solutions', [])
+                
+                print(f"   Question: {question_en[:100]}...")
+                print(f"   Stage Type: {stage_type}")
+                print(f"   Step Solutions: {len(step_solutions)}")
+                
+                # CRITICAL TEST 1: Should be temperature conversion problem
+                temperature_keywords = ['temperature', 'Celsius', 'Fahrenheit', '°C', '°F', 'F =', 'C']
+                if not any(keyword in question_en for keyword in temperature_keywords):
+                    self.log_test("Temperature Conversion Word Problem", False, 
+                                f"❌ practice4_2 should be temperature conversion problem, got: {question_en}")
+                    return False
+                
+                # CRITICAL TEST 2: Should have stage_type "practice_word"
+                if stage_type != "practice_word":
+                    self.log_test("Temperature Conversion Word Problem", False, 
+                                f"❌ practice4_2 should have stage_type 'practice_word', got: {stage_type}")
+                    return False
+                
+                # CRITICAL TEST 3: Should have 3-step structure
+                if len(step_solutions) != 3:
+                    self.log_test("Temperature Conversion Word Problem", False, 
+                                f"❌ practice4_2 should have 3 step solutions, got {len(step_solutions)}")
+                    return False
+                
+                # CRITICAL TEST 4: Verify step content relates to temperature conversion
                 for i, step in enumerate(step_solutions):
                     step_text = step.get('step_en', '')
                     possible_answers = step.get('possible_answers', [])
@@ -164,371 +451,299 @@ class WordProblemLogicTester:
                     print(f"   Possible Answers: {possible_answers}")
                     
                     if not possible_answers:
-                        self.log_test("Practice2_2 Word Problem Structure", False, 
+                        self.log_test("Temperature Conversion Word Problem", False, 
                                     f"❌ Step {i+1} missing possible_answers array")
                         return False
                 
-                # CRITICAL TEST 4: Verify expected step solutions match review request
-                step1_answers = step_solutions[0].get('possible_answers', [])
-                step2_answers = step_solutions[1].get('possible_answers', [])
-                step3_answers = step_solutions[2].get('possible_answers', [])
+                print(f"   ✅ practice4_2 is temperature conversion word problem with 3-step structure")
                 
-                # Check if Step 1 accepts "10t ≥ 500" or variants
-                step1_valid = any("10t" in answer and "500" in answer for answer in step1_answers)
-                if not step1_valid:
-                    self.log_test("Practice2_2 Word Problem Structure", False, 
-                                f"❌ Step 1 doesn't accept expected format '10t ≥ 500'")
-                    return False
-                
-                # Check if Step 3 accepts "t ≥ 50"
-                step3_valid = any("t" in answer and "50" in answer for answer in step3_answers)
-                if not step3_valid:
-                    self.log_test("Practice2_2 Word Problem Structure", False, 
-                                f"❌ Step 3 doesn't accept expected format 't ≥ 50'")
-                    return False
-                
-                self.log_test("Practice2_2 Word Problem Structure", True, 
-                            f"✅ Practice word problem has correct 3-step structure with proper validation")
+                self.log_test("Temperature Conversion Word Problem", True, 
+                            f"✅ practice4_2 has Celsius to Fahrenheit temperature conversion with proper 3-step structure and stage_type 'practice_word'")
                 return True
                 
             else:
-                self.log_test("Practice2_2 Word Problem Structure", False, 
-                            f"Failed to get practice2_2 data: HTTP {response.status_code}")
+                self.log_test("Temperature Conversion Word Problem", False, 
+                            f"Failed to get practice4_2 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Practice2_2 Word Problem Structure", False, f"Test execution error: {str(e)}")
+            self.log_test("Temperature Conversion Word Problem", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_practice_vs_assessment_differentiation(self):
-        """Test backend differentiation between practice and assessment word problems"""
+    def test_assessment_updates(self):
+        """Test Assessment Updates - assessment4 changed to new compound inequality"""
         try:
-            print("\n🎯 PRACTICE VS ASSESSMENT DIFFERENTIATION TESTING")
-            print("Testing backend logic for practice (3-step) vs assessment (1-step) word problems")
+            print("\n🎯 ASSESSMENT UPDATES TESTING")
+            print("Testing assessment4 changed to '-8 ≤ 4 - 2x < 6' with answer '-1 < x ≤ 6'")
             
-            # First complete practice stages to unlock assessment access
-            print("   Completing practice stages to unlock assessment access...")
-            
-            # Complete practice2_1 first
-            practice2_1_attempt = {
-                "problem_id": "practice2_1",
-                "answer": "k < -12",
-                "hints_used": 0
-            }
-            
-            practice2_1_response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
-                json=practice2_1_attempt,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if practice2_1_response.status_code == 200:
-                print("   ✅ Completed practice2_1")
-            
-            # Complete practice2_2 
-            practice2_2_attempt = {
-                "problem_id": "practice2_2",
-                "answer": "t ≥ 50",
-                "hints_used": 0
-            }
-            
-            practice2_2_response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
-                json=practice2_2_attempt,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if practice2_2_response.status_code == 200:
-                print("   ✅ Completed practice2_2")
-            
-            # Test practice2_2 (should have step_solutions)
-            practice_response = self.session.get(f"{self.base_url}/problems/practice2_2")
-            
-            # Test assessment2 (should NOT have step_solutions or have different structure)
-            assessment_response = self.session.get(
-                f"{self.base_url}/problems/assessment2",
+            response = self.session.get(
+                f"{self.base_url}/problems/assessment4",
                 params={"username": self.test_student_username}
             )
             
-            if practice_response.status_code == 200 and assessment_response.status_code == 200:
-                practice_data = practice_response.json()
-                assessment_data = assessment_response.json()
+            if response.status_code == 200:
+                assessment4_data = response.json()
                 
-                print(f"   Practice Problem: {practice_data.get('question_en', 'N/A')}")
-                print(f"   Assessment Problem: {assessment_data.get('question_en', 'N/A')}")
+                question_en = assessment4_data.get('question_en', '')
+                answer = assessment4_data.get('answer', '')
+                problem_type = assessment4_data.get('type', '')
                 
-                # CRITICAL TEST 1: Practice should have step_solutions
-                practice_steps = practice_data.get('step_solutions', [])
-                if not practice_steps or len(practice_steps) < 3:
-                    self.log_test("Practice vs Assessment Differentiation", False, 
-                                f"❌ Practice problem missing proper step_solutions structure")
+                print(f"   Question: {question_en}")
+                print(f"   Answer: {answer}")
+                print(f"   Type: {problem_type}")
+                
+                # CRITICAL TEST 1: Question should contain "-8 ≤ 4 - 2x < 6"
+                if "-8 ≤ 4 - 2x < 6" not in question_en:
+                    self.log_test("Assessment Updates", False, 
+                                f"❌ assessment4 question should contain '-8 ≤ 4 - 2x < 6', got: {question_en}")
                     return False
                 
-                # CRITICAL TEST 2: Assessment should be different (either no step_solutions or different structure)
-                assessment_steps = assessment_data.get('step_solutions', [])
-                assessment_type = assessment_data.get('type', '')
-                
-                print(f"   Practice Steps: {len(practice_steps)}")
-                print(f"   Assessment Steps: {len(assessment_steps) if assessment_steps else 0}")
-                print(f"   Assessment Type: {assessment_type}")
-                
-                # Assessment should be type 'assessment'
-                if assessment_type != 'assessment':
-                    self.log_test("Practice vs Assessment Differentiation", False, 
-                                f"❌ Assessment problem has wrong type: {assessment_type}")
+                # CRITICAL TEST 2: Answer should be "-1 < x ≤ 6"
+                if answer != "-1 < x ≤ 6":
+                    self.log_test("Assessment Updates", False, 
+                                f"❌ assessment4 answer should be '-1 < x ≤ 6', got: {answer}")
                     return False
                 
-                # CRITICAL TEST 3: Verify hide_answer flag differences
-                practice_hide = practice_data.get('hide_answer', False)
-                assessment_hide = assessment_data.get('hide_answer', True)
-                
-                print(f"   Practice hide_answer: {practice_hide}")
-                print(f"   Assessment hide_answer: {assessment_hide}")
-                
-                if assessment_hide != True:
-                    self.log_test("Practice vs Assessment Differentiation", False, 
-                                f"❌ Assessment should have hide_answer=True, got {assessment_hide}")
+                # CRITICAL TEST 3: Should be assessment type
+                if problem_type != 'assessment':
+                    self.log_test("Assessment Updates", False, 
+                                f"❌ assessment4 should be type 'assessment', got: {problem_type}")
                     return False
                 
-                self.log_test("Practice vs Assessment Differentiation", True, 
-                            f"✅ Backend correctly differentiates practice (3-step) vs assessment (1-step) problems")
+                print(f"   ✅ assessment4 has correct compound inequality content")
+                
+                self.log_test("Assessment Updates", True, 
+                            f"✅ assessment4 successfully updated to '-8 ≤ 4 - 2x < 6' with answer '-1 < x ≤ 6'")
                 return True
                 
             else:
-                self.log_test("Practice vs Assessment Differentiation", False, 
-                            f"Failed to get problem data: practice={practice_response.status_code}, assessment={assessment_response.status_code}")
+                self.log_test("Assessment Updates", False, 
+                            f"Failed to get assessment4 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Practice vs Assessment Differentiation", False, f"Test execution error: {str(e)}")
+            self.log_test("Assessment Updates", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_step_by_step_submission_validation(self):
-        """Test step-by-step submission validation for practice2_2"""
+    def test_exam_prep_updates(self):
+        """Test Exam Prep Updates - examprep4 changed to AND compound inequality"""
         try:
-            print("\n🎯 STEP-BY-STEP SUBMISSION VALIDATION TESTING")
-            print("Testing practice2_2 step-by-step answer submission and validation")
+            print("\n🎯 EXAM PREP UPDATES TESTING")
+            print("Testing examprep4 changed to '2(x - 1) ≤ 6 AND x + 3 > 2' with answer '-1 < x ≤ 4'")
             
-            # Expected step answers based on review request
-            test_steps = [
-                {
-                    "step": 1,
-                    "answers": ["10t ≥ 500", "10 * t ≥ 500"],
-                    "description": "Step 1: Write the inequality"
-                },
-                {
-                    "step": 2, 
-                    "answers": ["t ≥ 500/10", "10t/10 ≥ 500/10"],
-                    "description": "Step 2: Perform the operation"
-                },
-                {
-                    "step": 3,
-                    "answers": ["t ≥ 50"],
-                    "description": "Step 3: Simplify final answer"
-                }
-            ]
-            
-            all_steps_passed = True
-            
-            for step_info in test_steps:
-                step_num = step_info["step"]
-                test_answers = step_info["answers"]
-                description = step_info["description"]
-                
-                print(f"\n   Testing {description}")
-                
-                for test_answer in test_answers:
-                    # Submit answer attempt for practice2_2
-                    attempt_data = {
-                        "problem_id": "practice2_2",
-                        "answer": test_answer,
-                        "hints_used": 0
-                    }
-                    
-                    attempt_response = self.session.post(
-                        f"{self.base_url}/students/{self.test_student_username}/attempt",
-                        json=attempt_data,
-                        headers={"Content-Type": "application/json"}
-                    )
-                    
-                    if attempt_response.status_code == 200:
-                        attempt_result = attempt_response.json()
-                        is_correct = attempt_result.get("correct", False)
-                        
-                        print(f"     Answer '{test_answer}': {'✅ ACCEPTED' if is_correct else '❌ REJECTED'}")
-                        
-                        # For practice problems, we expect step-by-step validation
-                        # Note: The backend might validate against final answer, so we'll check if it processes correctly
-                        
-                    else:
-                        print(f"     Answer '{test_answer}': ❌ FAILED (HTTP {attempt_response.status_code})")
-                        all_steps_passed = False
-            
-            # Test final answer submission
-            print(f"\n   Testing Final Answer Submission")
-            final_attempt_data = {
-                "problem_id": "practice2_2",
-                "answer": "t ≥ 50",
-                "hints_used": 0
-            }
-            
-            final_response = self.session.post(
-                f"{self.base_url}/students/{self.test_student_username}/attempt",
-                json=final_attempt_data,
-                headers={"Content-Type": "application/json"}
+            response = self.session.get(
+                f"{self.base_url}/problems/examprep4",
+                params={"username": self.test_student_username}
             )
             
-            if final_response.status_code == 200:
-                final_result = final_response.json()
-                is_final_correct = final_result.get("correct", False)
-                final_score = final_result.get("score", 0)
+            if response.status_code == 200:
+                examprep4_data = response.json()
                 
-                print(f"     Final Answer 't ≥ 50': {'✅ CORRECT' if is_final_correct else '❌ INCORRECT'}")
-                print(f"     Score: {final_score}")
+                question_en = examprep4_data.get('question_en', '')
+                answer = examprep4_data.get('answer', '')
+                problem_type = examprep4_data.get('type', '')
                 
-                if is_final_correct:
-                    self.log_test("Step-by-Step Submission Validation", True, 
-                                f"✅ Practice word problem accepts step-by-step submissions and final answer")
-                    return True
-                else:
-                    self.log_test("Step-by-Step Submission Validation", False, 
-                                f"❌ Final answer 't ≥ 50' not accepted for practice2_2")
+                print(f"   Question: {question_en}")
+                print(f"   Answer: {answer}")
+                print(f"   Type: {problem_type}")
+                
+                # CRITICAL TEST 1: Question should contain "2(x - 1) ≤ 6 AND x + 3 > 2"
+                if "2(x - 1) ≤ 6" not in question_en or "x + 3 > 2" not in question_en:
+                    self.log_test("Exam Prep Updates", False, 
+                                f"❌ examprep4 question should contain '2(x - 1) ≤ 6 AND x + 3 > 2', got: {question_en}")
                     return False
+                
+                # CRITICAL TEST 2: Answer should be "-1 < x ≤ 4"
+                if answer != "-1 < x ≤ 4":
+                    self.log_test("Exam Prep Updates", False, 
+                                f"❌ examprep4 answer should be '-1 < x ≤ 4', got: {answer}")
+                    return False
+                
+                # CRITICAL TEST 3: Should be examprep type
+                if problem_type != 'examprep':
+                    self.log_test("Exam Prep Updates", False, 
+                                f"❌ examprep4 should be type 'examprep', got: {problem_type}")
+                    return False
+                
+                print(f"   ✅ examprep4 has correct AND compound inequality content")
+                
+                self.log_test("Exam Prep Updates", True, 
+                            f"✅ examprep4 successfully updated to '2(x - 1) ≤ 6 AND x + 3 > 2' with answer '-1 < x ≤ 4'")
+                return True
+                
             else:
-                self.log_test("Step-by-Step Submission Validation", False, 
-                            f"❌ Final answer submission failed: HTTP {final_response.status_code}")
+                self.log_test("Exam Prep Updates", False, 
+                            f"Failed to get examprep4 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Step-by-Step Submission Validation", False, f"Test execution error: {str(e)}")
+            self.log_test("Exam Prep Updates", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_hints_system_for_practice_problems(self):
-        """Test hints system for practice word problems"""
+    def test_bilingual_content(self):
+        """Test Bilingual Content - Verify both English and Arabic content"""
         try:
-            print("\n🎯 HINTS SYSTEM TESTING FOR PRACTICE PROBLEMS")
-            print("Testing hints structure and delivery for practice2_2")
+            print("\n🎯 BILINGUAL CONTENT TESTING")
+            print("Testing all Section 4 problems have proper English and Arabic content")
             
-            # Get practice2_2 problem to check hints
-            response = self.session.get(f"{self.base_url}/problems/practice2_2")
+            problems_to_test = ["prep4", "explanation4", "practice4_1", "practice4_2", "assessment4", "examprep4"]
+            all_bilingual_working = True
+            
+            for problem_id in problems_to_test:
+                print(f"\n   Testing bilingual content for {problem_id}")
+                
+                # For assessment and examprep, we need username parameter
+                params = {}
+                if problem_id in ['assessment4', 'examprep4']:
+                    params['username'] = self.test_student_username
+                
+                response = self.session.get(
+                    f"{self.base_url}/problems/{problem_id}",
+                    params=params
+                )
+                
+                if response.status_code == 200:
+                    problem_data = response.json()
+                    
+                    # CRITICAL TEST 1: Basic bilingual fields
+                    required_bilingual_fields = [
+                        ('question_en', 'question_ar'),
+                        ('answer', 'answer_ar')
+                    ]
+                    
+                    for en_field, ar_field in required_bilingual_fields:
+                        en_content = problem_data.get(en_field, '')
+                        ar_content = problem_data.get(ar_field, '')
+                        
+                        if not en_content:
+                            print(f"     ❌ Missing {en_field}")
+                            all_bilingual_working = False
+                        
+                        if not ar_content and en_content:  # Only check Arabic if English exists
+                            print(f"     ❌ Missing {ar_field}")
+                            all_bilingual_working = False
+                    
+                    # CRITICAL TEST 2: Step solutions bilingual content
+                    step_solutions = problem_data.get('step_solutions', [])
+                    for i, step in enumerate(step_solutions):
+                        step_en = step.get('step_en', '')
+                        step_ar = step.get('step_ar', '')
+                        possible_answers = step.get('possible_answers', [])
+                        possible_answers_ar = step.get('possible_answers_ar', [])
+                        
+                        if step_en and not step_ar:
+                            print(f"     ❌ Step {i+1} missing Arabic description")
+                            all_bilingual_working = False
+                        
+                        if possible_answers and not possible_answers_ar:
+                            print(f"     ❌ Step {i+1} missing Arabic possible answers")
+                            all_bilingual_working = False
+                    
+                    if all_bilingual_working:
+                        print(f"     ✅ {problem_id} has proper bilingual content")
+                else:
+                    print(f"     ❌ Failed to get {problem_id}: HTTP {response.status_code}")
+                    all_bilingual_working = False
+            
+            if all_bilingual_working:
+                self.log_test("Bilingual Content", True, 
+                            f"✅ All Section 4 problems have proper English and Arabic content")
+                return True
+            else:
+                self.log_test("Bilingual Content", False, 
+                            f"❌ Some Section 4 problems missing bilingual content")
+                return False
+                
+        except Exception as e:
+            self.log_test("Bilingual Content", False, f"Test execution error: {str(e)}")
+            return False
+
+    def test_sign_flipping_logic(self):
+        """Test Sign Flipping Logic - Test problems with negative coefficients"""
+        try:
+            print("\n🎯 SIGN FLIPPING LOGIC TESTING")
+            print("Testing problems with negative coefficients for proper sign flipping documentation")
+            
+            # Test assessment4 which has negative coefficient: -8 ≤ 4 - 2x < 6
+            response = self.session.get(
+                f"{self.base_url}/problems/assessment4",
+                params={"username": self.test_student_username}
+            )
             
             if response.status_code == 200:
-                problem_data = response.json()
+                assessment4_data = response.json()
                 
-                hints_en = problem_data.get('hints_en', [])
-                hints_ar = problem_data.get('hints_ar', [])
+                question_en = assessment4_data.get('question_en', '')
+                answer = assessment4_data.get('answer', '')
+                explanation_en = assessment4_data.get('explanation_en', '')
+                hints_en = assessment4_data.get('hints_en', [])
                 
-                print(f"   English Hints: {len(hints_en)}")
-                print(f"   Arabic Hints: {len(hints_ar)}")
+                print(f"   Question: {question_en}")
+                print(f"   Answer: {answer}")
+                print(f"   Explanation: {explanation_en}")
+                print(f"   Hints: {hints_en}")
                 
-                # CRITICAL TEST 1: Practice problems should have hints
-                if not hints_en:
-                    self.log_test("Hints System for Practice Problems", False, 
-                                f"❌ Practice word problem missing English hints")
+                # CRITICAL TEST 1: Problem should involve negative coefficient (-2x)
+                if "-2x" not in question_en:
+                    self.log_test("Sign Flipping Logic", False, 
+                                f"❌ assessment4 should contain negative coefficient '-2x', got: {question_en}")
                     return False
                 
-                if not hints_ar:
-                    self.log_test("Hints System for Practice Problems", False, 
-                                f"❌ Practice word problem missing Arabic hints")
-                    return False
+                # CRITICAL TEST 2: Explanation or hints should mention sign flipping
+                sign_flip_keywords = ['flip', 'reverse', 'change', 'sign', 'negative', 'divide by -', 'multiply by -']
+                sign_flip_mentioned = False
                 
-                # CRITICAL TEST 2: Hints should be step-appropriate
-                for i, hint in enumerate(hints_en):
-                    print(f"   Hint {i+1}: {hint}")
+                # Check explanation
+                if explanation_en:
+                    if any(keyword in explanation_en.lower() for keyword in sign_flip_keywords):
+                        sign_flip_mentioned = True
                 
-                # Check if hints align with 3-step process
-                step_related_hints = 0
-                word_problem_keywords = ['variable', 'inequality', 'tickets', 'price', 'collect', 'amount', 'at least', 'write', 'divide', 'simplify']
+                # Check hints
                 for hint in hints_en:
-                    if any(keyword in hint.lower() for keyword in word_problem_keywords):
-                        step_related_hints += 1
+                    if any(keyword in hint.lower() for keyword in sign_flip_keywords):
+                        sign_flip_mentioned = True
+                        break
                 
-                if step_related_hints < 2:
-                    self.log_test("Hints System for Practice Problems", False, 
-                                f"❌ Hints don't seem to align with word problem solving process")
+                if not sign_flip_mentioned:
+                    self.log_test("Sign Flipping Logic", False, 
+                                f"❌ assessment4 should mention sign flipping rules in explanation or hints")
                     return False
                 
-                self.log_test("Hints System for Practice Problems", True, 
-                            f"✅ Practice word problem has proper hints system with {len(hints_en)} hints")
+                # CRITICAL TEST 3: Answer should reflect proper sign flipping
+                # Original: -8 ≤ 4 - 2x < 6
+                # After subtracting 4: -12 ≤ -2x < 2  
+                # After dividing by -2 and flipping: -1 < x ≤ 6
+                if answer != "-1 < x ≤ 6":
+                    self.log_test("Sign Flipping Logic", False, 
+                                f"❌ assessment4 answer should reflect proper sign flipping: '-1 < x ≤ 6', got: {answer}")
+                    return False
+                
+                print(f"   ✅ assessment4 properly documents sign flipping logic")
+                
+                self.log_test("Sign Flipping Logic", True, 
+                            f"✅ Problems with negative coefficients properly document sign flipping rules")
                 return True
                 
             else:
-                self.log_test("Hints System for Practice Problems", False, 
-                            f"Failed to get practice2_2 data: HTTP {response.status_code}")
+                self.log_test("Sign Flipping Logic", False, 
+                            f"Failed to get assessment4 data: HTTP {response.status_code}")
                 return False
                 
         except Exception as e:
-            self.log_test("Hints System for Practice Problems", False, f"Test execution error: {str(e)}")
+            self.log_test("Sign Flipping Logic", False, f"Test execution error: {str(e)}")
             return False
 
-    def test_navigation_context_preservation(self):
-        """Test navigation context preservation for section redirection"""
-        try:
-            print("\n🎯 NAVIGATION CONTEXT PRESERVATION TESTING")
-            print("Testing section context preservation and proper redirection logic")
-            
-            # Test getting problems from different sections to verify context
-            sections_to_test = ["section1", "section2"]
-            
-            all_sections_working = True
-            
-            for section_id in sections_to_test:
-                print(f"\n   Testing {section_id} context preservation")
-                
-                # Get section problems
-                section_response = self.session.get(f"{self.base_url}/problems/section/{section_id}")
-                
-                if section_response.status_code == 200:
-                    section_problems = section_response.json()
-                    
-                    if not section_problems:
-                        print(f"     ❌ No problems found for {section_id}")
-                        all_sections_working = False
-                        continue
-                    
-                    print(f"     ✅ Found {len(section_problems)} problems in {section_id}")
-                    
-                    # Test individual problem access with section context
-                    for problem in section_problems[:2]:  # Test first 2 problems
-                        problem_id = problem.get('id')
-                        problem_response = self.session.get(
-                            f"{self.base_url}/problems/{problem_id}",
-                            params={"username": self.test_student_username}
-                        )
-                        
-                        if problem_response.status_code == 200:
-                            print(f"     ✅ Problem {problem_id} accessible with context")
-                        else:
-                            print(f"     ❌ Problem {problem_id} failed: HTTP {problem_response.status_code}")
-                            all_sections_working = False
-                else:
-                    print(f"     ❌ Failed to get {section_id}: HTTP {section_response.status_code}")
-                    all_sections_working = False
-            
-            if all_sections_working:
-                self.log_test("Navigation Context Preservation", True, 
-                            f"✅ Section context preservation working for tested sections")
-                return True
-            else:
-                self.log_test("Navigation Context Preservation", False, 
-                            f"❌ Some section context issues detected")
-                return False
-                
-        except Exception as e:
-            self.log_test("Navigation Context Preservation", False, f"Test execution error: {str(e)}")
-            return False
-
-    def generate_word_problem_summary(self, results, critical_failures):
-        """Generate comprehensive summary of word problem logic testing"""
+    def generate_section4_summary(self, results, critical_failures):
+        """Generate comprehensive summary of Section 4 testing"""
         print("\n" + "=" * 80)
-        print("🎯 WORD PROBLEM LOGIC AND NAVIGATION CONTEXT FIXES TESTING SUMMARY")
+        print("🎯 SECTION 4 COMPOUND INEQUALITIES COMPREHENSIVE TESTING SUMMARY")
         print("=" * 80)
         
         total_tests = len(results)
         passed_tests = sum(1 for success in results.values() if success)
         failed_tests = total_tests - passed_tests
         
-        print(f"\n📈 OVERALL WORD PROBLEM TESTING RESULTS:")
+        print(f"\n📈 OVERALL SECTION 4 TESTING RESULTS:")
         print(f"   Total Test Categories: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
@@ -540,54 +755,62 @@ class WordProblemLogicTester:
             print(f"   {status}: {category}")
         
         if critical_failures:
-            print(f"\n🚨 CRITICAL WORD PROBLEM ISSUES:")
+            print(f"\n🚨 CRITICAL SECTION 4 ISSUES:")
             for failure in critical_failures:
                 print(f"   ❌ {failure}")
-            print(f"\n⚠️  WORD PROBLEM STATUS: INCOMPLETE - Backend logic needs fixes!")
-            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix remaining word problem issues")
+            print(f"\n⚠️  SECTION 4 STATUS: INCOMPLETE - Implementation needs fixes!")
+            print(f"   🔧 IMMEDIATE ACTION REQUIRED: Fix remaining Section 4 issues")
         else:
-            print(f"\n🎉 NO CRITICAL WORD PROBLEM ISSUES DETECTED")
+            print(f"\n🎉 NO CRITICAL SECTION 4 ISSUES DETECTED")
         
-        print(f"\n📋 WORD PROBLEM LOGIC STATUS:")
+        print(f"\n📋 SECTION 4 COMPOUND INEQUALITIES STATUS:")
         if failed_tests == 0:
-            print("   🎯 ALL WORD PROBLEM TESTS PASSED")
-            print("   ✅ Practice word problems have 3-step structure")
-            print("   ✅ Assessment word problems have 1-step structure")
-            print("   ✅ Step-by-step submission validation working")
-            print("   ✅ Practice vs Assessment differentiation working")
-            print("   ✅ Hints system properly structured")
-            print("   ✅ Navigation context preservation working")
-            print("   🛡️  WORD PROBLEM LOGIC: WORKING")
+            print("   🎯 ALL SECTION 4 TESTS PASSED")
+            print("   ✅ Section 4 API endpoints working")
+            print("   ✅ Individual problem endpoints accessible")
+            print("   ✅ prep4 updated to compound inequality")
+            print("   ✅ explanation4 has 3-level structure")
+            print("   ✅ Step solutions with Level 1B, 2B, 3B naming")
+            print("   ✅ Temperature conversion word problem implemented")
+            print("   ✅ Assessment and exam prep updated")
+            print("   ✅ Bilingual content properly structured")
+            print("   ✅ Sign flipping logic documented")
+            print("   🛡️  SECTION 4 COMPOUND INEQUALITIES: FULLY WORKING")
         else:
-            print("   ⚠️  WORD PROBLEM LOGIC ISSUES DETECTED")
-            print("   🔧 Backend word problem logic needs enhancement")
-            print("   🚨 STUDENT EXPERIENCE: MAY BE BROKEN FOR WORD PROBLEMS")
+            print("   ⚠️  SECTION 4 IMPLEMENTATION ISSUES DETECTED")
+            print("   🔧 Section 4 compound inequalities need enhancement")
+            print("   🚨 STUDENT EXPERIENCE: MAY BE BROKEN FOR SECTION 4")
         
         print("\n" + "=" * 80)
 
-    def run_word_problem_tests(self):
-        """Run comprehensive word problem logic and navigation tests"""
+    def run_section4_tests(self):
+        """Run comprehensive Section 4 compound inequalities tests"""
         print("=" * 80)
-        print("🎯 WORD PROBLEM LOGIC AND NAVIGATION CONTEXT FIXES TESTING")
+        print("🎯 SECTION 4 COMPOUND INEQUALITIES COMPREHENSIVE TESTING")
         print("=" * 80)
-        print("Testing critical word problem logic and navigation issues")
+        print("Testing comprehensive Section 4 Compound Inequalities implementation")
         
-        # Test categories for word problem logic
+        # Test categories for Section 4
         test_categories = [
             ("Health Check", self.test_health_check, "critical"),
             ("Test Student Creation", self.create_test_student, "critical"),
-            ("Practice2_2 Word Problem Structure", self.test_practice2_2_word_problem_structure, "critical"),
-            ("Practice vs Assessment Differentiation", self.test_practice_vs_assessment_differentiation, "critical"),
-            ("Step-by-Step Submission Validation", self.test_step_by_step_submission_validation, "critical"),
-            ("Hints System for Practice Problems", self.test_hints_system_for_practice_problems, "high"),
-            ("Navigation Context Preservation", self.test_navigation_context_preservation, "high")
+            ("Section 4 API Endpoints", self.test_section4_api_endpoints, "critical"),
+            ("Individual Problem Endpoints", self.test_individual_problem_endpoints, "critical"),
+            ("Updated Problem Content", self.test_updated_problem_content, "critical"),
+            ("Compound Inequality Structure", self.test_compound_inequality_structure, "critical"),
+            ("Step Solutions with Level Naming", self.test_step_solutions_with_level_naming, "critical"),
+            ("Temperature Conversion Word Problem", self.test_temperature_conversion_word_problem, "critical"),
+            ("Assessment Updates", self.test_assessment_updates, "critical"),
+            ("Exam Prep Updates", self.test_exam_prep_updates, "critical"),
+            ("Bilingual Content", self.test_bilingual_content, "high"),
+            ("Sign Flipping Logic", self.test_sign_flipping_logic, "high")
         ]
         
         results = {}
         critical_failures = []
         
         for category_name, test_method, priority in test_categories:
-            print(f"\n🔍 WORD PROBLEM TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
+            print(f"\n🔍 SECTION 4 TEST CATEGORY: {category_name} (Priority: {priority.upper()})")
             print("-" * 60)
             
             try:
@@ -602,28 +825,28 @@ class WordProblemLogicTester:
                 results[category_name] = False
                 critical_failures.append(category_name)
         
-        # Generate comprehensive word problem summary
-        self.generate_word_problem_summary(results, critical_failures)
+        # Generate comprehensive Section 4 summary
+        self.generate_section4_summary(results, critical_failures)
         
         return results
 
 def main():
-    """Main function to run word problem logic tests"""
-    print("🚀 Starting WORD PROBLEM LOGIC AND NAVIGATION CONTEXT FIXES Testing...")
-    print("🎯 Goal: Verify backend support for practice 3-step vs assessment 1-step word problems")
+    """Main function to run Section 4 compound inequalities tests"""
+    print("🚀 Starting SECTION 4 COMPOUND INEQUALITIES COMPREHENSIVE Testing...")
+    print("🎯 Goal: Verify comprehensive Section 4 Compound Inequalities implementation")
     
-    tester = WordProblemLogicTester(BACKEND_URL)
-    results = tester.run_word_problem_tests()
+    tester = Section4CompoundInequalitiesTester(BACKEND_URL)
+    results = tester.run_section4_tests()
     
     # Exit with appropriate code
     failed_tests = sum(1 for success in results.values() if not success)
     
     if failed_tests > 0:
-        print(f"\n🚨 WORD PROBLEM ALERT: {failed_tests} test(s) failed!")
-        print("🔧 Word problem logic needs backend enhancement")
+        print(f"\n🚨 SECTION 4 ALERT: {failed_tests} test(s) failed!")
+        print("🔧 Section 4 compound inequalities need backend enhancement")
     else:
-        print(f"\n🛡️  WORD PROBLEM CONFIRMED: All tests passed!")
-        print("✅ Word problem logic and navigation context fixes are working correctly")
+        print(f"\n🛡️  SECTION 4 CONFIRMED: All tests passed!")
+        print("✅ Section 4 Compound Inequalities implementation is working correctly")
     
     sys.exit(failed_tests)
 
