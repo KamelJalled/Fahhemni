@@ -58,8 +58,11 @@ const ProblemView = () => {
   const normalizeAnswer = (answer) => {
     if (!answer) return '';
     
-    // Use basic normalization first
-    let normalized = basicNormalizeAnswer(answer);
+    // Process alternative absolute value input methods first
+    let processed = processAbsoluteValueAlternatives(answer);
+    
+    // Use basic normalization
+    let normalized = basicNormalizeAnswer(processed);
     
     // GLOBAL NEGATIVE NUMBER VALIDATION ENHANCEMENT
     // Handle negative numbers with or without parentheses: -5 vs (-5)
@@ -73,6 +76,25 @@ const ProblemView = () => {
       .toLowerCase();
     
     return normalized;
+  };
+
+  // ABSOLUTE VALUE: Process alternative input methods
+  const processAbsoluteValueAlternatives = (input) => {
+    if (!input) return '';
+    
+    // Convert abs(expression) to |expression|
+    let processed = input.replace(/abs\s*\(\s*([^)]+)\s*\)/gi, '|$1|');
+    
+    // Convert ABS(expression) to |expression|
+    processed = processed.replace(/ABS\s*\(\s*([^)]+)\s*\)/gi, '|$1|');
+    
+    // Convert //expression// to |expression|
+    processed = processed.replace(/\/\/\s*([^\/]+)\s*\/\//g, '|$1|');
+    
+    // Clean up any extra spaces around the converted expressions
+    processed = processed.replace(/\|\s*([^|]*)\s*\|/g, '|$1|');
+    
+    return processed;
   };
 
   // GLOBAL: Normalize negative numbers with multiple format support
