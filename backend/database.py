@@ -1049,57 +1049,60 @@ async def init_database():
             "section_id": "section3",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "3(2x - 1) ≤ 15",
-            "question_ar": "٣(٢س - ١) ≤ ١٥",
-            "answer": "x ≤ 3",
-            "answer_ar": "س ≤ ٣",
+            "stage_type": "practice_word",
+            "question_en": "A car rental costs SAR 100 plus SAR 2 per kilometer (k). Your budget is SAR 250. What is the maximum distance you can drive?",
+            "question_ar": "إيجار سيارة يكلف ١٠٠ ريال بالإضافة إلى ٢ ريال لكل كيلومتر. ميزانيتك ٢٥٠ ريال. ما أقصى مسافة يمكنك قيادتها؟",
+            "answer": "k ≤ 75",
+            "answer_ar": "ك ≤ ٧٥",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Distribute 3",
-                    "step_ar": "وزع ٣",
+                    "step_en": "اكتب المتباينة / Write the inequality",
+                    "step_ar": "اكتب المتباينة",
                     "possible_answers": [
-                        "6x - 3 ≤ 15"
+                        "100 + 2k ≤ 250",
+                        "١٠٠ + ٢ك ≤ ٢٥٠",
+                        "2k + 100 ≤ 250"
                     ],
                     "possible_answers_ar": [
-                        "٦س - ٣ ≤ ١٥"
+                        "١٠٠ + ٢ك ≤ ٢٥٠",
+                        "٢ك + ١٠٠ ≤ ٢٥٠"
                     ]
                 },
                 {
-                    "step_en": "Add 3 to both sides",
-                    "step_ar": "أضف ٣ للطرفين",
+                    "step_en": "اطرح التكلفة الثابتة / Subtract the fixed cost",
+                    "step_ar": "اطرح التكلفة الثابتة",
                     "possible_answers": [
-                        "6x ≤ 15 + 3",
-                        "6x ≤ 18"
+                        "2k ≤ 150",
+                        "٢ك ≤ ١٥٠"
                     ],
                     "possible_answers_ar": [
-                        "٦س ≤ ١٥ + ٣",
-                        "٦س ≤ ١٨"
+                        "٢ك ≤ ١٥٠"
                     ]
                 },
                 {
-                    "step_en": "Divide by 6",
-                    "step_ar": "اقسم على ٦",
+                    "step_en": "احسب الحد الأقصى للكيلومترات / Calculate maximum kilometers",
+                    "step_ar": "احسب الحد الأقصى للكيلومترات",
                     "possible_answers": [
-                        "x ≤ 18 / 6",
-                        "x ≤ 3"
+                        "k ≤ 75",
+                        "ك ≤ ٧٥"
                     ],
                     "possible_answers_ar": [
-                        "س ≤ ١٨ / ٦",
-                        "س ≤ ٣"
+                        "ك ≤ ٧٥"
                     ]
                 }
             ],
+            "final_answer_required": False,
             "hints_en": [
-                "Distribute first: 3 × 2x = 6x and 3 × (-1) = -3",
-                "Then solve step by step",
-                "What's 18 ÷ 6?"
+                "التكلفة الإجمالية = التكلفة الثابتة + (تكلفة الكيلومتر × عدد الكيلومترات) / Total = Fixed + (Per km × Number)",
+                "استخدم k للكيلومترات / Use k for kilometers",
+                "التكلفة يجب أن تكون ≤ الميزانية / Cost must be ≤ budget"
             ],
             "hints_ar": [
-                "وزع أولاً: ٣ × ٢س = ٦س و ٣ × (-١) = -٣",
-                "ثم احل خطوة بخطوة",
-                "كم ١٨ ÷ ٦؟"
+                "التكلفة الإجمالية = التكلفة الثابتة + (تكلفة الكيلومتر × عدد الكيلومترات)",
+                "استخدم k للكيلومترات",
+                "التكلفة يجب أن تكون ≤ الميزانية"
             ]
         },
         {
