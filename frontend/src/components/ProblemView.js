@@ -1421,6 +1421,14 @@ const ProblemView = () => {
 
   // Fix navigation button not working - force navigation
   const handleNavigationClick = () => {
+    // Prevent multiple navigation attempts
+    if (navigationInProgress) {
+      console.log('🔄 Navigation already in progress, ignoring duplicate call');
+      return;
+    }
+    
+    setNavigationInProgress(true);
+    
     // Get the next stage using existing logic
     const getSectionNumber = (id) => {
       const match = id.match(/[a-zA-Z]+(\d+)/);
@@ -1469,13 +1477,18 @@ const ProblemView = () => {
             console.log(`🔄 React Router failed, forcing with window.location`);
             window.location.href = nextStage;
           }
+          // Reset navigation flag after navigation attempt
+          setNavigationInProgress(false);
         }, 100);
         
       } catch (error) {
         console.error('Navigation error:', error);
         // Fallback: Force navigation with window.location
         window.location.href = nextStage;
+        setNavigationInProgress(false);
       }
+    } else {
+      setNavigationInProgress(false);
     }
   };
 
