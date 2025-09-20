@@ -2478,6 +2478,9 @@ const ProblemView = () => {
                           // Prevent multiple clicks
                           if (navigationInProgress) return;
                           
+                          // Set isCorrect for explanation completion before navigation
+                          setIsCorrect(true);
+                          
                           // Submit explanation completion to backend first
                           await submitToBackend();
                           // Then navigate to next problem with forced navigation
