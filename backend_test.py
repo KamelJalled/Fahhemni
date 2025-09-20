@@ -114,13 +114,13 @@ class CriticalBackendTester:
                                 f"Username mismatch: expected {self.test_student_username}, got {data.get('username')}")
                     return False
                 
-                if data.get("class_name") != "GR9-TEST":
+                if data.get("class_name") != "GR9-A":
                     self.log_test("Authentication System", False, 
-                                f"Class name mismatch: expected GR9-TEST, got {data.get('class_name')}")
+                                f"Class name mismatch: expected GR9-A, got {data.get('class_name')}")
                     return False
                 
                 self.log_test("Authentication System", True, 
-                            f"✅ Student login working - Created user '{self.test_student_username}' in class 'GR9-TEST'")
+                            f"✅ Student login working - Created user '{self.test_student_username}' in class 'GR9-A'")
                 return True
                 
             else:
