@@ -18,7 +18,8 @@ const MathKeyboard = ({ onSymbolSelect, onNumberSelect, onOperatorSelect, onActi
     { symbol: '≤', label: { en: 'Less than or equal', ar: 'أصغر من أو يساوي' } },
     { symbol: '≥', label: { en: 'Greater than or equal', ar: 'أكبر من أو يساوي' } },
     { symbol: '=', label: { en: 'Equals', ar: 'يساوي' } },
-    { symbol: '≠', label: { en: 'Not equal', ar: 'لا يساوي' } }
+    { symbol: '≠', label: { en: 'Not equal', ar: 'لا يساوي' } },
+    { symbol: '|', label: { en: 'Absolute value', ar: 'القيمة المطلقة' } }
   ];
 
   const operations = [
