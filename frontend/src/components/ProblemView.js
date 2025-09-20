@@ -2133,7 +2133,10 @@ const ProblemView = () => {
                                                 setShowEncouragement(language === 'en' ? "Perfect! All examples completed!" : "ممتاز! تم إكمال جميع الأمثلة!");
                                               }
                                             }
-                                            setTimeout(() => setShowEncouragement(''), 3000);
+                                            // Only clear encouragement for incorrect answers, not for completion
+                                            if (!stepCorrect) {
+                                              setTimeout(() => setShowEncouragement(''), 3000);
+                                            }
                                           } else {
                                             // Show error feedback
                                             const feedback = language === 'en' 
