@@ -587,6 +587,17 @@ const ProblemView = () => {
     }
   };
 
+  // Helper function to get absolute value hint for Section 5
+  const getAbsoluteValueHint = () => {
+    if (problem?.section_id === 'section5') {
+      return {
+        en: '💡 Use | symbol for absolute value: |x|',
+        ar: '💡 استخدم رمز | للقيمة المطلقة: |س|'
+      };
+    }
+    return null;
+  };
+
   const text = {
     en: {
       back: "Back to Dashboard",
