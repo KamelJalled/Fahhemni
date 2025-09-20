@@ -2129,10 +2129,8 @@ const ProblemView = () => {
                                                 // All examples completed - mark as complete but DON'T submit to backend yet
                                                 setAllStepsComplete(true);
                                                 setIsCorrect(true);
-                                                setTimeout(() => {
-                                                  setShowEncouragement('');
-                                                  // Don't submit to backend until user clicks Continue button
-                                                }, 3000);
+                                                // Remove automatic timeout - let user click Continue button manually
+                                                setShowEncouragement(language === 'en' ? "Perfect! All examples completed!" : "ممتاز! تم إكمال جميع الأمثلة!");
                                               }
                                             }
                                             setTimeout(() => setShowEncouragement(''), 3000);
