@@ -2078,7 +2078,11 @@ const ProblemView = () => {
                                               ? currentStepSolution.possible_answers_ar 
                                               : currentStepSolution.possible_answers;
                                             
-                                            stepCorrect = possibleAnswers?.some(ans => normalizeAnswer(ans) === normalized) || false;
+                                            // Enhanced validation with bidirectional support
+                                            stepCorrect = possibleAnswers?.some(ans => 
+                                              normalizeAnswer(ans) === normalized || 
+                                              areBidirectionallyEqual(normalized, normalizeAnswer(ans))
+                                            ) || false;
                                           }
                                           
                                           console.log(`🔍 Step ${explanationStep + 1} correct:`, stepCorrect);
