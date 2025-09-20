@@ -393,14 +393,21 @@ const ProblemView = () => {
   const validateInequalityStep = (userAnswer, expectedAnswers, stepInstruction) => {
     const normalizedUserAnswer = normalizeAnswer(userAnswer);
     
-    // Simple validation - check direct matches only
+    // Enhanced validation with bidirectional support for Sections 3, 4, 5
     let isCorrect = false;
     
     if (expectedAnswers) {
-      // Check direct matches only - NO automatic sign flipping
+      // Check direct matches first
       isCorrect = expectedAnswers.some(expectedAnswer => 
         normalizeAnswer(expectedAnswer) === normalizedUserAnswer
       );
+      
+      // If not direct match, check bidirectional equivalence for Sections 3, 4, 5
+      if (!isCorrect) {
+        isCorrect = expectedAnswers.some(expectedAnswer => 
+          areBidirectionallyEqual(normalizedUserAnswer, normalizeAnswer(expectedAnswer))
+        );
+      }
     }
     
     return isCorrect;
