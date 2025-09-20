@@ -53,6 +53,7 @@ const ProblemView = () => {
   const [explanationAnswers, setExplanationAnswers] = useState(['', '', '']); // Single input per example (simplified management)
   const [explanationStepHistory, setExplanationStepHistory] = useState([]); // Store completed step answers for display
   const [showRulesModal, setShowRulesModal] = useState(false); // Rules modal state
+  const [navigationInProgress, setNavigationInProgress] = useState(false); // Prevent navigation loops
 
   // GLOBAL: Enhanced normalization for negative numbers and mathematical expressions
   const normalizeAnswer = (answer) => {
