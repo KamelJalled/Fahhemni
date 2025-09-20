@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Word Problem Logic and Navigation Context Fixes Testing
-Tests the critical word problem logic and navigation issues as requested by user.
+Backend API Test Suite for Math Tutoring App - Section 3 Explanation Stage Bug Fix Testing
+Tests the Section 3 Explanation Stage bug fix as requested by user.
 
-CRITICAL ISSUES BEING TESTED:
-1. Practice Word Problem Structure - 3-step process vs Assessment 1-step process
-2. Section 2 Practice Word Problem (practice2_2) - "Tickets must be sold at SAR 10 each to collect at least SAR 500"
-3. Step-by-step submission validation for practice word problems
-4. Practice vs Assessment differentiation in backend logic
-5. Navigation context preservation and section redirection logic
+CRITICAL ISSUE BEING TESTED:
+Section 3 Explanation Stage showing "Inactive Practice" instead of interactive examples.
+
+SPECIFIC BUG FIX VERIFICATION:
+1. Step Solutions Structure - GET /api/problems/explanation3 should have step_solutions array
+2. Level-Based Steps - Verify Level 1B, 2B, and 3B steps with correct naming convention
+3. Interactive Examples - Confirm both interactive_examples and step_solutions are present
+4. Bilingual Support - Check each step has English and Arabic descriptions and possible answers
+5. Complete Structure - Verify explanation3 has complete structure for frontend interactive functionality
 
 EXPECTED BACKEND BEHAVIOR:
-- Practice word problems should have `step_solutions` array with 3 entries
-- Each step should have `possible_answers` arrays for validation
-- Assessment word problems should only accept final answer
-- Backend should support progressive hint delivery
+- explanation3 should have step_solutions array with Level 1B, 2B, 3B steps
+- Each level should have 2-3 steps with proper naming (e.g., "Level 1B Step 1")
+- Each step should have bilingual content and possible_answers arrays
+- Interactive examples should be present alongside step_solutions
+- Frontend should be able to render interactive step-by-step interface
 """
 
 import requests
