@@ -1002,57 +1002,46 @@ async def init_database():
             "section_id": "section3",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "2(x + 3) > 10",
-            "question_ar": "٢(س + ٣) > ١٠",
-            "answer": "x > 2",
-            "answer_ar": "س > ٢",
+            "question_en": "Solve the inequality 6 - 3y ≤ 18",
+            "question_ar": "احل المتباينة ٦ - ٣ص ≤ ١٨",
+            "answer": "y ≥ -4",
+            "answer_ar": "ص ≥ -٤",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Distribute 2",
-                    "step_ar": "وزع ٢",
+                    "step_en": "اطرح ٦ من كلا الطرفين / Subtract 6 from both sides",
+                    "step_ar": "اطرح ٦ من كلا الطرفين",
                     "possible_answers": [
-                        "2x + 6 > 10"
+                        "-3y ≤ 12",
+                        "-٣ص ≤ ١٢"
                     ],
                     "possible_answers_ar": [
-                        "٢س + ٦ > ١٠"
+                        "-٣ص ≤ ١٢"
                     ]
                 },
                 {
-                    "step_en": "Subtract 6 from both sides",
-                    "step_ar": "اطرح ٦ من الطرفين",
+                    "step_en": "اقسم على -٣ واقلب الإشارة / Divide by -3 and flip sign",
+                    "step_ar": "اقسم على -٣ واقلب الإشارة",
                     "possible_answers": [
-                        "2x > 10 - 6",
-                        "2x > 4"
+                        "y ≥ -4",
+                        "ص ≥ -٤"
                     ],
                     "possible_answers_ar": [
-                        "٢س > ١٠ - ٦",
-                        "٢س > ٤"
-                    ]
-                },
-                {
-                    "step_en": "Divide by 2",
-                    "step_ar": "اقسم على ٢",
-                    "possible_answers": [
-                        "x > 4 / 2",
-                        "x > 2"
-                    ],
-                    "possible_answers_ar": [
-                        "س > ٤ / ٢",
-                        "س > ٢"
+                        "ص ≥ -٤"
                     ]
                 }
             ],
+            "final_answer_required": False,
             "hints_en": [
-                "First distribute the 2 across the parentheses",
-                "Then solve the two-step inequality",
-                "Remember order of operations"
+                "ابدأ بطرح ٦ من كلا الطرفين / Start by subtracting 6",
+                "عزل الحد الذي يحتوي على المتغير / Isolate the term with variable",
+                "٦ - ٦ - ٣ص ≤ ١٨ - ٦ / 6 - 6 - 3y ≤ 18 - 6"
             ],
             "hints_ar": [
-                "أولاً وزع الـ ٢ على الأقواس",
-                "ثم احل المتباينة ذات الخطوتين",
-                "تذكر ترتيب العمليات"
+                "ابدأ بطرح ٦ من كلا الطرفين",
+                "عزل الحد الذي يحتوي على المتغير",
+                "٦ - ٦ - ٣ص ≤ ١٨ - ٦"
             ]
         },
         {
