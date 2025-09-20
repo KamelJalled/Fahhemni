@@ -88,6 +88,7 @@ class Problem(BaseModel):
     practice_problems: Optional[List[PracticeExample]] = None
     interactive_examples: Optional[List[InteractiveExample]] = None
     final_answer_required: Optional[bool] = False
+    stage_type: Optional[str] = None
 
 class Section(BaseModel):
     id: str
