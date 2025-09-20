@@ -1921,7 +1921,7 @@ const ProblemView = () => {
                                       
                                       {/* Symbol Shortcut Buttons */}
                                       <div className="symbol-buttons-container flex flex-wrap justify-center gap-2 md:flex-nowrap mb-3">
-                                        {['<', '>', '≤', '≥', '=', '≠'].map((symbol) => (
+                                        {['<', '>', '≤', '≥', '=', '≠', '|'].map((symbol) => (
                                           <Button
                                             key={symbol}
                                             variant="outline"
