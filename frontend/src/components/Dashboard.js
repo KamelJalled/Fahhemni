@@ -383,16 +383,61 @@ const Dashboard = () => {
   console.log(`Dashboard rendering - selectedSection: ${selectedSection}, selectedSectionData:`, selectedSectionData?.id, selectedSectionData?.problems?.length);
 
   return (
-    <div className="min-h-screen p-4">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+    <div className="min-h-screen p-4 overflow-x-hidden">
+      {/* Header - Mobile Responsive */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 truncate">
             {text[language].welcome}, {user.username}!
           </h1>
-          <p className="text-gray-600">{text[language].progress}</p>
+          <p className="text-gray-600 text-sm sm:text-base">{text[language].progress}</p>
         </div>
-        <div className="flex gap-2">
+        
+        {/* Mobile: Stacked buttons */}
+        <div className="flex flex-col sm:hidden gap-2 w-full">
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => setShowRulesModal(true)}
+              variant="outline" 
+              size="sm"
+              className="text-blue-600 border-blue-300 hover:bg-blue-50 flex-1"
+            >
+              <BookOpen className="w-4 h-4 mr-1" />
+              <span className="text-xs">{language === 'en' ? 'Rules' : 'قواعد'}</span>
+            </Button>
+            <Button 
+              onClick={() => {
+                // Reset to beginning - clear progress and refresh
+                if (window.confirm(language === 'en' ? 
+                  'Start over? This will reset all progress.' : 
+                  'البدء من جديد؟ سيتم حذف كل التقدم.'
+                )) {
+                  localStorage.removeItem('mathapp_progress');
+                  window.location.href = '/dashboard';
+                }
+              }} 
+              variant="outline" 
+              size="sm"
+              className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
+            >
+              <RotateCcw className="w-4 h-4 mr-1" />
+              <span className="text-xs">{language === 'en' ? 'Reset' : 'إعادة'}</span>
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={toggleLanguage} variant="outline" size="sm" className="flex-1">
+              <Globe className="w-4 h-4 mr-1" />
+              <span className="text-xs">{language === 'en' ? 'العربية' : 'English'}</span>
+            </Button>
+            <Button onClick={logout} variant="outline" size="sm" className="flex-1">
+              <LogOut className="w-4 h-4 mr-1" />
+              <span className="text-xs">{text[language].logout}</span>
+            </Button>
+          </div>
+        </div>
+        
+        {/* Desktop: Horizontal buttons */}
+        <div className="hidden sm:flex gap-2 flex-shrink-0">
           <Button 
             onClick={() => setShowRulesModal(true)}
             variant="outline" 
