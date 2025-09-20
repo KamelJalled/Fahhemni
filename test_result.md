@@ -1289,9 +1289,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Global Negative Number Input Validation - Frontend & Backend Implementation"
-    - "Rules Modal and Help System Testing - Dashboard and ProblemView Integration"
-    - "Test Section 1 and Section 2 negative number validation formats"
+    - "COMPREHENSIVE MATHEMATICAL FIXES VERIFICATION - Section 2, Practice2_1"
+    - "Step 1 Validation Logic Testing - Correct < sign acceptance, Wrong > sign rejection"
+    - "Step 2 Hint Correction Testing - Simplify vs Flip inequality sign"
+    - "Final Answer Skip Prevention in Step 1"
   stuck_tasks: []
   test_all: false
   test_priority: "critical_first"
