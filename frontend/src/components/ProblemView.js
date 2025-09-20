@@ -2169,8 +2169,15 @@ const ProblemView = () => {
                                           e.target.removeAttribute('data-active-input');
                                         }}
                                         placeholder=""
-                                        className="mb-3 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
+                                        className="mb-2 text-center text-lg font-mono border-2 border-blue-300 bg-white p-3 min-h-[50px]"
                                       />
+                                      
+                                      {/* Section 5 Absolute Value Hint */}
+                                      {getAbsoluteValueHint() && (
+                                        <div className="mb-3 p-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800 text-center">
+                                          {getAbsoluteValueHint()[language]}
+                                        </div>
+                                      )}
 
                                       <Button 
                                         onClick={() => {
