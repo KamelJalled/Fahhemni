@@ -2586,8 +2586,15 @@ const ProblemView = () => {
                                 setStepAnswers(newStepAnswers);
                               }}
                               placeholder={language === 'en' ? `Enter your answer for step ${currentStep + 1}...` : `أدخل إجابتك للخطوة ${currentStep + 1}...`}
-                              className="mb-4 text-lg h-12"
+                              className="mb-2 text-lg h-12"
                             />
+                            
+                            {/* Section 5 Absolute Value Hint */}
+                            {getAbsoluteValueHint() && (
+                              <div className="mb-4 p-2 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800 text-center">
+                                {getAbsoluteValueHint()[language]}
+                              </div>
+                            )}
                           </div>
                         );
                         
