@@ -1131,24 +1131,19 @@ async def init_database():
         {
             "id": "examprep3",
             "section_id": "section3",
-            "type": ProblemType.EXAMPREP,
-            "weight": 30,
-            "question_en": "5(2 - x) < 20",
-            "question_ar": "٥(٢ - س) < ٢٠",
-            "answer": "x > -2",
-            "answer_ar": "س > -٢",
+            "type": ProblemType.EXAM_PREP,
+            "weight": 25,
+            "question_en": "Solve the inequality: 3(1 - k) < 12",
+            "question_ar": "حل المتباينة: ٣(١ - ك) < ١٢",
+            "answer": "k > -3",
+            "answer_ar": "ك > -٣",
             "show_full_solution": False,
             "hide_answer": True,
-            "hints_en": [
-                "Distribute 5 to both terms in parentheses",
-                "Be careful with the negative coefficient of x",
-                "Remember to flip the inequality when dividing by negative"
-            ],
-            "hints_ar": [
-                "وزع ٥ على كلا الحدين في الأقواس",
-                "كن حذراً مع المعامل السالب لـ س",
-                "تذكر قلب المتباينة عند القسمة على عدد سالب"
-            ]
+            "explanation_en": "Distribute 3, subtract 3, then divide by -3 (flip sign)",
+            "explanation_ar": "وزع ٣، اطرح ٣، ثم اقسم على -٣ (اقلب الإشارة)",
+            "final_answer_required": True,
+            "hints_en": [],
+            "hints_ar": []
         }
     ]
     
