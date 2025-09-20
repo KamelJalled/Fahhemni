@@ -3076,7 +3076,10 @@ const ProblemView = () => {
                   {/* Action Buttons */}
                   <div className="mt-4 flex gap-2">
                     {/* Continue to Next Stage - FIXED: Better completion detection */}
-                    {(isCorrect || allStepsComplete) && (
+                    {(isCorrect || allStepsComplete) && 
+                     !(problem.stage_type === 'explanation' && 
+                       practiceComplete.length === problem.interactive_examples.length && 
+                       practiceComplete.every(completed => completed)) && (
                       <Button 
                         onClick={() => {
                           console.log('🔍 Continue button clicked, navigating to next stage with forced navigation');
