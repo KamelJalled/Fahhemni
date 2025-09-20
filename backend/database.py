@@ -636,14 +636,14 @@ async def init_database():
                 }
             ],
             "hints_en": [
-                "To solve a fraction coefficient, what is the inverse operation you should use?",
+                "To isolate k, multiply both sides by -3/2 (the reciprocal). Remember: when multiplying by a negative number, flip the inequality sign!",
                 "When multiplying both sides by a negative number, what happens to the inequality sign?",
-                "Focus on the process: multiply by the reciprocal and check the sign direction."
+                "The rule: multiply by the reciprocal and flip the inequality sign when the multiplier is negative."
             ],
             "hints_ar": [
-                "لحل معامل كسري، ما هي العملية العكسية التي يجب أن تستخدمها؟",
+                "لعزل ك، اضرب كلا الطرفين في -٣/٢ (المقلوب). تذكر: عند الضرب في عدد سالب، اقلب إشارة المتباينة!",
                 "عند ضرب كلا الطرفين في عدد سالب، ماذا يحدث لإشارة المتباينة؟",
-                "ركز على العملية: اضرب في المقلوب وتحقق من اتجاه الإشارة."
+                "القاعدة: اضرب في المقلوب واقلب إشارة المتباينة عندما يكون المضروب سالباً."
             ]
         },
         {
