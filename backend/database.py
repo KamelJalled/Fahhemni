@@ -863,135 +863,40 @@ async def init_database():
             "hide_answer": False,
             "interactive_examples": [
                 {
-                    "title_en": "Level 1: Simple (بسيط) - Example 1A (System Demonstrates)",
+                    "title_en": "Level 1: Simple - Example 1A (System Demonstrates)",
                     "title_ar": "المستوى ١: بسيط - المثال ١أ (يظهر النظام)",
                     "problem_en": "Solve 3x + 4 > 16",
                     "problem_ar": "احل ٣س + ٤ > ١٦",
                     "solution_en": "Step 1: Subtract 4 from both sides: 3x + 4 - 4 > 16 - 4 → 3x > 12\nStep 2: Divide by 3: 3x/3 > 12/3 → x > 4",
-                    "solution_ar": "الخطوة ١: اطرح ٤ من كلا الطرفين: ٣س + ٤ - ٤ > ١٦ - ٤ → ٣س > ١٢\nالخطوة ٢: اقسم على ٣: ٣س/٣ > ١٢/٣ → س > ٤"
+                    "solution_ar": "الخطوة ١: اطرح ٤ من كلا الطرفين: ٣س + ٤ - ٤ > ١٦ - ٤ → ٣س > ١٢\nالخطوة ٢: اقسم على ٣: ٣س/٣ > ١٢/٣ → س > ٤",
+                    "practice_question_en": "Now solve: 2y + 5 ≤ 19",
+                    "practice_question_ar": "الآن احل: ٢ص + ٥ ≤ ١٩",
+                    "practice_answer": "y ≤ 7",
+                    "practice_answer_ar": "ص ≤ ٧"
                 },
                 {
-                    "title_en": "Level 1: Simple (بسيط) - Example 1B (Student Solves - 2 STEPS REQUIRED)",
-                    "title_ar": "المستوى ١: بسيط - المثال ١ب (يحل الطالب - مطلوب خطوتان)",
-                    "problem_en": "Solve 2y + 5 ≤ 19",
-                    "problem_ar": "احل ٢ص + ٥ ≤ ١٩",
-                    "step_solutions": [
-                        {
-                            "step_en": "اطرح ٥ من كلا الطرفين / Subtract 5 from both sides",
-                            "step_ar": "اطرح ٥ من كلا الطرفين",
-                            "possible_answers": [
-                                "2y ≤ 14",
-                                "٢ص ≤ ١٤",
-                                "2y + 5 - 5 ≤ 19 - 5"
-                            ],
-                            "possible_answers_ar": [
-                                "٢ص ≤ ١٤",
-                                "٢ص + ٥ - ٥ ≤ ١٩ - ٥"
-                            ]
-                        },
-                        {
-                            "step_en": "اقسم كلا الطرفين على ٢ / Divide both sides by 2",
-                            "step_ar": "اقسم كلا الطرفين على ٢",
-                            "possible_answers": [
-                                "y ≤ 7",
-                                "ص ≤ ٧",
-                                "y ≤ 14/2"
-                            ],
-                            "possible_answers_ar": [
-                                "ص ≤ ٧",
-                                "ص ≤ ١٤/٢"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "title_en": "Level 2: Negative Coefficient (معامل سالب) - Example 2A (System Demonstrates)",
+                    "title_en": "Level 2: Negative Coefficient - Example 2A (System Demonstrates)",
                     "title_ar": "المستوى ٢: معامل سالب - المثال ٢أ (يظهر النظام)",
                     "problem_en": "Solve 12 - 4m < 20",
                     "problem_ar": "احل ١٢ - ٤م < ٢٠",
                     "solution_en": "Step 1: Subtract 12: -4m < 8\nStep 2: Divide by -4 and FLIP SIGN: m > -2",
-                    "solution_ar": "الخطوة ١: اطرح ١٢: -٤م < ٨\nالخطوة ٢: اقسم على -٤ واقلب الإشارة: م > -٢"
+                    "solution_ar": "الخطوة ١: اطرح ١٢: -٤م < ٨\nالخطوة ٢: اقسم على -٤ واقلب الإشارة: م > -٢",
+                    "practice_question_en": "Now solve: 15 - 5k ≥ -10",
+                    "practice_question_ar": "الآن احل: ١٥ - ٥ك ≥ -١٠",
+                    "practice_answer": "k ≤ 5",
+                    "practice_answer_ar": "ك ≤ ٥"
                 },
                 {
-                    "title_en": "Level 2: Negative Coefficient (معامل سالب) - Example 2B (Student Solves - 2 STEPS REQUIRED)",
-                    "title_ar": "المستوى ٢: معامل سالب - المثال ٢ب (يحل الطالب - مطلوب خطوتان)",
-                    "problem_en": "Solve 15 - 5k ≥ -10",
-                    "problem_ar": "احل ١٥ - ٥ك ≥ -١٠",
-                    "step_solutions": [
-                        {
-                            "step_en": "اطرح ١٥ من كلا الطرفين / Subtract 15 from both sides",
-                            "step_ar": "اطرح ١٥ من كلا الطرفين",
-                            "possible_answers": [
-                                "-5k ≥ -25",
-                                "-٥ك ≥ -٢٥",
-                                "15 - 5k - 15 ≥ -10 - 15"
-                            ],
-                            "possible_answers_ar": [
-                                "-٥ك ≥ -٢٥",
-                                "١٥ - ٥ك - ١٥ ≥ -١٠ - ١٥"
-                            ]
-                        },
-                        {
-                            "step_en": "اقسم على -٥ واقلب الإشارة / Divide by -5 and flip the sign",
-                            "step_ar": "اقسم على -٥ واقلب الإشارة",
-                            "possible_answers": [
-                                "k ≤ 5",
-                                "ك ≤ ٥"
-                            ],
-                            "possible_answers_ar": [
-                                "ك ≤ ٥"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "title_en": "Level 3: Distributive Property (خاصية التوزيع) - Example 3A (System Demonstrates)",
+                    "title_en": "Level 3: Distributive Property - Example 3A (System Demonstrates)",
                     "title_ar": "المستوى ٣: خاصية التوزيع - المثال ٣أ (يظهر النظام)",
                     "problem_en": "Solve 3(n + 2) ≤ 18",
                     "problem_ar": "احل ٣(ن + ٢) ≤ ١٨",
                     "solution_en": "Step 1: Distribute: 3n + 6 ≤ 18\nStep 2: Subtract 6: 3n ≤ 12\nStep 3: Divide by 3: n ≤ 4",
-                    "solution_ar": "الخطوة ١: وزع: ٣ن + ٦ ≤ ١٨\nالخطوة ٢: اطرح ٦: ٣ن ≤ ١٢\nالخطوة ٣: اقسم على ٣: ن ≤ ٤"
-                },
-                {
-                    "title_en": "Level 3: Distributive Property (خاصية التوزيع) - Example 3B (Student Solves - 3 STEPS REQUIRED)",
-                    "title_ar": "المستوى ٣: خاصية التوزيع - المثال ٣ب (يحل الطالب - مطلوب ٣ خطوات)",
-                    "problem_en": "Solve 4(r - 1) > 8",
-                    "problem_ar": "احل ٤(ر - ١) > ٨",
-                    "step_solutions": [
-                        {
-                            "step_en": "وزع الـ ٤ / Distribute the 4",
-                            "step_ar": "وزع الـ ٤",
-                            "possible_answers": [
-                                "4r - 4 > 8",
-                                "٤ر - ٤ > ٨"
-                            ],
-                            "possible_answers_ar": [
-                                "٤ر - ٤ > ٨"
-                            ]
-                        },
-                        {
-                            "step_en": "أضف ٤ لكلا الطرفين / Add 4 to both sides",
-                            "step_ar": "أضف ٤ لكلا الطرفين",
-                            "possible_answers": [
-                                "4r > 12",
-                                "٤ر > ١٢"
-                            ],
-                            "possible_answers_ar": [
-                                "٤ر > ١٢"
-                            ]
-                        },
-                        {
-                            "step_en": "اقسم على ٤ / Divide by 4",
-                            "step_ar": "اقسم على ٤",
-                            "possible_answers": [
-                                "r > 3",
-                                "ر > ٣"
-                            ],
-                            "possible_answers_ar": [
-                                "ر > ٣"
-                            ]
-                        }
-                    ]
+                    "solution_ar": "الخطوة ١: وزع: ٣ن + ٦ ≤ ١٨\nالخطوة ٢: اطرح ٦: ٣ن ≤ ١٢\nالخطوة ٣: اقسم على ٣: ن ≤ ٤",
+                    "practice_question_en": "Now solve: 4(r - 1) > 8",
+                    "practice_question_ar": "الآن احل: ٤(ر - ١) > ٨",
+                    "practice_answer": "r > 3",
+                    "practice_answer_ar": "ر > ٣"
                 }
             ],
             "hints_en": [],
