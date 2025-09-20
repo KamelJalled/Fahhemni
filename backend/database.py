@@ -601,15 +601,15 @@ async def init_database():
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Multiply both sides by -3/2",
-                    "step_ar": "اضرب كلا الطرفين في -٣/٢",
+                    "step_en": "Multiply both sides by -3/2 and flip the inequality sign",
+                    "step_ar": "اضرب كلا الطرفين في -٣/٢ واقلب إشارة المتباينة",
                     "possible_answers": [
-                        "(-2/3) k * (-3/2) > 8 * (-3/2)",
+                        "(-2/3) k * (-3/2) < 8 * (-3/2)",
                         "k < 8 * (-3/2)",
                         "k < -12"
                     ],
                     "possible_answers_ar": [
-                        "(-٢/٣) ك * (-٣/٢) > ٨ * (-٣/٢)",
+                        "(-٢/٣) ك * (-٣/٢) < ٨ * (-٣/٢)",
                         "ك < ٨ * (-٣/٢)",
                         "ك < -١٢"
                     ]
