@@ -298,121 +298,14 @@ const ProblemView = () => {
   const validateInequalityStep = (userAnswer, expectedAnswers, stepInstruction) => {
     const normalizedUserAnswer = normalizeAnswer(userAnswer);
     
-    // Enhanced validation for different answer formats
+    // Simple validation - check direct matches only
     let isCorrect = false;
     
     if (expectedAnswers) {
-      // Check direct matches first
+      // Check direct matches only - NO automatic sign flipping
       isCorrect = expectedAnswers.some(expectedAnswer => 
         normalizeAnswer(expectedAnswer) === normalizedUserAnswer
       );
-      
-      // ENHANCED: Special handling for inequality operations
-      if (!isCorrect && stepInstruction) {
-        const instruction = stepInstruction.toLowerCase();
-        
-        // Check for division/multiplication by negative numbers
-        if (instruction.includes('divide') && instruction.includes('-')) {
-          // When dividing by negative, sign should flip
-          const flippedAnswers = expectedAnswers.map(ans => {
-            let flipped = ans.replace('>', '<').replace('<', '>');
-            flipped = flipped.replace('≥', '≤').replace('≤', '≥');
-            return flipped;
-          });
-          
-          isCorrect = flippedAnswers.some(flippedAnswer => 
-            normalizeAnswer(flippedAnswer) === normalizedUserAnswer
-          );
-        }
-        
-        if (instruction.includes('multiply') && instruction.includes('-')) {
-          // When multiplying by negative, sign should flip
-          const flippedAnswers = expectedAnswers.map(ans => {
-            let flipped = ans.replace('>', '<').replace('<', '>');
-            flipped = flipped.replace('≥', '≤').replace('≤', '≥');
-            return flipped;
-          });
-          
-          isCorrect = flippedAnswers.some(flippedAnswer => 
-            normalizeAnswer(flippedAnswer) === normalizedUserAnswer
-          );
-        }
-      }
-      
-      // FIXED: Accept multiple formats for the same mathematical answer
-      if (!isCorrect) {
-        // Generate alternative formats for all expected answers
-        const allAlternativeFormats = [];
-        expectedAnswers.forEach(expected => {
-          const normalized = normalizeAnswer(expected);
-          
-          // Parse the inequality to get variable, operator, and value
-          const inequalityRegex = /([a-z]+)\s*([<>≤≥]+)\s*([-]?\d+\.?\d*)|(\d+\.?\d*)\s*([<>≤≥]+)\s*([a-z]+)/i;
-          const match = normalized.match(inequalityRegex);
-          
-          if (match) {
-            let variable, operator, value;
-            
-            if (match[1]) {
-              // Format: x < 5
-              variable = match[1];
-              operator = match[2];
-              value = match[3];
-            } else if (match[6]) {
-              // Format: 5 > x
-              value = match[4];
-              operator = match[5];
-              variable = match[6];
-            }
-            
-            if (variable && operator && value) {
-              // Create all equivalent formats
-              const alternatives = [];
-              
-              // Original format
-              alternatives.push(`${variable}${operator}${value}`);
-              
-              // Reversed format (x < 5 ↔ 5 > x)
-              const reverseOperatorMap = {
-                '<': '>',
-                '>': '<',
-                '≤': '≥',
-                '≥': '≤',
-                '<=': '>=',
-                '>=': '<='
-              };
-              
-              const reversedOp = reverseOperatorMap[operator];
-              if (reversedOp) {
-                alternatives.push(`${value}${reversedOp}${variable}`);
-              }
-              
-              // Handle text versions
-              alternatives.push(`${variable}>=${value}`);
-              alternatives.push(`${variable}<=${value}`);
-              alternatives.push(`${value}>=${variable}`);
-              alternatives.push(`${value}<=${variable}`);
-              
-              allAlternativeFormats.push(...alternatives);
-            }
-          }
-          
-          // Also add common variations
-          allAlternativeFormats.push(normalized);
-          allAlternativeFormats.push(normalized.replace('>=', '≥'));
-          allAlternativeFormats.push(normalized.replace('<=', '≤'));
-          allAlternativeFormats.push(normalized.replace('≥', '>='));
-          allAlternativeFormats.push(normalized.replace('≤', '<='));
-        });
-        
-        // Remove duplicates and check for matches
-        const uniqueFormats = [...new Set(allAlternativeFormats)];
-        isCorrect = uniqueFormats.some(alt => alt === normalizedUserAnswer);
-        
-        if (isCorrect) {
-          console.log(`✅ Accepted alternative format: ${userAnswer} → ${normalizedUserAnswer}`);
-        }
-      }
     }
     
     return isCorrect;
