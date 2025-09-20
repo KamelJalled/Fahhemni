@@ -2126,9 +2126,9 @@ const ProblemView = () => {
                                                   setShowEncouragement('');
                                                 }, 3000);
                                               } else {
-                                                // All examples completed - mark as complete but DON'T submit to backend yet
+                                                // All examples completed - mark as complete but DON'T set isCorrect for explanation stage
                                                 setAllStepsComplete(true);
-                                                setIsCorrect(true);
+                                                // Don't set isCorrect here to prevent conflicting navigation buttons
                                                 // Remove automatic timeout - let user click Continue button manually
                                                 setShowEncouragement(language === 'en' ? "Perfect! All examples completed!" : "ممتاز! تم إكمال جميع الأمثلة!");
                                               }
