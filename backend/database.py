@@ -802,66 +802,52 @@ async def init_database():
             "section_id": "section3",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "2(x + 3) > 10",
-            "question_ar": "٢(س + ٣) > ١٠",
-            "answer": "x > 2",
-            "answer_ar": "س > ٢",
-            "explanation_en": "This inequality has parentheses. We need to distribute first, then solve.",
-            "explanation_ar": "هذه المتباينة تحتوي على أقواس. نحتاج للتوزيع أولاً، ثم الحل.",
+            "question_en": "Solve the inequality: 2x + 5 > 15",
+            "question_ar": "حل المتباينة: ٢س + ٥ > ١٥",
+            "answer": "x > 5",
+            "answer_ar": "س > ٥",
+            "explanation_en": "This is a review problem for solving multi-step inequalities.",
+            "explanation_ar": "هذه مسألة مراجعة لحل المتباينات متعددة الخطوات.",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Distribute 2 to terms inside parentheses",
-                    "step_ar": "وزع ٢ على الحدود داخل الأقواس",
+                    "step_en": "Step 1: Subtract 5 from both sides",
+                    "step_ar": "الخطوة ١: اطرح ٥ من كلا الطرفين",
                     "possible_answers": [
-                        "2(x + 3) > 10",
-                        "2x + 6 > 10"
+                        "2x + 5 - 5 > 15 - 5",
+                        "2x > 15 - 5",
+                        "2x > 10"
                     ],
                     "possible_answers_ar": [
-                        "٢(س + ٣) > ١٠",
-                        "٢س + ٦ > ١٠"
+                        "٢س + ٥ - ٥ > ١٥ - ٥",
+                        "٢س > ١٥ - ٥",
+                        "٢س > ١٠"
                     ]
                 },
                 {
-                    "step_en": "Subtract 6 from both sides",
-                    "step_ar": "اطرح ٦ من الطرفين",
+                    "step_en": "Step 2: Divide by 2",
+                    "step_ar": "الخطوة ٢: اقسم على ٢",
                     "possible_answers": [
-                        "2x + 6 - 6 > 10 - 6",
-                        "2x > 10 - 6",
-                        "2x > 4"
+                        "2x / 2 > 10 / 2",
+                        "x > 10 / 2",
+                        "x > 5"
                     ],
                     "possible_answers_ar": [
-                        "٢س + ٦ - ٦ > ١٠ - ٦",
-                        "٢س > ١٠ - ٦",
-                        "٢س > ٤"
-                    ]
-                },
-                {
-                    "step_en": "Divide both sides by 2",
-                    "step_ar": "اقسم الطرفين على ٢",
-                    "possible_answers": [
-                        "2x / 2 > 4 / 2",
-                        "x > 4 / 2",
-                        "x > 2"
-                    ],
-                    "possible_answers_ar": [
-                        "٢س / ٢ > ٤ / ٢",
-                        "س > ٤ / ٢",
-                        "س > ٢"
+                        "٢س / ٢ > ١٠ / ٢",
+                        "س > ١٠ / ٢",
+                        "س > ٥"
                     ]
                 }
             ],
             "final_answer_required": True,
             "hints_en": [
-                "Start by distributing (multiplying out the parentheses)",
-                "Remember: 2(x + 3) = 2x + 6",
-                "Then solve like a two-step inequality"
+                "ما العملية التي تلغي +٥؟ / What operation cancels +5?",
+                "اطرح ٥ أولاً، ثم اقسم على ٢ / Subtract 5 first, then divide by 2"
             ],
             "hints_ar": [
-                "ابدأ بالتوزيع (ضرب ما داخل الأقواس)",
-                "تذكر: ٢(س + ٣) = ٢س + ٦", 
-                "ثم احل كمتباينة ذات خطوتين"
+                "ما العملية التي تلغي +٥؟",
+                "اطرح ٥ أولاً، ثم اقسم على ٢"
             ]
         },
         {
