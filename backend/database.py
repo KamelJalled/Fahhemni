@@ -1447,57 +1447,29 @@ async def init_database():
     }
     await sections_collection.insert_one(section4)
     
-    # Section 5: Compound Inequalities  
+    # Section 5: Absolute Value Inequalities - COMPREHENSIVE UPDATE
     section5_problems = [
         {
             "id": "prep5",
             "section_id": "section5",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "-3 < 2x + 1 ≤ 7",
-            "question_ar": "-٣ < ٢س + ١ ≤ ٧",
-            "answer": "-2 < x ≤ 3",
-            "answer_ar": "-٢ < س ≤ ٣",
-            "explanation_en": "This is a compound inequality. We solve both parts at the same time.",
-            "explanation_ar": "هذه متباينة مركبة. نحل كلا الجزئين في نفس الوقت.",
+            "question_en": "Solve: |x| < 4",
+            "question_ar": "حل: |س| < ٤",
+            "answer": "-4 < x < 4",
+            "answer_ar": "-٤ < س < ٤",
+            "explanation_en": "Absolute value less than a positive number creates a compound inequality.",
+            "explanation_ar": "القيمة المطلقة أقل من عدد موجب تنتج متباينة مركبة.",
             "show_full_solution": False,
             "hide_answer": False,
-            "step_solutions": [
-                {
-                    "step_en": "Subtract 1 from all parts",
-                    "step_ar": "اطرح ١ من جميع الأجزاء",
-                    "possible_answers": [
-                        "-3 - 1 < 2x + 1 - 1 ≤ 7 - 1",
-                        "-4 < 2x ≤ 6"
-                    ],
-                    "possible_answers_ar": [
-                        "-٣ - ١ < ٢س + ١ - ١ ≤ ٧ - ١",
-                        "-٤ < ٢س ≤ ٦"
-                    ]
-                },
-                {
-                    "step_en": "Divide all parts by 2",
-                    "step_ar": "اقسم جميع الأجزاء على ٢",
-                    "possible_answers": [
-                        "-4 / 2 < 2x / 2 ≤ 6 / 2",
-                        "-2 < x ≤ 3"
-                    ],
-                    "possible_answers_ar": [
-                        "-٤ / ٢ < ٢س / ٢ ≤ ٦ / ٢",
-                        "-٢ < س ≤ ٣"
-                    ]
-                }
-            ],
             "final_answer_required": True,
             "hints_en": [
-                "Apply the same operation to all three parts",
-                "Keep the inequality signs in the same direction",
-                "Work with all parts simultaneously"
+                "القيمة المطلقة أقل من ٤ تعني المسافة من الصفر أقل من ٤ / Absolute value less than 4 means distance from zero less than 4",
+                "الحل بين -٤ و ٤ / Solution is between -4 and 4"
             ],
             "hints_ar": [
-                "طبق نفس العملية على الأجزاء الثلاثة",
-                "احتفظ بإشارات المتباينة في نفس الاتجاه",
-                "اعمل مع جميع الأجزاء بشكل متزامن"
+                "القيمة المطلقة أقل من ٤ تعني المسافة من الصفر أقل من ٤",
+                "الحل بين -٤ و ٤"
             ]
         },
         {
@@ -1505,36 +1477,109 @@ async def init_database():
             "section_id": "section5",
             "type": ProblemType.EXPLANATION,
             "weight": 0,
-            "question_en": "Learn Compound Inequalities",
-            "question_ar": "تعلم المتباينات المركبة",
+            "question_en": "Learn Absolute Value Inequalities",
+            "question_ar": "تعلم متباينات القيمة المطلقة",
             "answer": "",
             "answer_ar": "",
             "show_full_solution": False,
             "hide_answer": False,
             "interactive_examples": [
                 {
-                    "title_en": "Example 1: Three-Part Inequality",
-                    "title_ar": "المثال الأول: متباينة ثلاثية الأجزاء",
-                    "problem_en": "1 ≤ 3x - 2 < 10",
-                    "problem_ar": "١ ≤ ٣س - ٢ < ١٠",
-                    "solution_en": "Step 1: Add 2 to all parts\n1 + 2 ≤ 3x - 2 + 2 < 10 + 2\n3 ≤ 3x < 12\nStep 2: Divide all parts by 3\n3 ÷ 3 ≤ 3x ÷ 3 < 12 ÷ 3\n1 ≤ x < 4",
-                    "solution_ar": "الخطوة ١: أضف ٢ لجميع الأجزاء\n١ + ٢ ≤ ٣س - ٢ + ٢ < ١٠ + ٢\n٣ ≤ ٣س < ١٢\nالخطوة ٢: اقسم جميع الأجزاء على ٣\n٣ ÷ ٣ ≤ ٣س ÷ ٣ < ١٢ ÷ ٣\n١ ≤ س < ٤",
-                    "practice_question_en": "Now try: 2 < x + 1 ≤ 5",
-                    "practice_question_ar": "الآن جرب: ٢ < س + ١ ≤ ٥",
-                    "practice_answer": "1 < x ≤ 4",
-                    "practice_answer_ar": "١ < س ≤ ٤"
+                    "title_en": "Level 1: Simple Absolute Value - Example 1A (System Demonstrates)",
+                    "title_ar": "المستوى ١: قيمة مطلقة بسيطة - المثال ١أ (يظهر النظام)",
+                    "problem_en": "Solve |m| ≤ 6",
+                    "problem_ar": "احل |م| ≤ ٦",
+                    "solution_en": "Absolute value ≤ positive means compound inequality\nConvert to: -6 ≤ m ≤ 6\nSolution: -6 ≤ m ≤ 6",
+                    "solution_ar": "القيمة المطلقة ≤ موجب تعني متباينة مركبة\nحول إلى: -٦ ≤ م ≤ ٦\nالحل: -٦ ≤ م ≤ ٦",
+                    "practice_question_en": "Now solve: |y| < 3",
+                    "practice_question_ar": "الآن احل: |ص| < ٣",
+                    "practice_answer": "-3 < y < 3",
+                    "practice_answer_ar": "-٣ < ص < ٣"
                 },
                 {
-                    "title_en": "Example 2: With Negative Division",
-                    "title_ar": "المثال الثاني: مع القسمة السالبة",
-                    "problem_en": "0 ≤ -2x + 6 < 8",
-                    "problem_ar": "٠ ≤ -٢س + ٦ < ٨",
-                    "solution_en": "Step 1: Subtract 6 from all parts\n0 - 6 ≤ -2x + 6 - 6 < 8 - 6\n-6 ≤ -2x < 2\nStep 2: Divide by -2 (FLIP signs!)\n-6 ÷ (-2) ≥ -2x ÷ (-2) > 2 ÷ (-2)\n3 ≥ x > -1\nRewrite: -1 < x ≤ 3",
-                    "solution_ar": "الخطوة ١: اطرح ٦ من جميع الأجزاء\n٠ - ٦ ≤ -٢س + ٦ - ٦ < ٨ - ٦\n-٦ ≤ -٢س < ٢\nالخطوة ٢: اقسم على -٢ (اقلب الإشارات!)\n-٦ ÷ (-٢) ≥ -٢س ÷ (-٢) > ٢ ÷ (-٢)\n٣ ≥ س > -١\nأعد الكتابة: -١ < س ≤ ٣",
-                    "practice_question_en": "Now try: 4 ≤ -x + 2 < 7",
-                    "practice_question_ar": "الآن جرب: ٤ ≤ -س + ٢ < ٧",
-                    "practice_answer": "-5 < x ≤ -2",
-                    "practice_answer_ar": "-٥ < س ≤ -٢"
+                    "title_en": "Level 2: Absolute Value Greater Than - Example 2A (System Demonstrates)",
+                    "title_ar": "المستوى ٢: القيمة المطلقة أكبر من - المثال ٢أ (يظهر النظام)",
+                    "problem_en": "Solve |k| > 5",
+                    "problem_ar": "احل |ك| > ٥",
+                    "solution_en": "Absolute value > positive means OR inequality\nConvert to: k < -5 or k > 5\nTwo separate ranges, not connected",
+                    "solution_ar": "القيمة المطلقة > موجب تعني متباينة أو\nحول إلى: ك < -٥ أو ك > ٥\nمداان منفصلان، غير متصلان",
+                    "practice_question_en": "Now solve: |n| ≥ 2",
+                    "practice_question_ar": "الآن احل: |ن| ≥ ٢",
+                    "practice_answer": "n ≤ -2 or n ≥ 2",
+                    "practice_answer_ar": "ن ≤ -٢ أو ن ≥ ٢"
+                },
+                {
+                    "title_en": "Level 3: Complex Absolute Value - Example 3A (System Demonstrates)",
+                    "title_ar": "المستوى ٣: قيمة مطلقة معقدة - المثال ٣أ (يظهر النظام)",
+                    "problem_en": "Solve |2x - 3| < 7",
+                    "problem_ar": "احل |٢س - ٣| < ٧",
+                    "solution_en": "Step 1: Convert to compound: -7 < 2x - 3 < 7\nStep 2: Add 3 to all parts: -4 < 2x < 10\nStep 3: Divide by 2: -2 < x < 5",
+                    "solution_ar": "الخطوة ١: حول إلى مركبة: -٧ < ٢س - ٣ < ٧\nالخطوة ٢: أضف ٣ لجميع الأجزاء: -٤ < ٢س < ١٠\nالخطوة ٣: اقسم على ٢: -٢ < س < ٥",
+                    "practice_question_en": "Now solve: |x + 4| ≤ 6",
+                    "practice_question_ar": "الآن احل: |س + ٤| ≤ ٦",
+                    "practice_answer": "-10 ≤ x ≤ 2",
+                    "practice_answer_ar": "-١٠ ≤ س ≤ ٢"
+                }
+            ],
+            "step_solutions": [
+                {
+                    "step_en": "Level 1B Step 1: Convert to compound inequality",
+                    "step_ar": "المستوى ١ب الخطوة ١: حول إلى متباينة مركبة",
+                    "possible_answers": [
+                        "-3 < y < 3",
+                        "-٣ < ص < ٣",
+                        "y > -3 and y < 3"
+                    ],
+                    "possible_answers_ar": [
+                        "-٣ < ص < ٣",
+                        "ص > -٣ و ص < ٣"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 1: Convert to OR inequality",
+                    "step_ar": "المستوى ٢ب الخطوة ١: حول إلى متباينة منفصلة",
+                    "possible_answers": [
+                        "n ≤ -2 or n ≥ 2",
+                        "ن ≤ -٢ أو ن ≥ ٢",
+                        "n <= -2 or n >= 2",
+                        "n ≤ -2 || n ≥ 2"
+                    ],
+                    "possible_answers_ar": [
+                        "ن ≤ -٢ أو ن ≥ ٢"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 1: Convert to compound inequality",
+                    "step_ar": "المستوى ٣ب الخطوة ١: حول إلى متباينة مركبة",
+                    "possible_answers": [
+                        "-6 ≤ x + 4 ≤ 6",
+                        "-٦ ≤ س + ٤ ≤ ٦"
+                    ],
+                    "possible_answers_ar": [
+                        "-٦ ≤ س + ٤ ≤ ٦"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 2: Subtract 4 from all parts",
+                    "step_ar": "المستوى ٣ب الخطوة ٢: اطرح ٤ من جميع الأجزاء",
+                    "possible_answers": [
+                        "-10 ≤ x ≤ 2",
+                        "-١٠ ≤ س ≤ ٢"
+                    ],
+                    "possible_answers_ar": [
+                        "-١٠ ≤ س ≤ ٢"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 3: Write final answer",
+                    "step_ar": "المستوى ٣ب الخطوة ٣: اكتب الإجابة النهائية",
+                    "possible_answers": [
+                        "-10 ≤ x ≤ 2",
+                        "-١٠ ≤ س ≤ ٢"
+                    ],
+                    "possible_answers_ar": [
+                        "-١٠ ≤ س ≤ ٢"
+                    ]
                 }
             ],
             "hints_en": [],
@@ -1545,43 +1590,48 @@ async def init_database():
             "section_id": "section5",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "-3 < 2x + 1 ≤ 7",
-            "question_ar": "-٣ < ٢س + ١ ≤ ٧",
-            "answer": "-2 < x ≤ 3",
-            "answer_ar": "-٢ < س ≤ ٣",
+            "question_en": "Solve |3y - 2| > 8",
+            "question_ar": "احل |٣ص - ٢| > ٨",
+            "answer": "y < -2 or y > 10/3",
+            "answer_ar": "ص < -٢ أو ص > ١٠/٣",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Subtract 1 from all parts",
-                    "step_ar": "اطرح ١ من جميع الأجزاء",
+                    "step_en": "حول إلى متباينة منفصلة / Convert to OR inequality",
+                    "step_ar": "حول إلى متباينة منفصلة",
                     "possible_answers": [
-                        "-4 < 2x ≤ 6"
+                        "3y - 2 < -8 or 3y - 2 > 8",
+                        "3y - 2 < -8 || 3y - 2 > 8",
+                        "٣ص - ٢ < -٨ أو ٣ص - ٢ > ٨"
                     ],
                     "possible_answers_ar": [
-                        "-٤ < ٢س ≤ ٦"
+                        "٣ص - ٢ < -٨ أو ٣ص - ٢ > ٨"
                     ]
                 },
                 {
-                    "step_en": "Divide all parts by 2",
-                    "step_ar": "اقسم جميع الأجزاء على ٢",
+                    "step_en": "حل كل متباينة منفصلة / Solve each inequality separately",
+                    "step_ar": "حل كل متباينة منفصلة",
                     "possible_answers": [
-                        "-2 < x ≤ 3"
+                        "y < -2 or y > 10/3",
+                        "y < -2 or y > 3.33",
+                        "ص < -٢ أو ص > ١٠/٣"
                     ],
                     "possible_answers_ar": [
-                        "-٢ < س ≤ ٣"
+                        "ص < -٢ أو ص > ١٠/٣"
                     ]
                 }
             ],
+            "final_answer_required": False,
             "hints_en": [
-                "Perform the same operation on all three parts",
-                "First eliminate the constant term",
-                "Then eliminate the coefficient of x"
+                "القيمة المطلقة > ٨ تعني حالتين منفصلتين / Absolute value > 8 means two separate cases",
+                "إما أقل من -٨ أو أكبر من ٨ / Either < -8 or > 8",
+                "|تعبير| > ٨ يعطي: تعبير < -٨ أو تعبير > ٨"
             ],
             "hints_ar": [
-                "نفذ نفس العملية على الأجزاء الثلاثة",
-                "أولاً احذف الحد الثابت",
-                "ثم احذف معامل س"
+                "القيمة المطلقة > ٨ تعني حالتين منفصلتين",
+                "إما أقل من -٨ أو أكبر من ٨",
+                "|تعبير| > ٨ يعطي: تعبير < -٨ أو تعبير > ٨"
             ]
         },
         {
@@ -1589,88 +1639,99 @@ async def init_database():
             "section_id": "section5",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "4 ≤ 3x - 2 < 10",
-            "question_ar": "٤ ≤ ٣س - ٢ < ١٠",
-            "answer": "2 ≤ x < 4",
-            "answer_ar": "٢ ≤ س < ٤",
+            "stage_type": "practice_word",
+            "question_en": "A machine produces parts with target length 50mm. Tolerance is ±0.5mm. Write and solve inequality for acceptable lengths.",
+            "question_ar": "آلة تنتج قطع بطول مستهدف ٥٠ مم. التفاوت المسموح ±٠.٥ مم. اكتب واحل متباينة الأطوال المقبولة.",
+            "answer": "49.5 ≤ L ≤ 50.5",
+            "answer_ar": "٤٩.٥ ≤ ط ≤ ٥٠.٥",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Add 2 to all parts",
-                    "step_ar": "أضف ٢ لجميع الأجزاء",
+                    "step_en": "اكتب متباينة القيمة المطلقة / Write absolute value inequality",
+                    "step_ar": "اكتب متباينة القيمة المطلقة",
                     "possible_answers": [
-                        "6 ≤ 3x < 12"
+                        "|L - 50| ≤ 0.5",
+                        "|ط - ٥٠| ≤ ٠.٥"
                     ],
                     "possible_answers_ar": [
-                        "٦ ≤ ٣س < ١٢"
+                        "|ط - ٥٠| ≤ ٠.٥"
                     ]
                 },
                 {
-                    "step_en": "Divide all parts by 3",
-                    "step_ar": "اقسم جميع الأجزاء على ٣",
+                    "step_en": "حول إلى متباينة مركبة / Convert to compound",
+                    "step_ar": "حول إلى متباينة مركبة",
                     "possible_answers": [
-                        "2 ≤ x < 4"
+                        "-0.5 ≤ L - 50 ≤ 0.5",
+                        "-٠.٥ ≤ ط - ٥٠ ≤ ٠.٥"
                     ],
                     "possible_answers_ar": [
-                        "٢ ≤ س < ٤"
+                        "-٠.٥ ≤ ط - ٥٠ ≤ ٠.٥"
+                    ]
+                },
+                {
+                    "step_en": "احسب المدى المقبول للأطوال / Calculate acceptable length range",
+                    "step_ar": "احسب المدى المقبول للأطوال",
+                    "possible_answers": [
+                        "49.5 ≤ L ≤ 50.5",
+                        "٤٩.٥ ≤ ط ≤ ٥٠.٥"
+                    ],
+                    "possible_answers_ar": [
+                        "٤٩.٥ ≤ ط ≤ ٥٠.٥"
                     ]
                 }
             ],
+            "final_answer_required": False,
             "hints_en": [
-                "What operation cancels -2?",
-                "Apply it to all three parts",
-                "Then divide to isolate x"
+                "الفرق عن الطول المستهدف يجب أن يكون ضمن التفاوت / Difference from target must be within tolerance",
+                "استخدم |الطول - المستهدف| ≤ التفاوت",
+                "الفرق عن ٥٠ يجب أن يكون ≤ ٠.٥"
             ],
             "hints_ar": [
-                "ما العملية التي تلغي -٢؟",
-                "طبقها على الأجزاء الثلاثة",
-                "ثم اقسم لعزل س"
+                "الفرق عن الطول المستهدف يجب أن يكون ضمن التفاوت",
+                "استخدم |الطول - المستهدف| ≤ التفاوت",
+                "الفرق عن ٥٠ يجب أن يكون ≤ ٠.٥"
             ]
         },
         {
             "id": "assessment5",
             "section_id": "section5",
             "type": ProblemType.ASSESSMENT,
-            "weight": 30,
-            "question_en": "1 < 2x - 3 ≤ 9",
-            "question_ar": "١ < ٢س - ٣ ≤ ٩",
-            "answer": "2 < x ≤ 6",
-            "answer_ar": "٢ < س ≤ ٦",
+            "weight": 20,
+            "question_en": "What is the solution to |4 - x| ≥ 3?",
+            "question_ar": "ما هو حل |٤ - س| ≥ ٣؟",
+            "answer": "x ≤ 1 or x ≥ 7",
+            "answer_ar": "س ≤ ١ أو س ≥ ٧",
             "show_full_solution": False,
             "hide_answer": True,
+            "explanation_en": "Convert to two cases: 4 - x ≥ 3 or 4 - x ≤ -3, then solve each",
+            "explanation_ar": "حول إلى حالتين: ٤ - س ≥ ٣ أو ٤ - س ≤ -٣، ثم احل كل حالة",
+            "final_answer_required": True,
             "hints_en": [
-                "Work with all three parts of the compound inequality",
-                "Add 3 to all parts first",
-                "Then divide all parts by 2"
+                "فكر في حالتين: ٤ - س ≥ ٣ أو ٤ - س ≤ -٣ / Think two cases: 4 - x ≥ 3 or 4 - x ≤ -3",
+                "حل كل حالة منفصلة وانتبه للإشارات / Solve each case separately, watch the signs"
             ],
             "hints_ar": [
-                "اعمل مع الأجزاء الثلاثة للمتباينة المركبة",
-                "أضف ٣ لجميع الأجزاء أولاً",
-                "ثم اقسم جميع الأجزاء على ٢"
+                "فكر في حالتين: ٤ - س ≥ ٣ أو ٤ - س ≤ -٣",
+                "حل كل حالة منفصلة وانتبه للإشارات"
             ]
         },
         {
             "id": "examprep5",
             "section_id": "section5",
             "type": ProblemType.EXAMPREP,
-            "weight": 30,
-            "question_en": "-5 ≤ -2x + 1 < 7",
-            "question_ar": "-٥ ≤ -٢س + ١ < ٧",
-            "answer": "-3 < x ≤ 3",
-            "answer_ar": "-٣ < س ≤ ٣",
+            "weight": 25,
+            "question_en": "Solve: |2x + 1| - 3 < 4",
+            "question_ar": "حل: |٢س + ١| - ٣ < ٤",
+            "answer": "-4 < x < 3",
+            "answer_ar": "-٤ < س < ٣",
             "show_full_solution": False,
             "hide_answer": True,
-            "hints_en": [
-                "This involves dividing by a negative number",
-                "Remember to flip all inequality signs when dividing by negative",
-                "Work systematically with all parts"
-            ],
-            "hints_ar": [
-                "هذا يتضمن القسمة على عدد سالب",
-                "تذكر قلب جميع إشارات المتباينة عند القسمة على سالب",
-                "اعمل بشكل منهجي مع جميع الأجزاء"
-            ]
+            "explanation_en": "First add 3 to both sides, then convert absolute value to compound inequality",
+            "explanation_ar": "أولاً أضف ٣ للطرفين، ثم حول القيمة المطلقة إلى متباينة مركبة",
+            "final_answer_required": True,
+            "hints_en": [],
+            "hints_ar": []
         }
     ]
     
