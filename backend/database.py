@@ -1131,7 +1131,7 @@ async def init_database():
         {
             "id": "examprep3",
             "section_id": "section3",
-            "type": ProblemType.EXAM_PREP,
+            "type": ProblemType.EXAMPREP,
             "weight": 25,
             "question_en": "Solve the inequality: 3(1 - k) < 12",
             "question_ar": "حل المتباينة: ٣(١ - ك) < ١٢",
