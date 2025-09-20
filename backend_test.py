@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for Math Tutoring App - Section 3 Explanation Stage Bug Fix Testing
-Tests the Section 3 Explanation Stage bug fix as requested by user.
+Backend API Test Suite for Math Tutoring App - Section 4 Compound Inequalities Testing
+Tests the comprehensive Section 4 Compound Inequalities implementation as requested by user.
 
-CRITICAL ISSUE BEING TESTED:
-Section 3 Explanation Stage showing "Inactive Practice" instead of interactive examples.
+CRITICAL FEATURES BEING TESTED:
+Section 4 comprehensive Compound Inequalities implementation with all required components.
 
-SPECIFIC BUG FIX VERIFICATION:
-1. Step Solutions Structure - GET /api/problems/explanation3 should have step_solutions array
-2. Level-Based Steps - Verify Level 1B, 2B, and 3B steps with correct naming convention
-3. Interactive Examples - Confirm both interactive_examples and step_solutions are present
-4. Bilingual Support - Check each step has English and Arabic descriptions and possible answers
-5. Complete Structure - Verify explanation3 has complete structure for frontend interactive functionality
+SPECIFIC VERIFICATION REQUIREMENTS:
+1. Section 4 API Endpoints - GET /api/problems/section/section4 returns all 6 problems
+2. Individual Problem Endpoints - Test each problem (prep4, explanation4, practice4_1, practice4_2, assessment4, examprep4)
+3. Updated Problem Content - prep4 changed from "3x + 5 < 2x + 9" to "3 < x + 2 < 8" with answer "1 < x < 6"
+4. Compound Inequality Structure - explanation4 has 3-level structure (Simple Compound, With Multiplication/Division, OR Inequalities)
+5. Step Solutions with Level Naming - Both interactive_examples and step_solutions arrays with Level 1B, 2B, 3B naming
+6. Temperature Conversion Word Problem - practice4_2 has Celsius to Fahrenheit conversion with 3-step structure
+7. Assessment Updates - assessment4 changed to "-8 ≤ 4 - 2x < 6" with answer "-1 < x ≤ 6"
+8. Exam Prep Updates - examprep4 changed to "2(x - 1) ≤ 6 AND x + 3 > 2" with answer "-1 < x ≤ 4"
+9. Bilingual Content - Verify both English and Arabic content is properly structured
+10. Sign Flipping Logic - Test problems with negative coefficients for proper sign flipping documentation
 
 EXPECTED BACKEND BEHAVIOR:
-- explanation3 should have step_solutions array with Level 1B, 2B, 3B steps
-- Each level should have 2-3 steps with proper naming (e.g., "Level 1B Step 1")
-- Each step should have bilingual content and possible_answers arrays
-- Interactive examples should be present alongside step_solutions
-- Frontend should be able to render interactive step-by-step interface
+- All Section 4 endpoints should return proper compound inequality content
+- explanation4 should have both interactive_examples and step_solutions arrays
+- practice4_2 should be temperature conversion word problem with stage_type: "practice_word"
+- All problems should have proper bilingual support and compound inequality validation
 """
 
 import requests
