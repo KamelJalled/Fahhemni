@@ -1147,61 +1147,29 @@ async def init_database():
     }
     await sections_collection.insert_one(section3)
     
-    # Section 4: Variables on Both Sides
+    # Section 4: Compound Inequalities - COMPREHENSIVE UPDATE
     section4_problems = [
         {
-            "id": "prep4", 
+            "id": "prep4",
             "section_id": "section4",
             "type": ProblemType.PREPARATION,
             "weight": 10,
-            "question_en": "3x + 5 < 2x + 9",
-            "question_ar": "٣س + ٥ < ٢س + ٩",
-            "answer": "x < 4",
-            "answer_ar": "س < ٤",
-            "explanation_en": "This inequality has variables on both sides. We need to collect like terms.",
-            "explanation_ar": "هذه المتباينة تحتوي على متغيرات في الطرفين. نحتاج لجمع الحدود المتشابهة.",
+            "question_en": "Solve: 3 < x + 2 < 8",
+            "question_ar": "حل: ٣ < س + ٢ < ٨",
+            "answer": "1 < x < 6",
+            "answer_ar": "١ < س < ٦",
+            "explanation_en": "This is a compound inequality. Apply operations to all parts simultaneously.",
+            "explanation_ar": "هذه متباينة مركبة. طبق العمليات على جميع الأجزاء في نفس الوقت.",
             "show_full_solution": False,
             "hide_answer": False,
-            "step_solutions": [
-                {
-                    "step_en": "Subtract 2x from both sides",
-                    "step_ar": "اطرح ٢س من الطرفين",
-                    "possible_answers": [
-                        "3x - 2x + 5 < 2x - 2x + 9",
-                        "3x - 2x + 5 < 9",
-                        "x + 5 < 9"
-                    ],
-                    "possible_answers_ar": [
-                        "٣س - ٢س + ٥ < ٢س - ٢س + ٩",
-                        "٣س - ٢س + ٥ < ٩",
-                        "س + ٥ < ٩"
-                    ]
-                },
-                {
-                    "step_en": "Subtract 5 from both sides",
-                    "step_ar": "اطرح ٥ من الطرفين",
-                    "possible_answers": [
-                        "x + 5 - 5 < 9 - 5",
-                        "x < 9 - 5",
-                        "x < 4"
-                    ],
-                    "possible_answers_ar": [
-                        "س + ٥ - ٥ < ٩ - ٥",
-                        "س < ٩ - ٥",
-                        "س < ٤"
-                    ]
-                }
-            ],
             "final_answer_required": True,
             "hints_en": [
-                "Move all x terms to one side",
-                "Move all constant terms to the other side",
-                "Subtract 2x from both sides first"
+                "اطرح ٢ من جميع الأجزاء / Subtract 2 from all parts",
+                "٣ - ٢ < س + ٢ - ٢ < ٨ - ٢ / 3 - 2 < x + 2 - 2 < 8 - 2"
             ],
             "hints_ar": [
-                "انقل جميع حدود س إلى جانب واحد",
-                "انقل جميع الحدود الثابتة إلى الجانب الآخر",
-                "اطرح ٢س من الطرفين أولاً"
+                "اطرح ٢ من جميع الأجزاء",
+                "٣ - ٢ < س + ٢ - ٢ < ٨ - ٢"
             ]
         },
         {
@@ -1209,36 +1177,112 @@ async def init_database():
             "section_id": "section4",
             "type": ProblemType.EXPLANATION,
             "weight": 0,
-            "question_en": "Learn Variables on Both Sides",
-            "question_ar": "تعلم المتغيرات في الطرفين",
+            "question_en": "Learn Compound Inequalities",
+            "question_ar": "تعلم المتباينات المركبة",
             "answer": "",
             "answer_ar": "",
             "show_full_solution": False,
             "hide_answer": False,
             "interactive_examples": [
                 {
-                    "title_en": "Example 1: Collect x terms on left",
-                    "title_ar": "المثال الأول: اجمع حدود س على اليسار",
-                    "problem_en": "5x - 2 > 3x + 6",
-                    "problem_ar": "٥س - ٢ > ٣س + ٦",
-                    "solution_en": "Step 1: Subtract 3x from both sides\n5x - 3x - 2 > 3x - 3x + 6\n2x - 2 > 6\nStep 2: Add 2 to both sides\n2x - 2 + 2 > 6 + 2\n2x > 8\nStep 3: Divide by 2\nx > 4",
-                    "solution_ar": "الخطوة ١: اطرح ٣س من الطرفين\n٥س - ٣س - ٢ > ٣س - ٣س + ٦\n٢س - ٢ > ٦\nالخطوة ٢: أضف ٢ للطرفين\n٢س - ٢ + ٢ > ٦ + ٢\n٢س > ٨\nالخطوة ٣: اقسم على ٢\nس > ٤",
-                    "practice_question_en": "Now try: 4x + 1 ≤ 2x + 7",
-                    "practice_question_ar": "الآن جرب: ٤س + ١ ≤ ٢س + ٧",
-                    "practice_answer": "x ≤ 3",
-                    "practice_answer_ar": "س ≤ ٣"
+                    "title_en": "Level 1: Simple Compound - Example 1A (System Demonstrates)",
+                    "title_ar": "المستوى ١: مركب بسيط - المثال ١أ (يظهر النظام)",
+                    "problem_en": "Solve 5 < m + 1 < 9",
+                    "problem_ar": "احل ٥ < م + ١ < ٩",
+                    "solution_en": "Step 1: Subtract 1 from all parts: 5 - 1 < m + 1 - 1 < 9 - 1\nResult: 4 < m < 8",
+                    "solution_ar": "الخطوة ١: اطرح ١ من جميع الأجزاء: ٥ - ١ < م + ١ - ١ < ٩ - ١\nالنتيجة: ٤ < م < ٨",
+                    "practice_question_en": "Now solve: -2 ≤ y - 3 ≤ 4",
+                    "practice_question_ar": "الآن احل: -٢ ≤ ص - ٣ ≤ ٤",
+                    "practice_answer": "1 ≤ y ≤ 7",
+                    "practice_answer_ar": "١ ≤ ص ≤ ٧"
                 },
                 {
-                    "title_en": "Example 2: Collect x terms on right",
-                    "title_ar": "المثال الثاني: اجمع حدود س على اليمين",
-                    "problem_en": "2x + 8 ≤ 5x - 1",
-                    "problem_ar": "٢س + ٨ ≤ ٥س - ١",
-                    "solution_en": "Step 1: Subtract 2x from both sides\n2x - 2x + 8 ≤ 5x - 2x - 1\n8 ≤ 3x - 1\nStep 2: Add 1 to both sides\n8 + 1 ≤ 3x - 1 + 1\n9 ≤ 3x\nStep 3: Divide by 3\n3 ≤ x  or  x ≥ 3",
-                    "solution_ar": "الخطوة ١: اطرح ٢س من الطرفين\n٢س - ٢س + ٨ ≤ ٥س - ٢س - ١\n٨ ≤ ٣س - ١\nالخطوة ٢: أضف ١ للطرفين\n٨ + ١ ≤ ٣س - ١ + ١\n٩ ≤ ٣س\nالخطوة ٣: اقسم على ٣\n٣ ≤ س  أو  س ≥ ٣",
-                    "practice_question_en": "Now try: x + 3 > 4x - 6",
-                    "practice_question_ar": "الآن جرب: س + ٣ > ٤س - ٦",
-                    "practice_answer": "x < 3",
-                    "practice_answer_ar": "س < ٣"
+                    "title_en": "Level 2: With Multiplication/Division - Example 2A (System Demonstrates)",
+                    "title_ar": "المستوى ٢: مع الضرب والقسمة - المثال ٢أ (يظهر النظام)",
+                    "problem_en": "Solve -6 < 2k < 10",
+                    "problem_ar": "احل -٦ < ٢ك < ١٠",
+                    "solution_en": "Divide all parts by 2: -6/2 < 2k/2 < 10/2\nResult: -3 < k < 5",
+                    "solution_ar": "اقسم جميع الأجزاء على ٢: -٦/٢ < ٢ك/٢ < ١٠/٢\nالنتيجة: -٣ < ك < ٥",
+                    "practice_question_en": "Now solve: -12 ≤ -3n ≤ 6",
+                    "practice_question_ar": "الآن احل: -١٢ ≤ -٣ن ≤ ٦",
+                    "practice_answer": "-2 ≤ n ≤ 4",
+                    "practice_answer_ar": "-٢ ≤ ن ≤ ٤"
+                },
+                {
+                    "title_en": "Level 3: OR Inequalities - Example 3A (System Demonstrates)",
+                    "title_ar": "المستوى ٣: متباينات أو - المثال ٣أ (يظهر النظام)",
+                    "problem_en": "Solve x < -1 or x > 3",
+                    "problem_ar": "احل س < -١ أو س > ٣",
+                    "solution_en": "This is a disjoint inequality - two separate ranges\nSolution remains: x < -1 or x > 3",
+                    "solution_ar": "هذه متباينة منفصلة - مداان منفصلان\nالحل يبقى: س < -١ أو س > ٣",
+                    "practice_question_en": "Now solve: 2t ≤ -4 or t + 1 > 5",
+                    "practice_question_ar": "الآن احل: ٢ت ≤ -٤ أو ت + ١ > ٥",
+                    "practice_answer": "t ≤ -2 or t > 4",
+                    "practice_answer_ar": "ت ≤ -٢ أو ت > ٤"
+                }
+            ],
+            "step_solutions": [
+                {
+                    "step_en": "Level 1B Step 1: Add 3 to all parts",
+                    "step_ar": "المستوى ١ب الخطوة ١: أضف ٣ لجميع الأجزاء",
+                    "possible_answers": [
+                        "1 ≤ y ≤ 7",
+                        "١ ≤ ص ≤ ٧",
+                        "-2+3 ≤ y-3+3 ≤ 4+3",
+                        "-2 + 3 ≤ y ≤ 4 + 3"
+                    ],
+                    "possible_answers_ar": [
+                        "١ ≤ ص ≤ ٧",
+                        "-٢+٣ ≤ ص-٣+٣ ≤ ٤+٣"
+                    ]
+                },
+                {
+                    "step_en": "Level 1B Step 2: Simplify",
+                    "step_ar": "المستوى ١ب الخطوة ٢: بسّط",
+                    "possible_answers": [
+                        "1 ≤ y ≤ 7",
+                        "١ ≤ ص ≤ ٧"
+                    ],
+                    "possible_answers_ar": [
+                        "١ ≤ ص ≤ ٧"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 1: Divide by -3 and flip ALL signs",
+                    "step_ar": "المستوى ٢ب الخطوة ١: اقسم على -٣ واقلب جميع الإشارات",
+                    "possible_answers": [
+                        "4 ≥ n ≥ -2",
+                        "-2 ≤ n ≤ 4",
+                        "-٢ ≤ ن ≤ ٤"
+                    ],
+                    "possible_answers_ar": [
+                        "٤ ≥ ن ≥ -٢",
+                        "-٢ ≤ ن ≤ ٤"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 2: Rewrite in standard form (smallest to largest)",
+                    "step_ar": "المستوى ٢ب الخطوة ٢: اكتب بالترتيب من الأصغر للأكبر",
+                    "possible_answers": [
+                        "-2 ≤ n ≤ 4",
+                        "-٢ ≤ ن ≤ ٤"
+                    ],
+                    "possible_answers_ar": [
+                        "-٢ ≤ ن ≤ ٤"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 1: Solve each inequality separately",
+                    "step_ar": "المستوى ٣ب الخطوة ١: حل كل متباينة منفصلة",
+                    "possible_answers": [
+                        "t ≤ -2 or t > 4",
+                        "ت ≤ -٢ أو ت > ٤",
+                        "t <= -2 or t > 4",
+                        "t ≤ -2 || t > 4"
+                    ],
+                    "possible_answers_ar": [
+                        "ت ≤ -٢ أو ت > ٤"
+                    ]
                 }
             ],
             "hints_en": [],
@@ -1249,152 +1293,148 @@ async def init_database():
             "section_id": "section4",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "3x + 5 < 2x + 9",
-            "question_ar": "٣س + ٥ < ٢س + ٩",
-            "answer": "x < 4",
-            "answer_ar": "س < ٤",
+            "question_en": "Solve -5 < 3x + 1 < 13",
+            "question_ar": "احل -٥ < ٣س + ١ < ١٣",
+            "answer": "-2 < x < 4",
+            "answer_ar": "-٢ < س < ٤",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Subtract 2x from both sides",
-                    "step_ar": "اطرح ٢س من الطرفين",
+                    "step_en": "اطرح ١ من جميع الأجزاء / Subtract 1 from all parts",
+                    "step_ar": "اطرح ١ من جميع الأجزاء",
                     "possible_answers": [
-                        "3x - 2x + 5 < 9",
-                        "x + 5 < 9"
+                        "-6 < 3x < 12",
+                        "-٦ < ٣س < ١٢"
                     ],
                     "possible_answers_ar": [
-                        "٣س - ٢س + ٥ < ٩",
-                        "س + ٥ < ٩"
+                        "-٦ < ٣س < ١٢"
                     ]
                 },
                 {
-                    "step_en": "Subtract 5 from both sides",
-                    "step_ar": "اطرح ٥ من الطرفين",
+                    "step_en": "اقسم جميع الأجزاء على ٣ / Divide all parts by 3",
+                    "step_ar": "اقسم جميع الأجزاء على ٣",
                     "possible_answers": [
-                        "x < 9 - 5",
-                        "x < 4"
+                        "-2 < x < 4",
+                        "-٢ < س < ٤"
                     ],
                     "possible_answers_ar": [
-                        "س < ٩ - ٥",
-                        "س < ٤"
+                        "-٢ < س < ٤"
                     ]
                 }
             ],
+            "final_answer_required": False,
             "hints_en": [
-                "Collect all x terms on one side",
-                "Get the smaller coefficient on the side you want to eliminate",
-                "Then isolate x"
+                "ابدأ بطرح ١ من جميع الأجزاء الثلاثة / Start by subtracting 1 from all three parts",
+                "تخلص من الثابت أولاً / Remove the constant first",
+                "-٥ - ١ < ٣س < ١٣ - ١ / -5 - 1 < 3x < 13 - 1"
             ],
             "hints_ar": [
-                "اجمع جميع حدود س في جانب واحد",
-                "احصل على المعامل الأصغر في الجانب الذي تريد إزالته",
-                "ثم اعزل س"
+                "ابدأ بطرح ١ من جميع الأجزاء الثلاثة",
+                "تخلص من الثابت أولاً",
+                "-٥ - ١ < ٣س < ١٣ - ١"
             ]
         },
         {
-            "id": "practice4_2", 
+            "id": "practice4_2",
             "section_id": "section4",
             "type": ProblemType.PRACTICE,
             "weight": 15,
-            "question_en": "5x - 2 > 3x + 6",
-            "question_ar": "٥س - ٢ > ٣س + ٦",
-            "answer": "x > 4",
-            "answer_ar": "س > ٤",
+            "stage_type": "practice_word",
+            "question_en": "Room temperature must be between 18°C and 25°C. If F = (9/5)C + 32 converts Celsius to Fahrenheit, what's the range in Fahrenheit?",
+            "question_ar": "درجة حرارة الغرفة يجب أن تكون بين ١٨ و٢٥ درجة مئوية. إذا كانت الصيغة ف = (٩/٥)م + ٣٢ تحول من مئوية إلى فهرنهايت، ما المدى بالفهرنهايت؟",
+            "answer": "64.4 ≤ F ≤ 77",
+            "answer_ar": "٦٤.٤ ≤ ف ≤ ٧٧",
             "show_full_solution": False,
             "hide_answer": False,
             "step_solutions": [
                 {
-                    "step_en": "Subtract 3x from both sides",
-                    "step_ar": "اطرح ٣س من الطرفين",
+                    "step_en": "اكتب المدى بالدرجة المئوية / Write the Celsius range",
+                    "step_ar": "اكتب المدى بالدرجة المئوية",
                     "possible_answers": [
-                        "5x - 3x - 2 > 6",
-                        "2x - 2 > 6"
+                        "18 ≤ C ≤ 25",
+                        "١٨ ≤ م ≤ ٢٥"
                     ],
                     "possible_answers_ar": [
-                        "٥س - ٣س - ٢ > ٦",
-                        "٢س - ٢ > ٦"
+                        "١٨ ≤ م ≤ ٢٥"
                     ]
                 },
                 {
-                    "step_en": "Add 2 to both sides",
-                    "step_ar": "أضف ٢ للطرفين",
+                    "step_en": "طبق الصيغة على جميع الأجزاء / Apply formula to all parts",
+                    "step_ar": "طبق الصيغة على جميع الأجزاء",
                     "possible_answers": [
-                        "2x > 6 + 2",
-                        "2x > 8"
+                        "(9/5)(18) + 32 ≤ F ≤ (9/5)(25) + 32",
+                        "32.4 + 32 ≤ F ≤ 45 + 32"
                     ],
                     "possible_answers_ar": [
-                        "٢س > ٦ + ٢",
-                        "٢س > ٨"
+                        "(٩/٥)(١٨) + ٣٢ ≤ ف ≤ (٩/٥)(٢٥) + ٣٢"
                     ]
                 },
                 {
-                    "step_en": "Divide by 2",
-                    "step_ar": "اقسم على ٢",
+                    "step_en": "احسب القيم النهائية / Calculate final values",
+                    "step_ar": "احسب القيم النهائية",
                     "possible_answers": [
-                        "x > 8 / 2",
-                        "x > 4"
+                        "64.4 ≤ F ≤ 77",
+                        "64 ≤ F ≤ 77",
+                        "٦٤.٤ ≤ ف ≤ ٧٧"
                     ],
                     "possible_answers_ar": [
-                        "س > ٨ / ٢",
-                        "س > ٤"
+                        "٦٤.٤ ≤ ف ≤ ٧٧",
+                        "٦٤ ≤ ف ≤ ٧٧"
                     ]
                 }
             ],
+            "final_answer_required": False,
             "hints_en": [
-                "Move variable terms to one side first",
-                "5x - 3x = 2x",
-                "Then solve the two-step inequality"
+                "درجة الحرارة يجب أن تكون بين ١٨ و٢٥ / Temperature must be between 18 and 25",
+                "استخدم C أو م للدرجة المئوية / Use C for Celsius",
+                "المدى: ١٨ ≤ م ≤ ٢٥ / Range: 18 ≤ C ≤ 25"
             ],
             "hints_ar": [
-                "انقل حدود المتغير إلى جانب واحد أولاً",
-                "٥س - ٣س = ٢س",
-                "ثم احل المتباينة ذات الخطوتين"
+                "درجة الحرارة يجب أن تكون بين ١٨ و٢٥",
+                "استخدم C أو م للدرجة المئوية",
+                "المدى: ١٨ ≤ م ≤ ٢٥"
             ]
         },
         {
             "id": "assessment4",
             "section_id": "section4",
             "type": ProblemType.ASSESSMENT,
-            "weight": 30,
-            "question_en": "4x - 3 ≤ 2x + 5",
-            "question_ar": "٤س - ٣ ≤ ٢س + ٥",
-            "answer": "x ≤ 4",
-            "answer_ar": "س ≤ ٤",
+            "weight": 20,
+            "question_en": "What is the solution to -8 ≤ 4 - 2x < 6?",
+            "question_ar": "ما هو حل -٨ ≤ ٤ - ٢س < ٦؟",
+            "answer": "-1 < x ≤ 6",
+            "answer_ar": "-١ < س ≤ ٦",
             "show_full_solution": False,
             "hide_answer": True,
+            "explanation_en": "Subtract 4 from all parts, then divide by -2 and flip signs",
+            "explanation_ar": "اطرح ٤ من جميع الأجزاء، ثم اقسم على -٢ واقلب الإشارات",
+            "final_answer_required": True,
             "hints_en": [
-                "Collect variable terms on one side and constants on the other",
-                "Start by subtracting 2x from both sides",
-                "Then add or subtract to isolate x"
+                "اطرح ٤ من جميع الأجزاء أولاً / Subtract 4 from all parts first",
+                "تذكر قلب الإشارات عند القسمة على -٢ / Remember to flip signs when dividing by -2"
             ],
             "hints_ar": [
-                "اجمع حدود المتغير في جانب والثوابت في الآخر",
-                "ابدأ بطرح ٢س من الطرفين",
-                "ثم اجمع أو اطرح لعزل س"
+                "اطرح ٤ من جميع الأجزاء أولاً",
+                "تذكر قلب الإشارات عند القسمة على -٢"
             ]
         },
         {
             "id": "examprep4",
             "section_id": "section4",
             "type": ProblemType.EXAMPREP,
-            "weight": 30,
-            "question_en": "7x + 2 ≥ 4x - 10",
-            "question_ar": "٧س + ٢ ≥ ٤س - ١٠",
-            "answer": "x ≥ -4",
-            "answer_ar": "س ≥ -٤",
+            "weight": 25,
+            "question_en": "Solve: 2(x - 1) ≤ 6 AND x + 3 > 2",
+            "question_ar": "حل: ٢(س - ١) ≤ ٦ و س + ٣ > ٢",
+            "answer": "-1 < x ≤ 4",
+            "answer_ar": "-١ < س ≤ ٤",
             "show_full_solution": False,
             "hide_answer": True,
-            "hints_en": [
-                "This involves negative numbers - be careful with your arithmetic",
-                "Move all x terms to the left and constants to the right",
-                "7x - 4x = 3x"
-            ],
-            "hints_ar": [
-                "هذا يتضمن أرقام سالبة - كن حذراً مع الحساب",
-                "انقل جميع حدود س إلى اليسار والثوابت إلى اليمين",
-                "٧س - ٤س = ٣س"
-            ]
+            "explanation_en": "Solve both inequalities separately, then find the intersection",
+            "explanation_ar": "احل كل متباينة منفصلة، ثم جد التقاطع",
+            "final_answer_required": True,
+            "hints_en": [],
+            "hints_ar": []
         }
     ]
     
