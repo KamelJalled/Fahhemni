@@ -25,7 +25,7 @@ import re
 from datetime import datetime
 
 # Use backend URL from frontend/.env as specified in review request
-BACKEND_URL = "https://step-by-step-math-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://math-bug-fixes.preview.emergentagent.com/api"
 
 class WordProblemLogicTester:
     def __init__(self, base_url):

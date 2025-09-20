@@ -84,7 +84,7 @@
       "timestamp": "2025-09-11T08:23:18.137977"
     }
   ],
-  "backend_url": "https://step-by-step-math-3.preview.emergentagent.com/api",
+  "backend_url": "https://math-bug-fixes.preview.emergentagent.com/api",
   "test_timestamp": "2025-09-11T08:23:18.138190",
   "test_focus": "infinite_recursion_bug_fix"
 }
