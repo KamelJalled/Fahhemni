@@ -1512,6 +1512,7 @@ const ProblemView = () => {
     setShowVoiceInput(false);
     setShowMathKeyboard(false);
     setShowRedirectionButton(false);
+    setNavigationInProgress(false); // Reset navigation flag
     setCurrentScore(100); // Reset score
     setExplanationStep(0); // Reset explanation step
     setExplanationAnswers(['', '', '']); // Reset explanation answers
