@@ -955,6 +955,7 @@ async def init_database():
             "type": ProblemType.PRACTICE,
             "weight": 15,
             "stage_type": "practice_word",
+            "stage_type": "practice_word",
             "question_en": "A car rental costs SAR 100 plus SAR 2 per kilometer (k). Your budget is SAR 250. What is the maximum distance you can drive?",
             "question_ar": "إيجار سيارة يكلف ١٠٠ ريال بالإضافة إلى ٢ ريال لكل كيلومتر. ميزانيتك ٢٥٠ ريال. ما أقصى مسافة يمكنك قيادتها؟",
             "answer": "k ≤ 75",
