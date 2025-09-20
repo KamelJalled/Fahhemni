@@ -371,6 +371,22 @@ class CriticalBackendTester:
                         params=params
                     )
                     
+                    # For assessment and examprep, expect 403 if practice not completed (this is correct behavior)
+                    if problem_id.startswith('assessment') or problem_id.startswith('examprep'):
+                        if response.status_code == 403:
+                            response_data = response.json()
+                            if response_data.get('detail', {}).get('error') == 'practice_incomplete':
+                                print(f"     ✅ {problem_id} correctly locked until practice completion")
+                                continue
+                            else:
+                                print(f"     ❌ {problem_id} unexpected 403 error: {response_data}")
+                                all_data_valid = False
+                                continue
+                        elif response.status_code != 200:
+                            print(f"     ❌ Failed to get {problem_id}: HTTP {response.status_code}")
+                            all_data_valid = False
+                            continue
+                    
                     if response.status_code == 200:
                         problem_data = response.json()
                         
