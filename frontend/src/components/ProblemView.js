@@ -2465,12 +2465,16 @@ const ProblemView = () => {
                       
                       <Button 
                         onClick={async () => {
+                          // Prevent multiple clicks
+                          if (navigationInProgress) return;
+                          
                           // Submit explanation completion to backend first
                           await submitToBackend();
                           // Then navigate to next problem with forced navigation
                           handleNavigationClick();
                         }}
-                        className="mt-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-16 py-6 text-2xl font-semibold"
+                        disabled={navigationInProgress}
+                        className="mt-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-16 py-6 text-2xl font-semibold disabled:opacity-50"
                       >
                         <Trophy className="w-8 h-8 mr-4" />
                         {language === 'en' ? 'Continue to Practice Stage →' : 'انتقل لمرحلة التطبيق ←'}
