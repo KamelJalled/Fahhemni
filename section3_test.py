@@ -391,17 +391,16 @@ class Section3Tester:
                                 f"❌ Missing levels: {missing_levels}")
                     return False
                 
-                # CRITICAL TEST 3: Check for step_solutions in interactive examples
-                examples_with_steps = 0
+                # CRITICAL TEST 3: Check for practice questions in interactive examples (correct structure)
+                examples_with_practice = 0
                 for example in interactive_examples:
-                    if 'step_solutions' in example:
-                        examples_with_steps += 1
-                        step_solutions = example['step_solutions']
-                        print(f"   Example has {len(step_solutions)} step solutions")
+                    if 'practice_question_en' in example and 'practice_answer' in example:
+                        examples_with_practice += 1
+                        print(f"   Example has practice question and answer")
                 
-                if examples_with_steps == 0:
+                if examples_with_practice == 0:
                     self.log_test("Explanation3 Structure", False, 
-                                f"❌ No interactive examples have step_solutions")
+                                f"❌ No interactive examples have practice questions")
                     return False
                 
                 # CRITICAL TEST 4: Verify bilingual content
