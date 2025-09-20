@@ -2726,8 +2726,15 @@ const ProblemView = () => {
                                 value={userAnswer}
                                 onChange={(e) => setUserAnswer(e.target.value)}
                                 placeholder={language === 'en' ? 'Enter your final answer (e.g., x < 4)...' : 'أدخل إجابتك النهائية (مثال: س < 4)...'}
-                                className="mb-4 text-lg h-12"
+                                className="mb-2 text-lg h-12"
                               />
+                              
+                              {/* Section 5 Absolute Value Hint */}
+                              {getAbsoluteValueHint() && (
+                                <div className="mb-4 p-2 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800 text-center">
+                                  {getAbsoluteValueHint()[language]}
+                                </div>
+                              )}
                             </div>
                           </div>
                         );
