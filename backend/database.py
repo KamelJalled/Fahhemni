@@ -899,6 +899,91 @@ async def init_database():
                     "practice_answer_ar": "ر > ٣"
                 }
             ],
+            "step_solutions": [
+                {
+                    "step_en": "Level 1B Step 1: Subtract 5 from both sides",
+                    "step_ar": "المستوى ١ب الخطوة ١: اطرح ٥ من كلا الطرفين",
+                    "possible_answers": [
+                        "2y ≤ 14",
+                        "٢ص ≤ ١٤",
+                        "2y + 5 - 5 ≤ 19 - 5"
+                    ],
+                    "possible_answers_ar": [
+                        "٢ص ≤ ١٤",
+                        "٢ص + ٥ - ٥ ≤ ١٩ - ٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 1B Step 2: Divide both sides by 2",
+                    "step_ar": "المستوى ١ب الخطوة ٢: اقسم كلا الطرفين على ٢",
+                    "possible_answers": [
+                        "y ≤ 7",
+                        "ص ≤ ٧",
+                        "y ≤ 14/2"
+                    ],
+                    "possible_answers_ar": [
+                        "ص ≤ ٧",
+                        "ص ≤ ١٤/٢"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 1: Subtract 15 from both sides",
+                    "step_ar": "المستوى ٢ب الخطوة ١: اطرح ١٥ من كلا الطرفين",
+                    "possible_answers": [
+                        "-5k ≥ -25",
+                        "-٥ك ≥ -٢٥",
+                        "15 - 5k - 15 ≥ -10 - 15"
+                    ],
+                    "possible_answers_ar": [
+                        "-٥ك ≥ -٢٥",
+                        "١٥ - ٥ك - ١٥ ≥ -١٠ - ١٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 2B Step 2: Divide by -5 and flip the inequality sign",
+                    "step_ar": "المستوى ٢ب الخطوة ٢: اقسم على -٥ واقلب إشارة المتباينة",
+                    "possible_answers": [
+                        "k ≤ 5",
+                        "ك ≤ ٥"
+                    ],
+                    "possible_answers_ar": [
+                        "ك ≤ ٥"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 1: Distribute the 4",
+                    "step_ar": "المستوى ٣ب الخطوة ١: وزع الـ ٤",
+                    "possible_answers": [
+                        "4r - 4 > 8",
+                        "٤ر - ٤ > ٨"
+                    ],
+                    "possible_answers_ar": [
+                        "٤ر - ٤ > ٨"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 2: Add 4 to both sides",
+                    "step_ar": "المستوى ٣ب الخطوة ٢: أضف ٤ لكلا الطرفين",
+                    "possible_answers": [
+                        "4r > 12",
+                        "٤ر > ١٢"
+                    ],
+                    "possible_answers_ar": [
+                        "٤ر > ١٢"
+                    ]
+                },
+                {
+                    "step_en": "Level 3B Step 3: Divide by 4",
+                    "step_ar": "المستوى ٣ب الخطوة ٣: اقسم على ٤",
+                    "possible_answers": [
+                        "r > 3",
+                        "ر > ٣"
+                    ],
+                    "possible_answers_ar": [
+                        "ر > ٣"
+                    ]
+                }
+            ],
             "hints_en": [],
             "hints_ar": []
         },
