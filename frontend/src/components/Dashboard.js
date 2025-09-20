@@ -476,9 +476,35 @@ const Dashboard = () => {
         <CardContent className="p-6">
           <h3 className="font-semibold mb-4 text-center">{text[language].sections}</h3>
           
-          {/* Mobile: Horizontal Scrollable Tabs */}
-          <div className="section-tabs-container overflow-x-auto pb-2">
-            <div className="flex space-x-3 min-w-max md:grid md:grid-cols-5 md:gap-2 md:min-w-0">
+          {/* Mobile: Simple Dropdown Menu */}
+          <div className="block md:hidden mb-4">
+            <select 
+              value={selectedSection} 
+              onChange={(e) => {
+                console.log(`Mobile dropdown: Switching to section: ${e.target.value}`);
+                updateSelectedSection(e.target.value);
+              }}
+              className="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-sm text-sm"
+            >
+              {sections.map((section) => {
+                const sectionInfo = sections_info.find(s => s.id === section.id);
+                const hasProblems = section.problems && section.problems.length > 0;
+                return (
+                  <option 
+                    key={section.id} 
+                    value={section.id}
+                    disabled={!hasProblems}
+                  >
+                    {sectionInfo ? (language === 'en' ? sectionInfo.title_en : sectionInfo.title_ar) : section.id}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          
+          {/* Desktop: Horizontal Tabs */}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-5 gap-2">
               {sections.map((section) => {
                 const sectionProgress = calculateSectionProgress(section.id);
                 const isSelected = selectedSection === section.id;
@@ -488,18 +514,16 @@ const Dashboard = () => {
                   <Button
                     key={section.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`section-tab-button flex-shrink-0 ${
+                    className={`section-tab-button ${
                       !hasProblems ? 'opacity-50' : ''
                     } ${isSelected ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-50'}`}
                     onClick={() => {
-                      console.log(`Switching to section: ${section.id}`);
+                      console.log(`Desktop tabs: Switching to section: ${section.id}`);
                       updateSelectedSection(section.id);
                     }}
                     disabled={!hasProblems}
                     style={{
-                      minWidth: '240px',
-                      width: '240px',
-                      height: '100px', // Increased height for Arabic text
+                      height: '100px',
                       padding: '8px',
                       whiteSpace: 'normal',
                       wordWrap: 'break-word',
@@ -516,8 +540,8 @@ const Dashboard = () => {
                         style={{
                           fontWeight: '500',
                           marginBottom: '4px',
-                          lineHeight: language === 'ar' ? '1.4' : '1.2', // More line height for Arabic
-                          maxHeight: language === 'ar' ? '65px' : '55px', // More height for Arabic
+                          lineHeight: language === 'ar' ? '1.4' : '1.2',
+                          maxHeight: language === 'ar' ? '65px' : '55px',
                           overflow: 'hidden',
                           wordBreak: 'break-word',
                           overflowWrap: 'break-word',
