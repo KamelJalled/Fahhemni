@@ -9,7 +9,7 @@ import json
 import sys
 
 # Use backend URL from frontend/.env
-BACKEND_URL = "https://math-bug-fixes.preview.emergentagent.com/api"
+BACKEND_URL = "https://maths-academy.preview.emergentagent.com/api"
 
 class StepProgressionTester:
     def __init__(self, base_url):
