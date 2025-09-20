@@ -89,7 +89,7 @@ class CriticalBackendTester:
             print("\n🔐 AUTHENTICATION SYSTEM TESTING")
             print("Testing POST /api/auth/student-login with test username")
             
-            test_student = {"username": self.test_student_username, "class_name": "GR9-TEST"}
+            test_student = {"username": self.test_student_username, "class_name": "GR9-A"}
             
             response = self.session.post(
                 f"{self.base_url}/auth/student-login",
