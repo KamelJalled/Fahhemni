@@ -137,8 +137,81 @@ const ProblemView = () => {
     // Check against all expected answer formats
     return expectedAnswers.some(expected => {
       const normalizedExpected = normalizeAnswer(expected);
-      return normalizedInput === normalizedExpected;
+      return normalizedInput === normalizedExpected || 
+             areBidirectionallyEqual(normalizedInput, normalizedExpected);
     });
+  };
+
+  // NEW: Handle bidirectional inequality validation for Sections 3, 4, and 5
+  const areBidirectionallyEqual = (userAnswer, expectedAnswer) => {
+    // Only apply bidirectional logic for Sections 3, 4, and 5
+    const currentSectionNum = problemId ? parseInt(problemId.match(/\d+/)?.[0]) : 0;
+    if (currentSectionNum < 3 || currentSectionNum > 5) return false;
+    
+    // Check if both expressions contain inequality operators
+    const inequalityOperators = ['>=', '<=', '>', '<', '≥', '≤'];
+    const userHasInequality = inequalityOperators.some(op => userAnswer.includes(op));
+    const expectedHasInequality = inequalityOperators.some(op => expectedAnswer.includes(op));
+    
+    if (!userHasInequality || !expectedHasInequality) return false;
+    
+    // Parse the inequality expressions
+    const userParsed = parseInequalityExpression(userAnswer);
+    const expectedParsed = parseInequalityExpression(expectedAnswer);
+    
+    if (!userParsed || !expectedParsed) return false;
+    
+    // Check if they're equivalent but reversed
+    // e.g., "250 ≥ 100 + 2k" equals "100 + 2k ≤ 250"
+    const userReversed = reverseInequality(userParsed);
+    return isEquivalentExpression(userReversed, expectedParsed);
+  };
+
+  // Helper: Parse inequality expression into components
+  const parseInequalityExpression = (expression) => {
+    const operators = ['>=', '<=', '>', '<'];
+    let operator = null;
+    let leftSide = '';
+    let rightSide = '';
+    
+    for (const op of operators) {
+      if (expression.includes(op)) {
+        const parts = expression.split(op);
+        if (parts.length === 2) {
+          leftSide = parts[0].trim();
+          rightSide = parts[1].trim();
+          operator = op;
+          break;
+        }
+      }
+    }
+    
+    if (!operator) return null;
+    
+    return { leftSide, operator, rightSide };
+  };
+
+  // Helper: Reverse the inequality
+  const reverseInequality = (parsed) => {
+    const operatorMap = {
+      '>=': '<=',
+      '<=': '>=',
+      '>': '<',
+      '<': '>'
+    };
+    
+    return {
+      leftSide: parsed.rightSide,
+      operator: operatorMap[parsed.operator],
+      rightSide: parsed.leftSide
+    };
+  };
+
+  // Helper: Check if two parsed expressions are equivalent
+  const isEquivalentExpression = (expr1, expr2) => {
+    return expr1.leftSide === expr2.leftSide && 
+           expr1.operator === expr2.operator && 
+           expr1.rightSide === expr2.rightSide;
   };
 
   // CRITICAL: Pedagogical hint system - NEVER show direct answers
