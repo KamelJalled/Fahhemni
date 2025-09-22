@@ -68,4 +68,11 @@ PRODUCTION_READY.md
 PUSH_TO_FAHHEMNI.md
 contracts.md
 create_download_package.sh
-setup-github.sh
+setup-github.sh-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*
