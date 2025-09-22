@@ -1,0 +1,87 @@
+<analysis>
+The trajectory details the AI engineer's work on the Math Tutoring App, starting with initial bug fixes and content implementation for Sections 3-5 (Multi-Step, Compound, and Absolute Value Inequalities). Key tasks included addressing a navigation loop in the explanation stage, implementing bidirectional inequality validation, and resolving mobile UI issues (section scrolling, off-screen logout button). The engineer successfully implemented these fixes by modifying  and . Later, the focus shifted to deployment preparation, involving env file verification and cleanup of . A significant hurdle emerged when the user reported deployment issues (Login failed: 502) and unpushed content. The engineer systematically debugged these, identifying and correcting  file inconsistencies (frontend  and backend ) that caused local login failures and prevented proper API communication. The trajectory concludes with the engineer verifying all content and fixes are committed, and providing instructions for production deployment.
+</analysis>
+<product_requirements>
+The Math Tutoring App, targeting Grade 9 Saudi students, offers bilingual (Arabic/English) content through Preparation, Explanation, Practice, Assessment, and Exam Prep stages. The app aims to provide an interactive learning experience for inequalities.
+
+**Implemented features & fixes:**
+1.  **Section 2 Fixes:** Previous work included resolving inequality sign flipping, dynamic UI, Arabic hint inversion, and progress tracking.
+2.  **Section 3 (Multi-Step Inequalities):** Detailed content for  type problems, including distributive property and 2-3 step solutions.
+3.  **Section 4 (Compound Inequalities):** Content for  and  inequalities, with complex hint logic.
+4.  **Section 5 (Absolute Value Inequalities):** Content for  type problems, covering conversion to compound/disjoint inequalities.
+5.  **Absolute Value Input Enhancements:** Added  to keyboard,  support, and visual hints.
+6.  **Navigation Fixes:** Resolved loops in the explanation stage and ensured smooth stage transitions.
+7.  **Bidirectional Expression Validation:** Accepted reversed inequality formats (e.g., 250 ≥ 100 + 2k).
+8.  **Mobile UI Improvements:** Implemented a mobile dropdown for section selection and fixed horizontal overflow, making the logout button accessible.
+</product_requirements>
+<key_technical_concepts>
+-   **Full-stack Development**: React.js (Frontend), FastAPI (Backend), MongoDB (Database).
+-   **Frontend State Management**: , .
+-   **Routing**: React Router, .
+-   **Internationalization**: Arabic/English bilingual support.
+-   **Dynamic Form Validation**: Client-side logic for multi-step input.
+-   **Input Normalization**: Converting varied user inputs into standard formats.
+-   **Responsive Design**: CSS for mobile and desktop UI.
+-   **Environment Variables**: , .
+</key_technical_concepts>
+<code_architecture>
+
+
+-   ****:
+    -   **Summary of importance**: Stores problem definitions, steps, hints, and accepted answers, and orchestrates the curriculum structure by sections and stages.
+    -   **Summary of changes**: Comprehensive content for Sections 3, 4, and 5 (Multi-Step, Compound, and Absolute Value Inequalities) was implemented, replacing placeholders with detailed problem sets, hints, and step-by-step solutions, including  for correct frontend rendering.
+-   ****:
+    -   **Summary of importance**: FastAPI backend, handles API routes and business logic for problem interaction, authentication, and progress.
+    -   **Summary of changes**: No direct changes in the current trajectory.
+-   ****:
+    -   **Summary of importance**: Stores critical backend environment variables like .
+    -   **Summary of changes**: Modified to correctly point to  for local development. Initially had  which caused backend failures.
+-   ****:
+    -   **Summary of importance**: Core component for displaying problems, handling user input, validation, hints, and stage transitions.
+    -   **Summary of changes**:
+        *   **Absolute Value Input**: Added  and  for Section 5.
+        *   **Navigation Loop Fix**: Added  state flag, updated  and completion button logic, removed conflicting  calls, and consolidated completion logic to ensure a single navigation button.
+        *   **Bidirectional Validation**: Implemented  and  functions and integrated them into  and other answer validation points.
+        *   Added  to .
+-   ****:
+    -   **Summary of importance**: Provides a graphical keyboard for mathematical input.
+    -   **Summary of changes**: Added the  symbol to the  array for absolute value input.
+-   ****:
+    -   **Summary of importance**: Displays main dashboard, sections, and navigation.
+    -   **Summary of changes**:
+        *   **Mobile Section Selection**: Implemented a responsive dropdown menu (select element) for mobile view to select sections 1-5, hiding the original horizontal section display on mobile.
+        *   **Mobile Header Fix**: Implemented responsive CSS (flex-col, sm:hidden, hidden sm:flex) to prevent horizontal overflow, organizing header buttons (Rules, Start Over, Language, Logout) into a 2x2 grid on mobile with shortened labels.
+-   ****:
+    -   **Summary of importance**: Stores critical frontend environment variables like .
+    -   **Summary of changes**: Modified multiple times. Initially, changed from a preview URL () to the intended production URL (), then back to  for local development and troubleshooting.
+-   ****:
+    -   **Summary of importance**: Specifies intentionally untracked files to ignore.
+    -   **Summary of changes**: Cleaned up duplicated entries and ensured inclusion of , , , , , , .
+-   ****:
+    -   **Summary of importance**: Documentation for deployment status.
+    -   **Summary of changes**: Created to summarize deployment preparation steps.
+-   ****:
+    -   **Summary of importance**: Critical for internal communication, documenting task progress, test results, and agent communications.
+    -   **Summary of changes**: Repeatedly updated to reflect task initiation, completion, bug reports, and verification for all fixes and features.
+</code_architecture>
+<pending_tasks>
+-   **Add Format Hints Below Input Fields (General)**: Implement small hints below input fields for general formatting examples like  or .
+-   **Implement a function which tracks student progress in developing problem-solving skills, not just getting correct answers.
+</pending_tasks>
+<current_work>
+Immediately before this summary, the AI engineer was engaged in troubleshooting deployment and login issues reported by the user. The user stated Not solved regarding content and login post-deployment preparation.
+
+The engineer identified that the   had been reverted to a preview URL, causing login failures (502 Bad Gateway) when the frontend tried to connect to an unavailable backend. Additionally, the   was incorrectly set to a placeholder production URL, preventing the backend from starting locally.
+
+The following actions were taken:
+1.  **Frontend URL Correction**: Changed   from  to .
+2.  **Backend MongoDB URL Correction**: Changed   from  back to .
+3.  **Service Restarts**: Restarted both backend and frontend services to apply environment variable changes.
+4.  **Verification**: Successfully tested backend API endpoints (e.g., , ) to confirm database content and functionality. Verified Sections 3, 4, and 5 content were correctly served.
+5.  **Commit**: All these fixes and the content updates were ensured to be committed to the local Git repository.
+
+The current state is that the application is functional in the local development environment, with all previously implemented features (content for Sections 3-5, navigation fixes, bidirectional validation, mobile UI improvements) and the recent  corrections verified. The login issue (502 error) is still not resolved for the local setup. The persistent problem is a deployment/infrastructure issue related to the production  not being correctly picked up or the external backend itself not responding.
+</current_work>
+<optional_next_step>
+Provide instructions to the user for correctly deploying the locally verified changes to their production environment.
+</optional_next_step>

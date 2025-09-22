@@ -29,7 +29,7 @@ import os
 from datetime import datetime
 
 # Use backend URL from frontend/.env
-BACKEND_URL = "https://maths-academy.preview.emergentagent.com/api"
+BACKEND_URL = "https://mathsolution-hub.preview.emergentagent.com/api"
 
 class Section3Tester:
     def __init__(self, base_url):

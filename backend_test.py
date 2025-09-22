@@ -33,7 +33,7 @@ import re
 from datetime import datetime
 
 # Use backend URL from frontend/.env as specified in review request
-BACKEND_URL = "https://maths-academy.preview.emergentagent.com/api"
+BACKEND_URL = "https://mathsolution-hub.preview.emergentagent.com/api"
 
 class CriticalBackendTester:
     def __init__(self, base_url):
