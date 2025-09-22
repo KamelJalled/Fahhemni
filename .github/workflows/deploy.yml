@@ -1,0 +1,55 @@
+name: Deploy to Hosting
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: 🔨 Build Frontend
+      run: |
+        cd frontend
+        npm ci
+        npm run build
+        
+    - name: 📂 Deploy Frontend via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./frontend/build/
+        server-dir: ./public_html/
+        dangerous-clean-slate: true
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 📦 Install Backend Dependencies
+      run: |
+        cd backend
+        pip install -r requirements.txt
+        
+    # Note: Backend deployment depends on your hosting setup
+    # For most shared hosting, you may need a separate deployment step
+    # or use a different hosting service that supports Python/FastAPI
