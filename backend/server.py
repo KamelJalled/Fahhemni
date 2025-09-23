@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -355,10 +356,11 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
 async def get_section_problems_endpoint(section_id: str):
     """Get all problems for a section"""
     try:
-        print(f"--- DEBUG: Received request for section_id: {section_id} ---") # Add this line
+        logging.warning(f"--- DEBUG: Received request for section_id: {section_id} ---") # Add this line
         problems = await get_section_problems(section_id)
         return problems
     except Exception as e:
+        logging.error(f"--- ERROR in get_section_problems_endpoint: {e} ---", exc_info=True)
         raise HTTPException(status_code=400, detail=str(e))
 
 @api_router.get("/problems/{problem_id}", response_model=Problem)
