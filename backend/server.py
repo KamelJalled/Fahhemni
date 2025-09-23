@@ -355,6 +355,7 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
 async def get_section_problems_endpoint(section_id: str):
     """Get all problems for a section"""
     try:
+        print(f"--- DEBUG: Received request for section_id: {section_id} ---") # Add this line
         problems = await get_section_problems(section_id)
         return problems
     except Exception as e:
