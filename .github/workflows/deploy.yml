@@ -15,21 +15,19 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install dependencies
+      - name: Check if frontend exists
         run: |
-          cd frontend
-          npm install --force
-          
-      - name: Build React app
-        env:
-          REACT_APP_BACKEND_URL: https://fahhemni-backend.onrender.com
-          CI: false
-        run: |
-          cd frontend
-          npm run build
-          echo "Build completed at $(date)" > build/build-info.txt
+          if [ -d "frontend" ]; then
+            echo "Frontend folder exists"
+            cd frontend
+            npm install --force
+            npm run build
+          else
+            echo "No frontend folder found - skipping build"
+          fi
           
       - name: Deploy to Hostinger
+        if: success()
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -37,4 +35,3 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./frontend/build/
           server-dir: ./
-          dangerous-clean-slate: true
