@@ -17,7 +17,7 @@ from datetime import datetime
 import os
 
 # CONFIGURATION - Update these values for your production database
-MONGO_URL = "mongodb+srv://.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Replace with your production MongoDB URL
+MONGO_URL = "mongodb+srv://kamalaljallad_db_user:<db_password>@cluster0.dip2jyt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Replace with your production MongoDB URL
 DB_NAME = "mathtutor"           # Replace with your database name
 
 # You can also use environment variables instead:

@@ -352,16 +352,18 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
         raise HTTPException(status_code=400, detail=str(e))
 
 # Problems endpoints
-@api_router.get("/problems/section/{section_id}", response_model=List[Problem])
+@api_router.get("/problems/section/{section_id}", response_model=list[Problem])
 async def get_section_problems_endpoint(section_id: str):
     """Get all problems for a section"""
     try:
-        logging.warning(f"--- DEBUG: Received request for section_id: {section_id} ---") # Add this line
+        logging.warning(f"--- DEBUG: Received request for section_id: {section_id} ---")
+        
         problems = await get_section_problems(section_id)
         return problems
     except Exception as e:
+        # This will log the full error and send the error message back to the browser
         logging.error(f"--- ERROR in get_section_problems_endpoint: {e} ---", exc_info=True)
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error fetching problems: {str(e)}")
 
 @api_router.get("/problems/{problem_id}", response_model=Problem)
 async def get_problem_endpoint(problem_id: str, username: str = None):
