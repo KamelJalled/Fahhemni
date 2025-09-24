@@ -7,6 +7,7 @@ class ProblemType(str, Enum):
     PREPARATION = "preparation"
     EXPLANATION = "explanation"
     PRACTICE = "practice"
+    PRACTICE_WORD = "practice_word"
     ASSESSMENT = "assessment"
     EXAMPREP = "examprep"
 
