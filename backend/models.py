@@ -58,10 +58,11 @@ class InteractiveExample(BaseModel):
     problem_ar: str
     solution_en: str
     solution_ar: str
-    practice_question_en: str
-    practice_question_ar: str
-    practice_answer: str
-    practice_answer_ar: str
+    # Only the next four lines need to be changed
+    practice_question_en: str | None = None
+    practice_question_ar: str | None = None
+    practice_answer: str | None = None
+    practice_answer_ar: str | None = None
 
 class StepSolution(BaseModel):
     step_en: str
