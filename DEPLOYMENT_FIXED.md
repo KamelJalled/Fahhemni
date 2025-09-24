@@ -49,7 +49,7 @@ backend/
 
 **Create `backend/.env` file with:**
 ```bash
-MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/mathtutor
+MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/db
 # Get this from MongoDB Atlas (free tier available)
 ```
 

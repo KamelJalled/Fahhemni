@@ -104,3 +104,6 @@ setup-github.sh-e
 # Environment files
 *.env
 *.env.*
+# Ignore archive files
+*.zip
+*.tar.gz
