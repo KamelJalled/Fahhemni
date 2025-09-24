@@ -37,7 +37,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./frontend/build/
           server-dir: ./
-<<<<<<< HEAD
-          dangerous-clean-slate: true
-=======
->>>>>>> 98f2194bdaeb061fa9d2f25e462359c6444d1b42
+                dangerous-clean-slate: true
