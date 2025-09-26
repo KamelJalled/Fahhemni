@@ -9,6 +9,30 @@ import TeacherDashboard from "./components/TeacherDashboard";
 
 // this is a test comment.
 
+// Add this near the top of App.js after imports
+useEffect(() => {
+  // Store current section in sessionStorage
+  const currentPath = window.location.pathname;
+  if (currentPath && currentPath !== '/') {
+    sessionStorage.setItem('lastPath', currentPath);
+  }
+}, []);
+
+// Add error boundary to handle 404s
+const ErrorFallback = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const lastPath = sessionStorage.getItem('lastPath');
+    if (lastPath) {
+      navigate(lastPath);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+  
+  return <div>Redirecting...</div>;
+};
+
 // Language Context
 const LanguageContext = createContext();
 

@@ -1438,7 +1438,7 @@ const ProblemView = () => {
     const currentSectionNum = getSectionNumber(problemId);
     
     const sectionSequences = {
-      1: ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'],
+      1: ['prep1', 'explanation1', 'practice1_1', 'practice1_2', 'assessment1', 'examprep1'],
       2: ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'],
       3: ['prep3', 'explanation3', 'practice3_1', 'practice3_2', 'assessment3', 'examprep3'],
       4: ['prep4', 'explanation4', 'practice4_1', 'practice4_2', 'assessment4', 'examprep4'],
@@ -1532,7 +1532,7 @@ const ProblemView = () => {
     
     // Define problem sequences for each section
     const sectionSequences = {
-      1: ['prep1', 'explanation1', 'practice1', 'practice2', 'assessment1', 'examprep1'],
+      1: ['prep1', 'explanation1', 'practice1_1', 'practice1_2', 'assessment1', 'examprep1'],
       2: ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'],
       3: ['prep3', 'explanation3', 'practice3_1', 'practice3_2', 'assessment3', 'examprep3'],
       4: ['prep4', 'explanation4', 'practice4_1', 'practice4_2', 'assessment4', 'examprep4'],

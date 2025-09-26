@@ -39,7 +39,7 @@ export const mockProblems = {
         showFullSolution: true
       },
       {
-        id: "practice1",
+        id: "practice1_1",
         type: "practice",
         weight: 15,
         question: {
@@ -64,27 +64,27 @@ export const mockProblems = {
         ]
       },
       {
-        id: "practice2",
+        id: "practice1_2",
         type: "practice",
         weight: 15,
         question: {
-          en: "4x < 20",
-          ar: "٤س < ٢٠"
+          en: "A school's goal is to collect at least SAR 500. They have SAR 210. How much more money (m) do they need?",
+          ar: "هدف مدرسة هو جمع ٥٠٠ ريال على الأقل. لقد جمعوا ٢١٠ ريالات. ما هو المبلغ الإضافي (م) الذي يحتاجون لجمعه؟"
         },
-        answer: "x < 5",
-        answerAr: "س < ٥",
+        answer: "m ≥ 290",
+        answerAr: "م ≥ ٢٩٠",
         hints: [
           {
-            en: "What operation will isolate x?",
-            ar: "ما العملية التي ستعزل س؟"
+            en: "What inequality symbol does \"at least\" mean? (≥)",
+            ar: "كلمة \"على الأقل\" تعني أي رمز متباينة؟ (≥)"
           },
           {
-            en: "Divide both sides by 4.",
-            ar: "اقسم الطرفين على ٤."
+            en: "Use subtraction to isolate 'm'.",
+            ar: "استخدم عملية الطرح لعزل 'م'."
           },
           {
-            en: "4x ÷ 4 < 20 ÷ 4, so x < ?",
-            ar: "٤س ÷ ٤ < ٢٠ ÷ ٤، إذن س < ؟"
+            en: "Set up: m + 210 ≥ 500, then subtract 210 from both sides.",
+            ar: "اكتب المعادلة: م + ٢١٠ ≥ ٥٠٠، ثم اطرح ٢١٠ من الطرفين."
           }
         ]
       },
@@ -151,8 +151,8 @@ export const mockUsers = [
       section1: {
         prep1: { completed: true, score: 100, attempts: 1 },
         explanation1: { completed: true, score: 100, attempts: 1 },
-        practice1: { completed: true, score: 85, attempts: 2 },
-        practice2: { completed: false, score: 0, attempts: 0 },
+        practice1_1: { completed: true, score: 85, attempts: 2 },
+        practice1_2: { completed: false, score: 0, attempts: 0 },
         assessment1: { completed: false, score: 0, attempts: 0 },
         examprep1: { completed: false, score: 0, attempts: 0 }
       }

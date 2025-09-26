@@ -226,7 +226,7 @@ async def init_database():
             ]
         },
         {
-            "id": "practice1",
+            "id": "practice1_1",
             "section_id": "section1",
             "type": ProblemType.PRACTICE,
             "weight": 15,
@@ -272,7 +272,7 @@ async def init_database():
             ]
         },
         {
-            "id": "practice2",
+            "id": "practice1_2",
             "section_id": "section1",
             "type": ProblemType.PRACTICE,
             "weight": 15,

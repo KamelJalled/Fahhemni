@@ -131,8 +131,8 @@ const Dashboard = () => {
         section1: {
           prep1: { completed: false, score: 0, attempts: 0 },
           explanation1: { completed: false, score: 0, attempts: 0 },
-          practice1: { completed: false, score: 0, attempts: 0 },
-          practice2: { completed: false, score: 0, attempts: 0 },
+          practice1_1: { completed: false, score: 0, attempts: 0 },
+          practice1_2: { completed: false, score: 0, attempts: 0 },
           assessment1: { completed: false, score: 0, attempts: 0 },
           examprep1: { completed: false, score: 0, attempts: 0 }
         }

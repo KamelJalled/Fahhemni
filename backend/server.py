@@ -71,7 +71,7 @@ async def check_stage_access_security(username: str, problem_id: str) -> dict:
             
             # Define expected practice problems for each section
             if section_num == '1':
-                expected_practice = ['practice1', 'practice2']
+                expected_practice = ['practice1_1', 'practice1_2']
             elif section_num == '2':
                 expected_practice = ['practice2_1', 'practice2_2']
             else:
@@ -186,7 +186,7 @@ async def get_progress(username: str):
             
             # Handle legacy naming for section 1
             if section_num == 1:
-                default_problems = ["prep1", "explanation1", "practice1", "practice2", "assessment1", "examprep1"]
+                default_problems = ["prep1", "explanation1", "practice1_1", "practice1_2", "assessment1", "examprep1"]
             
             # Handle section 2 naming
             if section_num == 2:

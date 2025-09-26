@@ -176,7 +176,7 @@ async def migrate_database():
             ]
         },
         {
-            "id": "practice1",
+            "id": "practice1_1",
             "section_id": "section1",
             "type": "practice",
             "weight": 30,
@@ -376,7 +376,7 @@ async def migrate_database():
             ]
         },
         {
-            "id": "practice2",
+            "id": "practice2_2",
             "section_id": "section2",
             "type": "practice", 
             "weight": 30,
