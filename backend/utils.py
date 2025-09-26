@@ -1,4 +1,4 @@
-def calculate_badges(progress_dict: Dict, section_id: str = "section1") -> list:
+def calculate_badges(progress_dict: dict, section_id: str = "section1") -> list:
     """Calculate badges earned based on progress for any section"""
     badges = []
     
