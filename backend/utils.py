@@ -87,7 +87,7 @@ def calculate_score(attempts: int, hints_used: int, is_correct: bool) -> int:
     # Minimum score is 40 if correct
     return max(40, score)
 
-def calculate_badges(progress_dict: Dict, section_id: str = "section1") -> list:
+def calculate_badges(progress_dict: dict, section_id: str = "section1") -> list:
     """Calculate badges earned based on progress for any section"""
     badges = []
     
