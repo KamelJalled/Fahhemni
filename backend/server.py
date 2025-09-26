@@ -340,6 +340,7 @@ async def submit_attempt(username: str, attempt: ProblemAttempt):
         }
         
         updated_progress = await update_progress(username, attempt.problem_id, progress_data)
+        await handle_section_completion(username, section_id, attempt.problem_id)
         
         return {
             "correct": is_correct,
@@ -402,6 +403,56 @@ async def get_problem_endpoint(problem_id: str, username: str = None):
         raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+async def handle_section_completion(username: str, section_id: str, problem_id: str):
+    """
+    Handle the transition when a student completes a section's final exam prep
+    This prevents database corruption when moving between sections
+    """
+    try:
+        # Check if this is an examprep completion
+        if problem_id.startswith('examprep'):
+            current_section_num = int(section_id.replace('section', ''))
+            
+            # If completing any examprep, prepare for next section
+            if current_section_num < 5:
+                next_section = f'section{current_section_num + 1}'
+                next_prep = f'prep{current_section_num + 1}'
+                
+                # Get student to get their ID
+                student = await get_student(username)
+                if not student:
+                    return
+                
+                # Check current progress structure
+                current_progress = await get_student_progress(username)
+                
+                # Create initial progress entry for next section's prep stage
+                # This prevents the corruption issue
+                next_prep_progress = {
+                    "student_username": username,
+                    "section_id": next_section,
+                    "problem_id": next_prep,
+                    "completed": False,
+                    "score": 0,
+                    "attempts": 0,
+                    "hints_used": 0
+                }
+                
+                # Check if next section prep already exists
+                existing = next(
+                    (p for p in current_progress if p.problem_id == next_prep), 
+                    None
+                )
+                
+                if not existing:
+                    # Create the progress entry for next section
+                    await update_progress(username, next_prep, next_prep_progress)
+                    logging.info(f"Initialized {next_section} prep stage for student {username}")
+                    
+    except Exception as e:
+        logging.error(f"Error in handle_section_completion: {e}")
+        # Don't raise - just log the error to prevent breaking the flow
 
 # Teacher dashboard endpoints
 @api_router.get("/teacher/students")
