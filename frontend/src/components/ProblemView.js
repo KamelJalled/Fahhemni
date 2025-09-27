@@ -1245,12 +1245,12 @@ const ProblemView = () => {
 
   // Helper function to get current section number from problem  
   const getCurrentSection = () => {
-    if (problemId?.includes('1') || problem?.section_id === 'section1') return 1;
-    if (problemId?.includes('2') || problem?.section_id === 'section2') return 2;
-    if (problemId?.includes('3') || problem?.section_id === 'section3') return 3;
-    if (problemId?.includes('4') || problem?.section_id === 'section4') return 4;
-    if (problemId?.includes('5') || problem?.section_id === 'section5') return 5;
-    return 1; // Default to section 1
+    if (problemId?.includes('1') || problem?.section_id === 'section1') return 'section1';
+    if (problemId?.includes('2') || problem?.section_id === 'section2') return 'section2';
+    if (problemId?.includes('3') || problem?.section_id === 'section3') return 'section3';
+    if (problemId?.includes('4') || problem?.section_id === 'section4') return 'section4';
+    if (problemId?.includes('5') || problem?.section_id === 'section5') return 'section5';
+    return 'section1';
   };
 
   // NAVIGATION CONTEXT FIX: Helper to save navigation context
@@ -1261,13 +1261,6 @@ const ProblemView = () => {
       timestamp: Date.now()
     };
     localStorage.setItem('mathapp_navigation_context', JSON.stringify(context));
-  };
-
-  // NAVIGATION CONTEXT FIX: Navigate back to dashboard with context preservation
-  const navigateToSectionDashboard = () => {
-    const currentSection = getCurrentSection();
-    saveNavigationContext(currentSection);
-    navigate('/dashboard');
   };
 
   // NAVIGATION CONTEXT FIX: Redirect to correct section's explanation after failure
@@ -1419,78 +1412,78 @@ const ProblemView = () => {
     return hints[`${stage}_step${step}`]?.[isEnglish ? 'en' : 'ar'];
   };
 
-  // Fix navigation button not working - force navigation
-  const handleNavigationClick = () => {
-    // Prevent multiple navigation attempts
-    if (navigationInProgress) {
-      console.log('🔄 Navigation already in progress, ignoring duplicate call');
-      return;
-    }
-    
+  const handleNavigationClick = async () => {
+    if (navigationInProgress) return;
     setNavigationInProgress(true);
     
-    // Get the next stage using existing logic
-    const getSectionNumber = (id) => {
-      const match = id.match(/[a-zA-Z]+(\d+)/);
-      return match ? parseInt(match[1]) : 1;
-    };
+    // First, ensure the current stage is marked as complete
+    try {
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updateProgress`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: user.username,
+                section: getCurrentSection().replace('section', ''),
+                stage: problemId,
+                status: 'complete'
+            })
+        });
+    } catch (error) {
+        console.error('Error updating progress:', error);
+    }
     
-    const currentSectionNum = getSectionNumber(problemId);
-    
+    // Define the complete navigation sequence
     const sectionSequences = {
-      1: ['prep1', 'explanation1', 'practice1_1', 'practice1_2', 'assessment1', 'examprep1'],
-      2: ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'],
-      3: ['prep3', 'explanation3', 'practice3_1', 'practice3_2', 'assessment3', 'examprep3'],
-      4: ['prep4', 'explanation4', 'practice4_1', 'practice4_2', 'assessment4', 'examprep4'],
-      5: ['prep5', 'explanation5', 'practice5_1', 'practice5_2', 'assessment5', 'examprep5']
+        'section1': ['prep1', 'explanation1', 'practice1_1', 'practice1_2', 'assessment1', 'examprep1'],
+        'section2': ['prep2', 'explanation2', 'practice2_1', 'practice2_2', 'assessment2', 'examprep2'],
+        'section3': ['prep3', 'explanation3', 'practice3_1', 'practice3_2', 'assessment3', 'examprep3'],
+        'section4': ['prep4', 'explanation4', 'practice4_1', 'practice4_2', 'assessment4', 'examprep4'],
+        'section5': ['prep5', 'explanation5', 'practice5_1', 'practice5_2', 'assessment5', 'examprep5']
     };
     
-    const currentSequence = sectionSequences[currentSectionNum] || sectionSequences[1];
-    const currentIndex = currentSequence.indexOf(problemId);
+    const currentSection = getCurrentSection();
+    const sequence = sectionSequences[currentSection];
+    const currentIndex = sequence.indexOf(problemId);
     
-    let nextStage = null;
-    if (currentIndex < currentSequence.length - 1) {
-      nextStage = `/problem/${currentSequence[currentIndex + 1]}`;
-    } else {
-      // Move to next section
-      const nextSectionNum = currentSectionNum + 1;
-      if (nextSectionNum <= 5 && sectionSequences[nextSectionNum]) {
-        nextStage = `/problem/${sectionSequences[nextSectionNum][0]}`;
-      } else {
-        nextStage = '/dashboard';
-      }
-    }
-    
-    if (nextStage) {
-      console.log(`🚀 FORCE NAVIGATION: Navigating to ${nextStage}`);
-      
-      // Don't just update URL, actually navigate
-      resetProblemState();
-      
-      // Try React Router navigate first
-      try {
-        navigate(nextStage);
-        
-        // Force component reload if navigation doesn't work
-        setTimeout(() => {
-          if (window.location.pathname !== nextStage) {
-            console.log(`🔄 React Router failed, forcing with window.location`);
-            window.location.href = nextStage;
-          }
-          // Reset navigation flag after navigation attempt
-          setNavigationInProgress(false);
-        }, 100);
-        
-      } catch (error) {
-        console.error('Navigation error:', error);
-        // Fallback: Force navigation with window.location
-        window.location.href = nextStage;
+    if (currentIndex === -1) {
+        console.error('Problem not found in sequence');
         setNavigationInProgress(false);
-      }
-    } else {
-      setNavigationInProgress(false);
+        return;
     }
-  };
+    
+    // Determine next destination
+    let nextUrl;
+    
+    if (currentIndex === sequence.length - 1) {
+        // End of section - move to next section or complete
+        const sectionNum = parseInt(currentSection.replace('section', ''));
+        if (sectionNum < 5) {
+            const nextSection = `section${sectionNum + 1}`;
+            const nextProblem = `prep${sectionNum + 1}`;
+            nextUrl = `/section/${nextSection}/problem/${nextProblem}`;
+        } else {
+            // All sections complete
+            alert('Congratulations! You have completed all sections!');
+            nextUrl = '/dashboard';
+        }
+    } else {
+        // Move to next problem in sequence
+        const nextProblem = sequence[currentIndex + 1];
+        nextUrl = `/section/${currentSection}/problem/${nextProblem}`;
+    }
+    
+    // Use window.location for more reliable navigation
+    window.location.href = nextUrl;
+ };
+
+// NAVIGATION CONTEXT FIX: Navigate back to dashboard with context preservation
+const navigateToSectionDashboard = () => {
+    // Save current position before navigating
+    localStorage.setItem('lastSection', getCurrentSection());
+    localStorage.setItem('lastProblem', problemId);
+        // Use window.location for reliable navigation
+    window.location.href = '/dashboard';
+};
 
   const resetProblemState = () => {
     setStepAnswers(['', '', '']);
@@ -3096,19 +3089,21 @@ const ProblemView = () => {
                           const stageType = getStageType(problem.type, problem.id);
                           // FIXED: Better button text for practice word problems
                           if (stageType === 'preparation') {
-                            return language === 'en' ? 'Continue to Explanation Stage →' : 'انتقل لمرحلة الشرح ←';
+                              return language === 'en' ? 'Continue to Explanation Stage' : 'انتقل لمرحلة الشرح';
                           } else if (stageType === 'practice' || stageType === 'practice_word') {
-                            return language === 'en' ? 'Continue to Assessment →' : 'انتقل للتقييم ←';
-                          } else if (problem.id === 'examprep1') {
-                            return language === 'en' ? 'Start Section 2: Multiplication/Division →' : 'ابدأ القسم ٢: الضرب/القسمة ←';
-                          } else if (problem.id?.includes('examprep')) {
-                            const currentSection = getCurrentSection();
-                            const nextSection = currentSection + 1;
-                            return language === 'en' ? `Start Section ${nextSection} →` : `ابدأ القسم ${nextSection} ←`;
+                           // NEW LOGIC: Check which practice stage it is
+                              if (problem.id.includes('practice1')) {
+                                  return language === 'en' ? 'Continue to Practice 2' : 'متابعة إلى التمرين 2';
+                              } else { // This will now handle practice2 and any other practice types
+                                  return language === 'en' ? 'Continue to Assessment' : 'انتقل للتقييم';
+                              }
+                          } else if (problem.id.includes('examprep')) {
+                              const currentSection = getCurrentSection();
+                              const nextSection = currentSection + 1;
+                              return language === 'en' ? `Start Section ${nextSection}` : `ابدأ القسم ${nextSection}`;
                           } else {
-                            return language === 'en' ? 'Continue to Next Stage →' : 'انتقل للمرحلة التالية ←';
+                              return language === 'en' ? 'Continue to Next Stage' : 'انتقل للمرحلة التالية';
                           }
-                        })()}
                       </Button>
                     )}
                     

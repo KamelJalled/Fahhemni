@@ -143,6 +143,33 @@ const Dashboard = () => {
     }
   };
 
+  // Add this to Dashboard.js after the state declarations:
+
+useEffect(() => {
+    // Check if we're returning from a problem view
+    const lastSection = localStorage.getItem('lastSection');
+    const lastProblem = localStorage.getItem('lastProblem');
+    
+    if (lastSection) {
+        // Set the current section to the last visited
+        setCurrentSection(lastSection);
+        
+        // Clear the stored values
+        localStorage.removeItem('lastSection');
+        localStorage.removeItem('lastProblem');
+    }
+}, []);
+
+// Fix the handleProblemClick function:
+const handleProblemClick = (problemId) => {
+    // Store current context
+    localStorage.setItem('currentSection', currentSection);
+    localStorage.setItem('currentProblem', problemId);
+    
+    // Navigate with full URL
+    window.location.href = `/section/${currentSection}/problem/${problemId}`;
+};
+
   const text = {
     en: {
       welcome: "Welcome back",
@@ -292,17 +319,7 @@ const Dashboard = () => {
     return <IconComponent className="w-5 h-5" />;
   };
 
-  const handleProblemClick = (problemId, sectionId) => {
-    // CRITICAL: Check stage access control first (prevent cheating)
-    const accessControl = checkStageAccess(sectionId, problemId, userProgress);
-    
-    if (!accessControl.access) {
-      // Show access denied message
-      alert(`🔒 ${accessControl.message}`);
-      return; // Block navigation
-    }
-    
-    const status = getProblemStatus(problemId, sectionId, userProgress);
+     const status = getProblemStatus(problemId, sectionId, userProgress);
     
     // Show warning for assessment if not all practice completed (redundant check for safety)
     const assessmentId = `assessment${sectionId.slice(-1)}`;

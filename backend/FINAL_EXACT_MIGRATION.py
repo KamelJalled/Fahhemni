@@ -10,7 +10,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 
 # CONFIGURATION - UPDATE FOR YOUR PRODUCTION DATABASE
-MONGO_URL = "mongodb+srv://?retryWrites=True&w=majority&appName=Cluster0"  # ← REPLACE WITH YOUR MONGODB URL
+MONGO_URL = "mongodb+srv://ccccccccccccc@cluster0.dip2jyt.mongodb.net/mathtutor?retryWrites=true&w=majority&appName=Cluster0"  # ← REPLACE WITH YOUR MONGODB URL
 DB_NAME = "mathtutor"           # ← REPLACE WITH YOUR DATABASE NAME
 
 async def migrate_exact_preview_data():
