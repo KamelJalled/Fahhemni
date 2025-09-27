@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Globe, Calculator, Trophy, Star } from 'lucide-react';
 
-const StudentLogin = () => {
+function StudentLogin({ onLogin }) {
   const [username, setUsername] = useState('');
   const [className, setClassName] = useState('GR9-A');
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +90,7 @@ const StudentLogin = () => {
 
       if (response.ok) {
         const student = await response.json();
-        login(student.username, 'student');
+        onLogin(student);
         navigate('/dashboard');
       } else {
         console.error('Login failed:', response.status, response.statusText);
