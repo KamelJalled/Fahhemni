@@ -370,7 +370,23 @@ const Dashboard = () => { // <--- Component starts HERE
       <Card className="mb-6">
         <CardContent className="p-6">
           <h3 className="font-semibold mb-4 text-center">{text[language].sections}</h3>
-          
+           {/* Mobile: Simple Dropdown Menu */}
+           <div className="block md:hidden mb-4">
+             <select
+               value={selectedSection}
+               onChange={(e) => updateSelectedSection(e.target.value)}
+               className="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-sm text-sm"
+             >
+              {sections.map((section) => {
+               const sectionInfo = sections_info.find(s => s.id === section.id);
+               return (
+                <option key={section.id} value={section.id}>
+                {sectionInfo ? (language === 'en' ? sectionInfo.title_en : sectionInfo.title_ar) : section.id}
+                </option>
+              );
+           })}
+             </select>
+           </div>
           <div className="grid grid-cols-5 gap-2">
             {sections.map((section) => {
               const sectionProgress = calculateSectionProgress(section.id);
@@ -430,6 +446,24 @@ const Dashboard = () => { // <--- Component starts HERE
                 }`}
                 onClick={() => handleProblemClick(problem.id, selectedSection)}
               >
+                  <Button
+                    onClick={() => {
+                     if (window.confirm(language === 'en' ?
+                      'Are you sure you want to start over? This will reset all your progress.' :
+                      'هل أنت متأكد من أنك تريد البدء من جديد؟ سيؤدي هذا إلى إعادة تعيين كل تقدمك.'
+                      )) {
+                        localStorage.removeItem('mathapp_progress');
+                        window.location.href = '/dashboard';
+                       }
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                  >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  {language === 'en' ? 'Start Over' : 'ابدأ من جديد'}
+                  </Button>
+                
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">

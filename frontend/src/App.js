@@ -58,7 +58,7 @@ function App() {
     <AuthContext.Provider value={{ user, logout: handleLogout }}>
       <LanguageContext.Provider value={{ language, toggleLanguage }}>
         <Router>
-          <div className="App">
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="App">
             <Routes>
               <Route 
                 path="/login" 
