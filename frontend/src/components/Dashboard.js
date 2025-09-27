@@ -374,7 +374,7 @@ const Dashboard = () => { // <--- Component starts HERE
            <div className="block md:hidden mb-4">
              <select
                value={selectedSection}
-               onChange={(e) => updateSelectedSection(e.target.value)}
+               onChange={(e) => setSelectedSection(e.target.value)}
                className="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-sm text-sm"
              >
               {sections.map((section) => {
@@ -387,7 +387,7 @@ const Dashboard = () => { // <--- Component starts HERE
            })}
              </select>
            </div>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="hidden md:grid grid-cols-5 gap-2">
             {sections.map((section) => {
               const sectionProgress = calculateSectionProgress(section.id);
               const isSelected = selectedSection === section.id;
