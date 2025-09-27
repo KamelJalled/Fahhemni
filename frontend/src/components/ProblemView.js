@@ -3084,28 +3084,29 @@ const navigateToSectionDashboard = () => {
                         }}
                         className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600"
                       >
-                        <Trophy className="w-4 h-4 mr-2" />
-                        {(() => {
-                          const stageType = getStageType(problem.type, problem.id);
-                          // FIXED: Better button text for practice word problems
-                          if (stageType === 'preparation') {
-                              return language === 'en' ? 'Continue to Explanation Stage' : 'انتقل لمرحلة الشرح';
-                          } else if (stageType === 'practice' || stageType === 'practice_word') {
-                           // NEW LOGIC: Check which practice stage it is
-                              if (problem.id.includes('practice1')) {
-                                  return language === 'en' ? 'Continue to Practice 2' : 'متابعة إلى التمرين 2';
-                              } else { // This will now handle practice2 and any other practice types
-                                  return language === 'en' ? 'Continue to Assessment' : 'انتقل للتقييم';
-                              }
-                          } else if (problem.id.includes('examprep')) {
-                              const currentSection = getCurrentSection();
-                              const nextSection = currentSection + 1;
-                              return language === 'en' ? `Start Section ${nextSection}` : `ابدأ القسم ${nextSection}`;
-                          } else {
-                              return language === 'en' ? 'Continue to Next Stage' : 'انتقل للمرحلة التالية';
-                          }
-                      </Button>
-                    )}
+            <Trophy className="w-4 h-4 mr-2" />
+            {(() => {
+              const stageType = getStageType(problem.type, problem.id);
+              // FIXED: Better button text for practice word problems
+              if (stageType === 'preparation') {
+                return language === 'en' ? 'Continue to Explanation Stage' : 'انتقل لمرحلة الشرح';
+              } else if (stageType === 'practice' || stageType === 'practice_word') {
+               // NEW LOGIC: Check which practice stage it is
+                if (problem.id.includes('practice1')) {
+                  return language === 'en' ? 'Continue to Practice 2' : 'متابعة إلى التمرين 2';
+                } else { // This will now handle practice2 and any other practice types
+                  return language === 'en' ? 'Continue to Assessment' : 'انتقل للتقييم';
+                }
+              } else if (problem.id.includes('examprep')) {
+                const currentSection = getCurrentSection();
+                const nextSection = currentSection + 1;
+                return language === 'en' ? `Start Section ${nextSection}` : `ابدأ القسم ${nextSection}`;
+              } else {
+                return language === 'en' ? 'Continue to Next Stage' : 'انتقل للمرحلة التالية';
+              }
+            })()}
+            </Button>
+          )}
                     
                     {/* Try Again - Only for preparation/assessment stages under 3 attempts */}
                     {isSubmitted && !isCorrect && !allStepsComplete && attempts < 3 && ['preparation', 'assessment'].includes(getStageType(problem.type, problem.id)) && (
