@@ -4,7 +4,7 @@ from bson import ObjectId
 import sys
 
 # IMPORTANT: Add your MongoDB connection string here
-MONGO_URI = "mongodb+srv://kamalaljallad_db_user:K6G2BOpZkiq2qRUE@cluster0.dip2jyt.mongodb.net/mathtutor?retryWrites=true&w=majority&appName=Cluster0"
+MONGO_URI = "mongodb+srv://@cluster0.dip2jyt.mongodb.net/mathtutor?retryWrites=true&w=majority&appName=Cluster0"
 
 def fix_corrupted_students():
     """Fix students like Somayya whose accounts are corrupted"""

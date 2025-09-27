@@ -5,7 +5,7 @@ import pymongo
 from pymongo import MongoClient
 
 # Replace with your actual MongoDB connection string
-MONGO_URI = "mongodb+srv://kamalaljallad_db_user:K6G2BOpZkiq2qRUE@cluster0.dip2jyt.mongodb.net/mathtutor?retryWrites=true&w=majority&appName=Cluster0"
+MONGO_URI = "mongodb+srv://@cluster0.dip2jyt.mongodb.net/mathtutor?retryWrites=true&w=majority&appName=Cluster0"
 
 def fix_problem_naming():
     try:
