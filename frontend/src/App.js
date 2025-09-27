@@ -6,12 +6,16 @@ import Dashboard from './components/Dashboard';
 import ProblemView from './components/ProblemView';
 import TeacherDashboard from './components/TeacherDashboard';
 
+// Create contexts
+export const AuthContext = React.createContext(null);
+export const LanguageContext = React.createContext(null);
+
 function App() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
 
   useEffect(() => {
-    // Check for existing session
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
@@ -36,6 +40,12 @@ function App() {
     localStorage.removeItem('currentProblem');
   };
 
+  const toggleLanguage = () => {
+    const newLang = language === 'en' ? 'ar' : 'en';
+    setLanguage(newLang);
+    localStorage.setItem('language', newLang);
+  };
+
   if (isLoading) {
     return (
       <div className="loading-container">
@@ -45,84 +55,98 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          {/* Public route - Login */}
-          <Route 
-            path="/login" 
-            element={
-              user ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />
-            } 
-          />
+    <AuthContext.Provider value={{ user, logout: handleLogout }}>
+      <LanguageContext.Provider value={{ language, toggleLanguage }}>
+        <Router>
+          <div className="App">
+            <Routes>
+              <Route 
+                path="/login" 
+                element={
+                  user ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />
+                } 
+              />
 
-          {/* Protected routes - Dashboard */}
-          <Route 
-            path="/dashboard" 
-            element={
-              user ? (
-                user.role === 'teacher' ? (
-                  <TeacherDashboard user={user} onLogout={handleLogout} />
-                ) : (
-                  <Dashboard user={user} onLogout={handleLogout} />
-                )
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } 
-          />
+              <Route 
+                path="/dashboard" 
+                element={
+                  user ? (
+                    user.role === 'teacher' ? (
+                      <TeacherDashboard user={user} onLogout={handleLogout} />
+                    ) : (
+                      <Dashboard user={user} onLogout={handleLogout} />
+                    )
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                } 
+              />
 
-          {/* Protected route - Problem View with section and problem parameters */}
-          <Route 
-            path="/section/:sectionId/problem/:problemId" 
-            element={
-              user ? (
-                <ProblemView user={user} onLogout={handleLogout} />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } 
-          />
+              <Route 
+                path="/section/:sectionId/problem/:problemId" 
+                element={
+                  user ? (
+                    <ProblemView user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                } 
+              />
 
-          {/* Legacy route support for old URL format */}
-          <Route 
-            path="/problem/:problemId" 
-            element={
-              user ? (
-                <ProblemView user={user} onLogout={handleLogout} />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } 
-          />
+              <Route 
+                path="/problem/:problemId" 
+                element={
+                  user ? (
+                    <ProblemView user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                } 
+              />
 
-          {/* Teacher dashboard route */}
-          <Route 
-            path="/teacher-dashboard" 
-            element={
-              user && user.role === 'teacher' ? (
-                <TeacherDashboard user={user} onLogout={handleLogout} />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } 
-          />
+              <Route 
+                path="/teacher-dashboard" 
+                element={
+                  user && user.role === 'teacher' ? (
+                    <TeacherDashboard user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                } 
+              />
 
-          {/* Default route */}
-          <Route 
-            path="/" 
-            element={<Navigate to={user ? "/dashboard" : "/login"} replace />} 
-          />
+              <Route 
+                path="/" 
+                element={<Navigate to={user ? "/dashboard" : "/login"} replace />} 
+              />
 
-          {/* Catch all 404 - redirect to dashboard or login */}
-          <Route 
-            path="*" 
-            element={<Navigate to={user ? "/dashboard" : "/login"} replace />} 
-          />
-        </Routes>
-      </div>
-    </Router>
+              <Route 
+                path="*" 
+                element={<Navigate to={user ? "/dashboard" : "/login"} replace />} 
+              />
+            </Routes>
+          </div>
+        </Router>
+      </LanguageContext.Provider>
+    </AuthContext.Provider>
   );
 }
+
+// Export hooks
+export const useAuth = () => {
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    return { user: null, logout: () => {} };
+  }
+  return context;
+};
+
+export const useLanguage = () => {
+  const context = React.useContext(LanguageContext);
+  if (!context) {
+    return { language: 'en', toggleLanguage: () => {} };
+  }
+  return context;
+};
 
 export default App;
